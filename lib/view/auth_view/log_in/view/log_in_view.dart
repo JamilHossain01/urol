@@ -1,0 +1,147 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+
+import '../../../../common widget/custom text/custom_text_widget.dart';
+import '../../../../common widget/custom_button_widget.dart';
+import '../../../../uitilies/app_colors.dart';
+import '../../../../uitilies/app_images.dart';
+import '../../login_auth_view.dart';
+
+
+
+class LogInView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            // Full-screen background image
+            Image.asset(
+              AppImages.splash,
+              width: double.infinity,
+              height: double.infinity,
+              fit: BoxFit.cover, // Ensures the image fills the entire screen
+            ),
+            // Centered logo (adjust your logo size accordingly)
+            Image.asset(
+              AppImages.logo, // Change to your logo's asset path
+              width: 200.w,  // Adjust size as needed
+              height: 200.h, // Adjust size as needed
+            ),
+            // Positioned button at the bottom of the screen
+            Positioned(
+              bottom: 180.h, // Adjust this to control the vertical position of the button
+              left: 16.w,
+              right: 16.w,
+              child: SizedBox(
+                height: 55,
+                child: CustomButtonWidget(
+                  btnColor: AppColors.mainColor,
+                  btnTextColor: Colors.white,
+                  onTap: () {
+                    Get.to(() => SignInView());
+                  },
+                  iconWant: false,
+                  btnText: 'Log In',
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 120.h, // Adjust this to control the vertical position of the button
+              left: 16.w,
+              right: 16.w,
+              child: SizedBox(
+                height: 55,
+                child: CustomButtonWidget(
+                  borderColor: AppColors.mainColor,
+
+
+                  btnTextSize: 14.sp,
+                  btnColor: Colors.white,
+                  btnTextColor: AppColors.mainColor,
+                  onTap: () {
+                    Get.to(() => SignInView());
+                  },
+                  iconWant: false,
+                  btnText: 'Create account',
+                ),
+
+              ),
+            ),
+            Positioned(
+              bottom: 80.h, // Adjust this to control the vertical position of the button
+              left: 16.w,
+              right: 16.w,
+              child:  CustomText(
+                color: Color(0xFF686868),
+                fontWeight: FontWeight.w600,
+                textAlign: TextAlign.start,
+                fontSize: 11.sp,
+                text: "By signing up you confirm that you have read & agree to",
+              ),
+            ),   Positioned(
+              bottom: 65.h, // Adjust this to control the vertical position of the button
+              left: 42.w,
+              right: 42.w,
+              child:  Row(
+
+                children: [
+                  CustomText(
+                    color: Color(0xFF686868),
+                    fontWeight: FontWeight.w600,
+                    textAlign: TextAlign.start,
+                    fontSize: 11.sp,
+                    text: "the our",
+                  ),
+                  Gap(5.w),
+                  GestureDetector(
+                    onTap: (){
+                      // Get.to(()=> )
+                    },
+                    child: CustomText(
+                      color: AppColors.mainColor,
+                      fontWeight: FontWeight.w600,
+                      textAlign: TextAlign.start,
+                      fontSize: 11.sp,
+                      text: "Privacy Policy",
+                    ),
+                  ),
+                  Gap(5.w),
+
+
+                  CustomText(
+                    color: Color(0xFF686868),
+                    fontWeight: FontWeight.w600,
+                    textAlign: TextAlign.start,
+                    fontSize: 11.sp,
+                    text: "and",
+                  ),
+                  Gap(5.w),
+
+                  GestureDetector(
+                    onTap: (){
+                      // Get.to(()=> )
+                    },
+                    child: CustomText(
+                      color: AppColors.mainColor,
+                      fontWeight: FontWeight.w600,
+                      textAlign: TextAlign.start,
+                      fontSize: 11.sp,
+                      text: "Terms & conditions",
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
