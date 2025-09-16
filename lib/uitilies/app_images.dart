@@ -11,7 +11,7 @@ class AppImages {
   static String location = "assets/images/location.png";
   static String profile = "assets/images/profile.png";
   static String profileA = "assets/images/profileA.png";
-  static String calender = "assets/images/profile.png";
+  static String calender = "assets/images/calender.png";
   static String calenderA = "assets/images/calenderA.png";
   static String enableLocation = "assets/images/illustration.png";
   static String person = "assets/images/person.png";
@@ -40,5 +40,6 @@ class AppImages {
   static String fb = "assets/images/fb.png";
   static String https = "assets/images/https.png";
   static String insta = "assets/images/insta.png";
+  static String filter = "assets/images/filter.png";
 
 }

@@ -10,6 +10,7 @@ import 'package:get/get_core/src/get_main.dart';
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../location_view/gym_details_view.dart';
 import '../location_view/location_screen_view.dart';
+import '../location_view/widgets/gym_preview_card.dart';
 
 class SaveGymsView extends StatefulWidget {
   const SaveGymsView({super.key});
@@ -20,84 +21,37 @@ class SaveGymsView extends StatefulWidget {
 
 class _SaveGymsViewState extends State<SaveGymsView> {
   // Dummy list of gyms
-  final List<Map<String, String>> gyms = List.generate(
+  final List<Map<String, String>> gymList = List.generate(
     7,
         (index) => {
-      "name": "IBJJF World Championships 202${index + 1}",
-      "location": "📍 6157 Rd, California, USA",
-      "image": AppImages.gym1,
+      'gymName': 'GymNation Stars',
+      'location': '6157 Rd, California, USA',
+      'image': AppImages.gym1, // Use your own image paths here
+      'categories': 'Open Mat, BJJ, MMA', // Categories
     },
   );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backRoudnColors,
-      appBar: CustomAppBar(title: 'Saved Gyms'),
-      body: ListView.builder(
-        itemCount: gyms.length,
-        padding: EdgeInsets.all(12),
-        itemBuilder: (context, index) {
-          final gym = gyms[index];
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: GestureDetector(
-              onTap: (){
-                Get.to(()=>GymDetailsScreen());
-              },
-              child: CustomContainer(
-                height: 250.h,
-                width: double.infinity,
-                color: Colors.white,
-                borderRadius: 8,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Image.asset(
-                        gym["image"]!,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomText(
-                            text: gym["name"]!,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.mainTextColors,
-                          ),
-                          CustomText(
-                            text: gym["location"]!,
-                            fontSize: 10.sp,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFF4B4B4B),
-                          ),
-                          SizedBox(height: 8.h),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              _buildActivityButton('Open Mats'),
-                              _buildActivityButton('BJJ'),
-                              _buildActivityButton('MMA'),
-                              _buildActivityButton('Boxing'),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+        backgroundColor: AppColors.backRoudnColors,
+        appBar: CustomAppBar(title: 'Saved Gyms'),
+        body: ListView.builder(
+          // scrollDirection: Axis.vertical,
+          itemCount: gymList.length,
+          itemBuilder: (context, index) {
+            final gym = gymList[index];
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 16),
+              child: GymPreviewCard(
+                gymName: gym['gymName']!,
+                location: gym['location']!,
+                image: gym['image']!,
+                categories: gym['categories']!.split(', '),
               ),
-            ),
-          );
-        },
-      ),
-    );
+            );
+          },
+        ));
   }
 
   Widget _buildActivityButton(String text) {
