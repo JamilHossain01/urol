@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -18,6 +16,10 @@ class CustomTextField extends StatefulWidget {
   final Color? fillColor;
   final Color? borderColor;
   final int? maxLines;
+  final Color? hintTextColor; // Hint text color
+  final IconData? suffixIcon; // Suffix icon
+  final String? suffixIconAsset; // Suffix icon asset (image)
+  final VoidCallback? onSuffixTap; // Optional tap for suffix
 
   const CustomTextField({
     Key? key,
@@ -31,6 +33,10 @@ class CustomTextField extends StatefulWidget {
     this.borderColor,
     this.maxLines,
     this.readOnly,
+    this.hintTextColor,
+    this.suffixIcon,
+    this.suffixIconAsset,
+    this.onSuffixTap,
   }) : super(key: key);
 
   @override
@@ -52,11 +58,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
         maxLines: widget.maxLines ?? 1,
         style: GoogleFonts.poppins(
           fontSize: 14.h,
-          color: Colors.white,
+          color: AppColors.hintTextColors,
         ),
         decoration: InputDecoration(
           filled: true,
-          fillColor: widget.fillColor ?? Color(0xFFFFFFFF),
+          fillColor: widget.fillColor ?? Colors.white,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.sp),
             borderSide: BorderSide(
@@ -67,7 +73,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.sp),
             borderSide: BorderSide(
-              color: widget.borderColor ??Color(0xFFB9B9B9),
+              color: widget.borderColor ?? Color(0xFFB9B9B9),
               width: 1,
             ),
           ),
@@ -80,32 +86,54 @@ class _CustomTextFieldState extends State<CustomTextField> {
           ),
           prefixIcon: widget.imagePrefix != null
               ? Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Image.asset(
-                    widget.imagePrefix!,
-                    width: 24.w,
-                    height: 24.h,
-                    fit: BoxFit.contain,
-                  ),
-                )
+            padding: EdgeInsets.all(10),
+            child: Image.asset(
+              widget.imagePrefix!,
+              width: 24.w,
+              height: 24.h,
+              fit: BoxFit.contain,
+            ),
+          )
               : (widget.prefixIcon != null
-                  ? Icon(widget.prefixIcon, color: Colors.white)
-                  : null),
+              ? Icon(widget.prefixIcon, color: Colors.white)
+              : null),
+          // Suffix icon logic: showObscure takes priority
           suffixIcon: widget.showObscure
               ? IconButton(
-                  icon: Icon(
-                    _obscureText ? Icons.visibility_off : Icons.visibility,
-                    color: Color(0xFF666666),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _obscureText = !_obscureText;
-                    });
-                  },
-                )
-              : null,
+            icon: Icon(
+              _obscureText ? Icons.visibility_off : Icons.visibility,
+              color: Color(0xFF666666),
+            ),
+            onPressed: () {
+              setState(() {
+                _obscureText = !_obscureText;
+              });
+            },
+          )
+              : (widget.suffixIcon != null
+              ? IconButton(
+            icon: Icon(widget.suffixIcon, color: Color(0xFF666666)),
+            onPressed: widget.onSuffixTap,
+          )
+              : (widget.suffixIconAsset != null
+              ? GestureDetector(
+            onTap: widget.onSuffixTap,
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: Image.asset(
+                widget.suffixIconAsset!,
+                width: 24.w,
+                height: 24.h,
+                fit: BoxFit.contain,
+              ),
+            ),
+          )
+              : null)),
           hintText: widget.hintText,
-          hintStyle: GoogleFonts.poppins(fontSize: 14.h, color: Colors.white),
+          hintStyle: GoogleFonts.poppins(
+            fontSize: 14.h,
+            color: widget.hintTextColor ?? Colors.white,
+          ),
         ),
       ),
     );

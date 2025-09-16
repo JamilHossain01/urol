@@ -10,5 +10,6 @@ class AppColors {
   static Color secondColor = Color(0xFF9668EF);
   static Color textFieldNameColor = Color(0xFF464646);
   static Color mainTextColors = Color(0xFF1E1E1E);
-  static Color backRoudnColors = Color(0xFFF8F9FA);
+  static Color backRoudnColors = Color(0xFFFFFFFF);
+  static Color hintTextColors = Color(0xFF989898);
 }

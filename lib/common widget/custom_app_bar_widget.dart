@@ -1,32 +1,23 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:get/get.dart';
-
-import '../uitilies/app_colors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String? title;
-  final double? fontSize;
+  final String title;
   final VoidCallback? onTap;
-  final bool centerTitle;
-  final bool forceMaterialTransparency;
-  final bool automaticallyImplyLeading;
+  final Color backgroundColor;
   final List<Widget>? actions;
   final Widget? leading;
+  final bool centerTitle;
   final bool showLeadingIcon;
 
   const CustomAppBar({
     Key? key,
-    this.title,
-    this.fontSize,
-    this.centerTitle = true,
-    this.forceMaterialTransparency = true,
+    required this.title,
+    this.onTap,
+    this.backgroundColor = Colors.transparent, // Default background color
     this.actions,
     this.leading,
-    this.automaticallyImplyLeading = true,
-    this.onTap,
+    this.centerTitle = true,
     this.showLeadingIcon = true,
   })  : preferredSize = const Size.fromHeight(kToolbarHeight),
         super(key: key);
@@ -37,55 +28,36 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: automaticallyImplyLeading,
+      backgroundColor: backgroundColor,
+      elevation: 0,
+      leading: showLeadingIcon
+          ? Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+                    height: 32.h,
+                    width: 32.w,
+                    decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(40.r),
+            color: Colors.white,
+                    ),
+                    child: leading ??
+              IconButton(
+                icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 18),
+                onPressed: onTap ?? () => Navigator.pop(context),
+              ),
+                  ),
+          )
+          : null,
       title: Text(
-        title ?? "",
-        style: GoogleFonts.poppins(
-          color: Colors.white,
-          fontSize: fontSize ?? 17.h,
-          fontWeight: FontWeight.w500,
+        title,
+        style: TextStyle(
+          fontSize: 18.sp,
+          fontWeight: FontWeight.w600,
+          color: Colors.black,
         ),
       ),
       centerTitle: centerTitle,
       actions: actions,
-      leading: showLeadingIcon
-          ? Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Color(0xFF000000).withOpacity(0.02), // Shadow color
-              offset: Offset(2, 2), // Offset of the shadow
-              blurRadius: 5, // Blur intensity
-              spreadRadius: 1, // Spread of the shadow
-            ),
-          ],
-          borderRadius: BorderRadius.circular(50.r),
-        ),
-        child: leading ??
-            IconButton(
-              icon: Icon(Icons.arrow_back_ios, color: Colors.black),
-              onPressed: onTap ??
-                      () {
-                    if (Get.isSnackbarOpen) {
-                      Get.closeCurrentSnackbar();
-                    }
-                    if (Navigator.canPop(context)) {
-                      Navigator.pop(context);
-                    } else {
-                      if (kDebugMode) {
-                        print("No routes to pop");
-                      }
-                    }
-                  },
-            ),
-      )
-          : null,
-      elevation: forceMaterialTransparency ? 0 : null,
-      flexibleSpace: Container(
-        decoration: BoxDecoration(
-          color: Color(0xFFFFFFFF),
-        ),
-      ),
     );
   }
 }

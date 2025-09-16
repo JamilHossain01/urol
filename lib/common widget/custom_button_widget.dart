@@ -68,9 +68,9 @@ class CustomButtonWidget extends StatelessWidget {
                 Text(
                   btnText,
                   style: GoogleFonts.poppins(
-                    fontSize: btnTextSize ?? 15.h,
+                    fontSize: btnTextSize ?? 14.h,
                     color: btnTextColor ?? Colors.white,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],

@@ -1,6 +1,13 @@
+import 'package:calebshirthum/common%20widget/comon_conatainer/custom_conatiner.dart';
 import 'package:calebshirthum/common%20widget/custom_button_widget.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/app_images.dart';
+import 'package:calebshirthum/view/user/profile_view/profile_information_view.dart';
+import 'package:calebshirthum/view/user/profile_view/save_gyms.dart';
+import 'package:calebshirthum/view/user/profile_view/settings_view.dart';
+import 'package:calebshirthum/view/user/setting/views/about_view.dart';
+import 'package:calebshirthum/view/user/setting/views/privacy_policy.dart';
+import 'package:calebshirthum/view/user/setting/views/termOcondition_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -14,7 +21,8 @@ import 'package:octo_image/octo_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../common widget/custom text/custom_text_widget.dart';
-
+import 'add_compition_view.dart';
+import 'edite_profeil_view.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -39,8 +47,7 @@ class ProfileView extends StatelessWidget {
                       height: 100.w,
                       child: OctoImage(
                         image: CachedNetworkImageProvider(
-                          AppImages.person
-                          , // Profile image link
+                          AppImages.person, // Profile image link
                         ),
                         // ---------- use BlurHash as placeholder ----------
 
@@ -51,10 +58,11 @@ class ProfileView extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                     ),
-                  ),                  SizedBox(height: 8.h),
+                  ),
+                  SizedBox(height: 8.h),
                   Container(
                     padding:
-                    EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
                     decoration: BoxDecoration(
                       color: Colors.deepPurple,
                       borderRadius: BorderRadius.circular(20.r),
@@ -93,20 +101,25 @@ class ProfileView extends StatelessWidget {
                     Row(
                       children: [
                         Container(
-                          height: 40.h,width: 40.w,
-
+                          height: 40.h,
+                          width: 40.w,
                           decoration: BoxDecoration(
                             color: Color(0xFF989898),
                             borderRadius: BorderRadius.circular(10.r),
                           ),
-
                           child: Padding(
                             padding: const EdgeInsets.all(4.0),
-                            child: Image.asset(AppImages.location,height: 18.h,width: 15.w,color: Colors.white,),
+                            child: Image.asset(
+                              AppImages.location,
+                              height: 18.h,
+                              width: 15.w,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                         SizedBox(width: 8.w),
-                        Column(crossAxisAlignment:CrossAxisAlignment.start,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomText(
                               text: "Home Gym",
@@ -132,7 +145,6 @@ class ProfileView extends StatelessWidget {
                         _infoTile(AppImages.kg, "Weight", "170 lb"),
                       ],
                     ),
-
                     SizedBox(height: 10.h),
                     Wrap(
                       spacing: 6.w,
@@ -147,13 +159,22 @@ class ProfileView extends StatelessWidget {
                     SizedBox(height: 10.h),
                     CustomText(
                       text:
-                      "“Discipline is the bridge between goals and accomplishments.”",
+                          "“Discipline is the bridge between goals and accomplishments.”",
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w400,
                       color: Colors.black87,
                     ),
                     SizedBox(height: 8.h),
-                    CustomButtonWidget(btnText: 'Edite', onTap: (){}, iconWant: false,btnColor: Colors.white,btnTextColor: AppColors.mainColor,borderColor: AppColors.mainColor,),
+                    CustomButtonWidget(
+                      btnText: 'Edite',
+                      onTap: () {
+                        Get.to(() => EditProfileView());
+                      },
+                      iconWant: false,
+                      btnColor: Colors.white,
+                      btnTextColor: AppColors.mainColor,
+                      borderColor: AppColors.mainColor,
+                    ),
                   ],
                 ),
               ),
@@ -197,25 +218,34 @@ class ProfileView extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              _eventInfo("Division", "NoGi Absolute"),
-                              _eventInfo("Location", "Buffalo, New York"),
+                              _eventInfo("Division", "NoGi Absolute",
+                                  AppImages.division),
+                              _eventInfo("Location", "Buffalo, New York",
+                                  AppImages.Location),
                             ],
                           ),
                           SizedBox(height: 12.h),
                           Center(
                             child: Column(
                               children: [
-                                Icon(Icons.emoji_events,
-                                    color: Colors.amber, size: 28.sp),
-                                SizedBox(height: 4.h),
-                                CustomText(
-                                  text: "GOLD",
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.amber.shade700,
+                                SizedBox(height: 8.h),
+                                CustomButtonWidget(
+                                  btnText: 'GOLD',
+                                  onTap: () {},
+                                  iconWant: false,
+                                  btnColor: Color(0xFFE6E6E6),
+                                  btnTextColor: AppColors.mainColor,
+                                  // borderColor: AppColors.mainColor,
                                 ),
                                 SizedBox(height: 8.h),
-                                CustomButtonWidget(btnText: 'Edite', onTap: (){}, iconWant: false,btnColor: Colors.white,btnTextColor: AppColors.mainColor,borderColor: AppColors.mainColor,),
+                                CustomButtonWidget(
+                                  btnText: 'Edite',
+                                  onTap: () {},
+                                  iconWant: false,
+                                  btnColor: Colors.white,
+                                  btnTextColor: AppColors.mainColor,
+                                  borderColor: AppColors.mainColor,
+                                ),
                               ],
                             ),
                           ),
@@ -229,25 +259,39 @@ class ProfileView extends StatelessWidget {
               SizedBox(height: 20.h),
 
               // Others Section
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 16.w),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: Colors.grey.shade300),
-                ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _otherTile("Personal Information"),
-                    Divider(height: 0),
-                    _otherTile("Saved Gyms"),
-                    Divider(height: 0),
-                    _otherTile("Notifications"),
-                    Divider(height: 0),
-                    _otherTile("Support"),
-                    Divider(height: 0),
-                    _otherTile("Settings"),
-                    Divider(height: 0),
-                    _otherTile("Logout"),
+                    CustomText(
+                      text: "Others",
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                    _otherTile("Personal Information", AppImages.profileA, () {
+                      Get.to(() => ProfileInformationScreen());
+                    }),
+                    _otherTile("Saved Gyms", AppImages.book_mark, () {
+                      Get.to(() => SaveGymsView());
+                    }),
+                    _otherTile("Notifications", AppImages.bell2, () {
+                      Get.to(() => ProfileInformationScreen());
+                    }),
+                    _otherTile("About us", AppImages.support, () {
+                      Get.to(() => AboutUsView());
+                    }),  _otherTile("Privacy Policy", AppImages.privacy, () {
+                      Get.to(() => PrivacyPolicyScreen());
+                    }),  _otherTile("Terms of service", AppImages.terms, () {
+                      Get.to(() => TermsConditionsView());
+                    }),
+                    _otherTile("Settings", AppImages.setting, () {
+                      Get.to(() => AccountSettingsScreen());
+                    }),
+                    _otherTile("Logout", AppImages.log_out, () {
+                      Get.to(() => ProfileInformationScreen());
+                    }),
                   ],
                 ),
               ),
@@ -311,39 +355,87 @@ class ProfileView extends StatelessWidget {
   }
 
   // ✅ Event Info
-  Widget _eventInfo(String title, String value) {
+// ✅ Event Info (with asset icon)
+  Widget _eventInfo(String title, String value, String iconPath) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CustomText(
-          text: title,
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w400,
-          color: Colors.grey.shade600,
+        Row(
+          children: [
+            Image.asset(
+              iconPath,
+              height: 14.h,
+              width: 14.w,
+              fit: BoxFit.contain,
+            ),
+            SizedBox(width: 6.w),
+            CustomText(
+              text: title,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w400,
+              color: Colors.grey.shade600,
+            ),
+          ],
         ),
         SizedBox(height: 4.h),
-        CustomText(
-          text: value,
-          fontSize: 13.sp,
-          fontWeight: FontWeight.w500,
-          color: Colors.black,
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+          decoration: BoxDecoration(
+            color: Color(0xFFE9E9E9),
+            borderRadius: BorderRadius.circular(20.r),
+          ),
+          child: CustomText(
+            text: value,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF686868),
+          ),
         ),
       ],
     );
   }
 
   // ✅ Other Tile
-  Widget _otherTile(String text) {
-    return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
-      title: CustomText(
-        text: text,
-        fontSize: 14.sp,
-        fontWeight: FontWeight.w500,
-        color: Colors.black,
+// ✅ Other Tile (with asset icon)
+  Widget _otherTile(String text, String iconPath, VoidCallback onTap) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: CustomContainer(
+        color: const Color(0xFFE9E9E9),
+        borderRadius: 8,
+        height: 55.h,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                SizedBox(width: 12.w), // padding left
+                Image.asset(
+                  iconPath,
+                  height: 18.h,
+                  width: 18.w,
+                  fit: BoxFit.contain,
+                ),
+                SizedBox(width: 10.w),
+                CustomText(
+                  text: text,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+              ],
+            ),
+            GestureDetector(
+              onTap: onTap,
+              child: Icon(
+                Icons.chevron_right,
+                size: 20.sp,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
       ),
-      trailing: Icon(Icons.chevron_right, size: 20.sp, color: Colors.grey),
-      onTap: () {},
     );
   }
 }
