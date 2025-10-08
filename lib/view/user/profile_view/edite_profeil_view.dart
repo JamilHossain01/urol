@@ -6,8 +6,22 @@ import 'package:get/get.dart';
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_text_filed.dart';
 
-class EditProfileView extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import '../../../common widget/custom_text_filed.dart';
+import '../../../uitilies/app_colors.dart';
+import '../../../uitilies/app_images.dart';
+
+class EditProfileView extends StatefulWidget {
   const EditProfileView({super.key});
+
+  @override
+  _EditProfileViewState createState() => _EditProfileViewState();
+}
+
+class _EditProfileViewState extends State<EditProfileView> {
+  Set<String> selectedDisciplines = {};
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +35,7 @@ class EditProfileView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-// Top Bar
+              // Top Bar
               Row(
                 children: [
                   GestureDetector(
@@ -47,14 +61,14 @@ class EditProfileView extends StatelessWidget {
 
               SizedBox(height: 20.h),
 
-// Profile Picture
+              // Profile Picture
               Stack(
                 alignment: Alignment.bottomRight,
                 children: [
                   CircleAvatar(
                     radius: 55.r,
                     backgroundImage:
-                        const NetworkImage("https://via.placeholder.com/150"),
+                    const NetworkImage("https://via.placeholder.com/150"),
                   ),
                   Positioned(
                     bottom: 4,
@@ -67,7 +81,7 @@ class EditProfileView extends StatelessWidget {
                         border: Border.all(color: Colors.white, width: 2),
                       ),
                       child:
-                          const Icon(Icons.add, size: 18, color: Colors.white),
+                      const Icon(Icons.add, size: 18, color: Colors.white),
                     ),
                   )
                 ],
@@ -75,7 +89,27 @@ class EditProfileView extends StatelessWidget {
 
               SizedBox(height: 25.h),
 
-// Name
+              // Name
+              Align(
+                alignment: Alignment.centerLeft,
+                child: CustomText(
+                  text: "Name",
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.mainTextColors,
+                ),
+              ),
+              SizedBox(height: 6.h),
+              CustomTextField(
+                hintTextColor: Color(0xFF6B6B6B),
+                fillColor: Color(0xFFF5F5F5),
+                borderColor: Color(0xFFF5F5F5),
+                hintText: "Caleb Shirtum",
+                showObscure: false,
+              ),
+
+              SizedBox(height: 16.h),
+
               Align(
                 alignment: Alignment.centerLeft,
                 child: CustomText(
@@ -120,10 +154,10 @@ class EditProfileView extends StatelessWidget {
                     value: "Purple",
                     items: ["White", "Blue", "Purple", "Brown", "Black"]
                         .map((rank) => DropdownMenuItem(
-                              value: rank,
-                              child:
-                                  Text(rank, style: TextStyle(fontSize: 13.sp)),
-                            ))
+                      value: rank,
+                      child:
+                      Text(rank, style: TextStyle(fontSize: 13.sp)),
+                    ))
                         .toList(),
                     onChanged: (value) {},
                   ),
@@ -220,7 +254,7 @@ class EditProfileView extends StatelessWidget {
 
               SizedBox(height: 16.h),
 
-// Disciplines (Chips)
+              // Disciplines (Chips)
               Align(
                 alignment: Alignment.centerLeft,
                 child: CustomText(
@@ -247,29 +281,7 @@ class EditProfileView extends StatelessWidget {
 
               SizedBox(height: 16.h),
 
-// Favorite Quote
-              Align(
-                alignment: Alignment.centerLeft,
-                child: CustomText(
-                  text: "Favorite Quote",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.mainTextColors,
-                ),
-              ),
-              SizedBox(height: 6.h),
-              const CustomTextField(
-                fillColor: Color(0xFFF5F5F5),
-                borderColor: Color(0xFFF5F5F5),
-                hintText: "Discipline is the bridge...",
-                hintTextColor: Color(0xFF6B6B6B),
-
-                showObscure: false,
-              ),
-
-              SizedBox(height: 30.h),
-
-// Save Button
+              // Save Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -297,20 +309,32 @@ class EditProfileView extends StatelessWidget {
     );
   }
 
-// ✅ Discipline Chip
+  // ✅ Discipline Chip
   Widget _disciplineChip(String label) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF2F2F2),
-        borderRadius: BorderRadius.circular(20.r),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: Colors.black,
+    bool isSelected = selectedDisciplines.contains(label);
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          if (isSelected) {
+            selectedDisciplines.remove(label); // Unselect if already selected
+          } else {
+            selectedDisciplines.add(label); // Select if not already selected
+          }
+        });
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.mainColor : const Color(0xFFF2F2F2),
+          borderRadius: BorderRadius.circular(20.r),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w500,
+            color: isSelected ? Colors.white : Colors.black,
+          ),
         ),
       ),
     );

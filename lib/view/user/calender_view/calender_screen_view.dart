@@ -53,11 +53,11 @@ class _EventScreenViewState extends State<EventScreenView> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.r),
                         borderSide: BorderSide(
-                          color: Color(0xFFB9B9B9),
+                          color: Colors.white,
                         ),
                       ),
                       filled: true,
-                      fillColor: Colors.grey.shade100,
+                      fillColor: Colors.white,
                     ),
                   ),
                 ),
@@ -67,7 +67,7 @@ class _EventScreenViewState extends State<EventScreenView> {
                   child: Container(
                       padding: EdgeInsets.all(12.w),
                       decoration: BoxDecoration(
-                        color: Colors.red.shade700,
+                        color: AppColors.mainColor,
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                       child: Image.asset(
@@ -176,7 +176,7 @@ class _EventScreenViewState extends State<EventScreenView> {
               ),
               Positioned(
                 top: 8.h,
-                left: 8.w,
+                left: 20.w,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 4.h),
                   decoration: BoxDecoration(
@@ -185,8 +185,8 @@ class _EventScreenViewState extends State<EventScreenView> {
                   ),
                   child: CustomText(
                     text: date,
-                    fontSize: 10.sp,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
                 ),
@@ -409,36 +409,6 @@ class _EventScreenViewState extends State<EventScreenView> {
                     Row(
                       children: [
                         // City
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CustomText(
-                                text: "City",
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.mainTextColors,
-                              ),
-                              SizedBox(height: 6.h),
-                              SizedBox(
-                                height: 50.h,
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                    hintText: "Enter City",
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8.r),
-                                      borderSide: BorderSide(
-                                          color: Colors.grey.shade300, width: 1),
-                                    ),
-                                    contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 10.w),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 10.w),
                         // State
                         Expanded(
                           child: Column(
@@ -473,7 +443,38 @@ class _EventScreenViewState extends State<EventScreenView> {
                               ),
                             ],
                           ),
+                        ),                        SizedBox(width: 10.w),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomText(
+                                text: "City",
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.mainTextColors,
+                              ),
+                              SizedBox(height: 6.h),
+                              SizedBox(
+                                height: 50.h,
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    hintText: "Enter City",
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8.r),
+                                      borderSide: BorderSide(
+                                          color: Colors.grey.shade300, width: 1),
+                                    ),
+                                    contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 10.w),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
+
+
                       ],
                     ),
                     Gap(15.h),

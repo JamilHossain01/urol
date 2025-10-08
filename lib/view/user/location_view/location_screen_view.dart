@@ -1,8 +1,9 @@
-import 'package:calebshirthum/common%20widget/custom_button_widget.dart';
+import 'package:calebshirthum/common widget/custom_button_widget.dart';
 import 'package:calebshirthum/view/user/location_view/widgets/gym_preview_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../common widget/custom text/custom_text_widget.dart';
@@ -33,18 +34,74 @@ class _MapScreenViewState extends State<MapScreenView> {
 
   final LatLng _center = const LatLng(38.5816, -121.4944); // Sacramento
 
-  Set<Marker> markers = {
-    const Marker(
-      markerId: MarkerId("1"),
-      position: LatLng(38.5826, -121.4944),
-      infoWindow: InfoWindow(title: "GymNation Stars"),
-    ),
-    const Marker(
-      markerId: MarkerId("2"),
-      position: LatLng(38.5800, -121.4920),
-      infoWindow: InfoWindow(title: "BJJ Academy"),
-    ),
-  };
+  Set<Marker> markers = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _createMarkers();
+  }
+
+  // Create custom markers
+  Future<void> _createMarkers() async {
+    // Load custom marker image asynchronously
+    BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(size: Size(24, 24)),
+      AppImages.mapLogo,  // Custom marker image
+    );
+
+    // Now create the markers
+    setState(() {
+      markers.add(
+        Marker(
+          markerId: MarkerId("1"),
+          position: LatLng(38.5826, -121.4944),
+          infoWindow: InfoWindow(title: "GymNation Stars"),
+          icon: customIcon,
+        ),
+      );
+      markers.add(
+        Marker(
+          markerId: MarkerId("2"),
+          position: LatLng(38.5800, -121.4920),
+          infoWindow: InfoWindow(title: "BJJ Academy"),
+          icon: customIcon,
+        ),
+      );
+      markers.add(
+        Marker(
+          markerId: MarkerId("3"),
+          position: LatLng(38.5836, -121.4954),
+          infoWindow: InfoWindow(title: "MMA Fitness Gym"),
+          icon: customIcon,
+        ),
+      );
+      markers.add(
+        Marker(
+          markerId: MarkerId("4"),
+          position: LatLng(38.5772, -121.4936),
+          infoWindow: InfoWindow(title: "Victory BJJ Academy"),
+          icon: customIcon,
+        ),
+      );
+      markers.add(
+        Marker(
+          markerId: MarkerId("5"),
+          position: LatLng(38.5862, -121.4912),
+          infoWindow: InfoWindow(title: "Fight Club Gym"),
+          icon: customIcon,
+        ),
+      );
+      markers.add(
+        Marker(
+          markerId: MarkerId("6"),
+          position: LatLng(38.5796, -121.4908),
+          infoWindow: InfoWindow(title: "The Arena Combat Academy"),
+          icon: customIcon,
+        ),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +129,7 @@ class _MapScreenViewState extends State<MapScreenView> {
               child: Container(
                   padding: EdgeInsets.all(12.w),
                   decoration: BoxDecoration(
-                    color: Colors.red.shade700,
+                    color: AppColors.mainColor,
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Image.asset(
@@ -91,17 +148,23 @@ class _MapScreenViewState extends State<MapScreenView> {
               child: SizedBox(
                 height: 250.h, // Adjust this height as per your UI requirement
                 child: ListView.builder(
-                  // scrollDirection: Axis.vertical,
                   itemCount: gymList.length,
                   itemBuilder: (context, index) {
                     final gym = gymList[index];
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5,),
-                      child: GymPreviewCard(
-                        gymName: gym['gymName']!,
-                        location: gym['location']!,
-                        image: gym['image']!,
-                        categories: gym['categories']!.split(', '),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          Get.to(() => GymDetailsScreen());
+                        },
+                        child: GymPreviewCard(
+                          gymName: gym['gymName']!,
+                          location: gym['location']!,
+                          image: gym['image']!,
+                          categories: gym['categories']!.split(', '),
+                        ),
                       ),
                     );
                   },
@@ -220,13 +283,12 @@ class _MapScreenViewState extends State<MapScreenView> {
                   ),
                   Gap(20.h),
                   CustomButtonWidget(
-                      btnColor: AppColors.mainColor,
-                      btnTextColor: Colors.white,
-                      btnText: 'Apply Filter',
-                      onTap: () => Navigator.pop(context),
-                      iconWant: false)
-
-                  // Apply Button
+                    btnColor: AppColors.mainColor,
+                    btnTextColor: Colors.white,
+                    btnText: 'Apply Filter',
+                    onTap: () => Navigator.pop(context),
+                    iconWant: false,
+                  )
                 ],
               ),
             );

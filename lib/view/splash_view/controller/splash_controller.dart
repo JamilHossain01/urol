@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'package:calebshirthum/view/auth_view/login_auth_view.dart';
+import 'package:calebshirthum/view/splash_view/onboarding_view.dart';
 import 'package:get/get.dart';
 
 import '../../../uitilies/api/local_storage.dart';
@@ -24,7 +25,7 @@ class SplashController extends GetxController {
     });
 
     Future.delayed(const Duration(seconds: 3), () async {
-      Get.to(() => LogInView());
+      Get.to(() => OnboardingView());
     });
   }
 

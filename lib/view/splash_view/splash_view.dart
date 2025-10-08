@@ -14,26 +14,33 @@ class SplashView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            // Full-screen background image
-            Image.asset(
-              AppImages.splash,
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.cover, // Ensures the image fills the entire screen
-            ),
-            // Centered logo (adjust your logo size accordingly)
-            Image.asset(
-              AppImages.logo, // Change to your logo's asset path
-              width: 200.w,  // Adjust size as needed
-              height: 200.h, // Adjust size as needed
-            ),
-          ],
-        ),
+      body:       Image.asset(
+        AppImages.splash,
+        width: double.infinity,
+        height: double.infinity,
+        fit: BoxFit.cover, // Ensures the image fills the entire screen
       ),
+      //
+      // Center(
+      //   child: Stack(
+      //     alignment: Alignment.center,
+      //     children: [
+      //       // Full-screen background image
+      //       Image.asset(
+      //         AppImages.splash,
+      //         width: double.infinity,
+      //         height: double.infinity,
+      //         fit: BoxFit.cover, // Ensures the image fills the entire screen
+      //       ),
+      //       // Centered logo (adjust your logo size accordingly)
+      //       Image.asset(
+      //         AppImages.logo, // Change to your logo's asset path
+      //         width: 200.w,  // Adjust size as needed
+      //         height: 200.h, // Adjust size as needed
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 }

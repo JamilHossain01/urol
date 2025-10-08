@@ -21,7 +21,9 @@ class SignInView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: '',),
+      appBar: CustomAppBar(
+        title: '',
+      ),
       backgroundColor: Colors.white,
       body: Stack(
         children: [
@@ -33,22 +35,28 @@ class SignInView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     SizedBox(height: 30),
 
                     //Phone Number/Email
                     CustomText(
                       fontWeight: FontWeight.w600,
                       textAlign: TextAlign.start,
-                      text: "Sign in to your account",
+                      text: "Sign in to your",
                       fontSize: 32.sp,
                       color: Color(0xFF1E1E1E),
-                    ),  CustomText(
+                    ),
+                    CustomText(
+                      fontWeight: FontWeight.w600,
+                      textAlign: TextAlign.start,
+                      text: "account",
+                      fontSize: 32.sp,
+                      color: Color(0xFF1E1E1E),
+                    ),
+                    CustomText(
                       fontWeight: FontWeight.w500,
                       textAlign: TextAlign.start,
                       fontSize: 12.sp,
                       color: Color(0xFF8A8A8A),
-
                       text: "Enter your email address and password to log in ",
                     ),
                     SizedBox(height: 30),
@@ -57,6 +65,8 @@ class SignInView extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                       textAlign: TextAlign.start,
                       text: "Email",
+                      color: AppColors.textFieldNameColor,
+                      fontSize: 12.sp,
                     ),
                     CustomTextField(
                       fillColor: Color(0xFFFFFFFF),
@@ -70,6 +80,8 @@ class SignInView extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                       textAlign: TextAlign.start,
                       text: "Password",
+                      color: AppColors.textFieldNameColor,
+                      fontSize: 12.sp,
                     ),
                     CustomTextField(
                       // fillColor: Color(0xFFE4E4E4),
@@ -174,7 +186,7 @@ class SignInView extends StatelessWidget {
                             child: Padding(
                               padding: EdgeInsets.all(8),
                               child: Image(
-                                image: AssetImage(AppImages.googleIcon),
+                                image: AssetImage(AppImages.appleIcon),
                                 width: 30,
                               ),
                             )),
@@ -186,7 +198,12 @@ class SignInView extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CustomText(text: "Don’t have an account?"),
+                        CustomText(
+                          text: "Don’t have an account?",
+                          color: AppColors.pTextColors,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12.sp,
+                        ),
                         SizedBox(width: 5),
                         GestureDetector(
                           onTap: () {
@@ -200,11 +217,6 @@ class SignInView extends StatelessWidget {
                         )
                       ],
                     )
-
-
-
-
-
                   ],
                 ),
               ),

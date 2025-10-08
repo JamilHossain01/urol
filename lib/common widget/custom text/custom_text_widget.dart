@@ -16,6 +16,9 @@ class CustomText extends StatelessWidget {
     this.text = "",
     this.overflow = TextOverflow.ellipsis,
     this.letterSpace,
+    this.underlined = false, // Optional parameter for underline
+    this.underlineColor = Colors.black, // Optional parameter for underline color
+    this.underlineThickness = 2.0, // Optional parameter for underline thickness
   });
 
   final double left;
@@ -30,21 +33,27 @@ class CustomText extends StatelessWidget {
   final int? maxLines;
   final TextOverflow overflow;
   final double? letterSpace;
+  final bool underlined; // Track the underline option
+  final Color underlineColor; // Track the underline color
+  final double underlineThickness; // Track the underline thickness
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: left, right: right, top: top, bottom: bottom),
       child: Text(
-        text, // <-- Correct place for the actual text
+        text, // Actual text
         textAlign: textAlign,
         maxLines: maxLines,
         overflow: overflow,
-        style: GoogleFonts.poppins(
+        style: GoogleFonts.openSans(
           letterSpacing: letterSpace,
           fontSize: fontSize,
           fontWeight: fontWeight,
           color: color,
+          decoration: underlined ? TextDecoration.underline : TextDecoration.none, // Conditionally add underline
+          decorationColor: underlined ? underlineColor : Colors.transparent, // Set the underline color
+          decorationThickness: underlined ? underlineThickness : 0.0, // Set the thickness of the underline
         ),
       ),
     );

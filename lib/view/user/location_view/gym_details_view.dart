@@ -1,32 +1,72 @@
-import 'package:calebshirthum/common%20widget/comon_conatainer/custom_conatiner.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:cached_network_image/cached_network_image.dart'; // Add the cached network image package
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import '../../../../common widget/custom text/custom_text_widget.dart';
+import '../../../../common widget/custom_button_widget.dart';
+import '../../../../uitilies/app_colors.dart';
+import '../../../../uitilies/app_images.dart';
+import '../../../common widget/comon_conatainer/custom_conatiner.dart';
+import 'claim_your_gym.dart';
 
-import '../../../common widget/custom text/custom_text_widget.dart';
-import '../../../uitilies/app_colors.dart';
-import '../../../uitilies/app_images.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+import 'package:cached_network_image/cached_network_image.dart'; // Add the cached network image package
+import 'package:smooth_page_indicator/smooth_page_indicator.dart'; // Add Smooth Page Indicator
 
-class GymDetailsScreen extends StatelessWidget {
+import '../../../../common widget/custom text/custom_text_widget.dart';
+import '../../../../common widget/custom_button_widget.dart';
+import '../../../../uitilies/app_colors.dart';
+import '../../../../uitilies/app_images.dart';
+
+class GymDetailsScreen extends StatefulWidget {
   const GymDetailsScreen({super.key});
+
+  @override
+  State<GymDetailsScreen> createState() => _GymDetailsScreenState();
+}
+
+class _GymDetailsScreenState extends State<GymDetailsScreen> {
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController.addListener(() {
+      setState(() {
+        _currentPage = _pageController.page?.round() ?? 0;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backRoudnColors,
+      backgroundColor: Color(0xFFFFFFFF),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Gym Cover Image
+            // Gym Cover Image (Using PageView for swipeable images)
             Stack(
               children: [
-                Image.asset(
-                  AppImages.gym2,
+                Container(
                   height: 220.h,
                   width: double.infinity,
-                  fit: BoxFit.cover,
+                  child: PageView(
+                    controller: _pageController,
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      // CachedNetworkImage for gym images
+                      _buildGymImage('https://example.com/gym_image_1.jpg'),
+                      _buildGymImage('https://example.com/gym_image_2.jpg'),
+                      _buildGymImage(AppImages.gym2), // fallback to AssetImage
+                    ],
+                  ),
                 ),
                 Positioned(
                   top: 40.h,
@@ -37,6 +77,23 @@ class GymDetailsScreen extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+
+            // Circular Indicator for page progress
+            Center(
+              child: Padding(
+                padding: EdgeInsets.only(top: 16.h),
+                child: SmoothPageIndicator(
+                  controller: _pageController,  // PageController to control the indicator
+                  count: 3, // Total number of images
+                  effect: ExpandingDotsEffect(
+                    dotWidth: 8.w,
+                    dotHeight: 8.h,
+                    spacing: 6.w,
+                    activeDotColor: AppColors.mainColor,  // Active dot color
+                  ),
+                ),
+              ),
             ),
 
             Padding(
@@ -59,7 +116,7 @@ class GymDetailsScreen extends StatelessWidget {
                       Gap(5.w),
                       CustomText(
                         text: "6157 Rd, California, USA",
-                        fontSize: 12.sp,
+                        fontSize: 10.sp,
                         color: Color(0xFF4B4B4B),
                       ),
                     ],
@@ -79,30 +136,32 @@ class GymDetailsScreen extends StatelessWidget {
 
                   // Description
                   CustomText(
+                    maxLines: 10,
                     textAlign: TextAlign.start,
                     fontWeight: FontWeight.w400,
                     text:
-                        "GymNation Stars gives a full view of the gym’s offerings, schedule, and amenities. At the top, users see the gym name, logo, star rating, and location linked to an interactive map. A brief overview highlights services, atmosphere, and training types, with a photo gallery for a visual tour.",
+                    "GymNation Stars gives a full view of the gym’s offerings, schedule, and amenities. At the top, users see the gym name, logo, star rating, and location linked to an interactive map. A brief overview highlights services, atmosphere, and training types, with a photo gallery for a visual tour.",
                     fontSize: 12.sp,
                     color: Color(0xFF686868),
                   ),
-                  Gap(20.h),
 
                   // Info Section
-                  CustomText(
-                    text: "Information Details",
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.mainTextColors,
-                  ),
+
                   Gap(10.h),
                   CustomContainer(
                     color:Color(0xFFF8F9FA),
                     borderColor: Color(0xFF989898),
 
-                    height: 125.h,
-                    child: Column(
+                    height: 150.h,
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        CustomText(
+                          text: "Contact Information",
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.mainTextColors,
+                        ),
+                        Gap(5.h),
                         _buildInfoRow(AppImages.call, "(580) 559-7890","Phone"),
                         Divider(),
                         _buildInfoRow(AppImages.teligram, "info@gymnation.com","Email"),
@@ -126,23 +185,23 @@ class GymDetailsScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                          Row(children: [
-                            Image.asset(
-                              AppImages.https,
-                              height: 18.h,
-                              width: 18.w,
-                            ), Gap(5.w),
-                            Image.asset(
-                              AppImages.fb,
-                              height: 18.h,
-                              width: 18.w,
-                            ),Gap(5.w),   Image.asset(
-                              AppImages.insta,
-                              height: 18.h,
-                              width: 18.w,
-                            ),
+                            Row(children: [
+                              Image.asset(
+                                AppImages.https,
+                                height: 18.h,
+                                width: 18.w,
+                              ), Gap(5.w),
+                              Image.asset(
+                                AppImages.fb,
+                                height: 18.h,
+                                width: 18.w,
+                              ),Gap(5.w),   Image.asset(
+                                AppImages.insta,
+                                height: 18.h,
+                                width: 18.w,
+                              ),
 
-                          ],)
+                            ],)
 
                           ],
                         ),
@@ -155,16 +214,36 @@ class GymDetailsScreen extends StatelessWidget {
 
                   // Schedule
                   CustomText(
-                    text: "Schedule",
+                    text: "Open Mat Schedule",
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
                     color: AppColors.mainTextColors,
                   ),
                   Gap(10.h),
-                  _buildSchedule("9:00 - 11:00 PM", "Sun - Tue"),
-                  _buildSchedule("4:00 - 6:00 PM", "Wed, Thu"),
-                  _buildSchedule("9:00 - 11:00 PM", "Sun, Mon"),
-                  _buildSchedule("4:00 - 6:00 PM", "Tue, Wed"),
+                  _buildSchedule("9:00 - 11:00 PM", "Sun - Tue", "Open Mat"),
+                  _buildSchedule("4:00 - 6:00 PM", "Wed, Thu", "Open Mat"),
+                  _buildSchedule("9:00 - 11:00 PM", "Sun, Mon", "Open Mat"),
+                  _buildSchedule("4:00 - 6:00 PM", "Tue, Wed", "Open Mat"),
+                  Gap(10.h),  CustomText(
+                    text: "Class Schedule",
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.mainTextColors,
+                  ),
+                  Gap(10.h),
+                  _buildSchedule("9:00 - 11:00 PM", "Monday", "BJJ Fundamentals"),
+                  _buildSchedule("4:00 - 6:00 PM", "Tuesday","Muay Thai Kickboxing"),
+                  _buildSchedule("9:00 - 11:00 PM", "Thursday","Advanced BJJ"),
+                  Gap(10.h),
+
+                  CustomButtonWidget(
+                    btnText: 'Claim This Gym',
+                    onTap: () {
+                      Get.to(()=>ClaimYourGymScreen());
+                    },
+                    iconWant: false,
+                    btnColor: AppColors.mainColor,
+                  )
                 ],
               ),
             ),
@@ -178,13 +257,13 @@ class GymDetailsScreen extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: BoxDecoration(
-        color: Colors.grey.shade200,
+        color: AppColors.mainColor,
         borderRadius: BorderRadius.circular(50.r),
       ),
       child: CustomText(
         text: text,
         fontSize: 12.sp,
-        color: Color(0xFF686868),
+        color: Colors.white,
       ),
     );
   }
@@ -224,7 +303,7 @@ class GymDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSchedule(String time, String days) {
+  Widget _buildSchedule(String time, String days,String name,) {
     return Container(
       padding: EdgeInsets.all(12.w),
       margin: EdgeInsets.only(bottom: 8.h),
@@ -245,7 +324,7 @@ class GymDetailsScreen extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.access_time, size: 16, color: Colors.red),
+                   Icon(Icons.access_time, size: 16, color: AppColors.mainColor),
                   Gap(5.w),
                   CustomText(
                     text: "$time",
@@ -264,13 +343,25 @@ class GymDetailsScreen extends StatelessWidget {
             ],
           ),
           CustomText(
-            text: "Open Mat",
+            text:name,
             fontSize: 16.sp,
             color: AppColors.mainTextColors,
             fontWeight: FontWeight.w600,
           ),
         ],
       ),
+    );
+  }
+
+  // Helper method to build CachedNetworkImage or fallback to AssetImage if URL fails
+  Widget _buildGymImage(String imageUrl) {
+    return CachedNetworkImage(
+      imageUrl: imageUrl, // URL of the gym image
+      height: 220.h,
+      width: double.infinity,
+      fit: BoxFit.cover,
+      placeholder: (context, url) => Center(child: CircularProgressIndicator()), // Loading state
+      errorWidget: (context, url, error) => Image.asset(AppImages.gym2, fit: BoxFit.cover), // Fallback to AssetImage
     );
   }
 }

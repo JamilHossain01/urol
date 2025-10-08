@@ -28,7 +28,7 @@ class SignUpOTPVerifyView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(title: "OTP Verify"),
+      appBar: CustomAppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -37,36 +37,50 @@ class SignUpOTPVerifyView extends StatelessWidget {
             children: [
 
 
-              Center(
-                child: CustomText(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    text: "Enter Your Verification Code"),
-              ),
-              SizedBox(height: 20),
+              CustomText(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 32.sp,
+                  text: "Verification Code"),
+              SizedBox(height:4.h),
 
               CustomText(
                 text:
-                "Please enter the 6-digit code sent to your phone number.",
-                color: Colors.grey,
+                "Please enter the code we just sent to your email",
+                fontWeight: FontWeight.w500,
+                fontSize: 12.sp,
+                color: Color(0xFF8A8A8A),
               ),
               SizedBox(height: 30),
-              OtpForm(
-                controller: otpController,
+              Center(
+                child: OtpForm(
+                  controller: otpController,
+                ),
               ),
               SizedBox(height: 15.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CustomText(
-                    text: AppString.notOTP,
-                  ),
-                  CustomText(
-                    text: "Resend OTP",
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.mainColor,
-                  ),
-                ],
+              Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CustomText(
+                      text: AppString.notOTP,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.pTextColors,
+                      fontSize: 12.sp,
+                    ),
+                    CustomText(
+                      text: "Resend Code",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14.sp,
+                      color: AppColors.mainColor,
+                      underlined: true, // Adds underline
+                      underlineColor: AppColors.mainColor,
+                      underlineThickness: 3.0,// Custom underline color
+                    )
+
+
+
+                  ],
+                ),
               ),
 
               /// Phone number field
@@ -81,7 +95,7 @@ class SignUpOTPVerifyView extends StatelessWidget {
                     Get.to(() => SignInView());
                   },
                   iconWant: false,
-                  btnText: 'Submit',
+                  btnText: 'Verify',
                 ),
               ),
               SizedBox(height: 20),

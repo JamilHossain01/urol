@@ -1,4 +1,6 @@
 import 'package:calebshirthum/uitilies/app_colors.dart';
+import 'package:calebshirthum/view/user/profile_view/contact_us_screen.dart';
+import 'package:calebshirthum/view/user/profile_view/widgets/other_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -7,7 +9,10 @@ import '../../../common widget/comon_conatainer/custom_conatiner.dart';
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_app_bar_widget.dart';
 import '../../../uitilies/app_images.dart';
+import '../setting/views/about_view.dart';
 import '../setting/views/p_chnage_password_view.dart';
+import '../setting/views/privacy_policy.dart';
+import '../setting/views/termOcondition_view.dart';
 
 class AccountSettingsScreen extends StatelessWidget {
   @override
@@ -19,59 +24,42 @@ class AccountSettingsScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            _otherTile("Change Password", AppImages.lock, () {
-              Get.to(() => ChangedNewPasswordView());
-            }),
-            _otherTile("Delete Account", AppImages.delete, () {
-              _showDeleteDialog(context);
-            }),
+            OtherTile(
+              text: "Change Password",
+              iconPath: AppImages.lock,
+              onTap: () => Get.to(() => ChangedNewPasswordView()),
+            ),
+            OtherTile(
+              text: "Delete Account",
+              iconPath: AppImages.delete,
+              onTap: () => _showDeleteDialog(context),
+            ),
+            OtherTile(
+              text: "About Us",
+              iconPath: AppImages.support,
+              onTap: () => Get.to(() => AboutUsView()),
+            ),   OtherTile(
+              text: "Contact Us",
+              iconPath: AppImages.support,
+              onTap: () => Get.to(() => ContactScreen()),
+            ),
+            OtherTile(
+              text: "Privacy Policy",
+              iconPath: AppImages.privacy,
+              onTap: () => Get.to(() => PrivacyPolicyScreen()),
+            ),
+            OtherTile(
+              text: "Terms of Service",
+              iconPath: AppImages.terms,
+              onTap: () => Get.to(() => TermsConditionsView()),
+            ),
           ],
         ),
-      ),
+      )
+
     );
   }
 
-  Widget _otherTile(String text, String iconPath, VoidCallback onTap) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: CustomContainer(
-        color: const Color(0xFFE9E9E9),
-        borderRadius: 8,
-        height: 55.h,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                SizedBox(width: 12.w),
-                Image.asset(
-                  iconPath,
-                  height: 18.h,
-                  width: 18.w,
-                  fit: BoxFit.contain,
-                ),
-                SizedBox(width: 10.w),
-                CustomText(
-                  text: text,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black,
-                ),
-              ],
-            ),
-            GestureDetector(
-              onTap: onTap,
-              child: Icon(
-                Icons.chevron_right,
-                size: 20.sp,
-                color: Colors.grey,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   void _showDeleteDialog(BuildContext context) {
     showDialog(

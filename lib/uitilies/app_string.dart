@@ -16,7 +16,7 @@ class AppString {
   static String signUpTextTwo = "Please  fill the details and create account.";
   static String emailConfirm = "Email Confirmation";
   static String otpCode = "Enter 6 Digit OTP Code";
-  static String notOTP = "Did not receive an OTP ?";
+  static String notOTP = "Didn’t receive OTP?";
   static String premiumOne = "Ad-free experince";
   static String premiumTwo = "Expanded question restaurant";
   static String premiumThree = "Access to the additional categories";

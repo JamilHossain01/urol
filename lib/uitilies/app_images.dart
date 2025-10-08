@@ -1,9 +1,9 @@
 class AppImages {
   static String logo = "assets/images/Frame 1.png";
-  static String splash = "assets/images/WhatsApp Image 2025-09-12 at 10.43.42 AM 1.png";
+  static String splash = "assets/images/Sp.png";
 
   static String googleIcon = "assets/images/google.png";
-  static String appleIcon = "assets/images/google_icon.png";
+  static String appleIcon = "assets/images/apple-logo-svgrepo-com 1 (1).png";
   //BottomBAr
   static String home = "assets/images/home.png";
   static String homeA = "assets/images/homeA.png";
@@ -15,6 +15,10 @@ class AppImages {
   static String calenderA = "assets/images/calenderA.png";
   static String enableLocation = "assets/images/illustration.png";
   static String person = "assets/images/person.png";
+  static String onBoard = "assets/images/Onboarding.png";
+  static String shadowBlack = "assets/images/Rectangle.png";
+  static String badge = "assets/images/badge.png";
+
   //Home
   static String gym1 = "assets/images/Frame 2147227021.png";
   static String gym2 = "assets/images/Frame 2147227021 (1).png";
@@ -28,6 +32,9 @@ class AppImages {
   static String bell2 = "assets/images/Bell (1).png";
   static String setting = "assets/images/setting.png";
   static String support = "assets/images/support.png";
+  static String add = "assets/images/add.png";
+  static String friend = "assets/images/friend.png";
+  static String myGym = "assets/images/myGym.png";
   static String log_out = "assets/images/log_put.png";
   static String book_mark = "assets/images/bookmark.png";
   static String delete = "assets/images/deleteIcon.png";
@@ -41,5 +48,12 @@ class AppImages {
   static String https = "assets/images/https.png";
   static String insta = "assets/images/insta.png";
   static String filter = "assets/images/filter.png";
+  static String mapLogo = "assets/images/mapLogo.png";
+  static String my_friend = "assets/images/my_friend.png";
+  static String discover = "assets/images/discover.png";
+  //belt
+  static String purpelBelt = "assets/images/Purple.png";
+
+
 
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
+  final String? title;
   final VoidCallback? onTap;
   final Color backgroundColor;
   final List<Widget>? actions;
@@ -12,7 +12,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   const CustomAppBar({
     Key? key,
-    required this.title,
+     this.title,
     this.onTap,
     this.backgroundColor = Colors.transparent, // Default background color
     this.actions,
@@ -49,7 +49,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           )
           : null,
       title: Text(
-        title,
+        title ?? '',
         style: TextStyle(
           fontSize: 18.sp,
           fontWeight: FontWeight.w600,

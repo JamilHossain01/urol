@@ -20,6 +20,7 @@ class CustomTextField extends StatefulWidget {
   final IconData? suffixIcon; // Suffix icon
   final String? suffixIconAsset; // Suffix icon asset (image)
   final VoidCallback? onSuffixTap; // Optional tap for suffix
+  final String? Function(String?)? validator; // Added optional validator parameter
 
   const CustomTextField({
     Key? key,
@@ -37,6 +38,7 @@ class CustomTextField extends StatefulWidget {
     this.suffixIcon,
     this.suffixIconAsset,
     this.onSuffixTap,
+    this.validator, // Added
   }) : super(key: key);
 
   @override
@@ -135,6 +137,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             color: widget.hintTextColor ?? Colors.white,
           ),
         ),
+        validator: widget.validator, // Added validator to TextFormField
       ),
     );
   }

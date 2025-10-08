@@ -1,3 +1,5 @@
+import 'package:calebshirthum/view/user/setting/views/privacy_policy.dart';
+import 'package:calebshirthum/view/user/setting/views/termOcondition_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -9,6 +11,7 @@ import '../../../../common widget/custom_button_widget.dart';
 import '../../../../uitilies/app_colors.dart';
 import '../../../../uitilies/app_images.dart';
 import '../../login_auth_view.dart';
+import '../../sign_up_view.dart';
 
 
 
@@ -29,12 +32,24 @@ class LogInView extends StatelessWidget {
               fit: BoxFit.cover, // Ensures the image fills the entire screen
             ),
             // Centered logo (adjust your logo size accordingly)
-            Image.asset(
-              AppImages.logo, // Change to your logo's asset path
-              width: 200.w,  // Adjust size as needed
-              height: 200.h, // Adjust size as needed
-            ),
+            // Image.asset(
+            //   AppImages.logo, // Change to your logo's asset path
+            //   width: 200.w,  // Adjust size as needed
+            //   height: 200.h, // Adjust size as needed
+            // ),
             // Positioned button at the bottom of the screen
+            Positioned(
+              top: 100,
+              left: 100.w,
+              right: 100.w,
+              child:     CustomText(
+                color: Color(0xFF1A1A1A),
+                fontWeight: FontWeight.w600,
+                textAlign: TextAlign.start,
+                fontSize: 32.sp,
+                text: "Welcome!",
+              ),
+            ),
             Positioned(
               bottom: 180.h, // Adjust this to control the vertical position of the button
               left: 16.w,
@@ -66,7 +81,7 @@ class LogInView extends StatelessWidget {
                   btnColor: Colors.white,
                   btnTextColor: AppColors.mainColor,
                   onTap: () {
-                    Get.to(() => SignInView());
+                    Get.to(() => SignUpView());
                   },
                   iconWant: false,
                   btnText: 'Create account',
@@ -78,12 +93,14 @@ class LogInView extends StatelessWidget {
               bottom: 80.h, // Adjust this to control the vertical position of the button
               left: 16.w,
               right: 16.w,
-              child:  CustomText(
-                color: Color(0xFF686868),
-                fontWeight: FontWeight.w600,
-                textAlign: TextAlign.start,
-                fontSize: 11.sp,
-                text: "By signing up you confirm that you have read & agree to",
+              child:  Center(
+                child: CustomText(
+                  color: Color(0xFF686868),
+                  fontWeight: FontWeight.w400,
+                  textAlign: TextAlign.start,
+                  fontSize: 11.sp,
+                  text: "By signing up you confirm that you have read & agree to",
+                ),
               ),
             ),   Positioned(
               bottom: 65.h, // Adjust this to control the vertical position of the button
@@ -102,7 +119,7 @@ class LogInView extends StatelessWidget {
                   Gap(5.w),
                   GestureDetector(
                     onTap: (){
-                      // Get.to(()=> )
+                      Get.to(()=> PrivacyPolicyScreen());
                     },
                     child: CustomText(
                       color: AppColors.mainColor,
@@ -126,7 +143,7 @@ class LogInView extends StatelessWidget {
 
                   GestureDetector(
                     onTap: (){
-                      // Get.to(()=> )
+                      Get.to(()=> TermsConditionsView());
                     },
                     child: CustomText(
                       color: AppColors.mainColor,

@@ -8,7 +8,6 @@ import 'package:get/get_core/src/get_main.dart' show Get;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
-
 import '../../../uitilies/app_colors.dart';
 import '../../common widget/custom text/custom_text_widget.dart';
 import '../../common widget/custom_app_bar_widget.dart';
@@ -36,29 +35,29 @@ class SignUpView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               CustomText(
                 fontWeight: FontWeight.w600,
                 textAlign: TextAlign.start,
                 text: "Sign up",
                 fontSize: 32.sp,
                 color: Color(0xFF1E1E1E),
-              ),  CustomText(
+              ),
+              CustomText(
                 fontWeight: FontWeight.w500,
                 textAlign: TextAlign.start,
                 fontSize: 12.sp,
                 color: Color(0xFF8A8A8A),
-
                 text: "Create an account to continue!",
               ),
               SizedBox(height: 40),
-
 
               //Full Name
               CustomText(
                 fontWeight: FontWeight.w600,
                 textAlign: TextAlign.start,
                 text: "First Name",
+                color: AppColors.textFieldNameColor,
+                fontSize: 12.sp,
               ),
               CustomTextField(
                 hintText: "Enter full name",
@@ -71,6 +70,8 @@ class SignUpView extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 textAlign: TextAlign.start,
                 text: "Last Name",
+                color: AppColors.textFieldNameColor,
+                fontSize: 12.sp,
               ),
               CustomTextField(
                 hintText: "Enter your address",
@@ -83,6 +84,8 @@ class SignUpView extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 textAlign: TextAlign.start,
                 text: "Email",
+                color: AppColors.textFieldNameColor,
+                fontSize: 12.sp,
               ),
               CustomTextField(
                 hintText: "Enter your email",
@@ -91,9 +94,7 @@ class SignUpView extends StatelessWidget {
 
               SizedBox(height: 10),
 
-
               //Phone Number
-
 
               /// Phone number field
               // IntlPhoneField(
@@ -140,6 +141,8 @@ class SignUpView extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 textAlign: TextAlign.start,
                 text: "New Password",
+                color: AppColors.textFieldNameColor,
+                fontSize: 12.sp,
               ),
               CustomTextField(
                 hintText: "Enter your password",
@@ -152,6 +155,8 @@ class SignUpView extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 textAlign: TextAlign.start,
                 text: "Confirm Password",
+                color: AppColors.textFieldNameColor,
+                fontSize: 12.sp,
               ),
               CustomTextField(
                 hintText: "Enter confirm password",
@@ -166,7 +171,7 @@ class SignUpView extends StatelessWidget {
                 child: CustomButtonWidget(
                   btnColor: AppColors.mainColor,
                   onTap: () {
-                     Get.to(() => SignUpOTPVerifyView());
+                    Get.to(() => SignUpOTPVerifyView());
                   },
                   iconWant: false,
                   btnText: 'Sign Up',
@@ -205,7 +210,7 @@ class SignUpView extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.all(8),
                         child: Image(
-                          image: AssetImage(AppImages.googleIcon),
+                          image: AssetImage(AppImages.appleIcon),
                           width: 30,
                         ),
                       )),
@@ -216,11 +221,16 @@ class SignUpView extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CustomText(text: "Already have an account?"),
+                  CustomText(
+                    text: "Already have an account?",
+                    color: AppColors.textFieldNameColor,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 12.sp,
+                  ),
                   SizedBox(width: 5),
                   GestureDetector(
                     onTap: () {
-                      Get.to(() => SignUpView());
+                      Get.to(() => SignInView());
                     },
                     child: CustomText(
                       text: "Login",

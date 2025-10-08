@@ -7,14 +7,28 @@ import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_app_bar_widget.dart';
 import '../../../common widget/custom_text_filed.dart';
 
-class ProfileInformationScreen extends StatelessWidget {
+class ProfileInformationScreen extends StatefulWidget {
   const ProfileInformationScreen({super.key});
+
+  @override
+  State<ProfileInformationScreen> createState() => _ProfileInformationScreenState();
+}
+
+class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
+  String? selectedBelt = "Select One";
+  String? selectedFeet = "5";
+  String? selectedInches = "11";
+  List<String> selectedDisciplines = ["Jiu Jitsu", "Wrestling", "Judo", "MMA", "Boxing"];
+  final List<String> beltRanks = ["Select One", "White", "Blue", "Purple", "Brown", "Black"];
+  final List<String> feetOptions = ["4", "5", "6", "7"];
+  final List<String> inchesOptions = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"];
+  final List<String> disciplines = ["Jiu Jitsu", "Wrestling", "Judo", "MMA", "Boxing", "Muay Thai", "Kickboxing"];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backRoudnColors,
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         title: "Profile Information",
       ),
       body: SingleChildScrollView(
@@ -29,29 +43,11 @@ class ProfileInformationScreen extends StatelessWidget {
               color: AppColors.textFieldNameColor,
             ),
             SizedBox(height: 6.h),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 14.w),
-              decoration: BoxDecoration(
-                color: AppColors.backRoudnColors,
-                borderRadius: BorderRadius.circular(8.r),
-                border: Border.all(color:Color(0xFFB9B9B9))
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  value: "Purple",
-                  items: ["White", "Blue", "Purple", "Brown", "Black"]
-                      .map((rank) => DropdownMenuItem(
-                    value: rank,
-                    child:
-                    Text(rank, style: TextStyle(fontSize: 13.sp)),
-                  ))
-                      .toList(),
-                  onChanged: (value) {},
-                ),
-              ),
+            _buildDropdownField(
+              selectedBelt,
+              beltRanks,
+                  (String? value) => setState(() => selectedBelt = value),
             ),
-
             SizedBox(height: 14.h),
             CustomText(
               text: "Add Home Gym",
@@ -74,11 +70,48 @@ class ProfileInformationScreen extends StatelessWidget {
               color: AppColors.textFieldNameColor,
             ),
             SizedBox(height: 6.h),
-            CustomTextField(
-              hintText: "Enter your height",
-              showObscure: false,
-              fillColor: AppColors.backRoudnColors,
-              hintTextColor: AppColors.hintTextColors,
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText(
+                        text: "Feet",
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textFieldNameColor,
+                      ),
+                      SizedBox(height: 6.h),
+                      _buildDropdownField(
+                        selectedFeet,
+                        feetOptions,
+                            (String? value) => setState(() => selectedFeet = value),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(width: 12.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText(
+                        text: "Inches",
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textFieldNameColor,
+                      ),
+                      SizedBox(height: 6.h),
+                      _buildDropdownField(
+                        selectedInches,
+                        inchesOptions,
+                            (String? value) => setState(() => selectedInches = value),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: 14.h),
             CustomText(
@@ -105,15 +138,21 @@ class ProfileInformationScreen extends StatelessWidget {
             Wrap(
               spacing: 8.w,
               runSpacing: 8.h,
-              children: [
-                _chip("Jiu Jitsu"),
-                _chip("Wrestling"),
-                _chip("Judo"),
-                _chip("MMA"),
-                _chip("Boxing"),
-                _chip("Muay Thai"),
-                _chip("Kickboxing"),
-              ],
+              children: disciplines
+                  .map(
+                    (text) => _buildChip(
+                  text,
+                  selectedDisciplines.contains(text),
+                      () => setState(() {
+                    if (selectedDisciplines.contains(text)) {
+                      selectedDisciplines.remove(text);
+                    } else {
+                      selectedDisciplines.add(text);
+                    }
+                  }),
+                ),
+              )
+                  .toList(),
             ),
             SizedBox(height: 14.h),
             CustomText(
@@ -130,25 +169,67 @@ class ProfileInformationScreen extends StatelessWidget {
               hintTextColor: AppColors.hintTextColors,
             ),
             SizedBox(height: 24.h),
-    CustomButtonWidget(btnText: 'Save', onTap: (){}, iconWant: false,btnColor: AppColors.mainColor,)
+            CustomButtonWidget(
+              btnText: 'Save',
+              onTap: () {},
+              iconWant: false,
+              btnColor: AppColors.mainColor,
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _chip(String text) {
+  Widget _buildDropdownField(
+      String? value,
+      List<String> items,
+      Function(String?) onChanged,
+      ) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(horizontal: 14.w),
       decoration: BoxDecoration(
-        color: const Color(0xFFE9E9E9),
-        borderRadius: BorderRadius.circular(16.r),
+        color: AppColors.backRoudnColors,
+        borderRadius: BorderRadius.circular(8.r),
+        border: Border.all(color: const Color(0xFFB9B9B9)),
       ),
-      child: CustomText(
-        text: text,
-        fontSize: 12.sp,
-        fontWeight: FontWeight.w500,
-        color: Color(0xFF686868),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: value,
+          isExpanded: true,
+          items: items
+              .map(
+                (String item) => DropdownMenuItem<String>(
+              value: item,
+              child: Text(
+                item,
+                style: TextStyle(fontSize: 13.sp),
+              ),
+            ),
+          )
+              .toList(),
+          onChanged: onChanged,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildChip(String text, bool isSelected, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.mainColor : const Color(0xFFE9E9E9),
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        child: CustomText(
+          text: text,
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w500,
+          color: isSelected ? Colors.white : const Color(0xFF686868),
+        ),
       ),
     );
   }

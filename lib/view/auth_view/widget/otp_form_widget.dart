@@ -1,15 +1,13 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
-
 import '../../../uitilies/app_colors.dart';
 
 class OtpForm extends StatefulWidget {
-  final controller;
+  final TextEditingController controller;
 
   const OtpForm({super.key, required this.controller});
+
   @override
   _OtpFormState createState() => _OtpFormState();
 
@@ -19,6 +17,7 @@ class OtpForm extends StatefulWidget {
 
 class _OtpFormState extends State<OtpForm> {
   final focusNode = FocusNode();
+  bool showError = false;
 
   @override
   void dispose() {
@@ -27,23 +26,22 @@ class _OtpFormState extends State<OtpForm> {
     super.dispose();
   }
 
-  bool showError = false;
-
   @override
   Widget build(BuildContext context) {
-    final length = 6;
+    const length = 4;
     const errorColor = Color.fromRGBO(255, 234, 238, 1);
     const fillColor = Color.fromARGB(255, 240, 240, 240);
+
     final defaultPinTheme = PinTheme(
-      width: 50,
-      height: 55,
+      width: 56,
+      height: 56,
       textStyle: GoogleFonts.poppins(
         fontSize: 22,
         color: Color.fromRGBO(30, 60, 87, 1),
       ),
       decoration: BoxDecoration(
         color: fillColor,
-        borderRadius: BorderRadius.circular(8),
+        shape: BoxShape.circle,
         border: Border.all(color: Colors.transparent),
       ),
     );
@@ -56,23 +54,24 @@ class _OtpFormState extends State<OtpForm> {
         focusNode: focusNode,
         defaultPinTheme: defaultPinTheme.copyWith(
           decoration: defaultPinTheme.decoration!.copyWith(
-            border: Border.all(color: AppColors.mainColor),
+            border: Border.all(color: Colors.white),
           ),
         ),
         onCompleted: (pin) {
-          setState(() => showError = pin != '5555');
+          setState(() => showError = pin != '5111');
         },
         focusedPinTheme: defaultPinTheme.copyWith(
-          height: 68,
-          width: 65,
+          height: 60,
+          width: 60,
           decoration: defaultPinTheme.decoration!.copyWith(
-            border: Border.all(color: Colors.black),
+            border: Border.all(color: Color(0xFFECEEF1)),
+            shape: BoxShape.circle,
           ),
         ),
         errorPinTheme: defaultPinTheme.copyWith(
           decoration: BoxDecoration(
             color: errorColor,
-            borderRadius: BorderRadius.circular(8),
+            shape: BoxShape.circle,
           ),
         ),
       ),

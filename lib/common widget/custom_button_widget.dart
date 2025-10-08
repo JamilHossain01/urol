@@ -50,7 +50,7 @@ class CustomButtonWidget extends StatelessWidget {
               end: Alignment.topRight)
               : null,
           border: Border.all(color: borderColor ?? Colors.transparent),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12.r),
         ),
         child: Center(
           child: Padding(
@@ -67,7 +67,7 @@ class CustomButtonWidget extends StatelessWidget {
                 if (iconWant) SizedBox(width: 10),
                 Text(
                   btnText,
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.openSans(
                     fontSize: btnTextSize ?? 14.h,
                     color: btnTextColor ?? Colors.white,
                     fontWeight: FontWeight.w600,
