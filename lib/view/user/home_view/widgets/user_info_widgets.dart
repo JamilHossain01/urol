@@ -33,9 +33,14 @@ class UserInfoSection extends StatelessWidget {
       child: Column(
         children: [
           _buildUserProfile(),
-          Divider(),
+          Gap(2.h),
+          Divider(
+            color: Color(0xFF000000).withOpacity(0.10),
+          ),
           _buildUserLocation(),
-          Divider(),
+          Divider(
+            color: Color(0xFF000000).withOpacity(0.10),
+          ),
           _buildUserFavoriteQuote(),
         ],
       ),
@@ -74,9 +79,9 @@ class UserInfoSection extends StatelessWidget {
               fontSize: 20.h,
               text: name,
             ),
-            
-            Image.asset(AppImages.purpelBelt,width: 100.w,height: 20.h,)
-            
+
+            GestureDetector(child: Image.asset(AppImages.purpelBelt,width: 100.w,height: 20.h,))
+
             // Container(
             //   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
             //   decoration: BoxDecoration(

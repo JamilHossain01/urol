@@ -19,7 +19,7 @@ class AccountSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backRoudnColors,
-      appBar: CustomAppBar(title: 'Settings'),
+      appBar: CustomAppBar(title: 'Settings',showLeadingIcon: true,),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -29,14 +29,10 @@ class AccountSettingsScreen extends StatelessWidget {
               iconPath: AppImages.lock,
               onTap: () => Get.to(() => ChangedNewPasswordView()),
             ),
-            OtherTile(
-              text: "Delete Account",
-              iconPath: AppImages.delete,
-              onTap: () => _showDeleteDialog(context),
-            ),
+
             OtherTile(
               text: "About Us",
-              iconPath: AppImages.support,
+              iconPath: AppImages.emoji,
               onTap: () => Get.to(() => AboutUsView()),
             ),   OtherTile(
               text: "Contact Us",
@@ -53,12 +49,20 @@ class AccountSettingsScreen extends StatelessWidget {
               iconPath: AppImages.terms,
               onTap: () => Get.to(() => TermsConditionsView()),
             ),
+            OtherTile(
+              textColor: Color(0xFFE63431),
+              text: "Delete Account",
+              iconPath: AppImages.delete,
+              onTap: () => _showDeleteDialog(context),
+            ),
           ],
         ),
       )
 
     );
   }
+
+
 
 
   void _showDeleteDialog(BuildContext context) {
@@ -98,6 +102,7 @@ class AccountSettingsScreen extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                   color: Colors.grey[700]!,
                   textAlign: TextAlign.center,
+                  maxLines: 2,
                 ),
                 SizedBox(height: 25.h),
 

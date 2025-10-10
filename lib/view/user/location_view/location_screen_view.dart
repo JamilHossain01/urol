@@ -5,8 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import '../../../common widget/custom text/custom_text_widget.dart';
+import '../../../common widget/seacr)with_filter_widgets.dart';
 import '../../../uitilies/app_colors.dart';
 import '../../../uitilies/app_images.dart';
 import 'gym_details_view.dart';
@@ -27,13 +27,12 @@ class _MapScreenViewState extends State<MapScreenView> {
         (index) => {
       'gymName': 'GymNation Stars',
       'location': '6157 Rd, California, USA',
-      'image': AppImages.gym1, // Use your own image paths here
-      'categories': 'Open Mat, BJJ, MMA', // Categories
+      'image': AppImages.gym1,
+      'categories': 'Open Mat, BJJ, MMA',
     },
   );
 
-  final LatLng _center = const LatLng(38.5816, -121.4944); // Sacramento
-
+  final LatLng _center = const LatLng(38.5816, -121.4944);
   Set<Marker> markers = {};
 
   @override
@@ -42,64 +41,45 @@ class _MapScreenViewState extends State<MapScreenView> {
     _createMarkers();
   }
 
-  // Create custom markers
   Future<void> _createMarkers() async {
-    // Load custom marker image asynchronously
     BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(size: Size(24, 24)),
-      AppImages.mapLogo,  // Custom marker image
+      const ImageConfiguration(size: Size(50, 50)),
+      AppImages.mapLogo,
     );
 
-    // Now create the markers
     setState(() {
-      markers.add(
+      markers = {
         Marker(
-          markerId: MarkerId("1"),
-          position: LatLng(38.5826, -121.4944),
-          infoWindow: InfoWindow(title: "GymNation Stars"),
-          icon: customIcon,
-        ),
-      );
-      markers.add(
+            markerId: const MarkerId("1"),
+            position: const LatLng(38.5826, -121.4944),
+            infoWindow: const InfoWindow(title: "GymNation Stars"),
+            icon: customIcon),
         Marker(
-          markerId: MarkerId("2"),
-          position: LatLng(38.5800, -121.4920),
-          infoWindow: InfoWindow(title: "BJJ Academy"),
-          icon: customIcon,
-        ),
-      );
-      markers.add(
+            markerId: const MarkerId("2"),
+            position: const LatLng(38.5800, -121.4920),
+            infoWindow: const InfoWindow(title: "BJJ Academy"),
+            icon: customIcon),
         Marker(
-          markerId: MarkerId("3"),
-          position: LatLng(38.5836, -121.4954),
-          infoWindow: InfoWindow(title: "MMA Fitness Gym"),
-          icon: customIcon,
-        ),
-      );
-      markers.add(
+            markerId: const MarkerId("3"),
+            position: const LatLng(38.5836, -121.4954),
+            infoWindow: const InfoWindow(title: "MMA Fitness Gym"),
+            icon: customIcon),
         Marker(
-          markerId: MarkerId("4"),
-          position: LatLng(38.5772, -121.4936),
-          infoWindow: InfoWindow(title: "Victory BJJ Academy"),
-          icon: customIcon,
-        ),
-      );
-      markers.add(
+            markerId: const MarkerId("4"),
+            position: const LatLng(38.5772, -121.4936),
+            infoWindow: const InfoWindow(title: "Victory BJJ Academy"),
+            icon: customIcon),
         Marker(
-          markerId: MarkerId("5"),
-          position: LatLng(38.5862, -121.4912),
-          infoWindow: InfoWindow(title: "Fight Club Gym"),
-          icon: customIcon,
-        ),
-      );
-      markers.add(
+            markerId: const MarkerId("5"),
+            position: const LatLng(38.5862, -121.4912),
+            infoWindow: const InfoWindow(title: "Fight Club Gym"),
+            icon: customIcon),
         Marker(
-          markerId: MarkerId("6"),
-          position: LatLng(38.5796, -121.4908),
-          infoWindow: InfoWindow(title: "The Arena Combat Academy"),
-          icon: customIcon,
-        ),
-      );
+            markerId: const MarkerId("6"),
+            position: const LatLng(38.5796, -121.4908),
+            infoWindow: const InfoWindow(title: "The Arena Combat Academy"),
+            icon: customIcon),
+      };
     });
   }
 
@@ -108,74 +88,56 @@ class _MapScreenViewState extends State<MapScreenView> {
     return Scaffold(
       body: Stack(
         children: [
-          // Google Map
           GoogleMap(
-            onMapCreated: (controller) {
-              mapController = controller;
-            },
-            initialCameraPosition: CameraPosition(
-              target: _center,
-              zoom: 14.0,
-            ),
+            onMapCreated: (controller) => mapController = controller,
+            initialCameraPosition: CameraPosition(target: _center, zoom: 14.0),
             markers: markers,
           ),
 
-          // Filter Button
+          /// 🔍 Search Bar + Filter
           Positioned(
             top: 50.h,
             right: 16.w,
-            child: InkWell(
-              onTap: () => _openFilterSheet(context),
-              child: Container(
-                  padding: EdgeInsets.all(12.w),
-                  decoration: BoxDecoration(
-                    color: AppColors.mainColor,
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Image.asset(
-                    AppImages.filter,
-                    height: 20.h,
-                    width: 20.w,
-                  )),
+            left: 16.w,
+            child: SearchBarWithFilter(
+              backgroundColor: Colors.white,
+              onFilterTap: () => _openFilterSheet(context),
             ),
           ),
 
-          // Gym Preview Bottom Card
+          /// 🏋 Gym Preview Bottom List
           Positioned(
-              bottom: 20.h,
-              left: 16.w,
-              right: 16.w,
-              child: SizedBox(
-                height: 250.h, // Adjust this height as per your UI requirement
-                child: ListView.builder(
-                  itemCount: gymList.length,
-                  itemBuilder: (context, index) {
-                    final gym = gymList[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 5,
+            bottom: 20.h,
+            left: 16.w,
+            right: 16.w,
+            child: SizedBox(
+              height: 250.h,
+              child: ListView.builder(
+                itemCount: gymList.length,
+                itemBuilder: (context, index) {
+                  final gym = gymList[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: GestureDetector(
+                      onTap: () => Get.to(() => const GymDetailsScreen()),
+                      child: GymPreviewCard(
+                        gymName: gym['gymName']!,
+                        location: gym['location']!,
+                        image: gym['image']!,
+                        categories: gym['categories']!.split(', '),
                       ),
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.to(() => GymDetailsScreen());
-                        },
-                        child: GymPreviewCard(
-                          gymName: gym['gymName']!,
-                          location: gym['location']!,
-                          image: gym['image']!,
-                          categories: gym['categories']!.split(', '),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              )),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  // Filter Bottom Sheet
+  /// 🧾 Filter Bottom Sheet
   void _openFilterSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -192,12 +154,11 @@ class _MapScreenViewState extends State<MapScreenView> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                        icon: Icon(Icons.close),
+                        icon: const Icon(Icons.close),
                         onPressed: () => Navigator.pop(context),
                       ),
                       CustomText(
@@ -209,13 +170,11 @@ class _MapScreenViewState extends State<MapScreenView> {
                       CustomText(
                         text: "See All",
                         fontSize: 12.sp,
-                        color: Color(0xFF686868),
+                        color: const Color(0xFF686868),
                       ),
                     ],
                   ),
                   Gap(15.h),
-
-                  // Category Chips
                   CustomText(
                     text: "Category",
                     fontSize: 13.sp,
@@ -225,15 +184,20 @@ class _MapScreenViewState extends State<MapScreenView> {
                   Gap(8.h),
                   Wrap(
                     spacing: 8.w,
-                    children:
-                    ["Open Mat", "Jiu Jitsu", "Judo", "MMA", "Wrestling"]
+                    children: [
+                      "Open Mat",
+                      "Jiu Jitsu",
+                      "Judo",
+                      "MMA",
+                      "Wrestling"
+                    ]
                         .map(
                           (cat) => ChoiceChip(
                         backgroundColor: const Color(0xFFF5F5F5),
                         selectedColor: AppColors.mainColor,
                         label: CustomText(
                           text: cat,
-                          fontSize: 12.sp, // same size for all chips
+                          fontSize: 12.sp,
                           fontWeight: FontWeight.w500,
                           color: selectedCategory == cat
                               ? Colors.white
@@ -250,13 +214,20 @@ class _MapScreenViewState extends State<MapScreenView> {
                         .toList(),
                   ),
                   Gap(15.h),
-
-                  // Distance Slider
-                  CustomText(
-                    text: "Location Distance",
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.mainTextColors,
+                  Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
+                        text: "Location Distance",
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.mainTextColors,
+                      ),  CustomText(
+                        text: "Miles",
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.pTextColors,
+                      ),
+                    ],
                   ),
                   Row(
                     children: [
@@ -267,11 +238,8 @@ class _MapScreenViewState extends State<MapScreenView> {
                           max: 50,
                           divisions: 50,
                           activeColor: AppColors.mainColor,
-                          onChanged: (val) {
-                            setModalState(() {
-                              distance = val;
-                            });
-                          },
+                          onChanged: (val) =>
+                              setModalState(() => distance = val),
                         ),
                       ),
                       CustomText(
@@ -297,19 +265,64 @@ class _MapScreenViewState extends State<MapScreenView> {
       },
     );
   }
-
-  Widget _buildChip(String text) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(6.r),
-      ),
-      child: CustomText(
-        text: text,
-        fontSize: 10.sp,
-        color: Colors.black87,
-      ),
-    );
-  }
 }
+
+/// 🔁 Reusable Search Bar with Filter Button
+// class SearchBarWithFilter extends StatelessWidget {
+//   final Color? backgroundColor;
+//   final VoidCallback? onFilterTap;
+//
+//   const SearchBarWithFilter({
+//     Key? key,
+//     this.backgroundColor,
+//     this.onFilterTap,
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       children: [
+//         Expanded(
+//           child: Container(
+//             decoration: BoxDecoration(
+//               color: backgroundColor ?? const Color(0xFFF5F6F8),
+//               borderRadius: BorderRadius.circular(12.r),
+//             ),
+//             child: TextField(
+//               decoration: InputDecoration(
+//                 hintText: "Search here...",
+//                 hintStyle: TextStyle(
+//                   fontSize: 14.sp,
+//                   color: const Color(0xFFB9B9B9),
+//                 ),
+//                 prefixIcon: const Icon(
+//                   Icons.search,
+//                   color: Color(0xFFB9B9B9),
+//                 ),
+//                 border: InputBorder.none,
+//                 contentPadding: EdgeInsets.symmetric(
+//                     vertical: 12.h, horizontal: 8.w),
+//               ),
+//             ),
+//           ),
+//         ),
+//         SizedBox(width: 10.w),
+//         InkWell(
+//           onTap: onFilterTap,
+//           child: Container(
+//             padding: EdgeInsets.all(12.w),
+//             decoration: BoxDecoration(
+//               color: AppColors.mainColor,
+//               borderRadius: BorderRadius.circular(8.r),
+//             ),
+//             child: Image.asset(
+//               AppImages.filter,
+//               height: 20.h,
+//               width: 20.w,
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }

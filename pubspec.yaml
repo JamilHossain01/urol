@@ -36,6 +36,7 @@ dependencies:
   fluttertoast:
   flutter_html:
   geolocator: ^9.0.0
+
   geocoding:
   shimmer:
   cached_network_image: ^3.4.1

@@ -1,37 +1,19 @@
-import 'package:calebshirthum/common%20widget/comon_conatainer/custom_conatiner.dart';
 import 'package:calebshirthum/common%20widget/custom_button_widget.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/app_images.dart';
-import 'package:calebshirthum/view/user/profile_view/friend_screen_view.dart';
-import 'package:calebshirthum/view/user/profile_view/profile_information_view.dart';
-import 'package:calebshirthum/view/user/profile_view/save_gyms.dart';
-import 'package:calebshirthum/view/user/profile_view/settings_view.dart';
-import 'package:calebshirthum/view/user/profile_view/widgets/other_tile.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/profille_header_widgets.dart';
-import 'package:calebshirthum/view/user/setting/views/about_view.dart';
-import 'package:calebshirthum/view/user/setting/views/privacy_policy.dart';
-import 'package:calebshirthum/view/user/setting/views/termOcondition_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:octo_image/octo_image.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:octo_image/octo_image.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../common widget/custom text/custom_text_widget.dart';
-import '../home_view/widgets/user_info_widgets.dart';
 import 'add_compition_view.dart';
-import 'edite_gyms_details.dart';
 import 'edite_profeil_view.dart';
 
 class FindProfileView extends StatelessWidget {
-  const FindProfileView({super.key});
+  final String ? follow;
+  const FindProfileView({super.key, this.follow});
 
   @override
   Widget build(BuildContext context) {
@@ -284,7 +266,7 @@ class FindProfileView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: CustomButtonWidget(
-                  btnText: 'Follow',
+                  btnText: follow ?? "Follow",
                   onTap: () {
                     Get.to(() => EditProfileView());
                     // Get.to(() => EditGymDetailsScreen());

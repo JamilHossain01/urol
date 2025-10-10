@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 
 import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../common widget/custom_text_filed.dart';
@@ -28,9 +29,9 @@ class LocationWidget extends StatelessWidget {
       children: [
         CustomText(
           text: "Location",
-          fontSize: 16.sp,
+          fontSize: 14.sp,
           fontWeight: FontWeight.w600,
-          color: AppColors.textFieldNameColor,
+          color: AppColors.mainTextColors,
         ),
         SizedBox(height: 12.h),
         CustomText(
@@ -39,6 +40,8 @@ class LocationWidget extends StatelessWidget {
           fontWeight: FontWeight.w600,
           color: AppColors.textFieldNameColor,
         ),
+        Gap(4.h),
+
         CustomTextField(
           controller: streetAddressController,
           hintText: "Street address",
@@ -50,28 +53,7 @@ class LocationWidget extends StatelessWidget {
         SizedBox(height: 12.h),
         Row(
           children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomText(
-                    text: "City",
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textFieldNameColor,
-                  ),
-                  CustomTextField(
-                    controller: cityController,
-                    hintText: "Enter City",
-                    showObscure: false,
-                    fillColor: AppColors.backRoudnColors,
-                    hintTextColor: AppColors.hintTextColors,
-                    validator: (value) => value!.isEmpty ? "City is required" : null,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(width: 12.w),
+
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,6 +91,29 @@ class LocationWidget extends StatelessWidget {
                 ],
               ),
             ),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomText(
+                    text: "City",
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textFieldNameColor,
+                  ),
+                  CustomTextField(
+                    controller: cityController,
+                    hintText: "Enter City",
+                    showObscure: false,
+                    fillColor: AppColors.backRoudnColors,
+                    hintTextColor: AppColors.hintTextColors,
+                    validator: (value) => value!.isEmpty ? "City is required" : null,
+                  ),
+                ],
+              ),
+            ),
+
           ],
         ),
         SizedBox(height: 12.h),
@@ -118,6 +123,8 @@ class LocationWidget extends StatelessWidget {
           fontWeight: FontWeight.w600,
           color: AppColors.textFieldNameColor,
         ),
+        Gap(4.h),
+
         CustomTextField(
           controller: zipCodeController,
           hintText: "Enter zip code",

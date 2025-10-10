@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 
 import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../common widget/custom_text_filed.dart';
@@ -24,9 +25,9 @@ class BasicInfoWidget extends StatelessWidget {
       children: [
         CustomText(
           text: "Basic Information",
-          fontSize: 16.sp,
+          fontSize: 14.sp,
           fontWeight: FontWeight.w600,
-          color: AppColors.textFieldNameColor,
+          color: AppColors.mainTextColors,
         ),
         SizedBox(height: 12.h),
         CustomText(
@@ -35,6 +36,7 @@ class BasicInfoWidget extends StatelessWidget {
           fontWeight: FontWeight.w600,
           color: AppColors.textFieldNameColor,
         ),
+        Gap(4.h),
         CustomTextField(
           controller: gymNameController,
           hintText: "Enter your gym name",
@@ -48,8 +50,10 @@ class BasicInfoWidget extends StatelessWidget {
           text: "Description",
           fontSize: 12.sp,
           fontWeight: FontWeight.w600,
-          color: AppColors.textFieldNameColor,
+          color: AppColors.mainTextColors,
         ),
+        Gap(4.h),
+
         CustomTextField(
           controller: descriptionController,
           hintText: "Enter your gym description",

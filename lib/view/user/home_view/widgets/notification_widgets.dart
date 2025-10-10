@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+
+import '../../profile_view/notification_view.dart';
 
 class NotificationBell extends StatelessWidget {
   final int notificationCount; // Dynamic notification count
@@ -13,7 +17,7 @@ class NotificationBell extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
-            // Handle tap, for example, navigate to notifications screen
+            Get.to(() => NotificationsScreen());
           },
           child: Container(
             height: 35.h,

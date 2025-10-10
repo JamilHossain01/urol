@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart' show Get;
 
@@ -17,7 +18,7 @@ class CreateNewPasswordView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Create New Password"),
+      appBar: CustomAppBar(),
       backgroundColor: Colors.white,
       body: Stack(
           children: [
@@ -31,20 +32,27 @@ class CreateNewPasswordView extends StatelessWidget {
             children: [
 
             CustomText(
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            fontSize: 32.sp,
             text: "New Password"),
-        SizedBox(height: 10),
+        SizedBox(height: 8),
         CustomText(
           text:
           "New password must different from previous",
-          color: Colors.grey,
+          color: Color(0xFF8A8A8A),
+          fontWeight: FontWeight.w500,
+          fontSize: 12.sp,
         ),
         SizedBox(height: 10),
         CustomText(
+
+          text: "New Password",
+          fontSize: 12.sp,
+          color: AppColors.pTextColors,
           fontWeight: FontWeight.w600,
           textAlign: TextAlign.start,
-          text: "Password",
+
+
         ),
         CustomTextField(
           hintText: "Enter your password",
@@ -53,6 +61,8 @@ class CreateNewPasswordView extends StatelessWidget {
         SizedBox(height: 10),
         SizedBox(height: 10),
         CustomText(
+          fontSize: 12.sp,
+          color: AppColors.pTextColors,
           fontWeight: FontWeight.w600,
           textAlign: TextAlign.start,
           text: "Confirm Password",

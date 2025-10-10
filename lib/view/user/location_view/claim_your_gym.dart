@@ -144,10 +144,10 @@ class ClaimYourGymScreen extends StatelessWidget {
 
               ],
             ),
-            SizedBox(height: 14.h),
+            // SizedBox(height: 8.h),
             CustomText(
               text: "Required Documents",
-              fontSize: 12.sp,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w600,
               color: AppColors.textFieldNameColor,
             ),
@@ -157,7 +157,7 @@ class ClaimYourGymScreen extends StatelessWidget {
               fontWeight: FontWeight.w400,
               color: Color(0xFF989898),
             ),
-            SizedBox(height: 24.h),
+            SizedBox(height: 14.h),
             UploadCard(title: 'Utility Bill'),
             SizedBox(height: 6.h),
 

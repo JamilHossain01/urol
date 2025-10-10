@@ -3,7 +3,6 @@ import 'package:calebshirthum/view/user/profile_view/find_friend_profile_view.da
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
 import '../../../uitilies/app_colors.dart';
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_app_bar_widget.dart';
@@ -15,7 +14,8 @@ class FriendsScreen extends StatefulWidget {
   State<FriendsScreen> createState() => _FriendsScreenState();
 }
 
-class _FriendsScreenState extends State<FriendsScreen> with SingleTickerProviderStateMixin {
+class _FriendsScreenState extends State<FriendsScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   final List<Map<String, dynamic>> friends = [
@@ -23,19 +23,22 @@ class _FriendsScreenState extends State<FriendsScreen> with SingleTickerProvider
       'name': 'Caleb Shirthum',
       'gym': 'The Arena Combat Academy',
       'disciplines': ['Jiu Jitsu', 'Wrestling'],
-      'imageUrl': 'https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
+      'imageUrl':
+      'https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
     },
     {
       'name': 'Sarah Martinez',
       'gym': 'Elite Combat Training',
       'disciplines': ['Jiu Jitsu', 'Wrestling', 'Judo'],
-      'imageUrl': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
+      'imageUrl':
+      'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
     },
     {
       'name': 'Marcus Johnson',
       'gym': 'Iron Fist Gym',
       'disciplines': ['Jiu Jitsu', 'MMA', 'Wrestling'],
-      'imageUrl': 'https://images.unsplash.com/photo-1530268729831-4f9721fa1d75?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
+      'imageUrl':
+      'https://images.unsplash.com/photo-1530268729831-4f9721fa1d75?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
     },
   ];
 
@@ -44,35 +47,40 @@ class _FriendsScreenState extends State<FriendsScreen> with SingleTickerProvider
       'name': 'Caleb Shirthum',
       'gym': 'Knockout Club',
       'disciplines': ['Jiu Jitsu', 'Wrestling'],
-      'imageUrl': 'https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
+      'imageUrl':
+      'https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
       'isFollowing': false,
     },
     {
       'name': 'Kristin Watson',
       'gym': 'Knockout Club',
       'disciplines': ['Jiu Jitsu', 'Wrestling'],
-      'imageUrl': 'https://images.unsplash.com/photo-1544718045-84e628b0ff82?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
+      'imageUrl':
+      'https://images.unsplash.com/photo-1544718045-84e628b0ff82?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
       'isFollowing': false,
     },
     {
       'name': 'Brooklyn Sims',
       'gym': 'Knockout Club',
       'disciplines': ['Jiu Jitsu', 'Wrestling'],
-      'imageUrl': 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
+      'imageUrl':
+      'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
       'isFollowing': false,
     },
     {
       'name': 'Courtney Henry',
       'gym': 'Knockout Club',
       'disciplines': ['Jiu Jitsu', 'Wrestling'],
-      'imageUrl': 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
+      'imageUrl':
+      'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
       'isFollowing': false,
     },
     {
       'name': 'Savannah Nguyen',
       'gym': 'Knockout Club',
       'disciplines': ['Jiu Jitsu', 'Wrestling'],
-      'imageUrl': 'https://images.unsplash.com/photo-1508187613440-360d3b14d4b8?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
+      'imageUrl':
+      'https://images.unsplash.com/photo-1508187613440-360d3b14d4b8?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
       'isFollowing': false,
     },
   ];
@@ -157,7 +165,8 @@ class _FriendsScreenState extends State<FriendsScreen> with SingleTickerProvider
               ),
               filled: true,
               fillColor: Colors.grey[100],
-              contentPadding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
+              contentPadding:
+              EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
             ),
           ),
         ),
@@ -199,7 +208,8 @@ class _FriendsScreenState extends State<FriendsScreen> with SingleTickerProvider
               ),
               filled: true,
               fillColor: Colors.grey[100],
-              contentPadding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
+              contentPadding:
+              EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
             ),
           ),
         ),
@@ -273,9 +283,11 @@ class _FriendsScreenState extends State<FriendsScreen> with SingleTickerProvider
                     Wrap(
                       spacing: 6.w,
                       runSpacing: 4.h,
-                      children: (friend['disciplines'] as List).map((discipline) {
+                      children:
+                      (friend['disciplines'] as List).map((discipline) {
                         return Container(
-                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 8.w, vertical: 4.h),
                           decoration: BoxDecoration(
                             color: AppColors.mainColor,
                             borderRadius: BorderRadius.circular(12.r),
@@ -289,19 +301,17 @@ class _FriendsScreenState extends State<FriendsScreen> with SingleTickerProvider
                         );
                       }).toList(),
                     ),
-
                   ],
                 ),
               ),
             ],
           ),
           SizedBox(height: 4.h),
-
           SizedBox(
             width: double.infinity,
             child: TextButton(
               onPressed: () {
-                Get.to(()=>FindProfileView());
+                Get.to(() => FindProfileView(follow: 'Unfollow'));
               },
               style: TextButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
@@ -315,7 +325,6 @@ class _FriendsScreenState extends State<FriendsScreen> with SingleTickerProvider
               ),
             ),
           ),
-
         ],
       ),
     );
@@ -364,16 +373,11 @@ class _FriendsScreenState extends State<FriendsScreen> with SingleTickerProvider
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomText(
-                          text: user['name'],
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ),
-                      ],
+                    CustomText(
+                      text: user['name'],
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
                     ),
                     SizedBox(height: 4.h),
                     CustomText(
@@ -386,9 +390,11 @@ class _FriendsScreenState extends State<FriendsScreen> with SingleTickerProvider
                     Wrap(
                       spacing: 6.w,
                       runSpacing: 4.h,
-                      children: (user['disciplines'] as List).map((discipline) {
+                      children:
+                      (user['disciplines'] as List).map((discipline) {
                         return Container(
-                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 8.w, vertical: 4.h),
                           decoration: BoxDecoration(
                             color: AppColors.mainColor,
                             borderRadius: BorderRadius.circular(12.r),
@@ -407,16 +413,15 @@ class _FriendsScreenState extends State<FriendsScreen> with SingleTickerProvider
               ),
               Column(
                 children: [
-                  // View Button with fixed width and height
                   SizedBox(
-                    width: 64.w,  // Set width here to match the TextButton
-                    height: 30.h,  // Set height here to match the TextButton
+                    width: 64.w,
+                    height: 30.h,
                     child: TextButton(
                       onPressed: () {
-                        Get.to(()=>FindProfileView());
+                        Get.to(() => FindProfileView(follow: "Follow"));
                       },
                       style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero, // Remove padding to ensure the height and width are fixed
+                        padding: EdgeInsets.zero,
                         side: BorderSide(color: AppColors.mainColor),
                       ),
                       child: CustomText(
@@ -428,11 +433,9 @@ class _FriendsScreenState extends State<FriendsScreen> with SingleTickerProvider
                     ),
                   ),
                   SizedBox(height: 8.h),
-
-                  // Follow Button with same fixed width and height
                   SizedBox(
-                    width: 64.w,  // Set width here to match the TextButton
-                    height: 30.h,  // Set height here to match the TextButton
+                    width: 64.w,
+                    height: 30.h,
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
@@ -440,12 +443,11 @@ class _FriendsScreenState extends State<FriendsScreen> with SingleTickerProvider
                         });
                       },
                       child: Container(
-                        padding: EdgeInsets.zero,  // Remove padding to make it the same height and width
                         decoration: BoxDecoration(
                           color: followColor,
                           borderRadius: BorderRadius.circular(20.r),
                         ),
-                        child: Center(  // Center the text inside the container
+                        child: Center(
                           child: CustomText(
                             text: followText,
                             fontSize: 14.sp,
@@ -456,12 +458,9 @@ class _FriendsScreenState extends State<FriendsScreen> with SingleTickerProvider
                     ),
                   ),
                 ],
-              )
-
+              ),
             ],
           ),
-
-          SizedBox(height: 8.h),
         ],
       ),
     );

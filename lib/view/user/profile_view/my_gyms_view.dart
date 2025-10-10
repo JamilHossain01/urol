@@ -13,14 +13,14 @@ import '../location_view/gym_details_view.dart';
 import '../location_view/location_screen_view.dart';
 import '../location_view/widgets/gym_preview_card.dart';
 
-class SaveGymsView extends StatefulWidget {
-  const SaveGymsView({super.key});
+class MyGymsView extends StatefulWidget {
+  const MyGymsView({super.key});
 
   @override
-  State<SaveGymsView> createState() => _SaveGymsViewState();
+  State<MyGymsView> createState() => _MyGymsViewState();
 }
 
-class _SaveGymsViewState extends State<SaveGymsView> {
+class _MyGymsViewState extends State<MyGymsView> {
   // Dummy list of gyms
   final List<Map<String, String>> gymList = List.generate(
     7,
@@ -36,7 +36,7 @@ class _SaveGymsViewState extends State<SaveGymsView> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppColors.backRoudnColors,
-        appBar: CustomAppBar(title: 'Saved Gyms',        showLeadingIcon: true,
+        appBar: CustomAppBar(title: 'My Gyms',        showLeadingIcon: true,
         ),
         body: ListView.builder(
           // scrollDirection: Axis.vertical,
@@ -50,7 +50,7 @@ class _SaveGymsViewState extends State<SaveGymsView> {
                   Get.to(()=>SaveGymDetailsScreen());
                 },
                 child: GymPreviewCard(
-                  // showEditDelete: true,
+                  showEditDelete: true,
                   gymName: gym['gymName']!,
                   location: gym['location']!,
                   image: gym['image']!,

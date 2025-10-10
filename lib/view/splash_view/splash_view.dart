@@ -15,7 +15,7 @@ class SplashView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body:       Image.asset(
-        AppImages.splash,
+        AppImages.splash1,
         width: double.infinity,
         height: double.infinity,
         fit: BoxFit.cover, // Ensures the image fills the entire screen

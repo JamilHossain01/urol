@@ -4,14 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../common widget/custom text/custom_text_widget.dart';
+import '../../../common widget/custom_app_bar_widget.dart';
 import '../../../common widget/custom_text_filed.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import '../../../common widget/custom_text_filed.dart';
-import '../../../uitilies/app_colors.dart';
-import '../../../uitilies/app_images.dart';
 
 class EditProfileView extends StatefulWidget {
   const EditProfileView({super.key});
@@ -22,12 +17,21 @@ class EditProfileView extends StatefulWidget {
 
 class _EditProfileViewState extends State<EditProfileView> {
   Set<String> selectedDisciplines = {};
+  String? selectedBelt = "Select One";
+  String? selectedFeet = "5";
+  String? selectedInches = "11";
+  final List<String> beltRanks = ["Select One", "White", "Blue", "Purple", "Brown", "Black"];
+  final List<String> feetOptions = ["4", "5", "6", "7"];
+  final List<String> inchesOptions = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"];
+  final List<String> disciplines = ["Jiu Jitsu", "Wrestling", "Judo", "MMA", "Boxing", "Muay Thai", "Kickboxing"];
 
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context);
 
     return Scaffold(
+      appBar: CustomAppBar(title: 'Edit Profile',        showLeadingIcon: true,
+    ),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -36,30 +40,30 @@ class _EditProfileViewState extends State<EditProfileView> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Top Bar
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => Get.back(),
-                    child: Container(
-                      padding: EdgeInsets.all(6.w),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.arrow_back, size: 18),
-                    ),
-                  ),
-                  SizedBox(width: 20.w),
-                  CustomText(
-                    text: "Edit Profile",
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                  ),
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     GestureDetector(
+              //       onTap: () => Get.back(),
+              //       child: Container(
+              //         padding: EdgeInsets.all(6.w),
+              //         decoration: BoxDecoration(
+              //           color: Colors.grey.shade200,
+              //           shape: BoxShape.circle,
+              //         ),
+              //         child: const Icon(Icons.arrow_back, size: 18),
+              //       ),
+              //     ),
+              //     SizedBox(width: 20.w),
+              //     CustomText(
+              //       text: "Edit Profile",
+              //       fontSize: 16.sp,
+              //       fontWeight: FontWeight.w600,
+              //       color: Colors.black,
+              //     ),
+              //   ],
+              // ),
 
-              SizedBox(height: 20.h),
+              // SizedBox(height: 20.h),
 
               // Profile Picture
               Stack(
@@ -184,6 +188,25 @@ class _EditProfileViewState extends State<EditProfileView> {
                 borderColor: Color(0xFFF5F5F5),
                 hintText: "calebshirtum@gmail.com",
                 showObscure: false,
+              )    ,
+              SizedBox(height: 16.h),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: CustomText(
+                  text: "Phone Number",
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.mainTextColors,
+                ),
+              ),
+              SizedBox(height: 6.h),
+              const CustomTextField(
+                hintTextColor: Color(0xFF6B6B6B),
+
+                fillColor: Color(0xFFF5F5F5),
+                borderColor: Color(0xFFF5F5F5),
+                hintText: "+912541305420",
+                showObscure: false,
               ),
 
               SizedBox(height: 16.h),
@@ -209,8 +232,6 @@ class _EditProfileViewState extends State<EditProfileView> {
               ),
 
               SizedBox(height: 16.h),
-
-// Height
               Align(
                 alignment: Alignment.centerLeft,
                 child: CustomText(
@@ -221,14 +242,72 @@ class _EditProfileViewState extends State<EditProfileView> {
                 ),
               ),
               SizedBox(height: 6.h),
-              const CustomTextField(
-                hintTextColor: Color(0xFF6B6B6B),
 
-                fillColor: Color(0xFFF5F5F5),
-                borderColor: Color(0xFFF5F5F5),
-                hintText: "170 lb",
-                showObscure: false,
+
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomText(
+                          text: "Feet",
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textFieldNameColor,
+                        ),
+                        SizedBox(height: 6.h),
+                        _buildDropdownField(
+                          selectedFeet,
+                          feetOptions,
+                              (String? value) => setState(() => selectedFeet = value),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 12.w),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomText(
+                          text: "Inches",
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textFieldNameColor,
+                        ),
+                        SizedBox(height: 6.h),
+                        _buildDropdownField(
+                          selectedInches,
+                          inchesOptions,
+                              (String? value) => setState(() => selectedInches = value),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
+
+
+// Height
+//               Align(
+//                 alignment: Alignment.centerLeft,
+//                 child: CustomText(
+//                   text: "Height",
+//                   fontSize: 16.sp,
+//                   fontWeight: FontWeight.w500,
+//                   color: AppColors.mainTextColors,
+//                 ),
+//               ),
+//               SizedBox(height: 6.h),
+//               const CustomTextField(
+//                 hintTextColor: Color(0xFF6B6B6B),
+//
+//                 fillColor: Color(0xFFF5F5F5),
+//                 borderColor: Color(0xFFF5F5F5),
+//                 hintText: "170 lb",
+//                 showObscure: false,
+//               ),
 
               SizedBox(height: 16.h),
 
@@ -248,7 +327,7 @@ class _EditProfileViewState extends State<EditProfileView> {
 
                 fillColor: Color(0xFFF5F5F5),
                 borderColor: Color(0xFFF5F5F5),
-                hintText: "5'10\"",
+                hintText: "56 KG",
                 showObscure: false,
               ),
 
@@ -292,7 +371,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.back();
+                  },
                   child: CustomText(
                     text: "Save",
                     fontSize: 15.sp,
@@ -308,7 +389,39 @@ class _EditProfileViewState extends State<EditProfileView> {
       ),
     );
   }
-
+  Widget _buildDropdownField(
+      String? value,
+      List<String> items,
+      Function(String?) onChanged,
+      ) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(horizontal: 14.w),
+      decoration: BoxDecoration(
+        color: AppColors.backRoudnColors,
+        borderRadius: BorderRadius.circular(8.r),
+        border: Border.all(color: const Color(0xFFB9B9B9)),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: value,
+          isExpanded: true,
+          items: items
+              .map(
+                (String item) => DropdownMenuItem<String>(
+              value: item,
+              child: Text(
+                item,
+                style: TextStyle(fontSize: 13.sp),
+              ),
+            ),
+          )
+              .toList(),
+          onChanged: onChanged,
+        ),
+      ),
+    );
+  }
   // ✅ Discipline Chip
   Widget _disciplineChip(String label) {
     bool isSelected = selectedDisciplines.contains(label);

@@ -6,6 +6,7 @@ import '../../../../common widget/custom text/custom_text_widget.dart';
 
 class OtherTile extends StatelessWidget {
   final String text;
+  final Color? textColor;
   final String iconPath;
   final VoidCallback onTap;
 
@@ -14,6 +15,7 @@ class OtherTile extends StatelessWidget {
     required this.text,
     required this.iconPath,
     required this.onTap,
+    this.textColor,
   }) : super(key: key);
 
   @override
@@ -29,7 +31,7 @@ class OtherTile extends StatelessWidget {
           children: [
             Row(
               children: [
-                SizedBox(width: 12.w), // padding left
+                SizedBox(width: 12.w),
                 Image.asset(
                   iconPath,
                   height: 18.h,
@@ -41,7 +43,7 @@ class OtherTile extends StatelessWidget {
                   text: text,
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
-                  color: Colors.black,
+                  color: textColor ?? Colors.black,
                 ),
               ],
             ),

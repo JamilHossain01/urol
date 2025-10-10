@@ -51,6 +51,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
+
       width: Get.width,
       child: TextFormField(
         keyboardType: widget.keyboardType,
@@ -133,8 +134,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
               : null)),
           hintText: widget.hintText,
           hintStyle: GoogleFonts.poppins(
-            fontSize: 14.h,
-            color: widget.hintTextColor ?? Colors.white,
+            fontWeight: FontWeight.w400,
+            fontSize: 12.h,
+            color: widget.hintTextColor ?? Color(0xff989898),
           ),
         ),
         validator: widget.validator, // Added validator to TextFormField

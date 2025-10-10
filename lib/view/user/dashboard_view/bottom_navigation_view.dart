@@ -72,7 +72,7 @@ class _BottomNavigationState extends State<DashboardView> {
                 AppImages.location,
                 _selectedIndex == 1,
               ),
-              label: 'Location',
+              label: 'Map',
             ),
             BottomNavigationBarItem(
               icon: _buildImageIcon(
@@ -80,7 +80,7 @@ class _BottomNavigationState extends State<DashboardView> {
                 AppImages.calender,
                 _selectedIndex == 2,
               ),
-              label: 'Calender',
+              label: 'Events',
             ),
             BottomNavigationBarItem(
               icon: _buildImageIcon(

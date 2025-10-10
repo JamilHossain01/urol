@@ -1,20 +1,25 @@
+import 'package:calebshirthum/uitilies/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../uitilies/app_colors.dart';
+import '../../profile_view/edite_gyms_details.dart';
 
 class GymPreviewCard extends StatelessWidget {
   final String image, gymName, location;
   final List<String> categories;
+  final bool showEditDelete;
 
   const GymPreviewCard({
     Key? key,
     required this.image,
     required this.gymName,
     required this.location,
-    required this.categories,
+    required this.categories,  this.showEditDelete = false,
   }) : super(key: key);
 
   @override
@@ -35,28 +40,84 @@ class GymPreviewCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8.r),
-            child: Image.asset(
-              image,
-              height: 120.h,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
+          Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8.r),
+                child: Image.asset(
+                  image,
+                  height: 120.h,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              if (showEditDelete) ...[ // Conditionally show the icons row on image
+                Positioned(
+                  top: 8.h,
+                  right: 8.w,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(()=>EditGymDetailsScreen());
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(4.w),
+                          decoration: BoxDecoration(
+                            // color: Colors.black.withOpacity(0.5),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Image.asset(
+                            AppImages.e, // Replace with actual asset path
+                            height: 14.h,
+                            width: 16.w,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 8.w),
+                      GestureDetector(
+                        onTap: () {
+                          // TODO: Handle delete action
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(4.w),
+                          decoration: BoxDecoration(
+                            // color: Colors.black.withOpacity(0.5),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Image.asset(
+                            AppImages.d, // Replace with actual asset path
+                            height: 14.h,
+                            width: 16.w,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
           ),
           Gap(8.h),
           CustomText(
             text: gymName,
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w700,
             color: AppColors.mainTextColors,
           ),
-          CustomText(
-            text: location,
-            fontSize: 10.sp,
-            fontWeight: FontWeight.w400,
+          Row(
+            children: [
+              Image.asset(AppImages.location,height: 10.h,width: 10.w,),
+              Gap(4.w),
+              CustomText(
+                text: location,
+                fontSize: 10.sp,
+                fontWeight: FontWeight.w500,
 
-            color: Colors.grey,
+                color: Color(0xFF4B4B4B),
+              ),
+            ],
           ),
           Gap(5.h),
           Wrap(
@@ -72,13 +133,14 @@ class GymPreviewCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: BoxDecoration(
-        color: Colors.grey.shade200,
+        color: AppColors.mainColor,
         borderRadius: BorderRadius.circular(6.r),
       ),
       child: CustomText(
         text: text,
         fontSize: 10.sp,
-        color: Colors.black87,
+        fontWeight: FontWeight.w500,
+        color: Colors.white,
       ),
     );
   }

@@ -1,36 +1,35 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../common widget/custom text/custom_text_widget.dart';
+import '../../../../common widget/dot_border_container.dart';
 import '../../../../uitilies/app_colors.dart';
 
 class ImageUploadWidget extends StatefulWidget {
-  const ImageUploadWidget({super.key});
+  const ImageUploadWidget({Key? key}) : super(key: key);
 
   @override
-  _ImageUploadWidgetState createState() => _ImageUploadWidgetState();
+  State<ImageUploadWidget> createState() => _ImageUploadWidgetState();
 }
 
 class _ImageUploadWidgetState extends State<ImageUploadWidget> {
-  File? _selectedImage;
+  final List<File> _images = [];
+  final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImage() async {
-    final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-
     if (image != null) {
       setState(() {
-        _selectedImage = File(image.path);
+        _images.add(File(image.path));
       });
     }
   }
 
-  void _removeImage() {
+  void _removeImage(int index) {
     setState(() {
-      _selectedImage = null;
+      _images.removeAt(index);
     });
   }
 
@@ -39,51 +38,70 @@ class _ImageUploadWidgetState extends State<ImageUploadWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            CustomText(
-              text: "Upload Image",
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textFieldNameColor,
-            ),
-            SizedBox(width: 8.w),
-            IconButton(
-              icon: Icon(Icons.add, size: 24.sp),
-              onPressed: _pickImage,
-            ),
-          ],
+        CustomText(
+          text: "Upload Image",
+          fontSize: 14.sp,
+          fontWeight: FontWeight.w500,
+          color: AppColors.mainTextColors,
         ),
-        SizedBox(height: 8.h),
-        Stack(
-          children: [
-            Container(
-              height: 100.h,
-              width: double.infinity,
-              color: _selectedImage == null ? Colors.grey[300] : null,
-              child: _selectedImage == null
-                  ? Center(child: Text("Image Placeholder"))
-                  : Image.file(
-                _selectedImage!,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: 100.h,
-              ),
-            ),
-            if (_selectedImage != null)
-              Positioned(
-                top: 4.h,
-                right: 4.w,
-                child: IconButton(
-                  icon: Icon(Icons.close, size: 20.sp, color: Colors.red),
-                  onPressed: _removeImage,
-                  padding: EdgeInsets.all(4.w),
-                ),
-              ),
-          ],
+
+        SizedBox(height: 10.h),
+
+        // 🖼️ Image list + upload box
+        SizedBox(
+          height: 90.h,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: _images.length + 1,
+            separatorBuilder: (_, __) => SizedBox(width: 10.w),
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                // ➕ Upload button
+                return GestureDetector(
+                  onTap: _pickImage,
+                  child: DottedBorderBox(),
+                );
+              } else {
+                final imageFile = _images[index - 1];
+                return Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8.r),
+                      child: Image.file(
+                        imageFile,
+                        height: 90.h,
+                        width: 120.w,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Positioned(
+                      top: 4,
+                      right: 4,
+                      child: GestureDetector(
+                        onTap: () => _removeImage(index - 1),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.6),
+                            shape: BoxShape.circle,
+                          ),
+                          padding: EdgeInsets.all(2.w),
+                          child: const Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+            },
+          ),
         ),
-        SizedBox(height: 20.h),
       ],
     );
   }
 }
+
+

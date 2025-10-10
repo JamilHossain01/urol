@@ -28,8 +28,10 @@ class SignUpOTPVerifyView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(),
-      body: SafeArea(
+      appBar: CustomAppBar(
+      ),
+      body:
+      SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(

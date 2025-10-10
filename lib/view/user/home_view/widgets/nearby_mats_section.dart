@@ -3,11 +3,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../uitilies/app_colors.dart';
 
 import 'package:gap/gap.dart';
+
+import '../../location_view/location_screen_view.dart';
 
 class MatCardData {
   final String name;
@@ -44,11 +48,16 @@ class NearbyMatsSection extends StatelessWidget {
               fontSize: 16.h,
               text: "Nearby Open Mats",
             ),
-            CustomText(
-              color: AppColors.mainColor,
-              fontWeight: FontWeight.w600,
-              fontSize: 12.h,
-              text: "View All on Map",
+            GestureDetector(
+              onTap: (){
+                Get.to(()=>MapScreenView());
+              },
+              child: CustomText(
+                color: AppColors.mainColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 12.h,
+                text: "View All on Map",
+              ),
             ),
           ],
         ),
@@ -87,7 +96,7 @@ class NearbyMatsSection extends StatelessWidget {
       child: Row(
         children: [
           Padding(
-            padding: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12.r),
               child: Image.asset(
@@ -156,6 +165,8 @@ class NearbyMatsSection extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Gap(5.h),
+
                   Row(
                     children: [
                       const Icon(Icons.access_time, size: 12, color: Colors.grey),

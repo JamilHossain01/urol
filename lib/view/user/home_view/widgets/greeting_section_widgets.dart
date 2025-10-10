@@ -19,15 +19,15 @@ class GreetingSection extends StatelessWidget {
           children: [
             CustomText(
               color: const Color(0xFF686868),
-              fontSize: 10.h,
-              text: "Hello 👋🏻",
+              fontSize: 16.h,
+              text: "Hello!",
             ),
-            CustomText(
-              color: AppColors.mainTextColors,
-              fontSize: 12.h,
-              fontWeight: FontWeight.w500,
-              text: "Good Morning,",
-            ),
+            // CustomText(
+            //   color: AppColors.mainTextColors,
+            //   fontSize: 12.h,
+            //   fontWeight: FontWeight.w500,
+            //   text: "Good Morning,",
+            // ),
           ],
         ),
         NotificationBell(notificationCount: 5), // Notification bell widget here

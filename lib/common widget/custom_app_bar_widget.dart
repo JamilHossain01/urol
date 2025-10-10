@@ -12,9 +12,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   const CustomAppBar({
     Key? key,
-     this.title,
+    this.title,
     this.onTap,
-    this.backgroundColor = Colors.transparent, // Default background color
+    this.backgroundColor = Colors.transparent,
     this.actions,
     this.leading,
     this.centerTitle = true,
@@ -30,23 +30,25 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: backgroundColor,
       elevation: 0,
+      automaticallyImplyLeading: false, // 👈 prevents default back icon
       leading: showLeadingIcon
           ? Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-                    height: 32.h,
-                    width: 32.w,
-                    decoration: BoxDecoration(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          height: 32.h,
+          width: 32.w,
+          decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(40.r),
             color: Colors.white,
-                    ),
-                    child: leading ??
+          ),
+          child: leading ??
               IconButton(
-                icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 18),
+                icon: const Icon(Icons.arrow_back_ios,
+                    color: Colors.black, size: 18),
                 onPressed: onTap ?? () => Navigator.pop(context),
               ),
-                  ),
-          )
+        ),
+      )
           : null,
       title: Text(
         title ?? '',

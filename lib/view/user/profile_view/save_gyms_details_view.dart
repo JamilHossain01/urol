@@ -1,3 +1,4 @@
+import 'package:calebshirthum/view/user/profile_view/save_gyms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -9,28 +10,20 @@ import '../../../../common widget/custom_button_widget.dart';
 import '../../../../uitilies/app_colors.dart';
 import '../../../../uitilies/app_images.dart';
 import '../../../common widget/comon_conatainer/custom_conatiner.dart';
-import '../profile_view/save_gyms.dart';
-import 'claim_your_gym.dart';
+import '../location_view/claim_your_gym.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:cached_network_image/cached_network_image.dart'; // Add the cached network image package
+// Add the cached network image package
 import 'package:smooth_page_indicator/smooth_page_indicator.dart'; // Add Smooth Page Indicator
 
-import '../../../../common widget/custom text/custom_text_widget.dart';
-import '../../../../common widget/custom_button_widget.dart';
-import '../../../../uitilies/app_colors.dart';
-import '../../../../uitilies/app_images.dart';
 
-class GymDetailsScreen extends StatefulWidget {
-  const GymDetailsScreen({super.key});
+class SaveGymDetailsScreen extends StatefulWidget {
+  const SaveGymDetailsScreen({super.key});
 
   @override
-  State<GymDetailsScreen> createState() => _GymDetailsScreenState();
+  State<SaveGymDetailsScreen> createState() => _SaveGymDetailsScreenState();
 }
 
-class _GymDetailsScreenState extends State<GymDetailsScreen> {
+class _SaveGymDetailsScreenState extends State<SaveGymDetailsScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
@@ -217,24 +210,12 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                                 ),
                               ],
                             ),
-                            Row(children: [
-                              Image.asset(
-                                AppImages.https,
-                                height: 18.h,
-                                width: 18.w,
-                              ), Gap(5.w),
-                              Image.asset(
-                                AppImages.fb,
-                                height: 18.h,
-                                width: 18.w,
-                              ),Gap(5.w),   Image.asset(
-                                AppImages.insta,
-                                height: 18.h,
-                                width: 18.w,
-                              ),
-
-                            ],)
-
+                            CustomText(
+                              text: "Visit Website",
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.sp,
+                              color: Color(0xFF989898),
+                            ),
                           ],
                         ),
 
@@ -356,7 +337,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
             children: [
               Row(
                 children: [
-                   Icon(Icons.access_time, size: 16, color: AppColors.mainColor),
+                  Icon(Icons.access_time, size: 16, color: AppColors.mainColor),
                   Gap(5.w),
                   CustomText(
                     text: "$time",

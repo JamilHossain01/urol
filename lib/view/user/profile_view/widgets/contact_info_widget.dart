@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 
 import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../common widget/custom_text_filed.dart';
@@ -30,9 +31,9 @@ class ContactInfoWidget extends StatelessWidget {
       children: [
         CustomText(
           text: "Contact Information",
-          fontSize: 16.sp,
+          fontSize: 14.sp,
           fontWeight: FontWeight.w600,
-          color: AppColors.textFieldNameColor,
+          color: AppColors.mainTextColors,
         ),
         SizedBox(height: 12.h),
         CustomText(
@@ -41,6 +42,8 @@ class ContactInfoWidget extends StatelessWidget {
           fontWeight: FontWeight.w600,
           color: AppColors.textFieldNameColor,
         ),
+        Gap(4.h),
+
         CustomTextField(
           controller: phoneController,
           hintText: "Enter your phone number",
@@ -62,6 +65,8 @@ class ContactInfoWidget extends StatelessWidget {
           fontWeight: FontWeight.w600,
           color: AppColors.textFieldNameColor,
         ),
+        Gap(4.h),
+
         CustomTextField(
           controller: emailController,
           hintText: "Enter your email address",
@@ -83,6 +88,8 @@ class ContactInfoWidget extends StatelessWidget {
           fontWeight: FontWeight.w600,
           color: AppColors.textFieldNameColor,
         ),
+        Gap(4.h),
+
         CustomTextField(
           controller: websiteController,
           hintText: "Enter your website link",
@@ -97,6 +104,8 @@ class ContactInfoWidget extends StatelessWidget {
           fontWeight: FontWeight.w600,
           color: AppColors.textFieldNameColor,
         ),
+        Gap(4.h),
+
         CustomTextField(
           controller: facebookController,
           hintText: "Enter your Facebook link",
@@ -111,6 +120,8 @@ class ContactInfoWidget extends StatelessWidget {
           fontWeight: FontWeight.w600,
           color: AppColors.textFieldNameColor,
         ),
+        Gap(4.h),
+
         CustomTextField(
           controller: instagramController,
           hintText: "Enter your Instagram link",

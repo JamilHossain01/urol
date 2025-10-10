@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_button_widget.dart';
+import '../../../common widget/seacr)with_filter_widgets.dart';
 import '../../../uitilies/app_colors.dart';
 import '../../../uitilies/app_images.dart';
 
@@ -24,6 +25,7 @@ class _EventScreenViewState extends State<EventScreenView> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
+
         title: 'Events',
         showLeadingIcon: false,
       ),
@@ -35,48 +37,12 @@ class _EventScreenViewState extends State<EventScreenView> {
             Gap(15.h),
 
             // Search + Filter Row
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: "Search here...",
-                      hintStyle: TextStyle(
-                        fontSize: 14.sp,
-                        color: Color(0xFFB9B9B9),
-                      ),
-                      prefixIcon: const Icon(
-                        Icons.search,
-                        color: Color(0xFFB9B9B9),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(vertical: 10.h),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.r),
-                        borderSide: BorderSide(
-                          color: Colors.white,
-                        ),
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                    ),
-                  ),
-                ),
-                Gap(10.w),
-                InkWell(
-                  onTap: () => _openFilterSheet(context),
-                  child: Container(
-                      padding: EdgeInsets.all(12.w),
-                      decoration: BoxDecoration(
-                        color: AppColors.mainColor,
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                      child: Image.asset(
-                        AppImages.filter,
-                        height: 20.h,
-                        width: 20.w,
-                      )),
-                ),
-              ],
+            SearchBarWithFilter(
+              backgroundColor: Color(0xFFF5F6F8),
+              onFilterTap: () {
+                _openFilterSheet(context);
+                
+              },
             ),
             Gap(20.h),
 
@@ -480,11 +446,20 @@ class _EventScreenViewState extends State<EventScreenView> {
                     Gap(15.h),
                 
                     // Location Distance
-                    CustomText(
-                      text: "Location Distance",
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.mainTextColors,
+                    Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomText(
+                          text: "Location Distance",
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.mainTextColors,
+                        ),  CustomText(
+                          text: "Miles",
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.pTextColors,
+                        ),
+                      ],
                     ),
                     Row(
                       children: [

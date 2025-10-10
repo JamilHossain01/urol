@@ -2,6 +2,8 @@ import 'package:calebshirthum/common%20widget/custom_button_widget.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_app_bar_widget.dart';
@@ -30,6 +32,7 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
       backgroundColor: AppColors.backRoudnColors,
       appBar: const CustomAppBar(
         title: "Profile Information",
+        showLeadingIcon: true,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
@@ -171,7 +174,9 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
             SizedBox(height: 24.h),
             CustomButtonWidget(
               btnText: 'Save',
-              onTap: () {},
+              onTap: () {
+                Get.back();
+              },
               iconWant: false,
               btnColor: AppColors.mainColor,
             ),
@@ -187,6 +192,7 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
       Function(String?) onChanged,
       ) {
     return Container(
+      height: 46.h,
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 14.w),
       decoration: BoxDecoration(
