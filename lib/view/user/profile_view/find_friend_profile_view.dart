@@ -1,3 +1,4 @@
+import 'package:calebshirthum/common%20widget/custom_app_bar_widget.dart';
 import 'package:calebshirthum/common%20widget/custom_button_widget.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/app_images.dart';
@@ -19,6 +20,7 @@ class FindProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     ScreenUtil.init(context);
     return Scaffold(
+      appBar: CustomAppBar(),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(

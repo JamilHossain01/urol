@@ -50,7 +50,8 @@ class AppImages {
   static String https = "assets/images/https.png";
   static String insta = "assets/images/insta.png";
   static String filter = "assets/images/filter.png";
-  static String mapLogo = "assets/images/map_logo.png";
+
+  static String mapLogo = "assets/images/logo_main.png";
   static String my_friend = "assets/images/my_friend.png";
   static String discover = "assets/images/discover.png";
   static String d = "assets/images/D.png";

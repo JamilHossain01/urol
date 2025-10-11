@@ -32,11 +32,16 @@ class LogInView extends StatelessWidget {
               fit: BoxFit.cover, // Ensures the image fills the entire screen
             ),
             // Centered logo (adjust your logo size accordingly)
-            Image.asset(
-              AppImages.logo, // Change to your logo's asset path
-              width: 200.w,  // Adjust size as needed
-              height: 200.h, // Adjust size as needed
+            // Centered logo (moved 20px upward)
+            Positioned(
+              top: MediaQuery.of(context).size.height / 2 - 150.h,
+              child: Image.asset(
+                AppImages.logo,
+                width: 200.w,
+                height: 200.h,
+              ),
             ),
+
             // Positioned button at the bottom of the screen
             Positioned(
               top: 100,
