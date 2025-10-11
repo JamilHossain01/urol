@@ -38,7 +38,6 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Gap(50.h),
-                  // Pass data as parameters to the widgets
                   GreetingSection(),
                   Gap(10.h),
                   UserInfoSection(

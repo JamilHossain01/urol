@@ -36,13 +36,13 @@ class CustomContainer extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: height ?? 100.h, // Default height
-        width: width ?? double.infinity, // Default width (takes full screen width)
+        height: height ?? 100.h,
+        width: width ?? double.infinity,
         decoration: BoxDecoration(
-          color: color ?? Colors.transparent, // Default transparent background
-          borderRadius: BorderRadius.circular(borderRadius ?? 8.0), // Default border radius
+          color: color ?? Colors.transparent,
+          borderRadius: BorderRadius.circular(borderRadius ?? 8.0),
           border: Border.all(
-            color: borderColor ?? Colors.transparent, // Default border color is transparent
+            color: borderColor ?? Colors.transparent,
             width: borderWidth ?? 1.0, // Default border width
           ),
           boxShadow: boxShadow != null

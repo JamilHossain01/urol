@@ -28,6 +28,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      forceMaterialTransparency: true,
       backgroundColor: backgroundColor,
       elevation: 0,
       automaticallyImplyLeading: false, // 👈 prevents default back icon

@@ -44,7 +44,7 @@ class _MapScreenViewState extends State<MapScreenView> {
   Future<void> _createMarkers() async {
     BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
       const ImageConfiguration(size: Size(50, 50)),
-      AppImages.mapLogo,
+      "assets/images/small_logo.png",
     );
 
     setState(() {

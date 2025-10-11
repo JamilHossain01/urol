@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Calebshirthum</string>
+	<string>uJitsu</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>calebshirthum</string>
+	<string>com.ujitsu.app</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -45,5 +45,17 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+	<!-- Location Permission -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need access to your location to provide nearby services or shops.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>We need access to your location even when the app is in the background for providing nearby services or shops.</string>
+
+
+
+
+
+
 </dict>
 </plist>

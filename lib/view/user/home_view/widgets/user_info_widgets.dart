@@ -7,10 +7,6 @@ import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../uitilies/app_colors.dart';
 import '../../../../uitilies/app_images.dart';
 
-
-
-
-
 class UserInfoSection extends StatelessWidget {
   final String name;
   final String belt;
@@ -28,7 +24,7 @@ class UserInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomContainer(
-      height: 182.h,
+      height: 202.h,
       color: Colors.white,
       child: Column(
         children: [
@@ -48,27 +44,25 @@ class UserInfoSection extends StatelessWidget {
   }
 
   Widget _buildUserProfile() {
-    return
-      Row(
+    return Row(
       children: [
         CircleAvatar(
           radius: 28.r,
-          backgroundColor: Colors.transparent, // This ensures the background is transparent for the border to be visible
+          backgroundColor: Colors.transparent,
           child: Container(
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: Color(0xFFBC6068), // Change this to your desired border color
-                width: 2.w, // Adjust the border width as needed
+                color: Color(0xFFBC6068),
+                width: 2.w,
               ),
             ),
             child: CircleAvatar(
-              radius: 28.r, // Slightly smaller radius to fit inside the border
+              radius: 28.r,
               backgroundImage: AssetImage(AppImages.person),
             ),
           ),
         ),
-
         Gap(10.w),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,7 +74,12 @@ class UserInfoSection extends StatelessWidget {
               text: name,
             ),
 
-            GestureDetector(child: Image.asset(AppImages.purpelBelt,width: 100.w,height: 20.h,))
+            GestureDetector(
+                child: Image.asset(
+              AppImages.purpelBelt,
+              width: 100.w,
+              height: 20.h,
+            ))
 
             // Container(
             //   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
