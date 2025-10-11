@@ -1,3 +1,4 @@
+import 'package:calebshirthum/view/user/location_view/gym_details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
@@ -49,8 +50,8 @@ class NearbyMatsSection extends StatelessWidget {
               text: "Nearby Open Mats",
             ),
             GestureDetector(
-              onTap: (){
-                Get.to(()=>MapScreenView());
+              onTap: () {
+                Get.to(() => MapScreenView());
               },
               child: CustomText(
                 color: AppColors.mainColor,
@@ -62,24 +63,30 @@ class NearbyMatsSection extends StatelessWidget {
           ],
         ),
         Gap(10.h),
-        ...mats.map((mat) => _buildNearbyMatCard(
-          mat.name,
-          mat.distance,
-          mat.days,
-          mat.time,
-          mat.image,
-        )),
+        ...mats.map(
+          (mat) => GestureDetector(
+              onTap: () {
+                Get.to(() => GymDetailsScreen());
+              },
+              child: _buildNearbyMatCard(
+                mat.name,
+                mat.distance,
+                mat.days,
+                mat.time,
+                mat.image,
+              )),
+        ),
       ],
     );
   }
 
   Widget _buildNearbyMatCard(
-      String name,
-      String distance,
-      String days,
-      String time,
-      String image,
-      ) {
+    String name,
+    String distance,
+    String days,
+    String time,
+    String image,
+  ) {
     return Container(
       margin: EdgeInsets.only(bottom: 10.h),
       decoration: BoxDecoration(
@@ -125,10 +132,10 @@ class NearbyMatsSection extends StatelessWidget {
                       Container(
                         decoration: BoxDecoration(
                             color: Color(0xFFF5F5F5),
-                            borderRadius: BorderRadius.circular(10.r)
-                        ),
-                        child:     Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+                            borderRadius: BorderRadius.circular(10.r)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
                           child: CustomText(
                             color: const Color(0xFF686868),
                             fontSize: 10.h,
@@ -136,7 +143,6 @@ class NearbyMatsSection extends StatelessWidget {
                           ),
                         ),
                       ),
-
                     ],
                   ),
                   Gap(5.h),
@@ -153,11 +159,11 @@ class NearbyMatsSection extends StatelessWidget {
                   // ),
                   Container(
                     decoration: BoxDecoration(
-                      color: Color(0xFFF5F5F5),
-                      borderRadius: BorderRadius.circular(10.r)
-                    ),
-                    child:     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+                        color: Color(0xFFF5F5F5),
+                        borderRadius: BorderRadius.circular(10.r)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       child: CustomText(
                         color: const Color(0xFF686868),
                         fontSize: 12.h,
@@ -169,7 +175,8 @@ class NearbyMatsSection extends StatelessWidget {
 
                   Row(
                     children: [
-                      const Icon(Icons.access_time, size: 12, color: Colors.grey),
+                      const Icon(Icons.access_time,
+                          size: 12, color: Colors.grey),
                       Gap(4.w),
                       CustomText(
                         color: const Color(0xFF686868),

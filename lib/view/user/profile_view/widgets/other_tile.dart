@@ -23,7 +23,7 @@ class OtherTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: GestureDetector(
-        onTap: onTap,  // Make the entire card tappable
+        onTap: onTap,
         child: CustomContainer(
           color: const Color(0xFFE9E9E9),
           borderRadius: 8,

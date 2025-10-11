@@ -52,7 +52,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Gym Cover Image (Using PageView for swipeable images)
+
             Stack(
               children: [
                 Container(
@@ -65,7 +65,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                       // CachedNetworkImage for gym images
                       _buildGymImage('https://example.com/gym_image_1.jpg'),
                       _buildGymImage('https://example.com/gym_image_2.jpg'),
-                      _buildGymImage(AppImages.gym2), // fallback to AssetImage
+                      _buildGymImage(AppImages.gym2),
                     ],
                   ),
                 ),
@@ -79,7 +79,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                       backgroundColor: Colors.black54,
                       child: Center(
                         child: Icon(
-                          Icons.arrow_back_ios,
+                          Icons.arrow_back,
                           color: Colors.white,
                           size: 22,
                         ),
