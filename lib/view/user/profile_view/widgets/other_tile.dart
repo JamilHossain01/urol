@@ -22,40 +22,40 @@ class OtherTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: CustomContainer(
-        color: const Color(0xFFE9E9E9),
-        borderRadius: 8,
-        height: 55.h,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                SizedBox(width: 12.w),
-                Image.asset(
-                  iconPath,
-                  height: 18.h,
-                  width: 18.w,
-                  fit: BoxFit.contain,
-                ),
-                SizedBox(width: 10.w),
-                CustomText(
-                  text: text,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                  color: textColor ?? Colors.black,
-                ),
-              ],
-            ),
-            GestureDetector(
-              onTap: onTap,
-              child: Icon(
+      child: GestureDetector(
+        onTap: onTap,  // Make the entire card tappable
+        child: CustomContainer(
+          color: const Color(0xFFE9E9E9),
+          borderRadius: 8,
+          height: 55.h,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  SizedBox(width: 12.w),
+                  Image.asset(
+                    iconPath,
+                    height: 18.h,
+                    width: 18.w,
+                    fit: BoxFit.contain,
+                  ),
+                  SizedBox(width: 10.w),
+                  CustomText(
+                    text: text,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
+                    color: textColor ?? Colors.black,
+                  ),
+                ],
+              ),
+              Icon(
                 Icons.chevron_right,
                 size: 20.sp,
                 color: Colors.grey,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -56,7 +56,6 @@ class ProfileView extends StatelessWidget {
               // Profile Image + Belt
               ProfileHeaderWithBelt(
                 imageUrl: AppImages.person,
-                // Replace with your image URL or asset
                 name: 'Caleb Shirtum',
               ),
 
