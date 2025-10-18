@@ -41,7 +41,7 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
   String? _selectedDay;
   String? _startTime;
   String? _endTime;
-  final List<String> _days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  final List<String> _days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   final List<String> _times = ['12:30 PM', '1:00 PM', '2:30 PM', '3:00 PM'];
 
   List<String> _selectedDisciplines = [];

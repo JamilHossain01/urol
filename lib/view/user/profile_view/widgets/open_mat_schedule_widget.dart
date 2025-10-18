@@ -93,7 +93,7 @@ class OpenMatScheduleWidget extends StatelessWidget {
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               value: selectedDay,
-              hint: Text("mon", style: TextStyle(fontSize: 13.sp)),
+              hint: Text("Select a day", style: TextStyle(fontSize: 13.sp)),
               items: days.map((day) => DropdownMenuItem(
                 value: day,
                 child: Text(day, style: TextStyle(fontSize: 13.sp)),

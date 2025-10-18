@@ -51,6 +51,8 @@ dependencies:
   firebase_auth: ^5.3.4
   action_slider: ^0.7.0
   smooth_page_indicator: ^1.2.1
+  apple_maps_flutter:
+
 
   gap: ^3.0.1
 dev_dependencies:
