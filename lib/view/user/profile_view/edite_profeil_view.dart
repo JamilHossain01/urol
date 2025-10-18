@@ -1,12 +1,14 @@
+import 'dart:io';
+
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_app_bar_widget.dart';
 import '../../../common widget/custom_text_filed.dart';
-
 
 class EditProfileView extends StatefulWidget {
   const EditProfileView({super.key});
@@ -20,18 +22,64 @@ class _EditProfileViewState extends State<EditProfileView> {
   String? selectedBelt = "Select One";
   String? selectedFeet = "5";
   String? selectedInches = "11";
-  final List<String> beltRanks = ["Select One", "White", "Blue", "Purple", "Brown", "Black"];
+  final List<String> beltRanks = [
+    "Select One",
+    "White",
+    "Blue",
+    "Purple",
+    "Brown",
+    "Black"
+  ];
   final List<String> feetOptions = ["4", "5", "6", "7"];
-  final List<String> inchesOptions = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"];
-  final List<String> disciplines = ["Jiu Jitsu", "Wrestling", "Judo", "MMA", "Boxing", "Muay Thai", "Kickboxing"];
+  final List<String> inchesOptions = [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11"
+  ];
+  final List<String> disciplines = [
+    "Jiu Jitsu",
+    "Wrestling",
+    "Judo",
+    "MMA",
+    "Boxing",
+    "Muay Thai",
+    "Kickboxing"
+  ];
+
+  final ImagePicker _picker = ImagePicker();
+  XFile? _image; // This will hold the selected image.
+
+  // Function to pick an image from the gallery
+  Future<void> _pickImage() async {
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image =
+            pickedFile; // Update the profile picture with the selected image
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context);
 
     return Scaffold(
-      appBar: CustomAppBar(title: 'Edit Profile',        showLeadingIcon: true,
-    ),
+      appBar: CustomAppBar(
+        title: 'Edit Profile',
+        showLeadingIcon: true,
+      ),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -39,61 +87,41 @@ class _EditProfileViewState extends State<EditProfileView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Top Bar
-              // Row(
-              //   children: [
-              //     GestureDetector(
-              //       onTap: () => Get.back(),
-              //       child: Container(
-              //         padding: EdgeInsets.all(6.w),
-              //         decoration: BoxDecoration(
-              //           color: Colors.grey.shade200,
-              //           shape: BoxShape.circle,
-              //         ),
-              //         child: const Icon(Icons.arrow_back, size: 18),
-              //       ),
-              //     ),
-              //     SizedBox(width: 20.w),
-              //     CustomText(
-              //       text: "Edit Profile",
-              //       fontSize: 16.sp,
-              //       fontWeight: FontWeight.w600,
-              //       color: Colors.black,
-              //     ),
-              //   ],
-              // ),
-
-              // SizedBox(height: 20.h),
-
-              // Profile Picture
-              Stack(
-                alignment: Alignment.bottomRight,
-                children: [
-                  CircleAvatar(
-                    radius: 55.r,
-                    backgroundImage:
-                    const NetworkImage("https://via.placeholder.com/150"),
-                  ),
-                  Positioned(
-                    bottom: 4,
-                    right: 4,
-                    child: Container(
-                      padding: EdgeInsets.all(4.w),
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
-                      ),
-                      child:
-                      const Icon(Icons.add, size: 18, color: Colors.white),
+              Center(
+                child: Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    CircleAvatar(
+                      radius: 55.0,
+                      backgroundImage: _image == null
+                          ? const NetworkImage(
+                              "https://static.vecteezy.com/system/resources/previews/013/360/247/non_2x/default-avatar-photo-icon-social-media-profile-sign-symbol-vector.jpg")
+                          : FileImage(
+                              File(_image!.path)), // Show the selected image
                     ),
-                  )
-                ],
+                    Positioned(
+                      bottom: 4,
+                      right: 4,
+                      child: GestureDetector(
+                        onTap:
+                            _pickImage, // Open gallery when the icon is tapped
+                        child: Container(
+                          padding: EdgeInsets.all(4.0),
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 2),
+                          ),
+                          child: const Icon(Icons.add,
+                              size: 18, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
 
               SizedBox(height: 25.h),
-
-
 
               Align(
                 alignment: Alignment.centerLeft,
@@ -107,7 +135,6 @@ class _EditProfileViewState extends State<EditProfileView> {
               SizedBox(height: 6.h),
               CustomTextField(
                 hintTextColor: Color(0xFF6B6B6B),
-
                 fillColor: Color(0xFFF5F5F5),
                 borderColor: Color(0xFFF5F5F5),
                 hintText: "Caleb Shirtum",
@@ -138,10 +165,10 @@ class _EditProfileViewState extends State<EditProfileView> {
                     value: "Purple",
                     items: ["White", "Blue", "Purple", "Brown", "Black"]
                         .map((rank) => DropdownMenuItem(
-                      value: rank,
-                      child:
-                      Text(rank, style: TextStyle(fontSize: 13.sp)),
-                    ))
+                              value: rank,
+                              child:
+                                  Text(rank, style: TextStyle(fontSize: 13.sp)),
+                            ))
                         .toList(),
                     onChanged: (value) {},
                   ),
@@ -163,12 +190,11 @@ class _EditProfileViewState extends State<EditProfileView> {
               SizedBox(height: 6.h),
               const CustomTextField(
                 hintTextColor: Color(0xFF6B6B6B),
-
                 fillColor: Color(0xFFF5F5F5),
                 borderColor: Color(0xFFF5F5F5),
                 hintText: "calebshirtum@gmail.com",
                 showObscure: false,
-              )    ,
+              ),
               SizedBox(height: 16.h),
               Align(
                 alignment: Alignment.centerLeft,
@@ -182,7 +208,6 @@ class _EditProfileViewState extends State<EditProfileView> {
               SizedBox(height: 6.h),
               const CustomTextField(
                 hintTextColor: Color(0xFF6B6B6B),
-
                 fillColor: Color(0xFFF5F5F5),
                 borderColor: Color(0xFFF5F5F5),
                 hintText: "+912541305420",
@@ -204,7 +229,6 @@ class _EditProfileViewState extends State<EditProfileView> {
               SizedBox(height: 6.h),
               const CustomTextField(
                 hintTextColor: Color(0xFF6B6B6B),
-
                 fillColor: Color(0xFFF5F5F5),
                 borderColor: Color(0xFFF5F5F5),
                 hintText: "The Arena Combat Academy",
@@ -223,7 +247,6 @@ class _EditProfileViewState extends State<EditProfileView> {
               ),
               SizedBox(height: 6.h),
 
-
               Row(
                 children: [
                   Expanded(
@@ -240,7 +263,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                         _buildDropdownField(
                           selectedFeet,
                           feetOptions,
-                              (String? value) => setState(() => selectedFeet = value),
+                          (String? value) =>
+                              setState(() => selectedFeet = value),
                         ),
                       ],
                     ),
@@ -260,7 +284,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                         _buildDropdownField(
                           selectedInches,
                           inchesOptions,
-                              (String? value) => setState(() => selectedInches = value),
+                          (String? value) =>
+                              setState(() => selectedInches = value),
                         ),
                       ],
                     ),
@@ -268,7 +293,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                 ],
               ),
 
-              SizedBox(height: 6.h),
+              SizedBox(height: 16.h),
               Align(
                 alignment: Alignment.centerLeft,
                 child: CustomText(
@@ -281,7 +306,6 @@ class _EditProfileViewState extends State<EditProfileView> {
               SizedBox(height: 6.h),
               const CustomTextField(
                 hintTextColor: Color(0xFF6B6B6B),
-
                 fillColor: Color(0xFFF5F5F5),
                 borderColor: Color(0xFFF5F5F5),
                 hintText: "56 lb",
@@ -317,6 +341,34 @@ class _EditProfileViewState extends State<EditProfileView> {
 
               SizedBox(height: 16.h),
 
+
+
+              Align(
+                alignment: Alignment.centerLeft,
+                child: CustomText(
+                  text: "Favorite Quote",
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.mainTextColors,
+                ),
+              ),
+              SizedBox(height: 6.h),
+              const CustomTextField(
+                hintTextColor: Color(0xFF6B6B6B),
+                fillColor: Color(0xFFF5F5F5),
+                borderColor: Color(0xFFF5F5F5),
+                hintText: "Write your favorite quote....",
+                showObscure: false,
+              ),
+
+
+
+              SizedBox(height: 26.h),
+
+
+
+
+
               // Save Button
               SizedBox(
                 width: double.infinity,
@@ -346,11 +398,12 @@ class _EditProfileViewState extends State<EditProfileView> {
       ),
     );
   }
+
   Widget _buildDropdownField(
-      String? value,
-      List<String> items,
-      Function(String?) onChanged,
-      ) {
+    String? value,
+    List<String> items,
+    Function(String?) onChanged,
+  ) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 14.w),
@@ -366,19 +419,20 @@ class _EditProfileViewState extends State<EditProfileView> {
           items: items
               .map(
                 (String item) => DropdownMenuItem<String>(
-              value: item,
-              child: Text(
-                item,
-                style: TextStyle(fontSize: 13.sp),
-              ),
-            ),
-          )
+                  value: item,
+                  child: Text(
+                    item,
+                    style: TextStyle(fontSize: 13.sp),
+                  ),
+                ),
+              )
               .toList(),
           onChanged: onChanged,
         ),
       ),
     );
   }
+
   // ✅ Discipline Chip
   Widget _disciplineChip(String label) {
     bool isSelected = selectedDisciplines.contains(label);
