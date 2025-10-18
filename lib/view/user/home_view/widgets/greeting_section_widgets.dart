@@ -19,7 +19,7 @@ class GreetingSection extends StatelessWidget {
           children: [
             CustomText(
               color: const Color(0xFF686868),
-              fontSize: 16.h,
+              fontSize: 18.h,
               text: "Hello!",
             ),
             // CustomText(

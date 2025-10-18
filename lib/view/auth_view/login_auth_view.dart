@@ -35,14 +35,14 @@ class SignInView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 30),
+                    SizedBox(height: 20),
 
                     //Phone Number/Email
                     CustomText(
                       fontWeight: FontWeight.w600,
                       textAlign: TextAlign.start,
                       text: "Sign in to your",
-                      fontSize: 32.sp,
+                      fontSize: 34.sp,
                       color: Color(0xFF1E1E1E),
                     ),
                     CustomText(
@@ -202,7 +202,7 @@ class SignInView extends StatelessWidget {
                           text: "Don’t have an account?",
                           color: AppColors.pTextColors,
                           fontWeight: FontWeight.w400,
-                          fontSize: 12.sp,
+                          fontSize: 14.sp,
                         ),
                         SizedBox(width: 5),
                         GestureDetector(

@@ -93,26 +93,7 @@ class _EditProfileViewState extends State<EditProfileView> {
 
               SizedBox(height: 25.h),
 
-              // Name
-              Align(
-                alignment: Alignment.centerLeft,
-                child: CustomText(
-                  text: "Name",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.mainTextColors,
-                ),
-              ),
-              SizedBox(height: 6.h),
-              CustomTextField(
-                hintTextColor: Color(0xFF6B6B6B),
-                fillColor: Color(0xFFF5F5F5),
-                borderColor: Color(0xFFF5F5F5),
-                hintText: "Caleb Shirtum",
-                showObscure: false,
-              ),
 
-              SizedBox(height: 16.h),
 
               Align(
                 alignment: Alignment.centerLeft,
@@ -135,7 +116,6 @@ class _EditProfileViewState extends State<EditProfileView> {
 
               SizedBox(height: 16.h),
 
-// Belt Rank (Dropdown)
               Align(
                 alignment: Alignment.centerLeft,
                 child: CustomText(
@@ -288,30 +268,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                 ],
               ),
 
-
-// Height
-//               Align(
-//                 alignment: Alignment.centerLeft,
-//                 child: CustomText(
-//                   text: "Height",
-//                   fontSize: 16.sp,
-//                   fontWeight: FontWeight.w500,
-//                   color: AppColors.mainTextColors,
-//                 ),
-//               ),
-//               SizedBox(height: 6.h),
-//               const CustomTextField(
-//                 hintTextColor: Color(0xFF6B6B6B),
-//
-//                 fillColor: Color(0xFFF5F5F5),
-//                 borderColor: Color(0xFFF5F5F5),
-//                 hintText: "170 lb",
-//                 showObscure: false,
-//               ),
-
-              SizedBox(height: 16.h),
-
-// Weight
+              SizedBox(height: 6.h),
               Align(
                 alignment: Alignment.centerLeft,
                 child: CustomText(
@@ -327,7 +284,7 @@ class _EditProfileViewState extends State<EditProfileView> {
 
                 fillColor: Color(0xFFF5F5F5),
                 borderColor: Color(0xFFF5F5F5),
-                hintText: "56 KG",
+                hintText: "56 lb",
                 showObscure: false,
               ),
 
