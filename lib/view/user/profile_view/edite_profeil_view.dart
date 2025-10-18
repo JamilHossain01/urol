@@ -87,39 +87,47 @@ class _EditProfileViewState extends State<EditProfileView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Center(
-                child: Stack(
-                  alignment: Alignment.bottomRight,
-                  children: [
-                    CircleAvatar(
-                      radius: 55.0,
-                      backgroundImage: _image == null
-                          ? const NetworkImage(
-                              "https://static.vecteezy.com/system/resources/previews/013/360/247/non_2x/default-avatar-photo-icon-social-media-profile-sign-symbol-vector.jpg")
-                          : FileImage(
-                              File(_image!.path)), // Show the selected image
-                    ),
-                    Positioned(
-                      bottom: 4,
-                      right: 4,
-                      child: GestureDetector(
-                        onTap:
-                            _pickImage, // Open gallery when the icon is tapped
-                        child: Container(
-                          padding: EdgeInsets.all(4.0),
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 2),
-                          ),
-                          child: const Icon(Icons.add,
-                              size: 18, color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ],
+          Center(
+          child: Stack(
+          alignment: Alignment.bottomRight,
+            children: [
+              Container(
+                width: 120.0,
+                height: 120.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.mainColor,
+                    width: 4.0,
+                  ),
+                ),
+                child: CircleAvatar(
+                  radius: 55.0,
+                  backgroundImage: _image == null
+                      ? const NetworkImage(
+                      "https://static.vecteezy.com/system/resources/previews/013/360/247/non_2x/default-avatar-photo-icon-social-media-profile-sign-symbol-vector.jpg")
+                      : FileImage(File(_image!.path)),
                 ),
               ),
+              Positioned(
+                bottom: 4,
+                right: 4,
+                child: GestureDetector(
+                  onTap: _pickImage,
+                  child: Container(
+                    padding: EdgeInsets.all(4.0),
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 2),
+                    ),
+                    child: const Icon(Icons.add, size: 18, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
 
               SizedBox(height: 25.h),
 
@@ -216,7 +224,7 @@ class _EditProfileViewState extends State<EditProfileView> {
 
               SizedBox(height: 16.h),
 
-// Home Gym
+
               Align(
                 alignment: Alignment.centerLeft,
                 child: CustomText(
