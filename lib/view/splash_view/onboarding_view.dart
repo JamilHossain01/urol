@@ -83,7 +83,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                       CustomText(
                         text: 'Everything',
                         color: Colors.white,
-                        fontSize: 32.sp,
+                        fontSize: 34.sp,
                         fontWeight: FontWeight.w700,
                       ),
                       SizedBox(
@@ -92,7 +92,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                       CustomText(
                         text: 'jiu jitsu,',
                         color: AppColors.mainColor,
-                        fontSize: 32.sp,
+                        fontSize: 34.sp,
                         fontWeight: FontWeight.w700,
                       ),
                     ],
@@ -100,7 +100,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                   CustomText(
                     text: 'on one app.',
                     color: Colors.white,
-                    fontSize: 32.sp,
+                    fontSize: 34.sp,
                     fontWeight: FontWeight.w700,
                   ),
                   // Row(
@@ -127,7 +127,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                     text:
                     'Browse gyms, find open mats, and stay updated with events and seminars happening in your areas',
                     color: Color(0xFFB5B5B5),
-                    fontSize: 13.sp,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w400,
                   ),
                   // CustomText(

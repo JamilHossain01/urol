@@ -1,4 +1,4 @@
-package com.ujitsu.app
+package com.ujitsugym.app
 
 import io.flutter.embedding.android.FlutterActivity
 
