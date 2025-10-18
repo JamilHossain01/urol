@@ -135,7 +135,6 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
                     setState(() => _startTime = value),
                 onEndTimeChanged: (value) => setState(() => _endTime = value),
                 onAddMoreDays: () {
-                  // Implement logic to add more schedules
                   print("Add More Days tapped");
                 },
               ),

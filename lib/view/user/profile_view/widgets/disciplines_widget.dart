@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../uitilies/app_colors.dart';
-
-
 
 class DisciplinesWidget extends StatelessWidget {
   final List<String> selectedDisciplines;
@@ -33,7 +30,14 @@ class DisciplinesWidget extends StatelessWidget {
           runSpacing: 8.h,
           children: [
             FilterChip(
-              label: Text("Jiu Jitsu"),
+              label: Text(
+                "Jiu Jitsu",
+                style: TextStyle(
+                  color: selectedDisciplines.contains("Jiu Jitsu")
+                      ? Colors.white
+                      : AppColors.textFieldNameColor,
+                ),
+              ),
               selected: selectedDisciplines.contains("Jiu Jitsu"),
               onSelected: (selected) {
                 final updated = List<String>.from(selectedDisciplines);
@@ -48,7 +52,14 @@ class DisciplinesWidget extends StatelessWidget {
               checkmarkColor: Colors.white,
             ),
             FilterChip(
-              label: Text("Wrestling"),
+              label: Text(
+                "Wrestling",
+                style: TextStyle(
+                  color: selectedDisciplines.contains("Wrestling")
+                      ? Colors.white
+                      : AppColors.textFieldNameColor,
+                ),
+              ),
               selected: selectedDisciplines.contains("Wrestling"),
               onSelected: (selected) {
                 final updated = List<String>.from(selectedDisciplines);
@@ -63,7 +74,14 @@ class DisciplinesWidget extends StatelessWidget {
               checkmarkColor: Colors.white,
             ),
             FilterChip(
-              label: Text("MMA"),
+              label: Text(
+                "MMA",
+                style: TextStyle(
+                  color: selectedDisciplines.contains("MMA")
+                      ? Colors.white
+                      : AppColors.textFieldNameColor,
+                ),
+              ),
               selected: selectedDisciplines.contains("MMA"),
               onSelected: (selected) {
                 final updated = List<String>.from(selectedDisciplines);
@@ -78,7 +96,14 @@ class DisciplinesWidget extends StatelessWidget {
               checkmarkColor: Colors.white,
             ),
             FilterChip(
-              label: Text("Judo"),
+              label: Text(
+                "Judo",
+                style: TextStyle(
+                  color: selectedDisciplines.contains("Judo")
+                      ? Colors.white
+                      : AppColors.textFieldNameColor,
+                ),
+              ),
               selected: selectedDisciplines.contains("Judo"),
               onSelected: (selected) {
                 final updated = List<String>.from(selectedDisciplines);
@@ -93,7 +118,14 @@ class DisciplinesWidget extends StatelessWidget {
               checkmarkColor: Colors.white,
             ),
             FilterChip(
-              label: Text("Muay Thai"),
+              label: Text(
+                "Muay Thai",
+                style: TextStyle(
+                  color: selectedDisciplines.contains("Muay Thai")
+                      ? Colors.white
+                      : AppColors.textFieldNameColor,
+                ),
+              ),
               selected: selectedDisciplines.contains("Muay Thai"),
               onSelected: (selected) {
                 final updated = List<String>.from(selectedDisciplines);

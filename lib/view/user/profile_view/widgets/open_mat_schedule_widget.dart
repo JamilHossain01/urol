@@ -7,8 +7,6 @@ import '../../../../common widget/custom_text_filed.dart';
 import '../../../../common widget/dot_border_container.dart';
 import '../../../../uitilies/app_colors.dart';
 
-
-
 class OpenMatScheduleWidget extends StatelessWidget {
   final String? selectedDay;
   final String? startTime;
@@ -33,34 +31,35 @@ class OpenMatScheduleWidget extends StatelessWidget {
     required this.onDayChanged,
     required this.onStartTimeChanged,
     required this.onEndTimeChanged,
-    required this.onAddMoreDays, this.showClassField = false, this.name, this.addCC,
+    required this.onAddMoreDays,
+    this.showClassField = false,
+    this.name,
+    this.addCC,
   });
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController streetAddressController = TextEditingController();
+    final TextEditingController streetAddressController =
+        TextEditingController();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomText(
-          text: name??"Open Mat Schedule",
+          text: showClassField ? "Class Schedule" : "Open Mat Schedule",
           fontSize: 14.sp,
           fontWeight: FontWeight.w600,
           color: AppColors.textFieldNameColor,
         ),
         SizedBox(height: 8.h),
-        if(showClassField)...[
+        if (showClassField) ...[
           CustomText(
-            text: "Class Schedule",
+            text: "Class name",
             fontSize: 12.sp,
             fontWeight: FontWeight.w600,
             color: AppColors.textFieldNameColor,
           ),
           Gap(4.h),
-
-
-
           CustomTextField(
             controller: streetAddressController,
             hintText: "Enter the class name",
@@ -70,9 +69,6 @@ class OpenMatScheduleWidget extends StatelessWidget {
             validator: (value) => value!.isEmpty ? "Address is required" : null,
           ),
         ],
-
-
-
         CustomText(
           text: "Day",
           fontSize: 12.sp,
@@ -80,7 +76,6 @@ class OpenMatScheduleWidget extends StatelessWidget {
           color: AppColors.textFieldNameColor,
         ),
         Gap(4.h),
-
         Container(
           width: double.infinity,
           padding: EdgeInsets.symmetric(horizontal: 14.w),
@@ -94,10 +89,12 @@ class OpenMatScheduleWidget extends StatelessWidget {
             child: DropdownButton<String>(
               value: selectedDay,
               hint: Text("Select a day", style: TextStyle(fontSize: 13.sp)),
-              items: days.map((day) => DropdownMenuItem(
-                value: day,
-                child: Text(day, style: TextStyle(fontSize: 13.sp)),
-              )).toList(),
+              items: days
+                  .map((day) => DropdownMenuItem(
+                        value: day,
+                        child: Text(day, style: TextStyle(fontSize: 13.sp)),
+                      ))
+                  .toList(),
               onChanged: onDayChanged,
             ),
           ),
@@ -109,7 +106,6 @@ class OpenMatScheduleWidget extends StatelessWidget {
           color: AppColors.textFieldNameColor,
         ),
         Gap(4.h),
-
         Row(
           children: [
             Expanded(
@@ -124,20 +120,29 @@ class OpenMatScheduleWidget extends StatelessWidget {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     value: startTime,
-                    hint: Text("12:30 PM", style: TextStyle(fontSize: 12.sp,color: Color(0xFF989898),fontWeight: FontWeight.w400)),
-                    items: times.map((time) => DropdownMenuItem(
-                      value: time,
-                      child: Text(time, style: TextStyle(fontSize: 13.sp)),
-                    )).toList(),
+                    hint: Text("12:30 PM",
+                        style: TextStyle(
+                            fontSize: 12.sp,
+                            color: Color(0xFF989898),
+                            fontWeight: FontWeight.w400)),
+                    items: times
+                        .map((time) => DropdownMenuItem(
+                              value: time,
+                              child:
+                                  Text(time, style: TextStyle(fontSize: 13.sp)),
+                            ))
+                        .toList(),
                     onChanged: onStartTimeChanged,
                   ),
                 ),
               ),
             ),
             SizedBox(width: 4.w),
-
-            Text("to", style:
-            TextStyle(fontSize: 14.sp,color: Color(0xFF989898),fontWeight: FontWeight.w500)),
+            Text("to",
+                style: TextStyle(
+                    fontSize: 14.sp,
+                    color: Color(0xFF989898),
+                    fontWeight: FontWeight.w500)),
             SizedBox(width: 4.w),
             Expanded(
               child: Container(
@@ -151,11 +156,18 @@ class OpenMatScheduleWidget extends StatelessWidget {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     value: endTime,
-                    hint: Text("2:30 PM", style:  TextStyle(fontSize: 12.sp,color: Color(0xFF989898),fontWeight: FontWeight.w400)),
-                    items: times.map((time) => DropdownMenuItem(
-                      value: time,
-                      child: Text(time, style: TextStyle(fontSize: 13.sp)),
-                    )).toList(),
+                    hint: Text("2:30 PM",
+                        style: TextStyle(
+                            fontSize: 12.sp,
+                            color: Color(0xFF989898),
+                            fontWeight: FontWeight.w400)),
+                    items: times
+                        .map((time) => DropdownMenuItem(
+                              value: time,
+                              child:
+                                  Text(time, style: TextStyle(fontSize: 13.sp)),
+                            ))
+                        .toList(),
                     onChanged: onEndTimeChanged,
                   ),
                 ),
@@ -177,7 +189,8 @@ class OpenMatScheduleWidget extends StatelessWidget {
           textColor: Color(0xFF989898),
           direction: DottedBoxDirection.row,
           spacing: 8,
-        ),        SizedBox(height: 20.h),
+        ),
+        SizedBox(height: 20.h),
       ],
     );
   }
