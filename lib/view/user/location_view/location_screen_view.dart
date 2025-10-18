@@ -23,15 +23,47 @@ class _MapScreenViewState extends State<MapScreenView> {
   double distance = 2;
   String selectedCategory = "Open Mat";
   String? selectedGym; // Track the selected gym
-  final List<Map<String, String>> gymList = List.generate(
-    7,
-    (index) => {
+  double _zoomLevel = 14.0; // Default zoom level
+
+  // Updated gym list with unique names
+  final List<Map<String, String>> gymList = [
+    {
       'gymName': 'GymNation Stars',
       'location': '6157 Rd, California, USA',
       'image': AppImages.gym1,
       'categories': 'Open Mat, BJJ, MMA',
     },
-  );
+    {
+      'gymName': 'BJJ Academy',
+      'location': '1234 Rd, California, USA',
+      'image': AppImages.gym2,
+      'categories': 'BJJ, MMA',
+    },
+    {
+      'gymName': 'MMA Fitness Gym',
+      'location': '7890 Rd, California, USA',
+      'image': AppImages.gym3,
+      'categories': 'MMA, Boxing',
+    },
+    {
+      'gymName': 'Victory BJJ Academy',
+      'location': '2345 Rd, California, USA',
+      'image': AppImages.gym2,
+      'categories': 'BJJ',
+    },
+    {
+      'gymName': 'Fight Club Gym',
+      'location': '6789 Rd, California, USA',
+      'image': AppImages.gym2,
+      'categories': 'Boxing, MMA',
+    },
+    {
+      'gymName': 'The Arena Combat Academy',
+      'location': '4321 Rd, California, USA',
+      'image': AppImages.gym2,
+      'categories': 'MMA, Kickboxing',
+    },
+  ];
 
   final LatLng _center = const LatLng(38.5816, -121.4944);
   Set<Annotation> markers = {};
@@ -49,50 +81,18 @@ class _MapScreenViewState extends State<MapScreenView> {
     );
 
     setState(() {
-      markers = {
-        Annotation(
-          annotationId: AnnotationId("1"),
-          position: const LatLng(38.5826, -121.4944),
+      markers = gymList.asMap().entries.map((entry) {
+        final index = entry.key;
+        final gym = entry.value;
+
+        return Annotation(
+          annotationId: AnnotationId(index.toString()),
+          position: LatLng(38.5826 + index * 0.01, -121.4944 + index * 0.01),
           icon: customIcon,
-          infoWindow: const InfoWindow(title: "GymNation Stars"),
-          onTap: () => _onMarkerTapped("GymNation Stars"),
-        ),
-        Annotation(
-          annotationId: AnnotationId("2"),
-          position: const LatLng(38.5800, -121.4920),
-          icon: customIcon,
-          infoWindow: const InfoWindow(title: "BJJ Academy"),
-          onTap: () => _onMarkerTapped("BJJ Academy"),
-        ),
-        Annotation(
-          annotationId: AnnotationId("3"),
-          position: const LatLng(38.5836, -121.4954),
-          icon: customIcon,
-          infoWindow: const InfoWindow(title: "MMA Fitness Gym"),
-          onTap: () => _onMarkerTapped("MMA Fitness Gym"),
-        ),
-        Annotation(
-          annotationId: AnnotationId("4"),
-          position: const LatLng(38.5772, -121.4936),
-          icon: customIcon,
-          infoWindow: const InfoWindow(title: "Victory BJJ Academy"),
-          onTap: () => _onMarkerTapped("Victory BJJ Academy"),
-        ),
-        Annotation(
-          annotationId: AnnotationId("5"),
-          position: const LatLng(38.5862, -121.4912),
-          icon: customIcon,
-          infoWindow: const InfoWindow(title: "Fight Club Gym"),
-          onTap: () => _onMarkerTapped("Fight Club Gym"),
-        ),
-        Annotation(
-          annotationId: AnnotationId("6"),
-          position: const LatLng(38.5796, -121.4908),
-          icon: customIcon,
-          infoWindow: const InfoWindow(title: "The Arena Combat Academy"),
-          onTap: () => _onMarkerTapped("The Arena Combat Academy"),
-        ),
-      };
+          infoWindow: InfoWindow(title: gym['gymName']),
+          onTap: () => _onMarkerTapped(gym['gymName'].toString()),
+        );
+      }).toSet();
     });
   }
 
@@ -103,11 +103,32 @@ class _MapScreenViewState extends State<MapScreenView> {
     });
   }
 
+  // Function to update the zoom level
+  void _zoomIn() {
+    if (_zoomLevel < 20.0) {
+      setState(() {
+        _zoomLevel += 1;
+        mapController?.animateCamera(CameraUpdate.newCameraPosition(
+            CameraPosition(target: _center, zoom: _zoomLevel)));
+      });
+    }
+  }
+
+  void _zoomOut() {
+    if (_zoomLevel > 5.0) {
+      setState(() {
+        _zoomLevel -= 1;
+        mapController?.animateCamera(CameraUpdate.newCameraPosition(
+            CameraPosition(target: _center, zoom: _zoomLevel)));
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Find the selected gym details based on selectedGym
+    // Find the details of the selected gym
     final selectedGymDetails = gymList.firstWhere(
-      (gym) => gym['gymName'] == selectedGym,
+          (gym) => gym['gymName'] == selectedGym,
       orElse: () => {},
     );
 
@@ -115,7 +136,7 @@ class _MapScreenViewState extends State<MapScreenView> {
       body: Stack(
         children: [
           AppleMap(
-            initialCameraPosition: CameraPosition(target: _center, zoom: 14.0),
+            initialCameraPosition: CameraPosition(target: _center, zoom: _zoomLevel),
             annotations: markers,
             onMapCreated: (controller) => mapController = controller,
             myLocationEnabled: true,
@@ -132,6 +153,7 @@ class _MapScreenViewState extends State<MapScreenView> {
             ),
           ),
 
+          /// Gym Preview Bottom List (shows if a gym is selected)
           if (selectedGym != null) ...[
             Positioned(
               bottom: 20.h,
@@ -140,14 +162,47 @@ class _MapScreenViewState extends State<MapScreenView> {
               child: GestureDetector(
                 onTap: () => Get.to(() => const GymDetailsScreen()),
                 child: GymPreviewCard(
-                  gymName: 'GymNation Stars',
-                  location: '6157 Rd, California, USA',
-                  image: AppImages.gym1,
-                  categories: ['Open Mat', 'BJJ', 'MMA'],
+                  gymName: selectedGymDetails['gymName'] ?? 'No Gym Name',
+                  location: selectedGymDetails['location'] ?? 'No Location',
+                  image: selectedGymDetails['image'] ?? AppImages.gym1, // Default image if not available
+                  categories: (selectedGymDetails['categories'] ?? '').split(', '),
                 ),
               ),
             ),
           ],
+
+          /// Zoom In/Out Buttons
+          Positioned(
+            bottom: 10.h,
+            right: 16.w,
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: _zoomIn,
+                  child: Container(
+                    padding: EdgeInsets.all(12.w),
+                    decoration: BoxDecoration(
+                      color: AppColors.mainColor,
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                    child: const Icon(Icons.add, color: Colors.white),
+                  ),
+                ),
+                Gap(10.h),
+                GestureDetector(
+                  onTap: _zoomOut,
+                  child: Container(
+                    padding: EdgeInsets.all(12.w),
+                    decoration: BoxDecoration(
+                      color: AppColors.mainColor,
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                    child: const Icon(Icons.remove, color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -201,28 +256,28 @@ class _MapScreenViewState extends State<MapScreenView> {
                   Wrap(
                     spacing: 8.w,
                     children:
-                        ["Open Mat", "Jiu Jitsu", "Judo", "MMA", "Wrestling"]
-                            .map(
-                              (cat) => ChoiceChip(
-                                backgroundColor: const Color(0xFFF5F5F5),
-                                selectedColor: AppColors.mainColor,
-                                label: CustomText(
-                                  text: cat,
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: selectedCategory == cat
-                                      ? Colors.white
-                                      : Colors.black,
-                                ),
-                                selected: selectedCategory == cat,
-                                onSelected: (val) {
-                                  setModalState(() {
-                                    selectedCategory = cat;
-                                  });
-                                },
-                              ),
-                            )
-                            .toList(),
+                    ["Open Mat", "Jiu Jitsu", "Judo", "MMA", "Wrestling"]
+                        .map(
+                          (cat) => ChoiceChip(
+                        backgroundColor: const Color(0xFFF5F5F5),
+                        selectedColor: AppColors.mainColor,
+                        label: CustomText(
+                          text: cat,
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w500,
+                          color: selectedCategory == cat
+                              ? Colors.white
+                              : Colors.black,
+                        ),
+                        selected: selectedCategory == cat,
+                        onSelected: (val) {
+                          setModalState(() {
+                            selectedCategory = cat;
+                          });
+                        },
+                      ),
+                    )
+                        .toList(),
                   ),
                   Gap(15.h),
                   Row(
