@@ -188,7 +188,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomText(
-                          text: "Contact Information",
+                          text: "Information Details",
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
                           color: AppColors.mainTextColors,

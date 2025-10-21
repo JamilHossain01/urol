@@ -70,7 +70,7 @@ class SignInView extends StatelessWidget {
                     ),
                     CustomTextField(
                       fillColor: Color(0xFFFFFFFF),
-                      hintText: "Enter your phone number/email",
+                      hintText: "Enter your email address",
                       showObscure: false,
                     ),
                     SizedBox(height: 10),
@@ -130,7 +130,7 @@ class SignInView extends StatelessWidget {
                           },
                           child: CustomText(
                             color: AppColors.mainColor,
-                            text: "Forgot Password ?",
+                            text: "Forgot Password?",
                             fontWeight: FontWeight.w600,
                             fontSize: 12.sp,
                           ),

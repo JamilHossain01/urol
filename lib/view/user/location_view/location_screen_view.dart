@@ -128,7 +128,7 @@ class _MapScreenViewState extends State<MapScreenView> {
   Widget build(BuildContext context) {
     // Find the details of the selected gym
     final selectedGymDetails = gymList.firstWhere(
-          (gym) => gym['gymName'] == selectedGym,
+      (gym) => gym['gymName'] == selectedGym,
       orElse: () => {},
     );
 
@@ -136,7 +136,8 @@ class _MapScreenViewState extends State<MapScreenView> {
       body: Stack(
         children: [
           AppleMap(
-            initialCameraPosition: CameraPosition(target: _center, zoom: _zoomLevel),
+            initialCameraPosition:
+                CameraPosition(target: _center, zoom: _zoomLevel),
             annotations: markers,
             onMapCreated: (controller) => mapController = controller,
             myLocationEnabled: true,
@@ -164,8 +165,10 @@ class _MapScreenViewState extends State<MapScreenView> {
                 child: GymPreviewCard(
                   gymName: selectedGymDetails['gymName'] ?? 'No Gym Name',
                   location: selectedGymDetails['location'] ?? 'No Location',
-                  image: selectedGymDetails['image'] ?? AppImages.gym1, // Default image if not available
-                  categories: (selectedGymDetails['categories'] ?? '').split(', '),
+                  image: selectedGymDetails['image'] ??
+                      AppImages.gym1, // Default image if not available
+                  categories:
+                      (selectedGymDetails['categories'] ?? '').split(', '),
                 ),
               ),
             ),
@@ -180,7 +183,7 @@ class _MapScreenViewState extends State<MapScreenView> {
                 GestureDetector(
                   onTap: _zoomIn,
                   child: Container(
-                    padding: EdgeInsets.all(12.w),
+                    padding: EdgeInsets.all(8.w),
                     decoration: BoxDecoration(
                       color: AppColors.mainColor,
                       borderRadius: BorderRadius.circular(8.r),
@@ -192,7 +195,7 @@ class _MapScreenViewState extends State<MapScreenView> {
                 GestureDetector(
                   onTap: _zoomOut,
                   child: Container(
-                    padding: EdgeInsets.all(12.w),
+                    padding: EdgeInsets.all(8.w),
                     decoration: BoxDecoration(
                       color: AppColors.mainColor,
                       borderRadius: BorderRadius.circular(8.r),
@@ -256,28 +259,28 @@ class _MapScreenViewState extends State<MapScreenView> {
                   Wrap(
                     spacing: 8.w,
                     children:
-                    ["Open Mat", "Jiu Jitsu", "Judo", "MMA", "Wrestling"]
-                        .map(
-                          (cat) => ChoiceChip(
-                        backgroundColor: const Color(0xFFF5F5F5),
-                        selectedColor: AppColors.mainColor,
-                        label: CustomText(
-                          text: cat,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w500,
-                          color: selectedCategory == cat
-                              ? Colors.white
-                              : Colors.black,
-                        ),
-                        selected: selectedCategory == cat,
-                        onSelected: (val) {
-                          setModalState(() {
-                            selectedCategory = cat;
-                          });
-                        },
-                      ),
-                    )
-                        .toList(),
+                        ["Open Mat", "Jiu Jitsu", "Judo", "MMA", "Wrestling"]
+                            .map(
+                              (cat) => ChoiceChip(
+                                backgroundColor: const Color(0xFFF5F5F5),
+                                selectedColor: AppColors.mainColor,
+                                label: CustomText(
+                                  text: cat,
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: selectedCategory == cat
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                                selected: selectedCategory == cat,
+                                onSelected: (val) {
+                                  setModalState(() {
+                                    selectedCategory = cat;
+                                  });
+                                },
+                              ),
+                            )
+                            .toList(),
                   ),
                   Gap(15.h),
                   Row(

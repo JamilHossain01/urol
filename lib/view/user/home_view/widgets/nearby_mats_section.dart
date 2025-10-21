@@ -46,7 +46,7 @@ class NearbyMatsSection extends StatelessWidget {
             CustomText(
               color: AppColors.mainTextColors,
               fontWeight: FontWeight.w600,
-              fontSize: 16.h,
+              fontSize: 14.h,
               text: "Nearby Open Mats",
             ),
             GestureDetector(
@@ -56,7 +56,7 @@ class NearbyMatsSection extends StatelessWidget {
               child: CustomText(
                 color: AppColors.mainColor,
                 fontWeight: FontWeight.w600,
-                fontSize: 12.h,
+                fontSize: 10.h,
                 text: "View All on Map",
               ),
             ),

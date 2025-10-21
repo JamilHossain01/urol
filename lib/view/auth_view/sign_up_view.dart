@@ -3,6 +3,7 @@
 import 'package:calebshirthum/view/auth_view/signUpOtp_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart' show Get;
 import 'package:google_fonts/google_fonts.dart';
@@ -42,12 +43,13 @@ class SignUpView extends StatelessWidget {
                 fontSize: 32.sp,
                 color: Color(0xFF1E1E1E),
               ),
+              Gap(5.h),
               CustomText(
                 fontWeight: FontWeight.w500,
                 textAlign: TextAlign.start,
                 fontSize: 12.sp,
                 color: Color(0xFF8A8A8A),
-                text: "Create an account to continue!",
+                text: "Create an account to continue",
               ),
               SizedBox(height: 40),
 
@@ -60,7 +62,7 @@ class SignUpView extends StatelessWidget {
                 fontSize: 12.sp,
               ),
               CustomTextField(
-                hintText: "Enter full name",
+                hintText: "Enter first name",
                 showObscure: false,
               ),
               SizedBox(height: 10),
@@ -74,7 +76,7 @@ class SignUpView extends StatelessWidget {
                 fontSize: 12.sp,
               ),
               CustomTextField(
-                hintText: "Enter your address",
+                hintText: "Enter last name",
                 showObscure: false,
               ),
               SizedBox(height: 10),
@@ -88,7 +90,7 @@ class SignUpView extends StatelessWidget {
                 fontSize: 12.sp,
               ),
               CustomTextField(
-                hintText: "Enter your email",
+                hintText: "Enter your email address",
                 showObscure: false,
               ),
 
@@ -96,51 +98,23 @@ class SignUpView extends StatelessWidget {
 
               //Phone Number
 
-              /// Phone number field
-              // IntlPhoneField(
-              //   controller: _numberController,
-              //   decoration: InputDecoration(
-              //     hintStyle: GoogleFonts.outfit(fontSize: 12.h),
-              //     fillColor: Color(0xFFE4E4E4),
-              //     filled: true,
-              //     labelStyle: GoogleFonts.urbanist(fontSize: 13.h),
-              //     hintText: "Phone Number".tr,
-              //     enabledBorder: OutlineInputBorder(
-              //       borderRadius: BorderRadius.circular(8.sp),
-              //       borderSide: BorderSide(
-              //         color: Colors.transparent,
-              //         width: 1.5,
-              //       ),
-              //     ),
-              //     border: OutlineInputBorder(
-              //       borderSide: BorderSide(
-              //         color: AppColors.mainColor,
-              //         width: 1.0,
-              //       ),
-              //       borderRadius: BorderRadius.circular(12.0),
-              //     ),
-              //     focusedBorder: OutlineInputBorder(
-              //       borderSide: BorderSide(
-              //         color: AppColors.mainColor,
-              //         width: 1.0,
-              //       ),
-              //       borderRadius: BorderRadius.circular(12.0),
-              //     ),
-              //   ),
-              //   initialCountryCode: 'AE',
-              //   onChanged: (phone) {
-              //     // setState(() {
-              //     //   countryCode = phone.countryCode;
-              //     //   localNumber = phone.number;
-              //     // });
-              //   },
-              // ),
-
+              CustomText(
+                fontWeight: FontWeight.w600,
+                textAlign: TextAlign.start,
+                text: "Phone Number",
+                color: AppColors.textFieldNameColor,
+                fontSize: 12.sp,
+              ),
+              CustomTextField(
+                hintText: "Enter your phone number",
+                showObscure: false,
+              ),
+              SizedBox(height: 10),
               //Password
               CustomText(
                 fontWeight: FontWeight.w600,
                 textAlign: TextAlign.start,
-                text: "New Password",
+                text: "Password",
                 color: AppColors.textFieldNameColor,
                 fontSize: 12.sp,
               ),
@@ -159,7 +133,7 @@ class SignUpView extends StatelessWidget {
                 fontSize: 12.sp,
               ),
               CustomTextField(
-                hintText: "Enter confirm password",
+                hintText: "Confirm your password",
                 showObscure: true,
               ),
               SizedBox(height: 20),

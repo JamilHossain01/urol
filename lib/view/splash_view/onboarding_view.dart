@@ -103,29 +103,13 @@ class _OnboardingViewState extends State<OnboardingView> {
                     fontSize: 34.sp,
                     fontWeight: FontWeight.w700,
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     CustomText(
-                  //       text: 'with the',
-                  //       color: Colors.white,
-                  //       fontSize: 36.sp,
-                  //       fontWeight: FontWeight.w700,
-                  //     ),
-                  //     CustomText(
-                  //       text: ' Wolf Pack',
-                  //       color: AppColors.orangeColor,
-                  //       fontSize: 36.sp,
-                  //       fontWeight: FontWeight.w700,
-                  //     ),
-                  //   ],
-                  // ),
+
                   Gap(8.h),
                   CustomText(
                     textAlign: TextAlign.start,
                     maxLines: 10,
                     text:
-                    'Browse gyms, find open mats, and stay updated with events and seminars happening in your areas',
+                    'Browse gyms, find open mats, and stay updated with events and seminars happening in your area!',
                     color: Color(0xFFB5B5B5),
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w400,
@@ -136,7 +120,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                   //   fontSize: 14.sp,
                   //   fontWeight: FontWeight.w400,
                   // ),
-                  Gap(40.h),
+                  Gap(30.h),
                   Center(
                     child: ActionSlider.standard(
 

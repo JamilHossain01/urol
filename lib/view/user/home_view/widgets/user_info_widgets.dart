@@ -140,6 +140,7 @@ class UserInfoSection extends StatelessWidget {
           fontSize: 12.h,
           text: "Favorite Quote",
         ),
+        Gap(10),
         CustomText(
           color: AppColors.pTextColors,
           fontWeight: FontWeight.w400,

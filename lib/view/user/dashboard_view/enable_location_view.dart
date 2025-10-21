@@ -4,8 +4,10 @@ import 'package:calebshirthum/uitilies/app_images.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_app_bar_widget.dart';
@@ -45,15 +47,14 @@ class EnableLocationView extends StatelessWidget {
               fontSize: 18.h,
               text: "Location",
             ),
-            CustomText(
-              color: Color(0xFF8A8A8A),
-              fontWeight: FontWeight.w500,
-
-              fontSize: 14.h,
-              text:
-                  "Your location services are switched off. Please enable location, to help us serve better.",
+            Gap(5.h),
+            Text(
+              textAlign: TextAlign.center,
+              "Your location services are switched off. Please enable location to help us serve you better.",
+              style: GoogleFonts.openSans(
+                  color: Color(0xFF8A8A8A), fontSize: 11.h),
             ),
-            SizedBox(height: 40),
+            SizedBox(height: 60),
             CustomButtonWidget(
                 btnColor: AppColors.mainColor,
                 btnText: "Enable Location",

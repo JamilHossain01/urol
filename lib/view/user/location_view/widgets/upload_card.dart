@@ -24,7 +24,7 @@ class UploadCard extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-            fontSize: 16.sp,
+            fontSize: 13.sp,
             fontWeight: FontWeight.w600,
             color: Colors.black87,
           ),

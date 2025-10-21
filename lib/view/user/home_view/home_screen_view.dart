@@ -1,19 +1,13 @@
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/constant.dart';
-import 'package:calebshirthum/view/user/home_view/widgets/event_results_section.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/greeting_section_widgets.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/nearby_mats_section.dart';
-import 'package:calebshirthum/view/user/home_view/widgets/notification_widgets.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/user_info_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../uitilies/app_images.dart';
-import '../profile_view/add_compition_view.dart';
 import '../profile_view/widgets/event_card.dart';
 
 
