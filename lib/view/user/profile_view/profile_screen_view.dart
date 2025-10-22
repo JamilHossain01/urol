@@ -2,6 +2,7 @@ import 'package:calebshirthum/common%20widget/comon_conatainer/custom_conatiner.
 import 'package:calebshirthum/common%20widget/custom_button_widget.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/app_images.dart';
+import 'package:calebshirthum/view/user/profile_view/add_events_view.dart';
 import 'package:calebshirthum/view/user/profile_view/friend_screen_view.dart';
 import 'package:calebshirthum/view/user/profile_view/my_gyms_view.dart';
 import 'package:calebshirthum/view/user/profile_view/profile_information_view.dart';
@@ -132,7 +133,6 @@ class ProfileView extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 10.h),
-
                     Divider(
                       color: Color(0xFF000000).withOpacity(0.10),
                     ),
@@ -208,7 +208,6 @@ class ProfileView extends StatelessWidget {
                 medalText: "GOLD",
               ),
 
-
               // Others Section
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -235,6 +234,11 @@ class ProfileView extends StatelessWidget {
                       text: "Add Your Gym",
                       iconPath: AppImages.add,
                       onTap: () => Get.to(() => AddYourGymDetailsScreen()),
+                    ),
+                    OtherTile(
+                      text: "Add Event",
+                      iconPath: AppImages.calenderA,
+                      onTap: () => Get.to(() => AddEventsView()),
                     ),
                     OtherTile(
                       text: "My Gyms",

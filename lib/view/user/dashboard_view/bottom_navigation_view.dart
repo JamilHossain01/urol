@@ -32,10 +32,10 @@ class _BottomNavigationState extends State<DashboardView> {
     });
   }
 
-  // Update the function to show different icons for selected and unselected states
-  Widget _buildImageIcon(String selectedAssetPath, String unselectedAssetPath, bool isSelected) {
+  Widget _buildImageIcon(
+      String selectedAssetPath, String unselectedAssetPath, bool isSelected) {
     return Image.asset(
-      isSelected ? selectedAssetPath : unselectedAssetPath,  // Check if selected or not
+      isSelected ? selectedAssetPath : unselectedAssetPath,
       width: 23,
     );
   }
@@ -51,8 +51,8 @@ class _BottomNavigationState extends State<DashboardView> {
           selectedItemColor: AppColors.mainColor,
           unselectedLabelStyle: GoogleFonts.outfit(fontSize: 12.h),
           backgroundColor: Colors.white,
-          selectedLabelStyle: GoogleFonts.outfit(
-              color: AppColors.mainColor, fontSize: 14.h),
+          selectedLabelStyle:
+              GoogleFonts.outfit(color: AppColors.mainColor, fontSize: 14.h),
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
           iconSize: 22,
@@ -60,15 +60,15 @@ class _BottomNavigationState extends State<DashboardView> {
           items: [
             BottomNavigationBarItem(
               icon: _buildImageIcon(
-                AppImages.homeA,  // Selected state
-                AppImages.home,   // Unselected state
+                AppImages.homeA, // Selected state
+                AppImages.home, // Unselected state
                 _selectedIndex == 0,
               ),
               label: 'Home',
             ),
             BottomNavigationBarItem(
               icon: _buildImageIcon(
-                AppImages.locationA,  // Selected state
+                AppImages.locationA, // Selected state
                 AppImages.location,
                 _selectedIndex == 1,
               ),
@@ -76,7 +76,7 @@ class _BottomNavigationState extends State<DashboardView> {
             ),
             BottomNavigationBarItem(
               icon: _buildImageIcon(
-                AppImages.calenderA,  // Selected state
+                AppImages.calenderA, // Selected state
                 AppImages.calender,
                 _selectedIndex == 2,
               ),
@@ -84,7 +84,7 @@ class _BottomNavigationState extends State<DashboardView> {
             ),
             BottomNavigationBarItem(
               icon: _buildImageIcon(
-                AppImages.profileA,  // Selected state
+                AppImages.profileA, // Selected state
                 AppImages.profile,
                 _selectedIndex == 3,
               ),
