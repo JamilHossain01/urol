@@ -19,15 +19,11 @@ class EventScreenView extends StatefulWidget {
 }
 
 class _EventScreenViewState extends State<EventScreenView> {
-  String selectedEventType = "IBJJF";
-  double distance = 2;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
-
         title: 'Events',
         showLeadingIcon: false,
       ),
@@ -36,13 +32,11 @@ class _EventScreenViewState extends State<EventScreenView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Gap(15.h),
 
             SearchBarWithFilter(
               backgroundColor: Color(0xFFF5F6F8),
               onFilterTap: () {
                 _openFilterSheet(context);
-                
               },
             ),
             Gap(20.h),
@@ -91,9 +85,6 @@ class _EventScreenViewState extends State<EventScreenView> {
       ),
     );
   }
-
-
-
 
   void _openFilterSheet(BuildContext context) {
     showModalBottomSheet(
