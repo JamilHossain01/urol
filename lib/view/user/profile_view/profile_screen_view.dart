@@ -55,8 +55,6 @@ class ProfileView extends StatelessWidget {
                 text: "Profile",
               ),
 
-
-
               SizedBox(height: 18.h),
               ProfileHeaderWithBelt(
                 imageUrl: AppImages.person,
