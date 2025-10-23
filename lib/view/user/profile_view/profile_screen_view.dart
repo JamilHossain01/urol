@@ -115,9 +115,9 @@ class ProfileView extends StatelessWidget {
                     ),
                     SizedBox(height: 10.h),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _infoTile(AppImages.scale, "Height", "5'10\""),
+                        Gap(10.w),
                         _infoTile(AppImages.kg, "Weight", "170 lb"),
                       ],
                     ),
@@ -140,9 +140,10 @@ class ProfileView extends StatelessWidget {
                     CustomText(
                       text: "Favorite Quote",
                       fontSize: 12.sp,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.bold,
                       color: Color(0xFF4B4B4B),
                     ),
+                    SizedBox(height: 10.h),
                     CustomText(
                       maxLines: 2,
                       textAlign: TextAlign.start,

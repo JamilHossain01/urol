@@ -20,7 +20,7 @@ class GreetingSection extends StatelessWidget {
           children: [
             Text(
               "uJitsu",
-              style: GoogleFonts.pacifico(
+              style: GoogleFonts.libreBaskerville(
                 fontSize: 21.h,
                 color: AppColors.mainColor,
               ),

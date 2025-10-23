@@ -25,7 +25,7 @@ class _OnboardingViewState extends State<OnboardingView> {
     if (_isLoading) return;
     setState(() => _isLoading = true);
 
-    sliderController.loading(); // Start loading animation
+    sliderController.loading();
     await Future.delayed(const Duration(seconds: 2));
 
     setState(() {
@@ -109,7 +109,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                     textAlign: TextAlign.start,
                     maxLines: 10,
                     text:
-                    'Browse gyms, find open mats, and stay updated with events and seminars happening in your area!',
+                        'Browse gyms, find open mats, and stay updated with events and seminars happening in your area!',
                     color: Color(0xFFB5B5B5),
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w400,
@@ -123,7 +123,6 @@ class _OnboardingViewState extends State<OnboardingView> {
                   Gap(30.h),
                   Center(
                     child: ActionSlider.standard(
-
                       backgroundColor: AppColors.mainColor,
                       toggleColor: Colors.white,
                       icon: Icon(
@@ -131,7 +130,8 @@ class _OnboardingViewState extends State<OnboardingView> {
                         color: AppColors.mainColor,
                       ),
                       child: CustomText(
-                        text: 'Swipe to Get Started',color: Colors.white,
+                        text: 'Swipe to Get Started',
+                        color: Colors.white,
                         fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
                       ),
