@@ -54,7 +54,10 @@ class ProfileView extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 text: "Profile",
               ),
-              // Profile Image + Belt
+
+
+
+              SizedBox(height: 18.h),
               ProfileHeaderWithBelt(
                 imageUrl: AppImages.person,
                 name: 'Caleb Shirtum',
