@@ -32,7 +32,7 @@ class ContactScreen extends StatelessWidget {
             ),
             SizedBox(height: 6.h),
             CustomTextField(
-              hintText: "Enter name",
+              hintText: "Enter your name",
               showObscure: false,
               fillColor: AppColors.backRoudnColors,
               hintTextColor: AppColors.hintTextColors,
@@ -46,7 +46,7 @@ class ContactScreen extends StatelessWidget {
             ),
             SizedBox(height: 6.h),
             CustomTextField(
-              hintText: "Enter the email",
+              hintText: "Enter email address",
               showObscure: false,
               fillColor: AppColors.backRoudnColors,
               hintTextColor: AppColors.hintTextColors,
@@ -61,7 +61,7 @@ class ContactScreen extends StatelessWidget {
             SizedBox(height: 6.h),
             CustomTextField(
               maxLines: 10,
-              hintText: "Enter message here",
+              hintText: "Enter your message here",
               showObscure: false,
               fillColor: AppColors.backRoudnColors,
               hintTextColor: AppColors.hintTextColors,

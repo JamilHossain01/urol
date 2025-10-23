@@ -21,9 +21,19 @@ class _AddEventsViewState extends State<AddEventsView> {
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
   String? selectedGym;
+  String? selectedEventType;
+  String? selectedState;
+  String? selectedCity;
+  String? zipCode;
   XFile? selectedImage;
 
-  final _gyms = ['Gym 1', 'Gym 2', 'Gym 3', 'Gym 4']; // Example Gym names
+  final _gyms = ['Gym 1', 'Gym 2', 'Gym 3', 'Gym 4'];
+  final _eventTypes = [
+    'Seminar',
+    'Tournament',
+  ]; // Event types
+  final _states = ['State 1', 'State 2', 'State 3'];
+  final _cities = ['City 1', 'City 2', 'City 3'];
 
   // Date Picker function
   Future<void> _selectDate(BuildContext context) async {
@@ -144,6 +154,68 @@ class _AddEventsViewState extends State<AddEventsView> {
 
               SizedBox(height: 10.h),
 
+              // Event Type Dropdown
+              CustomText(
+                text: "Select Event Type",
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w600,
+                color: AppColors.mainTextColors,
+              ),
+              Gap(4.h),
+              Container(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 8.h), // Reduced vertical padding
+                decoration: BoxDecoration(
+                  color: AppColors.backRoudnColors,
+                  borderRadius: BorderRadius.circular(8.r),
+                  border: Border.all(color: AppColors.hintTextColors),
+                ),
+                child: DropdownButtonFormField<String>(
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                  ),
+                  value: selectedEventType,
+                  hint: Row(
+                    children: [
+                      Icon(Icons.event,
+                          size: 20, color: AppColors.hintTextColors),
+                      CustomText(
+                        text: "Select Event Type",
+                        fontSize: 14.sp,
+                        color: AppColors.hintTextColors,
+                      ),
+                    ],
+                  ),
+                  items:
+                      _eventTypes.map<DropdownMenuItem<String>>((String event) {
+                    return DropdownMenuItem<String>(
+                      value: event,
+                      child: Row(
+                        children: [
+                          Icon(Icons.event,
+                              size: 20, color: AppColors.mainColor),
+                          SizedBox(width: 10.w),
+                          CustomText(
+                            text: event,
+                            fontSize: 14.sp,
+                            color: AppColors.mainTextColors,
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedEventType = newValue;
+                    });
+                  },
+                ),
+              ),
+              SizedBox(height: 10.h),
+
+              // Event Name Field
               CustomText(
                 text: "Event Name",
                 fontSize: 12.sp,
@@ -162,6 +234,7 @@ class _AddEventsViewState extends State<AddEventsView> {
               ),
               SizedBox(height: 10.h),
 
+              // Event Description Field
               CustomText(
                 text: "Event Description",
                 fontSize: 12.sp,
@@ -180,7 +253,7 @@ class _AddEventsViewState extends State<AddEventsView> {
               ),
               SizedBox(height: 10.h),
 
-              // Location Field
+              // Event Location Field
               CustomText(
                 text: "Event Location",
                 fontSize: 12.sp,
@@ -196,6 +269,113 @@ class _AddEventsViewState extends State<AddEventsView> {
                 maxLines: 1,
                 validator: (value) =>
                     value!.isEmpty ? "Location is required" : null,
+              ),
+              SizedBox(height: 10.h),
+
+              // State, City, and Zip Code Fields
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // State Dropdown
+                  Container(
+                    width: 160.w,
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                    decoration: BoxDecoration(
+                      color: AppColors.backRoudnColors,
+                      borderRadius: BorderRadius.circular(8.r),
+                      border: Border.all(color: AppColors.hintTextColors),
+                    ),
+                    child: DropdownButtonFormField<String>(
+                      isExpanded: true,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                      ),
+                      value: selectedState,
+                      hint: CustomText(
+                        text: "State",
+                        fontSize: 14.sp,
+                        color: AppColors.hintTextColors,
+                      ),
+                      items:
+                          _states.map<DropdownMenuItem<String>>((String state) {
+                        return DropdownMenuItem<String>(
+                          value: state,
+                          child: CustomText(
+                            text: state,
+                            fontSize: 14.sp,
+                            color: AppColors.mainTextColors,
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedState = newValue;
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 10.w),
+
+                  // City Dropdown
+                  Container(
+                    width: 160.w,
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                    decoration: BoxDecoration(
+                      color: AppColors.backRoudnColors,
+                      borderRadius: BorderRadius.circular(8.r),
+                      border: Border.all(color: AppColors.hintTextColors),
+                    ),
+                    child: DropdownButtonFormField<String>(
+                      isExpanded: true,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                      ),
+                      value: selectedCity,
+                      hint: CustomText(
+                        text: "City",
+                        fontSize: 14.sp,
+                        color: AppColors.hintTextColors,
+                      ),
+                      items:
+                          _cities.map<DropdownMenuItem<String>>((String city) {
+                        return DropdownMenuItem<String>(
+                          value: city,
+                          child: CustomText(
+                            text: city,
+                            fontSize: 14.sp,
+                            color: AppColors.mainTextColors,
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedCity = newValue;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10.h),
+
+              // Zip Code Text Field
+              CustomText(
+                text: "Zip Code",
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w600,
+                color: AppColors.mainTextColors,
+              ),
+              Gap(4.h),
+              CustomTextField(
+                hintText: "Enter Zip Code",
+                showObscure: false,
+                fillColor: AppColors.backRoudnColors,
+                hintTextColor: AppColors.hintTextColors,
+                maxLines: 1,
+                validator: (value) =>
+                    value!.isEmpty ? "Zip Code is required" : null,
               ),
               SizedBox(height: 10.h),
 
@@ -267,9 +447,7 @@ class _AddEventsViewState extends State<AddEventsView> {
                   ),
                 ),
               ),
-              SizedBox(height: 10.h),
-
-              SizedBox(height: 10.h),
+              SizedBox(height: 20.h),
 
               // Event Image Upload
               CustomText(
@@ -299,29 +477,9 @@ class _AddEventsViewState extends State<AddEventsView> {
                         ),
                 ),
               ),
-              SizedBox(height: 10.h),
-
-              // Event Website URL
-              CustomText(
-                text: "Event Website (For Tickets)",
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.mainTextColors,
-              ),
-              Gap(4.h),
-              CustomTextField(
-                hintText: "Enter website URL for ticket registration",
-                showObscure: false,
-                fillColor: AppColors.backRoudnColors,
-                hintTextColor: AppColors.hintTextColors,
-                maxLines: 1,
-                validator: (value) =>
-                    value!.isEmpty ? "Website URL is required" : null,
-              ),
-              SizedBox(height: 20.h),
+              SizedBox(height: 30.h),
 
               // Submit Button
-
               CustomButtonWidget(
                   btnColor: AppColors.mainColor,
                   btnText: "Submit",
