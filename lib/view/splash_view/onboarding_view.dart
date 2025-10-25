@@ -36,7 +36,6 @@ class _OnboardingViewState extends State<OnboardingView> {
     sliderController.success(); // Success animation
     await Future.delayed(const Duration(milliseconds: 600));
 
-    // Navigate to login screen
     if (mounted) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => LogInView()),
@@ -72,7 +71,7 @@ class _OnboardingViewState extends State<OnboardingView> {
             right: 0,
             bottom: 40.h,
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(16.w), // Use ScreenUtil for padding
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -83,16 +82,16 @@ class _OnboardingViewState extends State<OnboardingView> {
                       CustomText(
                         text: 'Everything',
                         color: Colors.white,
-                        fontSize: 34.sp,
+                        fontSize: 34.sp, // Scalable font size
                         fontWeight: FontWeight.w700,
                       ),
                       SizedBox(
-                        width: 5.w,
+                        width: 5.w, // Scalable width
                       ),
                       CustomText(
                         text: 'jiu jitsu,',
                         color: AppColors.mainColor,
-                        fontSize: 34.sp,
+                        fontSize: 34.sp, // Scalable font size
                         fontWeight: FontWeight.w700,
                       ),
                     ],
@@ -100,27 +99,22 @@ class _OnboardingViewState extends State<OnboardingView> {
                   CustomText(
                     text: 'on one app.',
                     color: Colors.white,
-                    fontSize: 34.sp,
+                    fontSize: 34.sp, // Scalable font size
                     fontWeight: FontWeight.w700,
                   ),
 
-                  Gap(8.h),
+                  Gap(8.h), // Scalable gap
                   CustomText(
                     textAlign: TextAlign.start,
                     maxLines: 10,
                     text:
-                        'Browse gyms, find open mats, and stay updated with events and seminars happening in your area!',
+                    'Browse gyms, find open mats, and stay updated with events and seminars happening in your area!',
                     color: Color(0xFFB5B5B5),
-                    fontSize: 12.sp,
+                    fontSize: 12.sp, // Scalable font size
                     fontWeight: FontWeight.w400,
                   ),
-                  // CustomText(
-                  //   text: 'the sales closer you were born to be.',
-                  //   color: Colors.white,
-                  //   fontSize: 14.sp,
-                  //   fontWeight: FontWeight.w400,
-                  // ),
-                  Gap(30.h),
+
+                  Gap(30.h), // Scalable gap
                   Center(
                     child: ActionSlider.standard(
                       backgroundColor: AppColors.mainColor,
@@ -132,7 +126,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                       child: CustomText(
                         text: 'Swipe to Get Started',
                         color: Colors.white,
-                        fontSize: 16.sp,
+                        fontSize: 16.sp, // Scalable font size
                         fontWeight: FontWeight.bold,
                       ),
                       action: _handleSlider,

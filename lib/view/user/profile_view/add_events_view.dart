@@ -272,7 +272,6 @@ class _AddEventsViewState extends State<AddEventsView> {
               ),
               SizedBox(height: 10.h),
 
-              // State, City, and Zip Code Fields
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -379,7 +378,24 @@ class _AddEventsViewState extends State<AddEventsView> {
               ),
               SizedBox(height: 10.h),
 
-              // Event Date Field
+              CustomText(
+                text: "Event Ticket (if ticket available)",
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w600,
+                color: AppColors.mainTextColors,
+              ),
+              Gap(4.h),
+              CustomTextField(
+                hintText: "Paste your event ticket link",
+                showObscure: false,
+                fillColor: AppColors.backRoudnColors,
+                hintTextColor: AppColors.hintTextColors,
+                maxLines: 1,
+                validator: (value) =>
+                    value!.isEmpty ? "Location is required" : null,
+              ),
+              SizedBox(height: 10.h),
+
               CustomText(
                 text: "Event Date",
                 fontSize: 12.sp,

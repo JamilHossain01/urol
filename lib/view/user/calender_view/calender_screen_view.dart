@@ -4,6 +4,7 @@ import 'package:calebshirthum/view/user/calender_view/widget/filter_event_bottom
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_button_widget.dart';
@@ -23,16 +24,37 @@ class _EventScreenViewState extends State<EventScreenView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(
-        title: 'Events',
-        showLeadingIcon: false,
+      appBar: AppBar(
+        forceMaterialTransparency: true,
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              'uJitsu',
+              style: GoogleFonts.libreBaskerville(
+                fontSize: 18.sp,
+                color: AppColors.mainColor,
+              ),
+            ),
+            SizedBox(width: 10),
+            Text(
+              'Events',
+              style: GoogleFonts.libreBaskerville(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             SearchBarWithFilter(
               backgroundColor: Color(0xFFF5F6F8),
               onFilterTap: () {

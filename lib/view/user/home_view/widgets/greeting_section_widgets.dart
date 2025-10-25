@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../uitilies/app_colors.dart';
 import 'notification_widgets.dart';
-// Assuming NotificationBell widget is here
 
 class GreetingSection extends StatelessWidget {
   const GreetingSection({super.key});
@@ -21,7 +20,7 @@ class GreetingSection extends StatelessWidget {
             Text(
               "uJitsu",
               style: GoogleFonts.libreBaskerville(
-                fontSize: 21.h,
+                fontSize: 18.sp,
                 color: AppColors.mainColor,
               ),
             )

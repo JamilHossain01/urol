@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -42,20 +43,37 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     ScreenUtil.init(context);
     return Scaffold(
+      appBar: AppBar(
+        forceMaterialTransparency: true,
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              'uJitsu',
+              style: GoogleFonts.libreBaskerville(
+                fontSize: 18.sp,
+                color: AppColors.mainColor,
+              ),
+            ),
+            SizedBox(width: 10),
+            Text(
+              'Profile',
+              style: GoogleFonts.libreBaskerville(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 20.h),
-              CustomText(
-                color: Color(0xFF1E1E1E),
-                fontSize: 18.h,
-                fontWeight: FontWeight.w600,
-                text: "Profile",
-              ),
-
-              SizedBox(height: 18.h),
               ProfileHeaderWithBelt(
                 imageUrl: AppImages.person,
                 name: 'Caleb Shirtum',
