@@ -235,7 +235,7 @@ class _AddEventsViewState extends State<AddEventsView> {
               ),
               Gap(4.h),
               CustomTextField(
-                hintText: "Enter your event name",
+                hintText: "Enter event name",
                 showObscure: false,
                 fillColor: AppColors.backRoudnColors,
                 hintTextColor: AppColors.hintTextColors,
@@ -254,7 +254,7 @@ class _AddEventsViewState extends State<AddEventsView> {
               ),
               Gap(4.h),
               CustomTextField(
-                hintText: "Enter your event description",
+                hintText: "Enter event description",
                 showObscure: false,
                 fillColor: AppColors.backRoudnColors,
                 hintTextColor: AppColors.hintTextColors,
@@ -486,7 +486,7 @@ class _AddEventsViewState extends State<AddEventsView> {
                 ],
               ),
 
-              SizedBox(height: 30.h),
+              SizedBox(height: 20.h),
 
               // Submit Button
               CustomButtonWidget(
@@ -495,7 +495,7 @@ class _AddEventsViewState extends State<AddEventsView> {
                   onTap: () {},
                   iconWant: false),
 
-              SizedBox(height: 20.h),
+              SizedBox(height: 30.h),
             ],
           ),
         ),
