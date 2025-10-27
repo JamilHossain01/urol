@@ -130,7 +130,6 @@ class _AddEventsViewState extends State<AddEventsView> {
               ),
               SizedBox(height: 12.h),
 
-
               CustomText(
                 text: "Select Gym",
                 fontSize: 12.sp,
@@ -416,7 +415,6 @@ class _AddEventsViewState extends State<AddEventsView> {
               CustomText(
                 text: "Date & Time",
                 fontSize: 14.sp,
-
                 fontWeight: FontWeight.w600,
                 color: AppColors.mainTextColors,
               ),
