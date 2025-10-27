@@ -321,7 +321,7 @@ class ProfileView extends StatelessWidget {
                 const Text(
                   "Logout Account",
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 20,
                     fontWeight: FontWeight.w600,
                     color: Colors.black,
                   ),
@@ -331,7 +331,7 @@ class ProfileView extends StatelessWidget {
                   "Are you sure you want to logout your account? Please confirm your decision.",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 16,
                     color: Colors.black54,
                     height: 1.4,
                   ),
@@ -346,7 +346,7 @@ class ProfileView extends StatelessWidget {
                         child: const Text(
                           "Cancel",
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 18,
                             color: Colors.black87,
                             fontWeight: FontWeight.w500,
                           ),
@@ -367,7 +367,7 @@ class ProfileView extends StatelessWidget {
                         child: Text(
                           "Logout",
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 18,
                             color: AppColors.mainColor,
                             fontWeight: FontWeight.w500,
                           ),
