@@ -93,12 +93,49 @@ class _AddEventsViewState extends State<AddEventsView> {
             children: [
               Gap(4.h),
 
-              // Gym Dropdown
+              CustomText(
+                text: "Upload Event Image",
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w600,
+                color: AppColors.mainTextColors,
+              ),
+              Gap(5.h),
+              GestureDetector(
+                onTap: _pickImage,
+                child: Container(
+                  padding: EdgeInsets.all(12.h),
+                  decoration: BoxDecoration(
+                    color: AppColors.backRoudnColors,
+                    borderRadius: BorderRadius.circular(8.r),
+                    border: Border.all(color: AppColors.hintTextColors),
+                  ),
+                  child: selectedImage == null
+                      ? Icon(Icons.camera_alt,
+                          size: 30, color: AppColors.hintTextColors)
+                      : Image.file(
+                          File(selectedImage!.path),
+                          width: 100.w,
+                          height: 100.h,
+                          fit: BoxFit.cover,
+                        ),
+                ),
+              ),
+              Gap(10.h),
+
+              CustomText(
+                text: "Basic Information",
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w600,
+                color: AppColors.mainTextColors,
+              ),
+              SizedBox(height: 12.h),
+
+
               CustomText(
                 text: "Select Gym",
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.mainTextColors,
+                color: AppColors.textFieldNameColor,
               ),
               Gap(4.h),
               Container(
@@ -116,31 +153,18 @@ class _AddEventsViewState extends State<AddEventsView> {
                     border: InputBorder.none,
                   ),
                   value: selectedGym,
-                  hint: Row(
-                    children: [
-                      Icon(Icons.fitness_center,
-                          size: 20, color: AppColors.hintTextColors),
-                      CustomText(
-                        text: "Select Gym",
-                        fontSize: 14.sp,
-                        color: AppColors.hintTextColors,
-                      ),
-                    ],
+                  hint: CustomText(
+                    text: "Select Gym",
+                    fontSize: 14.sp,
+                    color: AppColors.hintTextColors,
                   ),
                   items: _gyms.map<DropdownMenuItem<String>>((String gym) {
                     return DropdownMenuItem<String>(
                       value: gym,
-                      child: Row(
-                        children: [
-                          Icon(Icons.fitness_center,
-                              size: 20, color: AppColors.mainColor), // Gym Icon
-                          SizedBox(width: 10.w),
-                          CustomText(
-                            text: gym,
-                            fontSize: 14.sp,
-                            color: AppColors.mainTextColors,
-                          ),
-                        ],
+                      child: CustomText(
+                        text: gym,
+                        fontSize: 14.sp,
+                        color: AppColors.mainTextColors,
                       ),
                     );
                   }).toList(),
@@ -159,7 +183,7 @@ class _AddEventsViewState extends State<AddEventsView> {
                 text: "Select Event Type",
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.mainTextColors,
+                color: AppColors.textFieldNameColor,
               ),
               Gap(4.h),
               Container(
@@ -177,32 +201,19 @@ class _AddEventsViewState extends State<AddEventsView> {
                     border: InputBorder.none,
                   ),
                   value: selectedEventType,
-                  hint: Row(
-                    children: [
-                      Icon(Icons.event,
-                          size: 20, color: AppColors.hintTextColors),
-                      CustomText(
-                        text: "Select Event Type",
-                        fontSize: 14.sp,
-                        color: AppColors.hintTextColors,
-                      ),
-                    ],
+                  hint: CustomText(
+                    text: "Select Event Type",
+                    fontSize: 14.sp,
+                    color: AppColors.hintTextColors,
                   ),
                   items:
                       _eventTypes.map<DropdownMenuItem<String>>((String event) {
                     return DropdownMenuItem<String>(
                       value: event,
-                      child: Row(
-                        children: [
-                          Icon(Icons.event,
-                              size: 20, color: AppColors.mainColor),
-                          SizedBox(width: 10.w),
-                          CustomText(
-                            text: event,
-                            fontSize: 14.sp,
-                            color: AppColors.mainTextColors,
-                          ),
-                        ],
+                      child: CustomText(
+                        text: event,
+                        fontSize: 14.sp,
+                        color: AppColors.mainTextColors,
                       ),
                     );
                   }).toList(),
@@ -220,7 +231,7 @@ class _AddEventsViewState extends State<AddEventsView> {
                 text: "Event Name",
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.mainTextColors,
+                color: AppColors.textFieldNameColor,
               ),
               Gap(4.h),
               CustomTextField(
@@ -239,7 +250,7 @@ class _AddEventsViewState extends State<AddEventsView> {
                 text: "Event Description",
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.mainTextColors,
+                color: AppColors.textFieldNameColor,
               ),
               Gap(4.h),
               CustomTextField(
@@ -252,13 +263,18 @@ class _AddEventsViewState extends State<AddEventsView> {
                     value!.isEmpty ? "Description is required" : null,
               ),
               SizedBox(height: 10.h),
-
-              // Event Location Field
+              CustomText(
+                text: "Location",
+                fontSize: 12.sp,
+                fontWeight: FontWeight.bold,
+                color: AppColors.mainTextColors,
+              ),
+              SizedBox(height: 10.h),
               CustomText(
                 text: "Event Location",
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w600,
-                color: AppColors.mainTextColors,
+                color: AppColors.textFieldNameColor,
               ),
               Gap(4.h),
               CustomTextField(
@@ -272,6 +288,7 @@ class _AddEventsViewState extends State<AddEventsView> {
               ),
               SizedBox(height: 10.h),
 
+              // State & City Dropdowns in a Row
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -378,6 +395,7 @@ class _AddEventsViewState extends State<AddEventsView> {
               ),
               SizedBox(height: 10.h),
 
+              // Event Ticket Field
               CustomText(
                 text: "Event Ticket (if ticket available)",
                 fontSize: 12.sp,
@@ -395,104 +413,79 @@ class _AddEventsViewState extends State<AddEventsView> {
                     value!.isEmpty ? "Location is required" : null,
               ),
               SizedBox(height: 10.h),
-
               CustomText(
-                text: "Event Date",
-                fontSize: 12.sp,
+                text: "Date & Time",
+                fontSize: 14.sp,
+
                 fontWeight: FontWeight.w600,
                 color: AppColors.mainTextColors,
-              ),
-              Gap(4.h),
-              InkWell(
-                onTap: () => _selectDate(context),
-                child: Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 14.h),
-                  decoration: BoxDecoration(
-                    color: AppColors.backRoudnColors,
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CustomText(
-                        text: selectedDate == null
-                            ? "Select Date"
-                            : "${selectedDate?.toLocal()}".split(' ')[0],
-                        fontSize: 14.sp,
-                        color: AppColors.hintTextColors,
-                      ),
-                      Icon(Icons.calendar_today,
-                          size: 20, color: AppColors.hintTextColors),
-                    ],
-                  ),
-                ),
               ),
               SizedBox(height: 10.h),
-
-              // Event Time Field
-              CustomText(
-                text: "Event Time",
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.mainTextColors,
-              ),
-              Gap(4.h),
-              InkWell(
-                onTap: () => _selectTime(context),
-                child: Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 14.h),
-                  decoration: BoxDecoration(
-                    color: AppColors.backRoudnColors,
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CustomText(
-                        text: selectedTime == null
-                            ? "Select Time"
-                            : "${selectedTime?.format(context)}",
-                        fontSize: 14.sp,
-                        color: AppColors.hintTextColors,
-                      ),
-                      Icon(Icons.access_time,
-                          size: 20, color: AppColors.hintTextColors),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: 20.h),
-
-              // Event Image Upload
-              CustomText(
-                text: "Upload Event Image",
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.mainTextColors,
-              ),
-              Gap(4.h),
-              GestureDetector(
-                onTap: _pickImage,
-                child: Container(
-                  padding: EdgeInsets.all(12.h),
-                  decoration: BoxDecoration(
-                    color: AppColors.backRoudnColors,
-                    borderRadius: BorderRadius.circular(8.r),
-                    border: Border.all(color: AppColors.hintTextColors),
-                  ),
-                  child: selectedImage == null
-                      ? Icon(Icons.camera_alt,
-                          size: 30, color: AppColors.hintTextColors)
-                      : Image.file(
-                          File(selectedImage!.path),
-                          width: 100.w,
-                          height: 100.h,
-                          fit: BoxFit.cover,
+              Row(
+                children: [
+                  // Event Date
+                  Expanded(
+                    child: InkWell(
+                      onTap: () => _selectDate(context),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 12.w, vertical: 14.h),
+                        decoration: BoxDecoration(
+                          color: AppColors.backRoudnColors,
+                          borderRadius: BorderRadius.circular(8.r),
+                          border: Border.all(color: AppColors.hintTextColors),
                         ),
-                ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CustomText(
+                              text: selectedDate == null
+                                  ? "Select Date"
+                                  : "${selectedDate?.toLocal()}".split(' ')[0],
+                              fontSize: 14.sp,
+                              color: AppColors.hintTextColors,
+                            ),
+                            Icon(Icons.calendar_today,
+                                size: 20, color: AppColors.hintTextColors),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10.w),
+
+                  // Event Time
+                  Expanded(
+                    child: InkWell(
+                      onTap: () => _selectTime(context),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 12.w, vertical: 14.h),
+                        decoration: BoxDecoration(
+                          color: AppColors.backRoudnColors,
+                          borderRadius: BorderRadius.circular(8.r),
+                          border: Border.all(color: AppColors.hintTextColors),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CustomText(
+                              text: selectedTime == null
+                                  ? "Select Time"
+                                  : "${selectedTime?.format(context)}",
+                              fontSize: 14.sp,
+                              color: AppColors.hintTextColors,
+                            ),
+                            Icon(Icons.access_time,
+                                size: 20, color: AppColors.hintTextColors),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
+
               SizedBox(height: 30.h),
 
               // Submit Button

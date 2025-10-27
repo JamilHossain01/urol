@@ -26,6 +26,7 @@ class BasicInfoWidget extends StatelessWidget {
         CustomText(
           text: "Basic Information",
           fontSize: 14.sp,
+     
           fontWeight: FontWeight.w600,
           color: AppColors.mainTextColors,
         ),
