@@ -82,16 +82,16 @@ class _OnboardingViewState extends State<OnboardingView> {
                       CustomText(
                         text: 'Everything',
                         color: Colors.white,
-                        fontSize: 31.sp, // Scalable font size
+                        fontSize: 31.sp,
                         fontWeight: FontWeight.w700,
                       ),
                       SizedBox(
-                        width: 5.w, // Scalable width
+                        width: 5.w,
                       ),
                       CustomText(
                         text: 'jiu jitsu,',
                         color: AppColors.mainColor,
-                        fontSize: 3.sp, // Scalable font size
+                        fontSize: 3.sp,
                         fontWeight: FontWeight.w700,
                       ),
                     ],
