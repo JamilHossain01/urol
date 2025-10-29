@@ -19,7 +19,8 @@ class GymPreviewCard extends StatelessWidget {
     required this.image,
     required this.gymName,
     required this.location,
-    required this.categories,  this.showEditDelete = false,
+    required this.categories,
+    this.showEditDelete = false,
   }) : super(key: key);
 
   @override
@@ -51,7 +52,8 @@ class GymPreviewCard extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              if (showEditDelete) ...[ // Conditionally show the icons row on image
+              if (showEditDelete) ...[
+                // Conditionally show the icons row on image
                 Positioned(
                   top: 8.h,
                   right: 8.w,
@@ -60,16 +62,15 @@ class GymPreviewCard extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Get.to(()=>EditGymDetailsScreen());
+                          Get.to(() => EditGymDetailsScreen());
                         },
                         child: Container(
                           padding: EdgeInsets.all(4.w),
                           decoration: BoxDecoration(
-                            // color: Colors.black.withOpacity(0.5),
                             shape: BoxShape.circle,
                           ),
                           child: Image.asset(
-                            AppImages.e, // Replace with actual asset path
+                            AppImages.e,
                             height: 14.h,
                             width: 16.w,
                           ),
@@ -102,19 +103,22 @@ class GymPreviewCard extends StatelessWidget {
           Gap(8.h),
           CustomText(
             text: gymName,
-            fontSize: 14.sp,
+            fontSize: 18.sp,
             fontWeight: FontWeight.w700,
             color: AppColors.mainTextColors,
           ),
           Row(
             children: [
-              Image.asset(AppImages.location,height: 10.h,width: 10.w,),
+              Image.asset(
+                AppImages.location,
+                height: 12.h,
+                width: 12.w,
+              ),
               Gap(4.w),
               CustomText(
                 text: location,
-                fontSize: 10.sp,
+                fontSize: 12.sp,
                 fontWeight: FontWeight.w500,
-
                 color: Color(0xFF4B4B4B),
               ),
             ],
@@ -122,7 +126,8 @@ class GymPreviewCard extends StatelessWidget {
           Gap(5.h),
           Wrap(
             spacing: 6.w,
-            children: categories.map((category) => _buildChip(category)).toList(),
+            children:
+                categories.map((category) => _buildChip(category)).toList(),
           ),
         ],
       ),
@@ -138,7 +143,7 @@ class GymPreviewCard extends StatelessWidget {
       ),
       child: CustomText(
         text: text,
-        fontSize: 10.sp,
+        fontSize: 12.sp,
         fontWeight: FontWeight.w500,
         color: Colors.white,
       ),

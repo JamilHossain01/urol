@@ -486,7 +486,6 @@ class _AddEventsViewState extends State<AddEventsView> {
 
               SizedBox(height: 20.h),
 
-              // Submit Button
               CustomButtonWidget(
                   btnColor: AppColors.mainColor,
                   btnText: "Submit",

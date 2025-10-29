@@ -7,13 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-
 import '../../../common widget/custom text/custom_text_widget.dart';
 import 'add_compition_view.dart';
 import 'edite_profeil_view.dart';
 
 class FindProfileView extends StatelessWidget {
-  final String ? follow;
+  final String? follow;
   const FindProfileView({super.key, this.follow});
 
   @override
@@ -33,7 +32,6 @@ class FindProfileView extends StatelessWidget {
                 imageUrl: AppImages.person,
                 name: 'Caleb Shirtum',
               ),
-
 
               SizedBox(height: 20.h),
 
@@ -109,36 +107,43 @@ class FindProfileView extends StatelessWidget {
                     ),
                     SizedBox(height: 10.h),
                     CustomText(
-                      text:
-                      "Favorite Quote",
+                      text: "Favorite Quote",
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w500,
                       color: Color(0xFF4B4B4B),
-                    ), CustomText(
+                    ),
+                    CustomText(
                       maxLines: 2,
                       textAlign: TextAlign.start,
                       text:
-                      "“Discipline is the bridge between goals and accomplishments.”",
+                          "“Discipline is the bridge between goals and accomplishments.”",
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w400,
                       color: Colors.black87,
                     ),
                     SizedBox(height: 8.h),
-
                   ],
                 ),
               ),
 
               SizedBox(height: 20.h),
               Padding(
-                padding:  EdgeInsets.symmetric(horizontal: 16),
-                child: Row(crossAxisAlignment: CrossAxisAlignment.start,
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-
                       children: [
-                        SizedBox(child: Image.asset(AppImages.cup,height: 14.h,width: 14.w,),),
-                        SizedBox(width: 5.w,),
+                        SizedBox(
+                          child: Image.asset(
+                            AppImages.cup,
+                            height: 14.h,
+                            width: 14.w,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5.w,
+                        ),
                         CustomText(
                           text: "Recent Event Results",
                           fontSize: 14.sp,
@@ -163,7 +168,6 @@ class FindProfileView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     Container(
                       padding: EdgeInsets.all(12.w),
                       decoration: BoxDecoration(
@@ -173,7 +177,6 @@ class FindProfileView extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
                           CustomText(
                             text: "IBJJF World Championships 2024",
                             fontSize: 13.sp,
@@ -183,10 +186,17 @@ class FindProfileView extends StatelessWidget {
                           SizedBox(height: 4.h),
 
                           Row(
-
                             children: [
-                              SizedBox(child: Image.asset(AppImages.calender,height: 14.h,width: 14.w,),),
-                              SizedBox(width: 5.w,),
+                              SizedBox(
+                                child: Image.asset(
+                                  AppImages.calender,
+                                  height: 14.h,
+                                  width: 14.w,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 5.w,
+                              ),
                               CustomText(
                                 text: "March 15, 2025",
                                 fontSize: 10.sp,
@@ -221,7 +231,8 @@ class FindProfileView extends StatelessWidget {
                                   ),
                                   child: Center(
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Image.asset(
                                           AppImages.badge,
@@ -238,19 +249,17 @@ class FindProfileView extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-
                                 SizedBox(height: 8.h),
-
                                 Divider(),
                                 GestureDetector(
-                                  onTap: (){
-                                    Get.to(()=> AddCompetitionResultScreen());
+                                  onTap: () {
+                                    Get.to(() => AddCompetitionResultScreen());
                                   },
                                   child: CustomText(
                                     text: "Add Competition Result",
                                     fontSize: 12.sp,
                                     fontWeight: FontWeight.w600,
-                                    color:AppColors.mainColor,
+                                    color: AppColors.mainColor,
                                   ),
                                 ),
                               ],
@@ -263,16 +272,12 @@ class FindProfileView extends StatelessWidget {
                 ),
               ),
 
-
               SizedBox(height: 10.h),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: CustomButtonWidget(
                   btnText: follow ?? "Follow",
-                  onTap: () {
-                    Get.to(() => EditProfileView());
-                    // Get.to(() => EditGymDetailsScreen());
-                  },
+                  onTap: () {},
                   iconWant: false,
                   btnColor: Colors.white,
                   btnTextColor: AppColors.mainColor,
@@ -280,8 +285,6 @@ class FindProfileView extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10.h),
-
-
             ],
           ),
         ),
@@ -380,6 +383,4 @@ class FindProfileView extends StatelessWidget {
       ],
     );
   }
-
-
 }

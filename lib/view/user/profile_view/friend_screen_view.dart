@@ -339,7 +339,7 @@ class _FriendsScreenState extends State<FriendsScreen>
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(5.r),
         border: Border.all(color: Colors.grey[200]!),
       ),
       child: Column(
@@ -445,7 +445,7 @@ class _FriendsScreenState extends State<FriendsScreen>
                       child: Container(
                         decoration: BoxDecoration(
                           color: followColor,
-                          borderRadius: BorderRadius.circular(20.r),
+                          borderRadius: BorderRadius.circular(10.r),
                         ),
                         child: Center(
                           child: CustomText(

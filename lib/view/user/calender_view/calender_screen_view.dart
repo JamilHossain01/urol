@@ -31,14 +31,6 @@ class _EventScreenViewState extends State<EventScreenView> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              'uJitsu',
-              style: GoogleFonts.libreBaskerville(
-                fontSize: 18.sp,
-                color: AppColors.mainColor,
-              ),
-            ),
-            SizedBox(width: 10),
-            Text(
               'Events',
               style: GoogleFonts.libreBaskerville(
                 fontSize: 18.sp,

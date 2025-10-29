@@ -49,14 +49,7 @@ class ProfileView extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Text(
-              'uJitsu',
-              style: GoogleFonts.libreBaskerville(
-                fontSize: 18.sp,
-                color: AppColors.mainColor,
-              ),
-            ),
-            SizedBox(width: 10),
+
             Text(
               'Profile',
               style: GoogleFonts.libreBaskerville(
