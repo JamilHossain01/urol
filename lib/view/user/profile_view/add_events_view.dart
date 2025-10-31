@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:calebshirthum/common%20widget/custom_app_bar_widget.dart';
 import 'package:calebshirthum/common%20widget/custom_button_widget.dart';
+import 'package:calebshirthum/view/user/profile_view/widgets/image_upload_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -93,34 +94,8 @@ class _AddEventsViewState extends State<AddEventsView> {
             children: [
               Gap(4.h),
 
-              CustomText(
-                text: "Upload Event Image",
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.mainTextColors,
-              ),
-              Gap(5.h),
-              GestureDetector(
-                onTap: _pickImage,
-                child: Container(
-                  padding: EdgeInsets.all(12.h),
-                  decoration: BoxDecoration(
-                    color: AppColors.backRoudnColors,
-                    borderRadius: BorderRadius.circular(8.r),
-                    border: Border.all(color: AppColors.hintTextColors),
-                  ),
-                  child: selectedImage == null
-                      ? Icon(Icons.camera_alt,
-                          size: 30, color: AppColors.hintTextColors)
-                      : Image.file(
-                          File(selectedImage!.path),
-                          width: 100.w,
-                          height: 100.h,
-                          fit: BoxFit.cover,
-                        ),
-                ),
-              ),
-              Gap(10.h),
+              ImageUploadWidget(),
+              Gap(15.h),
 
               CustomText(
                 text: "Basic Information",

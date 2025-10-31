@@ -108,7 +108,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                     textAlign: TextAlign.start,
                     maxLines: 10,
                     text:
-                    'Browse gyms, find open mats, and stay updated with events and seminars happening in your area!',
+                        'Browse gyms, find open mats, and stay updated with events and seminars happening in your area!',
                     color: Color(0xFFB5B5B5),
                     fontSize: 12.sp, // Scalable font size
                     fontWeight: FontWeight.w400,
