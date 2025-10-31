@@ -71,7 +71,7 @@ class _OnboardingViewState extends State<OnboardingView> {
             right: 0,
             bottom: 40.h,
             child: Padding(
-              padding: EdgeInsets.all(16.w), // Use ScreenUtil for padding
+              padding: EdgeInsets.all(16.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -82,7 +82,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                       CustomText(
                         text: 'Everything',
                         color: Colors.white,
-                        fontSize: 31.sp,
+                        fontSize: 32.sp,
                         fontWeight: FontWeight.w700,
                       ),
                       SizedBox(
@@ -91,7 +91,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                       CustomText(
                         text: 'jiu jitsu,',
                         color: AppColors.mainColor,
-                        fontSize: 3.sp,
+                        fontSize: 32.sp,
                         fontWeight: FontWeight.w700,
                       ),
                     ],
@@ -99,7 +99,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                   CustomText(
                     text: 'on one app.',
                     color: Colors.white,
-                    fontSize: 34.sp, // Scalable font size
+                    fontSize: 32.sp, // Scalable font size
                     fontWeight: FontWeight.w700,
                   ),
 
