@@ -61,7 +61,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         maxLines: widget.maxLines ?? 1,
         style: GoogleFonts.poppins(
           fontSize: 14.h,
-          color: AppColors.hintTextColors,
+          color: Colors.black,
         ),
         decoration: InputDecoration(
           filled: true,

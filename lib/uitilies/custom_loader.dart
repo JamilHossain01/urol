@@ -15,7 +15,7 @@ class CustomLoader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: SpinKitFadingCircle(
-        color: AppColors.secondColor,
+        color: AppColors.mainColor,
         size: size,
       ),
     );
