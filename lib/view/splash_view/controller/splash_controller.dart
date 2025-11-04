@@ -2,12 +2,10 @@
 
 import 'dart:async';
 import 'package:calebshirthum/view/auth_view/login_auth_view.dart';
-import 'package:calebshirthum/view/splash_view/onboarding_view.dart';
 import 'package:get/get.dart';
-
 import '../../../uitilies/api/local_storage.dart';
 import '../../auth_view/log_in/view/log_in_view.dart';
-
+import '../../user/dashboard_view/bottom_navigation_view.dart';
 
 class SplashController extends GetxController {
   Timer? timer;
@@ -18,14 +16,22 @@ class SplashController extends GetxController {
   void onInit() {
     super.onInit();
 
-    timer = Timer.periodic(Duration(seconds: 3), (Timer t) {
-      if (opacity.value != 1.0) {
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      if (opacity.value < 1.0) {
         opacity.value += 0.5;
+      } else {
+        timer?.cancel();
       }
     });
 
     Future.delayed(const Duration(seconds: 3), () async {
-      Get.to(() => OnboardingView());
+      String? accessToken = await _storageService.read('accessToken');
+
+      if (accessToken != null && accessToken.isNotEmpty) {
+        Get.offAll(() => DashboardView());
+      } else {
+        Get.offAll(() => SignInView());
+      }
     });
   }
 

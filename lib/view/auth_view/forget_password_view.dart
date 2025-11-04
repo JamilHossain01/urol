@@ -12,15 +12,18 @@ import '../../common widget/custom text/custom_text_widget.dart';
 import '../../common widget/custom_app_bar_widget.dart';
 import '../../common widget/custom_button_widget.dart';
 import '../../common widget/custom_text_filed.dart';
+import '../../uitilies/custom_loader.dart';
+import '../../uitilies/custom_toast.dart';
+import 'controller/forget_password_controller.dart';
 import 'otp_verify_filed_view.dart';
 
 class ForgetPasswordView extends StatelessWidget {
   ForgetPasswordView({super.key});
 
-  String? countryCode;
-  String? localNumber;
+  final TextEditingController emailController = TextEditingController();
 
-  final TextEditingController _numberController = TextEditingController();
+  final ForgotPasswordController _forgotPasswordController =
+      Get.put(ForgotPasswordController());
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +36,6 @@ class ForgetPasswordView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-
               CustomText(
                 fontWeight: FontWeight.w600,
                 fontSize: 32.sp,
@@ -47,37 +48,50 @@ class ForgetPasswordView extends StatelessWidget {
                 fontSize: 12.sp,
                 textAlign: TextAlign.center,
                 fontWeight: FontWeight.w500,
-
               ),
-              SizedBox(height: 40.h),
+              SizedBox(height: 20.h),
               CustomText(
                 fontWeight: FontWeight.w600,
                 fontSize: 14.sp,
                 text: "Email",
                 color: AppColors.pTextColors,
               ),
+
               /// Phone number field
 
               CustomTextField(
-                // fillColor: Color(0xFFE4E4E4),
+                controller: emailController,
                 hintText: "Enter your email",
                 hintTextColor: Color(0xFF989898),
                 showObscure: false,
               ),
-              SizedBox(height: 30.h),
-              SizedBox(
-                height: 55,
-                width: double.infinity,
-                child: CustomButtonWidget(
+              SizedBox(height: 20.h),
 
-                  btnColor: AppColors.mainColor,
-                  onTap: () {
-                    Get.to(() => OTPVerifyView());
-                  },
-                  iconWant: false,
-                  btnText: 'Send Code',
-                ),
-              ),
+              Obx(() {
+                return _forgotPasswordController.isLoading.value
+                    ? Center(
+                        child: CustomLoader(),
+                      )
+                    : SizedBox(
+                        height: 55,
+                        width: double.infinity,
+                        child: CustomButtonWidget(
+                          btnColor: AppColors.mainColor,
+                          onTap: () {
+                            if (emailController.text.isEmpty) {
+                              CustomToast.showToast("Please enter your email",
+                                  isError: true);
+                            } else {
+                              _forgotPasswordController.emailSubmit(
+                                  email: emailController.text);
+                            }
+                          },
+                          iconWant: false,
+                          btnText: 'Send Code',
+                        ),
+                      );
+              }),
+
               SizedBox(height: 20),
             ],
           ),

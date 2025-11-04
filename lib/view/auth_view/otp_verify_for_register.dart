@@ -12,11 +12,14 @@ import '../../common widget/custom text/custom_text_widget.dart';
 import '../../common widget/custom_app_bar_widget.dart';
 import '../../common widget/custom_button_widget.dart';
 import '../../uitilies/app_string.dart';
+import 'controller/forget_password_controller.dart';
 import 'controller/otp_submit_controller.dart';
 import 'create_new_password_view.dart';
 
 class OTPVerifyForRegister extends StatefulWidget {
-  const OTPVerifyForRegister({super.key});
+  final String email;
+
+  const OTPVerifyForRegister({super.key, required this.email});
 
   @override
   State<OTPVerifyForRegister> createState() => _OTPVerifyForRegisterState();
@@ -24,6 +27,9 @@ class OTPVerifyForRegister extends StatefulWidget {
 
 class _OTPVerifyForRegisterState extends State<OTPVerifyForRegister> {
   final TextEditingController otpController = TextEditingController();
+
+  final ForgotPasswordController _forgotPasswordController =
+      Get.put(ForgotPasswordController());
 
   final OTPController controller = Get.put(OTPController());
 
@@ -57,6 +63,7 @@ class _OTPVerifyForRegisterState extends State<OTPVerifyForRegister> {
 
   void _resendCode() {
     print("Resend OTP code");
+    _forgotPasswordController.emailSubmit(email: widget.email);
     _startTimer();
   }
 

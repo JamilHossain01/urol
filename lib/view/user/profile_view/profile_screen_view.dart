@@ -2,6 +2,8 @@ import 'package:calebshirthum/common%20widget/comon_conatainer/custom_conatiner.
 import 'package:calebshirthum/common%20widget/custom_button_widget.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/app_images.dart';
+import 'package:calebshirthum/uitilies/custom_toast.dart';
+import 'package:calebshirthum/view/auth_view/login_auth_view.dart';
 import 'package:calebshirthum/view/user/profile_view/add_events_view.dart';
 import 'package:calebshirthum/view/user/profile_view/friend_screen_view.dart';
 import 'package:calebshirthum/view/user/profile_view/my_gyms_view.dart';
@@ -29,6 +31,8 @@ import 'package:octo_image/octo_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../common widget/custom text/custom_text_widget.dart';
+import '../../../uitilies/api/local_storage.dart';
+import '../../auth_view/log_in/view/log_in_view.dart';
 import '../home_view/widgets/user_info_widgets.dart';
 import 'Add_your_gym.dart';
 import 'add_compition_view.dart';
@@ -49,7 +53,6 @@ class ProfileView extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-
             Text(
               'Profile',
               style: GoogleFonts.libreBaskerville(
@@ -276,10 +279,7 @@ class ProfileView extends StatelessWidget {
                     OtherTile(
                       text: "Logout",
                       iconPath: AppImages.log_out,
-                      onTap: () => showLogoutDialog(context, onConfirm: () {
-                        // Your logout logic here
-                        print("User logged out");
-                      }),
+                      onTap: () => showLogoutDialog(context, onConfirm: () {}),
                     ),
                   ],
                 ),
@@ -293,6 +293,8 @@ class ProfileView extends StatelessWidget {
   }
 
   void showLogoutDialog(BuildContext context, {VoidCallback? onConfirm}) {
+    final StorageService _storageService = Get.put(StorageService());
+
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -353,9 +355,12 @@ class ProfileView extends StatelessWidget {
                     ),
                     Expanded(
                       child: TextButton(
-                        onPressed: () {
-                          Get.back();
-                          if (onConfirm != null) onConfirm();
+                        onPressed: () async {
+                          await _storageService.remove('accessToken');
+
+                          Get.offAll(() => SignInView());
+
+                          CustomToast.showToast("Logout Successfully Done!");
                         },
                         child: Text(
                           "Logout",
@@ -423,47 +428,6 @@ class ProfileView extends StatelessWidget {
         fontWeight: FontWeight.w500,
         color: Colors.white,
       ),
-    );
-  }
-
-  // ✅ Event Info
-// ✅ Event Info (with asset icon)
-  Widget _eventInfo(String title, String value, String iconPath) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Image.asset(
-              iconPath,
-              height: 14.h,
-              width: 14.w,
-              fit: BoxFit.contain,
-            ),
-            SizedBox(width: 6.w),
-            CustomText(
-              text: title,
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w400,
-              color: Colors.grey.shade600,
-            ),
-          ],
-        ),
-        SizedBox(height: 4.h),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
-          decoration: BoxDecoration(
-            color: Color(0xFFE9E9E9),
-            borderRadius: BorderRadius.circular(20.r),
-          ),
-          child: CustomText(
-            text: value,
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF686868),
-          ),
-        ),
-      ],
     );
   }
 }

@@ -35,7 +35,10 @@ class _SignInViewState extends State<SignInView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: ''),
+      appBar: CustomAppBar(
+
+          showLeadingIcon: false,
+          title: ''),
       backgroundColor: Colors.white,
       body: Stack(
         children: [
@@ -48,7 +51,7 @@ class _SignInViewState extends State<SignInView> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 20),
+                      SizedBox(height: 10),
 
                       // Title
                       CustomText(
