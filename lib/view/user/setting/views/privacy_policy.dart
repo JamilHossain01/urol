@@ -3,11 +3,8 @@ import 'package:calebshirthum/uitilies/custom_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
-import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../common widget/custom_app_bar_widget.dart';
 import '../../../../common widget/not_found_widget.dart';
-import '../../../../uitilies/app_colors.dart';
 import '../controllers/settings_meta_controller.dart';
 
 class PrivacyPolicyScreen extends StatefulWidget {
