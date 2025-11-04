@@ -30,7 +30,7 @@ class SplashController extends GetxController {
       if (accessToken != null && accessToken.isNotEmpty) {
         Get.offAll(() => DashboardView());
       } else {
-        Get.offAll(() => SignInView());
+        Get.offAll(() => LogInView());
       }
     });
   }
