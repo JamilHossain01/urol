@@ -1,26 +1,93 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:calebshirthum/uitilies/custom_loader.dart';
+import 'package:calebshirthum/uitilies/custom_toast.dart';
+import 'package:calebshirthum/view/auth_view/controller/sign_up_controller.dart';
 import 'package:calebshirthum/view/auth_view/signUpOtp_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart' show Get;
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../../../uitilies/app_colors.dart';
 import '../../common widget/custom text/custom_text_widget.dart';
 import '../../common widget/custom_app_bar_widget.dart';
 import '../../common widget/custom_button_widget.dart';
 import '../../common widget/custom_text_filed.dart';
-import '../../uitilies/app_images.dart';
 import 'login_auth_view.dart';
 
-class SignUpView extends StatelessWidget {
-  SignUpView({super.key});
+class SignUpView extends StatefulWidget {
+  const SignUpView({super.key});
 
+  @override
+  State<SignUpView> createState() => _SignUpViewState();
+}
+
+class _SignUpViewState extends State<SignUpView> {
   final TextEditingController _numberController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
+  final SignUpController _signUpController = Get.put(SignUpController());
+
+  /// 🔒 Password Strength Validation Function
+  bool _isStrongPassword(String password) {
+    final regex =
+        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+    return regex.hasMatch(password);
+  }
+
+  /// ✅ Validation before signup
+  void _validateAndSubmit() {
+    final firstName = _firstNameController.text.trim();
+    final lastName = _lastNameController.text.trim();
+    final email = _emailController.text.trim();
+    final phone = _numberController.text.trim();
+    final password = _passwordController.text.trim();
+    final confirmPassword = _confirmPasswordController.text.trim();
+
+    if (firstName.isEmpty ||
+        lastName.isEmpty ||
+        email.isEmpty ||
+        phone.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
+      CustomToast.showToast("All fields are required", isError: true);
+      return;
+    }
+
+    if (!email.contains('@') || !email.contains('.com')) {
+      CustomToast.showToast("Please enter a valid email address",
+          isError: true);
+      return;
+    }
+
+    if (!_isStrongPassword(password)) {
+      CustomToast.showToast(
+        "Password must include uppercase, lowercase, number, special char & be at least 8 chars",
+        isError: true,
+      );
+      return;
+    }
+
+    if (password != confirmPassword) {
+      CustomToast.showToast("Passwords do not match", isError: true);
+      return;
+    }
+
+    _signUpController.signUp(
+      firstName: _firstNameController.text.trim(),
+      lastName: _lastNameController.text.trim(),
+      email: _emailController.text.trim(),
+      phoneNumber: _numberController.text.trim(),
+      password: _passwordController.text.trim(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +118,7 @@ class SignUpView extends StatelessWidget {
               ),
               SizedBox(height: 20),
 
-              //Full Name
+              // First Name
               CustomText(
                 fontWeight: FontWeight.w600,
                 textAlign: TextAlign.start,
@@ -60,12 +127,13 @@ class SignUpView extends StatelessWidget {
                 fontSize: 12.sp,
               ),
               CustomTextField(
+                controller: _firstNameController,
                 hintText: "Enter first name",
                 showObscure: false,
               ),
               SizedBox(height: 10),
 
-              //Location
+              // Last Name
               CustomText(
                 fontWeight: FontWeight.w600,
                 textAlign: TextAlign.start,
@@ -74,12 +142,13 @@ class SignUpView extends StatelessWidget {
                 fontSize: 12.sp,
               ),
               CustomTextField(
+                controller: _lastNameController,
                 hintText: "Enter last name",
                 showObscure: false,
               ),
               SizedBox(height: 10),
 
-              //Email
+              // Email
               CustomText(
                 fontWeight: FontWeight.w600,
                 textAlign: TextAlign.start,
@@ -88,14 +157,13 @@ class SignUpView extends StatelessWidget {
                 fontSize: 12.sp,
               ),
               CustomTextField(
+                controller: _emailController,
                 hintText: "Enter your email address",
                 showObscure: false,
               ),
-
               SizedBox(height: 10),
 
-              //Phone Number
-
+              // Phone Number
               CustomText(
                 fontWeight: FontWeight.w600,
                 textAlign: TextAlign.start,
@@ -104,11 +172,14 @@ class SignUpView extends StatelessWidget {
                 fontSize: 12.sp,
               ),
               CustomTextField(
+                controller: _numberController,
                 hintText: "Enter your phone number",
                 showObscure: false,
+                keyboardType: TextInputType.phone,
               ),
               SizedBox(height: 10),
-              //Password
+
+              // Password
               CustomText(
                 fontWeight: FontWeight.w600,
                 textAlign: TextAlign.start,
@@ -117,12 +188,13 @@ class SignUpView extends StatelessWidget {
                 fontSize: 12.sp,
               ),
               CustomTextField(
+                controller: _passwordController,
                 hintText: "Enter your password",
                 showObscure: true,
               ),
               SizedBox(height: 10),
 
-              //Confirm Password
+              // Confirm Password
               CustomText(
                 fontWeight: FontWeight.w600,
                 textAlign: TextAlign.start,
@@ -131,24 +203,26 @@ class SignUpView extends StatelessWidget {
                 fontSize: 12.sp,
               ),
               CustomTextField(
+                controller: _confirmPasswordController,
                 hintText: "Confirm your password",
                 showObscure: true,
               ),
-              SizedBox(height: 40),
+              SizedBox(height: 20),
 
-              //Sign Up
-              SizedBox(
-                height: 55,
-                width: double.infinity,
-                child: CustomButtonWidget(
-                  btnColor: AppColors.mainColor,
-                  onTap: () {
-                    Get.to(() => SignUpOTPVerifyView());
-                  },
-                  iconWant: false,
-                  btnText: 'Sign Up',
-                ),
-              ),
+              Obx(() {
+                return _signUpController.isLoading.value == true
+                    ? CustomLoader()
+                    : SizedBox(
+                        height: 55,
+                        width: double.infinity,
+                        child: CustomButtonWidget(
+                          btnColor: AppColors.mainColor,
+                          onTap: _validateAndSubmit,
+                          iconWant: false,
+                          btnText: 'Sign Up',
+                        ),
+                      );
+              }),
 
               SizedBox(height: 10),
 
@@ -174,9 +248,6 @@ class SignUpView extends StatelessWidget {
                   )
                 ],
               ),
-
-              //Already have an account
-
               SizedBox(height: 20),
             ],
           ),

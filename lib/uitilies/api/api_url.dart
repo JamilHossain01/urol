@@ -6,8 +6,8 @@ class ApiUrl {
 
   static const String login = "$baseUrl/auth/login";
   static const String forgetPass = "$baseUrl/auth/forget-password";
-  static const String verifyOTP = "$baseUrl/auth/verify-account";
-  static const String signUp = "$baseUrl/auth/sign-up";
+  static const String verifyOTP = "$baseUrl/auth/verify-otp";
+  static const String signUp = "$baseUrl/auth/create";
   static const String resetPassword = "$baseUrl/auth/reset-password";
 
   // profile

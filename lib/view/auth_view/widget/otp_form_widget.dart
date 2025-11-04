@@ -28,7 +28,7 @@ class _OtpFormState extends State<OtpForm> {
 
   @override
   Widget build(BuildContext context) {
-    const length = 4;
+    const length = 6;
     const errorColor = Color.fromRGBO(255, 234, 238, 1);
     const fillColor = Color.fromARGB(255, 240, 240, 240);
 

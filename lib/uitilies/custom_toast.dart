@@ -5,7 +5,8 @@ class CustomToast {
   static void showToast(String message, {bool isError = false}) {
     Fluttertoast.showToast(
       msg: message,
-      toastLength: Toast.LENGTH_SHORT,
+      toastLength: Toast.LENGTH_LONG,
+      timeInSecForIosWeb: 3,
       gravity: ToastGravity.TOP,
       backgroundColor: isError ? Colors.red : Colors.green,
       textColor: Colors.white,
