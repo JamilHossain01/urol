@@ -20,9 +20,6 @@ import 'login_auth_view.dart';
 class SignUpView extends StatelessWidget {
   SignUpView({super.key});
 
-  String? countryCode;
-  String? localNumber;
-
   final TextEditingController _numberController = TextEditingController();
 
   @override
@@ -36,6 +33,7 @@ class SignUpView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Gap(15.h),
               CustomText(
                 fontWeight: FontWeight.w600,
                 textAlign: TextAlign.start,
@@ -51,7 +49,7 @@ class SignUpView extends StatelessWidget {
                 color: Color(0xFF8A8A8A),
                 text: "Create an account to continue",
               ),
-              SizedBox(height: 40),
+              SizedBox(height: 20),
 
               //Full Name
               CustomText(
@@ -136,7 +134,7 @@ class SignUpView extends StatelessWidget {
                 hintText: "Confirm your password",
                 showObscure: true,
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 40),
 
               //Sign Up
               SizedBox(
@@ -151,46 +149,8 @@ class SignUpView extends StatelessWidget {
                   btnText: 'Sign Up',
                 ),
               ),
-              SizedBox(height: 20),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(color: Colors.grey, width: 160, height: 1.5),
-                  CustomText(text: "Or"),
-                  Container(color: Colors.grey, width: 160, height: 1.5),
-                ],
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Image(
-                          image: AssetImage("assets/images/google.png"),
-                          width: 30,
-                        ),
-                      )),
-                  SizedBox(width: 20),
-                  Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Image(
-                          image: AssetImage(AppImages.appleIcon),
-                          width: 30,
-                        ),
-                      )),
-                ],
-              ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
