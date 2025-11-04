@@ -1,7 +1,4 @@
 class ApiUrl {
-
-
-
   static const String baseUrl = "http://10.10.10.9:4300/api";
 
   static const String login = "$baseUrl/auth/login";
@@ -13,9 +10,9 @@ class ApiUrl {
   // profile
   static const String profile = "$baseUrl/user/profile";
 
-
   static String reviewStatistics({required String serviceId}) =>
       "$baseUrl/reviews/stats/$serviceId";
 
-
+  static String settingMetaData({required String meta}) =>
+      "$baseUrl/setting/$meta";
 }
