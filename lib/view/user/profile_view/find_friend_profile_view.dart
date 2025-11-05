@@ -3,14 +3,20 @@ import 'package:calebshirthum/common%20widget/custom_button_widget.dart';
 import 'package:calebshirthum/common%20widget/custom_date_format.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/app_images.dart';
+import 'package:calebshirthum/uitilies/custom_loader.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/profille_header_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import '../../../common widget/custom text/custom_text_widget.dart';
+import 'controller/add_friend_controller.dart';
+import 'controller/unfriend_controller.dart';
 
 class FindProfileView extends StatelessWidget {
   final String? follow;
   final String firstName;
+  final String friendId;
   final String lastName;
   final String quote;
   final String gymName;
@@ -27,7 +33,7 @@ class FindProfileView extends StatelessWidget {
   final dynamic eventStatus;
   final bool statusOfFollow;
 
-  const FindProfileView({
+  FindProfileView({
     super.key,
     this.follow,
     required this.firstName,
@@ -46,7 +52,13 @@ class FindProfileView extends StatelessWidget {
     this.eventName,
     this.eventStatus,
     required this.statusOfFollow,
+    required this.friendId,
   });
+
+  final AddFriendController addFriendController =
+      Get.put(AddFriendController());
+
+  final UnfriendController _unfriendController = Get.put(UnfriendController());
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +71,6 @@ class FindProfileView extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 20.h),
           child: Column(
             children: [
-              // Profile Header
               ProfileHeaderWithBelt(
                 imageUrl: imageUrl,
                 name: "$firstName $lastName",
@@ -75,18 +86,27 @@ class FindProfileView extends StatelessWidget {
 
               if (eventStatus != null) _buildEventSection(),
 
-              // Follow / Unfollow Button
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-                child: CustomButtonWidget(
-                  btnText: follow ?? "Follow",
-                  onTap: () {},
-                  iconWant: false,
-                  btnColor: Colors.white,
-                  btnTextColor: AppColors.mainColor,
-                  borderColor: AppColors.mainColor,
-                ),
-              ),
+              Obx(() {
+                return addFriendController.isLoading.value == true
+                    ? CustomLoader()
+                    : Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 16.w, vertical: 16.h),
+                        child: CustomButtonWidget(
+                          btnText:
+                              statusOfFollow == true ? "Follow" : "Unfollow",
+                          onTap: () {
+                            statusOfFollow == true
+                                ? addFriendController.addFriend(id: friendId)
+                                : _unfriendController.unFriend(id: friendId);
+                          },
+                          iconWant: false,
+                          btnColor: Colors.white,
+                          btnTextColor: AppColors.mainColor,
+                          borderColor: AppColors.mainColor,
+                        ),
+                      );
+              })
             ],
           ),
         ),

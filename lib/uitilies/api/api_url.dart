@@ -24,6 +24,12 @@ class ApiUrl {
       "$baseUrl/friends?searchTerm=$searchTerm";
 
 
+  static String unFriend(
+      {required String friendId}) =>
+      "$baseUrl/friends/unfolow/$friendId";
+
+
+
   static String reviewStatistics({required String serviceId}) =>
       "$baseUrl/reviews/stats/$serviceId";
 

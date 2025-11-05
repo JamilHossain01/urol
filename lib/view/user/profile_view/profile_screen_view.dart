@@ -1,5 +1,7 @@
+import 'package:calebshirthum/common%20widget/custom_date_format.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/app_images.dart';
+import 'package:calebshirthum/uitilies/custom_loader.dart';
 import 'package:calebshirthum/uitilies/custom_toast.dart';
 import 'package:calebshirthum/view/auth_view/login_auth_view.dart';
 import 'package:calebshirthum/view/user/profile_view/add_events_view.dart';
@@ -123,6 +125,7 @@ class _ProfileViewState extends State<ProfileView> {
               }),
 
               SizedBox(height: 20.h),
+
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
@@ -151,15 +154,33 @@ class _ProfileViewState extends State<ProfileView> {
                   ],
                 ),
               ),
+
               SizedBox(height: 12.h),
-              // Recent Event Results
-              EventCard(
-                title: "IBJJF World Championships 2024",
-                date: "March 15, 2025",
-                division: "NoGi Absolute",
-                location: "Buffalo, New York",
-                medalText: "GOLD",
-              ),
+
+              Obx(() {
+                return _getProfileController.isLoading.value == true
+                    ? CustomLoader()
+                    : EventCard(
+                        title: _getProfileController
+                                .profile.value.data?.competition?.eventName ??
+                            "",
+                        date: CustomDateFormatter.formatDate(
+                            _getProfileController
+                                    .profile.value.data?.competition?.eventDate
+                                    .toString() ??
+                                ""),
+                        division: _getProfileController
+                                .profile.value.data?.competition?.division ??
+                            "",
+                        location: _getProfileController
+                                .profile.value.data?.competition?.city ??
+                            "",
+                        medalText: _getProfileController
+                                .profile.value.data?.competition?.result ??
+                            "",
+                      );
+              }),
+
               // Others Section
               Padding(
                 padding: const EdgeInsets.all(16.0),

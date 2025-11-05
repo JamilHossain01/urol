@@ -115,6 +115,7 @@ class _MyFriendsTabWidgetState extends State<MyFriendsTabWidget> {
                           eventName: friendData.competition?.eventName,
                           eventStatus: friendData.competition,
                           statusOfFollow: false,
+                          friendId: friendData.id.toString(),
                         ));
                   },
                 );

@@ -28,6 +28,10 @@ class GetMyFriendsController extends GetxController {
       if (responseBody['success'] == true) {
         friend.value = MyFriendsModel.fromJson(responseBody);
         print("fetched: ${friend.value}");
+
+
+
+
       } else {
         throw 'Failed to load profile data: ${responseBody['message']}';
       }

@@ -126,7 +126,7 @@ class _DiscoverFriendsWidgetState extends State<DiscoverFriendsWidget> {
                           eventBadge: user.competition?.result,
                           eventName: user.competition?.eventName,
                           eventStatus: user
-                              .competition, statusOfFollow: true,
+                              .competition, statusOfFollow: true, friendId: user.id.toString(),
                         ));
                   },
                 );

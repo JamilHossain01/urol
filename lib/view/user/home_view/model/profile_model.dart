@@ -1,26 +1,26 @@
 class MyProfileModel {
   MyProfileModel({
-     this.success,
-     this.message,
-     this.data,
+    this.success,
+    this.message,
+    this.data,
   });
 
   final bool? success;
   final String? message;
   final Data? data;
 
-  factory MyProfileModel.fromJson(Map<String, dynamic> json){
+  factory MyProfileModel.fromJson(Map<String, dynamic> json) {
     return MyProfileModel(
       success: json["success"],
       message: json["message"],
       data: json["data"] == null ? null : Data.fromJson(json["data"]),
     );
   }
-
 }
 
 class Data {
   Data({
+    required this.location,
     required this.id,
     required this.email,
     required this.v,
@@ -40,11 +40,12 @@ class Data {
     required this.weight,
   });
 
+  final Location? location;
   final String? id;
   final String? email;
   final int? v;
   final String? beltRank;
-  final dynamic competition;
+  final Competition? competition;
   final String? contact;
   final DateTime? createdAt;
   final List<String> disciplines;
@@ -52,22 +53,28 @@ class Data {
   final String? firstName;
   final Height? height;
   final String? homeGym;
-  final dynamic image;
+  final String? image;
   final String? lastName;
   final String? role;
   final DateTime? updatedAt;
   final String? weight;
 
-  factory Data.fromJson(Map<String, dynamic> json){
+  factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
+      location:
+          json["location"] == null ? null : Location.fromJson(json["location"]),
       id: json["_id"],
       email: json["email"],
       v: json["__v"],
       beltRank: json["belt_rank"],
-      competition: json["competition"],
+      competition: json["competition"] == null
+          ? null
+          : Competition.fromJson(json["competition"]),
       contact: json["contact"],
       createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
-      disciplines: json["disciplines"] == null ? [] : List<String>.from(json["disciplines"]!.map((x) => x)),
+      disciplines: json["disciplines"] == null
+          ? []
+          : List<String>.from(json["disciplines"]!.map((x) => x)),
       favouriteQuote: json["favourite_quote"],
       firstName: json["first_name"],
       height: json["height"] == null ? null : Height.fromJson(json["height"]),
@@ -79,7 +86,38 @@ class Data {
       weight: json["weight"],
     );
   }
+}
 
+class Competition {
+  Competition({
+    required this.eventName,
+    required this.eventDate,
+    required this.division,
+    required this.city,
+    required this.state,
+    required this.result,
+    required this.id,
+  });
+
+  final String? eventName;
+  final DateTime? eventDate;
+  final String? division;
+  final String? city;
+  final String? state;
+  final String? result;
+  final String? id;
+
+  factory Competition.fromJson(Map<String, dynamic> json) {
+    return Competition(
+      eventName: json["event_name"],
+      eventDate: DateTime.tryParse(json["event_date"] ?? ""),
+      division: json["division"],
+      city: json["city"],
+      state: json["state"],
+      result: json["result"],
+      id: json["_id"],
+    );
+  }
 }
 
 class Height {
@@ -93,12 +131,25 @@ class Height {
   final int? amount;
   final String? id;
 
-  factory Height.fromJson(Map<String, dynamic> json){
+  factory Height.fromJson(Map<String, dynamic> json) {
     return Height(
       category: json["category"],
       amount: json["amount"],
       id: json["_id"],
     );
   }
+}
 
+class Location {
+  Location({
+    required this.type,
+  });
+
+  final String? type;
+
+  factory Location.fromJson(Map<String, dynamic> json) {
+    return Location(
+      type: json["type"],
+    );
+  }
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:calebshirthum/view/auth_view/login_auth_view.dart';
 import 'package:calebshirthum/view/user/profile_view/controller/discover_friends_controller.dart';
+import 'package:calebshirthum/view/user/profile_view/controller/get_my_friends_controller.dart';
 import 'package:get/get.dart';
 
 import '../../../../common widget/success_screen_widget.dart';
@@ -10,28 +11,25 @@ import '../../../../uitilies/app_colors.dart';
 import '../../../../uitilies/custom_toast.dart';
 import '../../../../view/user/dashboard_view/bottom_navigation_view.dart';
 
-class AddFriendController extends GetxController {
+class UnfriendController extends GetxController {
   var isLoading = false.obs;
 
   final DiscoverFriendsController _discoverFriendsController =
       Get.put(DiscoverFriendsController());
 
-  Future<void> addFriend({
+  final GetMyFriendsController _getMyFriendsController =
+      Get.put(GetMyFriendsController());
+
+  Future<void> unFriend({
     required String id,
   }) async {
     isLoading(true);
 
-    Map<String, dynamic> body = {
-      "friend_id": id,
-    };
-
     try {
-      print("🚀 Sending to: ${ApiUrl.support}");
-      print("📦 Body: ${jsonEncode(body)}");
+      print("🚀 Sending to: ${ApiUrl.unFriend(friendId: id)}");
 
       var response = await BaseClient.postRequest(
-        api: ApiUrl.addFriend,
-        body: body,
+        api: ApiUrl.unFriend(friendId: id),
       );
 
       print("📡 Status: ${response.statusCode}");
@@ -39,13 +37,12 @@ class AddFriendController extends GetxController {
 
       if (response.statusCode == 200) {
         _discoverFriendsController.getDiscover('');
-
+        _getMyFriendsController.getFriends('');
+        Get.back();
         CustomToast.showToast(
-          "Friend added successfully!",
+          "Unfollow successfully done!",
           isError: false,
         );
-
-        Get.back();
       } else {
         Map<String, dynamic> errorData = {};
         try {
