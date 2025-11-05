@@ -1,8 +1,5 @@
-import 'package:calebshirthum/common%20widget/comon_conatainer/custom_conatiner.dart';
-import 'package:calebshirthum/common%20widget/custom_button_widget.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/app_images.dart';
-import 'package:calebshirthum/uitilies/custom_loader.dart';
 import 'package:calebshirthum/uitilies/custom_toast.dart';
 import 'package:calebshirthum/view/auth_view/login_auth_view.dart';
 import 'package:calebshirthum/view/user/profile_view/add_events_view.dart';
@@ -17,32 +14,14 @@ import 'package:calebshirthum/view/user/profile_view/widgets/profille_header_wid
 import 'package:calebshirthum/view/user/profile_view/widgets/shimmer/profile_header_shimmer.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/shimmer/user_info_shimmer.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/user_info_card_widget.dart';
-import 'package:calebshirthum/view/user/setting/views/about_view.dart';
-import 'package:calebshirthum/view/user/setting/views/privacy_policy.dart';
-import 'package:calebshirthum/view/user/setting/views/termOcondition_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:octo_image/octo_image.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:octo_image/octo_image.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../uitilies/api/local_storage.dart';
-import '../../auth_view/log_in/view/log_in_view.dart';
 import '../home_view/controller/my_profile_controller.dart';
-import '../home_view/widgets/user_info_widgets.dart';
 import 'Add_your_gym.dart';
-import 'add_compition_view.dart';
-import 'edite_gyms_details.dart';
-import 'edite_profeil_view.dart';
 import 'notification_view.dart';
 
 class ProfileView extends StatefulWidget {
@@ -56,11 +35,18 @@ class _ProfileViewState extends State<ProfileView> {
   final GetProfileController _getProfileController =
       Get.put(GetProfileController());
 
+  final RxBool _showShimmerFor2s = true.obs;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getProfileController.getProfileController();
+
+    Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        _showShimmerFor2s.value = false;
+      });
+    });
   }
 
   @override
@@ -110,7 +96,27 @@ class _ProfileViewState extends State<ProfileView> {
               SizedBox(height: 20.h),
               // Home Gym Section
 
-              UserInfoCard(),
+              Obx(() {
+                if (_showShimmerFor2s.value) {
+                  return UserInfoCardShimmer();
+                } else if (_getProfileController.isLoading.value) {
+                  return UserInfoCardShimmer();
+                } else {
+                  final data = _getProfileController.profile.value.data;
+                  return UserInfoCard(
+                    homeGym: data?.homeGym ?? "",
+                    height: data?.height?.amount?.toString() ?? "",
+                    weight: (() {
+                      final weightStr = data?.weight?.toString() ?? "";
+                      return weightStr
+                          .replaceAll(RegExp(r'kg', caseSensitive: false), '')
+                          .trim();
+                    })(),
+                    skills: data?.disciplines ?? [],
+                    favoriteQuote: data?.favouriteQuote ?? "",
+                  );
+                }
+              }),
 
               SizedBox(height: 20.h),
               Padding(

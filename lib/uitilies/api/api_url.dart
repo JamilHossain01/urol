@@ -6,6 +6,7 @@ class ApiUrl {
   static const String verifyOTP = "$baseUrl/auth/verify-otp";
   static const String signUp = "$baseUrl/auth/create";
   static const String resetPassword = "$baseUrl/auth/reset-password";
+  static const String updateProfile = "$baseUrl/users/update-my-profile";
 
   // profile
   static const String profile = "$baseUrl/users/my-profile";

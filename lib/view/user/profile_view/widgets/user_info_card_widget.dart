@@ -9,7 +9,19 @@ import '../../../../uitilies/app_images.dart';
 import '../edite_profeil_view.dart';
 
 class UserInfoCard extends StatelessWidget {
-  const UserInfoCard({super.key});
+  final String homeGym;
+  final String height;
+  final String weight;
+  final List<String> skills;
+  final String favoriteQuote;
+
+  const UserInfoCard(
+      {super.key,
+      required this.homeGym,
+      required this.height,
+      required this.weight,
+      required this.skills,
+      required this.favoriteQuote});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +67,7 @@ class UserInfoCard extends StatelessWidget {
                     color: AppColors.pTextColors,
                   ),
                   CustomText(
-                    text: "The Arena Combat Academy",
+                    text: homeGym,
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w600,
                     color: Colors.black,
@@ -70,9 +82,9 @@ class UserInfoCard extends StatelessWidget {
           /// 📏 Height and Weight Row
           Row(
             children: [
-              _infoTile(AppImages.scale, "Height", "5'10\""),
+              _infoTile(AppImages.scale, "Height", "$height"),
               Gap(10.w),
-              _infoTile(AppImages.kg, "Weight", "170 lb"),
+              _infoTile(AppImages.kg, "Weight", "$weight lb"),
             ],
           ),
 
@@ -83,10 +95,7 @@ class UserInfoCard extends StatelessWidget {
             spacing: 6.w,
             runSpacing: 6.h,
             children: [
-              _skillChip("Jiu Jitsu"),
-              _skillChip("Wrestling"),
-              _skillChip("Judo"),
-              _skillChip("MMA"),
+              for (var skill in skills) _skillChip(skill),
             ],
           ),
 
@@ -108,8 +117,7 @@ class UserInfoCard extends StatelessWidget {
           CustomText(
             maxLines: 2,
             textAlign: TextAlign.start,
-            text:
-                "“Discipline is the bridge between goals and accomplishments.”",
+            text: "“$favoriteQuote”",
             fontSize: 12.sp,
             fontWeight: FontWeight.w400,
             color: Colors.black87,

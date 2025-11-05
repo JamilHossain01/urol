@@ -20,7 +20,8 @@ class CustomTextField extends StatefulWidget {
   final IconData? suffixIcon; // Suffix icon
   final String? suffixIconAsset; // Suffix icon asset (image)
   final VoidCallback? onSuffixTap; // Optional tap for suffix
-  final String? Function(String?)? validator; // Added optional validator parameter
+  final String? Function(String?)?
+      validator; // Added optional validator parameter
 
   const CustomTextField({
     Key? key,
@@ -51,7 +52,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-
       width: Get.width,
       child: TextFormField(
         keyboardType: widget.keyboardType,
@@ -60,7 +60,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         obscureText: widget.showObscure ? _obscureText : false,
         maxLines: widget.maxLines ?? 1,
         style: GoogleFonts.poppins(
-          fontSize: 14.h,
+          fontSize: 12.h,
           color: Colors.black,
         ),
         decoration: InputDecoration(
@@ -89,49 +89,49 @@ class _CustomTextFieldState extends State<CustomTextField> {
           ),
           prefixIcon: widget.imagePrefix != null
               ? Padding(
-            padding: EdgeInsets.all(10),
-            child: Image.asset(
-              widget.imagePrefix!,
-              width: 24.w,
-              height: 24.h,
-              fit: BoxFit.contain,
-            ),
-          )
+                  padding: EdgeInsets.all(10),
+                  child: Image.asset(
+                    widget.imagePrefix!,
+                    width: 24.w,
+                    height: 24.h,
+                    fit: BoxFit.contain,
+                  ),
+                )
               : (widget.prefixIcon != null
-              ? Icon(widget.prefixIcon, color: Colors.white)
-              : null),
+                  ? Icon(widget.prefixIcon, color: Colors.white)
+                  : null),
           // Suffix icon logic: showObscure takes priority
           suffixIcon: widget.showObscure
               ? IconButton(
-            icon: Icon(
-              _obscureText ? Icons.visibility_off : Icons.visibility,
-              color: Color(0xFF666666),
-            ),
-            onPressed: () {
-              setState(() {
-                _obscureText = !_obscureText;
-              });
-            },
-          )
+                  icon: Icon(
+                    _obscureText ? Icons.visibility_off : Icons.visibility,
+                    color: Color(0xFF666666),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
+                )
               : (widget.suffixIcon != null
-              ? IconButton(
-            icon: Icon(widget.suffixIcon, color: Color(0xFF666666)),
-            onPressed: widget.onSuffixTap,
-          )
-              : (widget.suffixIconAsset != null
-              ? GestureDetector(
-            onTap: widget.onSuffixTap,
-            child: Padding(
-              padding: EdgeInsets.all(10),
-              child: Image.asset(
-                widget.suffixIconAsset!,
-                width: 24.w,
-                height: 24.h,
-                fit: BoxFit.contain,
-              ),
-            ),
-          )
-              : null)),
+                  ? IconButton(
+                      icon: Icon(widget.suffixIcon, color: Color(0xFF666666)),
+                      onPressed: widget.onSuffixTap,
+                    )
+                  : (widget.suffixIconAsset != null
+                      ? GestureDetector(
+                          onTap: widget.onSuffixTap,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Image.asset(
+                              widget.suffixIconAsset!,
+                              width: 24.w,
+                              height: 24.h,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        )
+                      : null)),
           hintText: widget.hintText,
           hintStyle: GoogleFonts.poppins(
             fontWeight: FontWeight.w400,

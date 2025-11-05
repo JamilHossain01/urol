@@ -9,19 +9,41 @@ import 'package:image_picker/image_picker.dart';
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_app_bar_widget.dart';
 import '../../../common widget/custom_text_filed.dart';
+import '../home_view/controller/my_profile_controller.dart';
+import 'controller/update_profile_controller.dart';
 
 class EditProfileView extends StatefulWidget {
   const EditProfileView({super.key});
 
   @override
-  _EditProfileViewState createState() => _EditProfileViewState();
+  State<EditProfileView> createState() => _EditProfileViewState();
 }
 
 class _EditProfileViewState extends State<EditProfileView> {
-  Set<String> selectedDisciplines = {};
-  String? selectedBelt = "Select One";
-  String? selectedFeet = "5";
-  String? selectedInches = "11";
+  final GetProfileController _profileCtrl = Get.put(GetProfileController());
+  final UpdateProfileController _updateCtrl =
+      Get.put(UpdateProfileController());
+
+  // Form Fields
+  late TextEditingController _fNameCtrl;
+  late TextEditingController _lNameCtrl;
+  late TextEditingController _emailCtrl;
+  late TextEditingController _phoneCtrl;
+  late TextEditingController _homeGymCtrl;
+  late TextEditingController _weightCtrl;
+  late TextEditingController _quoteCtrl;
+
+  // Dropdowns & Chips
+  String? selectedBelt;
+  String? selectedFeet;
+  String? selectedInches;
+  final Set<String> selectedDisciplines = {};
+
+  // Image
+  XFile? _pickedImage;
+  final ImagePicker _picker = ImagePicker();
+
+  // Options
   final List<String> beltRanks = [
     "Select One",
     "White",
@@ -30,21 +52,10 @@ class _EditProfileViewState extends State<EditProfileView> {
     "Brown",
     "Black"
   ];
-  final List<String> feetOptions = ["4", "5", "6", "7"];
-  final List<String> inchesOptions = [
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "11"
-  ];
+  final List<String> feetOptions =
+      List.generate(8, (i) => (4 + i).toString()); // "4" to "11"
+  final List<String> inchesOptions =
+      List.generate(12, (i) => i.toString()); // "0" to "11"
   final List<String> disciplines = [
     "Jiu Jitsu",
     "Wrestling",
@@ -55,377 +66,303 @@ class _EditProfileViewState extends State<EditProfileView> {
     "Kickboxing"
   ];
 
-  final ImagePicker _picker = ImagePicker();
-  XFile? _image; // This will hold the selected image.
+  @override
+  void initState() {
+    super.initState();
 
-  // Function to pick an image from the gallery
-  Future<void> _pickImage() async {
-    final XFile? pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery);
+    _fNameCtrl = TextEditingController();
+    _lNameCtrl = TextEditingController();
+    _emailCtrl = TextEditingController();
+    _phoneCtrl = TextEditingController();
+    _homeGymCtrl = TextEditingController();
+    _weightCtrl = TextEditingController();
+    _quoteCtrl = TextEditingController();
 
-    if (pickedFile != null) {
-      setState(() {
-        _image =
-            pickedFile; // Update the profile picture with the selected image
-      });
+    ever(_profileCtrl.profile, (_) => _populateFromProfile());
+    if (_profileCtrl.profile.value.data != null) {
+      _populateFromProfile();
     }
+  }
+
+  void _populateFromProfile() {
+    final data = _profileCtrl.profile.value.data;
+    if (data == null) return;
+
+    setState(() {
+      _fNameCtrl.text = "${data.firstName}";
+      _lNameCtrl.text = "${data.lastName}";
+      _emailCtrl.text = data.email ?? "";
+      _phoneCtrl.text = data.contact ?? "";
+      _homeGymCtrl.text = data.homeGym ?? "";
+      _weightCtrl.text = (data.weight ?? "")
+          .replaceAll(RegExp(r'kg|lb', caseSensitive: false), '')
+          .trim();
+      _quoteCtrl.text = data.favouriteQuote ?? "";
+
+      final belt = data.beltRank?.trim();
+      selectedBelt = beltRanks.contains(belt) ? belt : beltRanks[0];
+
+      final cm = data.height?.amount ?? 0;
+      if (cm > 0) {
+        final totalInches = cm / 2.54;
+        final feet = (totalInches ~/ 12).toString();
+        final inches = (totalInches % 12).round().toString();
+
+        selectedFeet = _clampFeet(feet);
+        selectedInches = inchesOptions.contains(inches) ? inches : "0";
+      } else {
+        selectedFeet = "5";
+        selectedInches = "0";
+      }
+
+      selectedDisciplines.clear();
+      selectedDisciplines.addAll(data.disciplines);
+    });
+  }
+
+  String _clampFeet(String feetStr) {
+    final feet = int.tryParse(feetStr) ?? 5;
+    if (feet < 4) return "4";
+    if (feet > 11) return "11";
+    return feet.toString();
+  }
+
+  Future<void> _pickImage() async {
+    final picked = await _picker.pickImage(source: ImageSource.gallery);
+    if (picked != null) {
+      setState(() => _pickedImage = picked);
+    }
+  }
+
+  Future<void> _saveProfile() async {
+    final feet = int.tryParse(selectedFeet ?? "5") ?? 5;
+    final inches = int.tryParse(selectedInches ?? "0") ?? 0;
+    final heightCm = (feet * 12 + inches) * 2.54;
+
+    await _updateCtrl.updateProfile(
+      firstName: _fNameCtrl.text,
+      lastName: _lNameCtrl.text,
+      contact: _phoneCtrl.text.trim(),
+      beltRank: selectedBelt == "Select One" ? "" : selectedBelt!,
+      disciplines: selectedDisciplines.toList(),
+      favouriteQuote: _quoteCtrl.text.trim(),
+      heightCm: heightCm,
+      weight: "${_weightCtrl.text.trim()} kg",
+      homeGym: _homeGymCtrl.text.trim(),
+      profilePicture: _pickedImage != null ? File(_pickedImage!.path) : null,
+    );
+  }
+
+  @override
+  void dispose() {
+    _emailCtrl.dispose();
+    _phoneCtrl.dispose();
+    _homeGymCtrl.dispose();
+    _weightCtrl.dispose();
+    _quoteCtrl.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context);
-
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'Edit Profile',
-        showLeadingIcon: true,
-      ),
+      appBar: CustomAppBar(title: 'Edit Profile', showLeadingIcon: true),
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+        child: Obx(() {
+          final isLoading = _updateCtrl.isLoading.value;
+          return Stack(
             children: [
-              Center(
-                child: Stack(
-                  alignment: Alignment.bottomRight,
+              SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: 120.0,
-                      height: 120.0,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.mainColor,
-                          width: 4.0,
-                        ),
-                      ),
-                      child: CircleAvatar(
-                        radius: 55.0,
-                        backgroundImage: _image == null
-                            ? const NetworkImage(
-                                "https://static.vecteezy.com/system/resources/previews/013/360/247/non_2x/default-avatar-photo-icon-social-media-profile-sign-symbol-vector.jpg")
-                            : FileImage(File(_image!.path)),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 4,
-                      right: 4,
-                      child: GestureDetector(
-                        onTap: _pickImage,
-                        child: Container(
-                          padding: EdgeInsets.all(4.0),
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 2),
+                    // Profile Image
+                    Center(
+                      child: Stack(
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          Container(
+                            width: 120.w,
+                            height: 120.w,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                  color: AppColors.mainColor, width: 4),
+                            ),
+                            child: CircleAvatar(
+                              radius: 56.r,
+                              backgroundImage: _getImageProvider(),
+                            ),
                           ),
-                          child: const Icon(Icons.add,
-                              size: 18, color: Colors.white),
-                        ),
+                          Positioned(
+                            bottom: 4,
+                            right: 4,
+                            child: GestureDetector(
+                              onTap: _pickImage,
+                              child: Container(
+                                padding: EdgeInsets.all(6.w),
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  shape: BoxShape.circle,
+                                  border:
+                                      Border.all(color: Colors.white, width: 2),
+                                ),
+                                child: Icon(Icons.camera_alt,
+                                    size: 18.sp, color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+                    SizedBox(height: 25.h),
+
+                    _buildLabel("First Name"),
+                    CustomTextField(
+                        controller: _fNameCtrl,
+                        hintText: "Enter first name",
+                        showObscure: false),
+
+                    SizedBox(height: 16.h),
+                    _buildLabel("Last Name"),
+                    CustomTextField(
+                        controller: _lNameCtrl,
+                        hintText: "Enter last name",
+                        showObscure: false),
+
+                    SizedBox(height: 16.h),
+
+                    _buildLabel("Email"),
+                    CustomTextField(
+                      readOnly: true,
+                      controller: _emailCtrl,
+                      hintText: "Enter email",
+                      showObscure: false,
+                    ),
+                    SizedBox(height: 16.h),
+
+                    _buildLabel("Phone Number"),
+                    CustomTextField(
+                        controller: _phoneCtrl,
+                        hintText: "Enter phone",
+                        showObscure: false),
+                    SizedBox(height: 16.h),
+
+                    _buildLabel("Home Gym"),
+                    CustomTextField(
+                        controller: _homeGymCtrl,
+                        hintText: "Enter gym",
+                        showObscure: false),
+                    SizedBox(height: 16.h),
+
+                    _buildLabel("Belt Rank"),
+                    _buildDropdown(selectedBelt ?? beltRanks[0], beltRanks,
+                        (v) => setState(() => selectedBelt = v)),
+                    SizedBox(height: 16.h),
+
+                    _buildLabel("Disciplines"),
+                    SizedBox(height: 6.h),
+                    Wrap(
+                      spacing: 8.w,
+                      runSpacing: 8.h,
+                      children:
+                          disciplines.map((d) => _disciplineChip(d)).toList(),
+                    ),
+                    SizedBox(height: 16.h),
+
+                    _buildLabel("Favorite Quote"),
+                    CustomTextField(
+                      controller: _quoteCtrl,
+                      hintText: "Write your favorite quote...",
+                      maxLines: 3,
+                      showObscure: false,
+                    ),
+                    SizedBox(height: 26.h),
+
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.mainColor,
+                          padding: EdgeInsets.symmetric(vertical: 16.h),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.r)),
+                        ),
+                        onPressed: isLoading ? null : _saveProfile,
+                        child: isLoading
+                            ? SizedBox(
+                                height: 20.h,
+                                width: 20.w,
+                                child: CircularProgressIndicator(
+                                    color: Colors.white, strokeWidth: 2))
+                            : CustomText(
+                                text: "Save",
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white),
+                      ),
+                    ),
+                    SizedBox(height: 20.h),
                   ],
                 ),
               ),
-
-              SizedBox(height: 25.h),
-
-              Align(
-                alignment: Alignment.centerLeft,
-                child: CustomText(
-                  text: "Name",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.mainTextColors,
-                ),
-              ),
-              SizedBox(height: 6.h),
-              CustomTextField(
-                hintTextColor: Color(0xFF6B6B6B),
-                fillColor: Color(0xFFF5F5F5),
-                borderColor: Color(0xFFF5F5F5),
-                hintText: "Caleb Shirtum",
-                showObscure: false,
-              ),
-
-              SizedBox(height: 16.h),
-
-              Align(
-                alignment: Alignment.centerLeft,
-                child: CustomText(
-                  text: "Belt Rank",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.mainTextColors,
-                ),
-              ),
-              SizedBox(height: 6.h),
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(horizontal: 14.w),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF5F5F5),
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    value: "Purple",
-                    items: ["White", "Blue", "Purple", "Brown", "Black"]
-                        .map((rank) => DropdownMenuItem(
-                              value: rank,
-                              child:
-                                  Text(rank, style: TextStyle(fontSize: 13.sp)),
-                            ))
-                        .toList(),
-                    onChanged: (value) {},
-                  ),
-                ),
-              ),
-
-              SizedBox(height: 16.h),
-
-// Email
-              Align(
-                alignment: Alignment.centerLeft,
-                child: CustomText(
-                  text: "Email",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.mainTextColors,
-                ),
-              ),
-              SizedBox(height: 6.h),
-              const CustomTextField(
-                hintTextColor: Color(0xFF6B6B6B),
-                fillColor: Color(0xFFF5F5F5),
-                borderColor: Color(0xFFF5F5F5),
-                hintText: "calebshirtum@gmail.com",
-                showObscure: false,
-              ),
-              SizedBox(height: 16.h),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: CustomText(
-                  text: "Phone Number",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.mainTextColors,
-                ),
-              ),
-              SizedBox(height: 6.h),
-              const CustomTextField(
-                hintTextColor: Color(0xFF6B6B6B),
-                fillColor: Color(0xFFF5F5F5),
-                borderColor: Color(0xFFF5F5F5),
-                hintText: "+912541305420",
-                showObscure: false,
-              ),
-
-              SizedBox(height: 16.h),
-
-              Align(
-                alignment: Alignment.centerLeft,
-                child: CustomText(
-                  text: "Home Gym",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.mainTextColors,
-                ),
-              ),
-              SizedBox(height: 6.h),
-              const CustomTextField(
-                hintTextColor: Color(0xFF6B6B6B),
-                fillColor: Color(0xFFF5F5F5),
-                borderColor: Color(0xFFF5F5F5),
-                hintText: "The Arena Combat Academy",
-                showObscure: false,
-              ),
-
-              SizedBox(height: 16.h),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: CustomText(
-                  text: "Height",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.mainTextColors,
-                ),
-              ),
-              SizedBox(height: 6.h),
-
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomText(
-                          text: "Feet",
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textFieldNameColor,
-                        ),
-                        SizedBox(height: 6.h),
-                        _buildDropdownField(
-                          selectedFeet,
-                          feetOptions,
-                          (String? value) =>
-                              setState(() => selectedFeet = value),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(width: 12.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomText(
-                          text: "Inches",
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textFieldNameColor,
-                        ),
-                        SizedBox(height: 6.h),
-                        _buildDropdownField(
-                          selectedInches,
-                          inchesOptions,
-                          (String? value) =>
-                              setState(() => selectedInches = value),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 16.h),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: CustomText(
-                  text: "Weight",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.mainTextColors,
-                ),
-              ),
-              SizedBox(height: 6.h),
-              const CustomTextField(
-                hintTextColor: Color(0xFF6B6B6B),
-                fillColor: Color(0xFFF5F5F5),
-                borderColor: Color(0xFFF5F5F5),
-                hintText: "56 lb",
-                showObscure: false,
-              ),
-
-              SizedBox(height: 16.h),
-
-              // Disciplines (Chips)
-              Align(
-                alignment: Alignment.centerLeft,
-                child: CustomText(
-                  text: "Disciplines",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.mainTextColors,
-                ),
-              ),
-              SizedBox(height: 6.h),
-              Wrap(
-                spacing: 8.w,
-                runSpacing: 8.h,
-                children: [
-                  _disciplineChip("Jiu Jitsu"),
-                  _disciplineChip("Wrestling"),
-                  _disciplineChip("Judo"),
-                  _disciplineChip("MMA"),
-                  _disciplineChip("Boxing"),
-                  _disciplineChip("Muay Thai"),
-                  _disciplineChip("Kickboxing"),
-                ],
-              ),
-
-              SizedBox(height: 16.h),
-
-              Align(
-                alignment: Alignment.centerLeft,
-                child: CustomText(
-                  text: "Favorite Quote",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.mainTextColors,
-                ),
-              ),
-              SizedBox(height: 6.h),
-              const CustomTextField(
-                hintTextColor: Color(0xFF6B6B6B),
-                fillColor: Color(0xFFF5F5F5),
-                borderColor: Color(0xFFF5F5F5),
-                hintText: "Write your favorite quote....",
-                showObscure: false,
-              ),
-
-              SizedBox(height: 26.h),
-
-              // Save Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.mainColor,
-                    padding: EdgeInsets.symmetric(vertical: 14.h),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                  ),
-                  onPressed: () {
-                    Get.back();
-                  },
-                  child: CustomText(
-                    text: "Save",
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              SizedBox(height: 20.h),
+              if (isLoading)
+                Container(
+                    color: Colors.black54,
+                    child: Center(child: CircularProgressIndicator())),
             ],
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
 
-  Widget _buildDropdownField(
-    String? value,
-    List<String> items,
-    Function(String?) onChanged,
-  ) {
+  ImageProvider _getImageProvider() {
+    if (_pickedImage != null) {
+      return FileImage(File(_pickedImage!.path));
+    }
+    final url = _profileCtrl.profile.value.data?.image;
+    return url != null && url.isNotEmpty
+        ? NetworkImage(url)
+        : const NetworkImage(
+            "https://static.vecteezy.com/system/resources/previews/013/360/247/non_2x/default-avatar-photo-icon-social-media-profile-sign-symbol-vector.jpg");
+  }
+
+  Widget _buildLabel(String text) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: CustomText(
+        text: text,
+        fontSize: 16.sp,
+        fontWeight: FontWeight.w500,
+        color: AppColors.mainTextColors,
+      ),
+    );
+  }
+
+  // FIXED: Safe Dropdown
+  Widget _buildDropdown(
+      String? value, List<String> items, Function(String?) onChanged) {
+    final safeValue =
+        (value != null && items.contains(value)) ? value : items[0];
+
     return Container(
-      width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 14.w),
       decoration: BoxDecoration(
-        color: AppColors.backRoudnColors,
+        color: const Color(0xFFF5F5F5),
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: const Color(0xFFB9B9B9)),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
-          value: value,
+          value: safeValue,
           isExpanded: true,
           items: items
-              .map(
-                (String item) => DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(
-                    item,
-                    style: TextStyle(fontSize: 13.sp),
-                  ),
-                ),
-              )
+              .map((e) => DropdownMenuItem(
+                    value: e,
+                    child: Text(e, style: TextStyle(fontSize: 13.sp)),
+                  ))
               .toList(),
           onChanged: onChanged,
         ),
@@ -433,19 +370,29 @@ class _EditProfileViewState extends State<EditProfileView> {
     );
   }
 
-  // ✅ Discipline Chip
+  Widget _buildHeightDropdown(String label, String? value, List<String> items,
+      Function(String?) onChanged) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomText(
+          text: label,
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w600,
+          color: AppColors.textFieldNameColor,
+        ),
+        SizedBox(height: 6.h),
+        _buildDropdown(value, items, onChanged),
+      ],
+    );
+  }
+
   Widget _disciplineChip(String label) {
-    bool isSelected = selectedDisciplines.contains(label);
+    final isSelected = selectedDisciplines.contains(label);
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          if (isSelected) {
-            selectedDisciplines.remove(label); // Unselect if already selected
-          } else {
-            selectedDisciplines.add(label); // Select if not already selected
-          }
-        });
-      },
+      onTap: () => setState(() => isSelected
+          ? selectedDisciplines.remove(label)
+          : selectedDisciplines.add(label)),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
         decoration: BoxDecoration(
@@ -455,10 +402,9 @@ class _EditProfileViewState extends State<EditProfileView> {
         child: Text(
           label,
           style: TextStyle(
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w500,
-            color: isSelected ? Colors.white : Colors.black,
-          ),
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w500,
+              color: isSelected ? Colors.white : Colors.black),
         ),
       ),
     );

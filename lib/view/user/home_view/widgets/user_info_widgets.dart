@@ -29,9 +29,11 @@ class UserInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomContainer(
-      height: 202.h,
+      height: 190.h,
       color: Colors.white,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildUserProfile(),
           Gap(2.h),
@@ -106,6 +108,7 @@ class UserInfoSection extends StatelessWidget {
         Gap(10.w),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             CustomText(
               color: Color(0xFF8C8C8C),
@@ -128,8 +131,10 @@ class UserInfoSection extends StatelessWidget {
   Widget _buildUserFavoriteQuote() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         CustomText(
+          textAlign: TextAlign.start,
           color: Color(0xFF4B4B4B),
           fontWeight: FontWeight.w500,
           fontSize: 12.h,
@@ -137,12 +142,13 @@ class UserInfoSection extends StatelessWidget {
         ),
         Gap(10),
         CustomText(
+          text: '"$quote"', // Wraps the quote in double quotes
           color: AppColors.pTextColors,
           fontWeight: FontWeight.w400,
+          fontSize: 12.sp,
           maxLines: 10,
+          overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.start,
-          fontSize: 12.h,
-          text: "${quote}",
         ),
       ],
     );
