@@ -31,21 +31,39 @@ class BaseClient {
     return response;
   }
 
-  static postRequest({required String api, body}) async {
+  static Future<http.Response> postRequest({
+    required String api,
+    Map<String, dynamic>? body,
+    Map<String, String>? extraHeaders,
+  }) async {
     debugPrint('\nYou hit: $api');
     debugPrint('Request Body: ${jsonEncode(body)}');
 
-    /// getx storage
+    // Get token
     final StorageService _storageService = Get.put(StorageService());
     String? accessToken = _storageService.read<String>('accessToken');
 
-    var headers = {
+    final Map<String, String> headers = {
+      'Content-Type': 'application/json',
       'Accept': 'application/json',
-      "Authorization": "Bearer $accessToken"
+      "Authorization": "Bearer $accessToken",
+
     };
 
-    http.Response response = await http.post(Uri.parse(api),
-        body: body, headers: headers, encoding: Encoding.getByName("utf-8"));
+    final String jsonBody = jsonEncode(body ?? {});
+
+    debugPrint('Headers: $headers');
+    debugPrint('Sending JSON: $jsonBody');
+
+    final response = await http.post(
+      Uri.parse(api),
+      headers: headers,
+      body: jsonBody,
+    );
+
+    debugPrint('Status: ${response.statusCode}');
+    debugPrint('Response: ${response.body}');
+
     return response;
   }
 
@@ -63,7 +81,7 @@ class BaseClient {
     };
 
     http.Response response =
-    await http.delete(Uri.parse(api), body: body, headers: headers);
+        await http.delete(Uri.parse(api), body: body, headers: headers);
     return response;
   }
 

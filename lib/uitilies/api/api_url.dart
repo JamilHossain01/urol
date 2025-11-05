@@ -7,6 +7,7 @@ class ApiUrl {
   static const String signUp = "$baseUrl/auth/create";
   static const String resetPassword = "$baseUrl/auth/reset-password";
   static const String updateProfile = "$baseUrl/users/update-my-profile";
+  static const String support = "$baseUrl/contacts/add";
 
   // profile
   static const String profile = "$baseUrl/users/my-profile";
