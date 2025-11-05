@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:calebshirthum/view/auth_view/login_auth_view.dart';
 import 'package:get/get.dart';
 
 import '../../../../common widget/success_screen_widget.dart';
@@ -8,50 +9,41 @@ import '../../../../uitilies/app_colors.dart';
 import '../../../../uitilies/custom_toast.dart';
 import '../../../../view/user/dashboard_view/bottom_navigation_view.dart';
 
-class ContactUsController extends GetxController {
+class ChnagePasswordController extends GetxController {
   var isLoading = false.obs;
 
-  Future<void> addReflection({
-    required String name,
-    required String email,
-    required String description,
+  Future<void> passwordChange({
+    required String oldPass,
+    required String newPass,
+    required String confirmPass,
   }) async {
     isLoading(true);
 
     Map<String, dynamic> body = {
-      "name": name.trim(),
-      "email": email.trim(),
-      "description": description.trim(),
+      "oldPassword": oldPass,
+      "newPassword": newPass,
+      "confirmPassword": confirmPass
     };
 
     try {
       print("🚀 Sending to: ${ApiUrl.support}");
       print("📦 Body: ${jsonEncode(body)}");
 
-      var response = await BaseClient.postRequest(
-        api: ApiUrl.support,
+      var response = await BaseClient.patchRequest(
+        api: ApiUrl.changePassword,
         body: body,
       );
 
       print("📡 Status: ${response.statusCode}");
       print("📄 Response Body: ${response.body}");
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response.statusCode == 200) {
         CustomToast.showToast(
-          "Your support message has been sent successfully!",
+          "Your Password has been changed successfully!",
           isError: false,
         );
 
-        Get.off(() => SuccessScreen(
-          title: "Thank You, $name!",
-          message:
-          "We have received your message and will get back to you at $email within 24 hours.",
-          buttonText: "Back to Home",
-          buttonColor: AppColors.mainColor,
-          onPressed: () {
-            Get.offAll(() => DashboardView());
-          },
-        ));
+        Get.offAll(() => SignInView());
       } else {
         Map<String, dynamic> errorData = {};
         try {
