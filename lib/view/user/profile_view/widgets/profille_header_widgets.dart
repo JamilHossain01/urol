@@ -1,6 +1,6 @@
+import 'package:calebshirthum/view/user/profile_view/widgets/shimmer/full_image_view_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../uitilies/app_colors.dart';
 import '../../../../uitilies/app_images.dart';
@@ -19,31 +19,39 @@ class ProfileHeaderWithBelt extends StatelessWidget {
     return Column(
       children: [
         Stack(
-          alignment: Alignment.bottomCenter, // Align the belt below the avatar
+          alignment: Alignment.bottomCenter,
           children: [
-            // CircleAvatar with border
-            CircleAvatar(
-              radius: 60.r,
-              backgroundColor: Colors.transparent,
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Color(0xFFBC6068), // Border color
-                    width: 2.w, // Border width
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => FullImageView(imageUrl: imageUrl),
                   ),
-                ),
-                child: CircleAvatar(
-                  radius: 55.r, // Slightly smaller radius to fit inside the border
-                  backgroundImage: AssetImage(imageUrl),
+                );
+              },
+              child: CircleAvatar(
+                radius: 60.r,
+                backgroundColor: Colors.transparent,
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Color(0xFFBC6068),
+                      width: 2.w,
+                    ),
+                  ),
+                  child: CircleAvatar(
+                    radius: 55.r,
+                    backgroundImage: NetworkImage(imageUrl),
+                  ),
                 ),
               ),
             ),
-            // Purple Belt Image under the CircleAvatar
             Positioned(
               bottom: 0,
               child: Image.asset(
-                AppImages.purpelBelt, // Belt Image
+                AppImages.purpelBelt,
                 width: 100.w,
                 height: 20.h,
               ),

@@ -8,7 +8,7 @@ class ApiUrl {
   static const String resetPassword = "$baseUrl/auth/reset-password";
 
   // profile
-  static const String profile = "$baseUrl/user/profile";
+  static const String profile = "$baseUrl/users/my-profile";
 
   static String reviewStatistics({required String serviceId}) =>
       "$baseUrl/reviews/stats/$serviceId";

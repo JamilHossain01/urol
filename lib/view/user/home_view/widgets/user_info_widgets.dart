@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../../../common widget/comon_conatainer/custom_conatiner.dart';
 import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../uitilies/app_colors.dart';
 import '../../../../uitilies/app_images.dart';
+import '../../profile_view/widgets/shimmer/full_image_view_shimmer.dart';
 
 class UserInfoSection extends StatelessWidget {
   final String name;
   final String belt;
   final String gymName;
+  final String image;
   final String quote;
 
   const UserInfoSection({
@@ -19,6 +23,7 @@ class UserInfoSection extends StatelessWidget {
     required this.belt,
     required this.gymName,
     required this.quote,
+    required this.image,
   });
 
   @override
@@ -46,20 +51,25 @@ class UserInfoSection extends StatelessWidget {
   Widget _buildUserProfile() {
     return Row(
       children: [
-        CircleAvatar(
-          radius: 28.r,
-          backgroundColor: Colors.transparent,
-          child: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: Color(0xFFBC6068),
-                width: 2.w,
+        GestureDetector(
+          onTap: () {
+            Get.to(() => FullImageView(imageUrl: image));
+          },
+          child: CircleAvatar(
+            radius: 28.r,
+            backgroundColor: Colors.transparent,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Color(0xFFBC6068),
+                  width: 2.w,
+                ),
               ),
-            ),
-            child: CircleAvatar(
-              radius: 28.r,
-              backgroundImage: AssetImage(AppImages.person),
+              child: CircleAvatar(
+                radius: 28.r,
+                backgroundImage: NetworkImage(image),
+              ),
             ),
           ),
         ),
@@ -73,27 +83,12 @@ class UserInfoSection extends StatelessWidget {
               fontSize: 20.h,
               text: name,
             ),
-
             GestureDetector(
                 child: Image.asset(
               AppImages.purpelBelt,
               width: 100.w,
               height: 20.h,
             ))
-
-            // Container(
-            //   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(50.r),
-            //     color: const Color(0xFF8243EE),
-            //   ),
-            //   child: CustomText(
-            //     color: Colors.white,
-            //     fontSize: 10.h,
-            //     fontWeight: FontWeight.w600,
-            //     text: belt,
-            //   ),
-            // ),
           ],
         ),
       ],

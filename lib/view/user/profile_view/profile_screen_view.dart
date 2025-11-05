@@ -2,6 +2,7 @@ import 'package:calebshirthum/common%20widget/comon_conatainer/custom_conatiner.
 import 'package:calebshirthum/common%20widget/custom_button_widget.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/app_images.dart';
+import 'package:calebshirthum/uitilies/custom_loader.dart';
 import 'package:calebshirthum/uitilies/custom_toast.dart';
 import 'package:calebshirthum/view/auth_view/login_auth_view.dart';
 import 'package:calebshirthum/view/user/profile_view/add_events_view.dart';
@@ -13,6 +14,9 @@ import 'package:calebshirthum/view/user/profile_view/settings_view.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/event_card.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/other_tile.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/profille_header_widgets.dart';
+import 'package:calebshirthum/view/user/profile_view/widgets/shimmer/profile_header_shimmer.dart';
+import 'package:calebshirthum/view/user/profile_view/widgets/shimmer/user_info_shimmer.dart';
+import 'package:calebshirthum/view/user/profile_view/widgets/user_info_card_widget.dart';
 import 'package:calebshirthum/view/user/setting/views/about_view.dart';
 import 'package:calebshirthum/view/user/setting/views/privacy_policy.dart';
 import 'package:calebshirthum/view/user/setting/views/termOcondition_view.dart';
@@ -33,6 +37,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../uitilies/api/local_storage.dart';
 import '../../auth_view/log_in/view/log_in_view.dart';
+import '../home_view/controller/my_profile_controller.dart';
 import '../home_view/widgets/user_info_widgets.dart';
 import 'Add_your_gym.dart';
 import 'add_compition_view.dart';
@@ -40,8 +45,23 @@ import 'edite_gyms_details.dart';
 import 'edite_profeil_view.dart';
 import 'notification_view.dart';
 
-class ProfileView extends StatelessWidget {
+class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
+
+  @override
+  State<ProfileView> createState() => _ProfileViewState();
+}
+
+class _ProfileViewState extends State<ProfileView> {
+  final GetProfileController _getProfileController =
+      Get.put(GetProfileController());
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getProfileController.getProfileController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,119 +90,27 @@ class ProfileView extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              ProfileHeaderWithBelt(
-                imageUrl: AppImages.person,
-                name: 'Caleb Shirtum',
-              ),
+              Obx(() {
+                String firstName =
+                    _getProfileController.profile.value.data?.firstName ?? "";
+                String lastName =
+                    _getProfileController.profile.value.data?.lastName ?? "";
+                String fullName = "$firstName $lastName".trim();
 
+                return _getProfileController.isLoading.value
+                    ? ProfileHeaderShimmer()
+                    : ProfileHeaderWithBelt(
+                        imageUrl: _getProfileController
+                                .profile.value.data?.image
+                                .toString() ??
+                            "",
+                        name: fullName,
+                      );
+              }),
               SizedBox(height: 20.h),
-
               // Home Gym Section
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 16.w),
-                padding: EdgeInsets.all(12.w),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: Colors.grey.shade300),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          height: 38.h,
-                          width: 38.w,
-                          decoration: BoxDecoration(
-                            color: Color(0xFF989898),
-                            borderRadius: BorderRadius.circular(8.r),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Image.asset(
-                              AppImages.location,
-                              height: 18.h,
-                              width: 15.w,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 8.w),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomText(
-                              text: "Home Gym",
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.pTextColors,
-                            ),
-                            CustomText(
-                              text: "The Arena Combat Academy",
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10.h),
-                    Row(
-                      children: [
-                        _infoTile(AppImages.scale, "Height", "5'10\""),
-                        Gap(10.w),
-                        _infoTile(AppImages.kg, "Weight", "170 lb"),
-                      ],
-                    ),
-                    SizedBox(height: 10.h),
-                    Wrap(
-                      spacing: 6.w,
-                      runSpacing: 6.h,
-                      children: [
-                        _skillChip("Jiu Jitsu"),
-                        _skillChip("Wrestling"),
-                        _skillChip("Judo"),
-                        _skillChip("MMA"),
-                      ],
-                    ),
-                    SizedBox(height: 10.h),
-                    Divider(
-                      color: Color(0xFF000000).withOpacity(0.10),
-                    ),
-                    SizedBox(height: 4.h),
-                    CustomText(
-                      text: "Favorite Quote",
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF4B4B4B),
-                    ),
-                    SizedBox(height: 10.h),
-                    CustomText(
-                      maxLines: 2,
-                      textAlign: TextAlign.start,
-                      text:
-                          "“Discipline is the bridge between goals and accomplishments.”",
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.black87,
-                    ),
-                    SizedBox(height: 8.h),
-                    CustomButtonWidget(
-                      btnText: 'Edit',
-                      onTap: () {
-                        Get.to(() => EditProfileView());
-                        // Get.to(() => EditGymDetailsScreen());
-                      },
-                      iconWant: false,
-                      btnColor: Colors.white,
-                      btnTextColor: AppColors.mainColor,
-                      borderColor: AppColors.mainColor,
-                    ),
-                  ],
-                ),
-              ),
+
+              UserInfoCard(),
 
               SizedBox(height: 20.h),
               Padding(
@@ -214,7 +142,6 @@ class ProfileView extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 12.h),
-
               // Recent Event Results
               EventCard(
                 title: "IBJJF World Championships 2024",
@@ -223,7 +150,6 @@ class ProfileView extends StatelessWidget {
                 location: "Buffalo, New York",
                 medalText: "GOLD",
               ),
-
               // Others Section
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -292,142 +218,187 @@ class ProfileView extends StatelessWidget {
     );
   }
 
-  void showLogoutDialog(BuildContext context, {VoidCallback? onConfirm}) {
-    final StorageService _storageService = Get.put(StorageService());
-
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Container(
-            width: 510,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  "Logout Account",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  "Are you sure you want to logout your account? Please confirm your decision.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black54,
-                    height: 1.4,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                const Divider(height: 1, color: Colors.black12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextButton(
-                        onPressed: () => Get.back(),
-                        child: const Text(
-                          "Cancel",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black87,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 40,
-                      width: 1,
-                      color: Colors.black12,
-                    ),
-                    Expanded(
-                      child: TextButton(
-                        onPressed: () async {
-                          await _storageService.remove('accessToken');
-
-                          Get.offAll(() => SignInView());
-
-                          CustomToast.showToast("Logout Successfully Done!");
-                        },
-                        child: Text(
-                          "Logout",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: AppColors.mainColor,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
+  // Helper Widgets
   Widget _infoTile(String iconPath, String title, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Image.asset(
-              iconPath,
-              height: 14.h,
-              width: 14.w,
-              fit: BoxFit.contain,
-            ),
-            SizedBox(width: 6.w),
-            CustomText(
-              text: title,
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w400,
-              color: Colors.grey.shade600,
-            ),
-          ],
-        ),
-        SizedBox(height: 4.h),
-        CustomText(
-          text: value,
-          fontSize: 14.sp,
-          fontWeight: FontWeight.w500,
-          color: Colors.black,
-        ),
-      ],
+    return Expanded(
+      child: Row(
+        children: [
+          Image.asset(iconPath, height: 18.h, width: 18.w),
+          SizedBox(width: 4.w),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomText(
+                text: title,
+                fontSize: 10.sp,
+                fontWeight: FontWeight.w500,
+                color: AppColors.pTextColors,
+              ),
+              CustomText(
+                text: value,
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
-  // ✅ Skill Chip
-  Widget _skillChip(String text) {
+  Widget _skillChip(String skill) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: BoxDecoration(
-        color: AppColors.mainColor,
-        borderRadius: BorderRadius.circular(20.r),
+        color: AppColors.mainColor.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(6.r),
       ),
       child: CustomText(
-        text: text,
-        fontSize: 12.sp,
+        text: skill,
+        fontSize: 10.sp,
         fontWeight: FontWeight.w500,
-        color: Colors.white,
+        color: AppColors.mainColor,
       ),
     );
   }
+}
+
+void showLogoutDialog(BuildContext context, {VoidCallback? onConfirm}) {
+  final StorageService _storageService = Get.put(StorageService());
+
+  showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder: (context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Container(
+          width: 510,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                "Logout Account",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                "Are you sure you want to logout your account? Please confirm your decision.",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black54,
+                  height: 1.4,
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Divider(height: 1, color: Colors.black12),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () => Get.back(),
+                      child: const Text(
+                        "Cancel",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 40,
+                    width: 1,
+                    color: Colors.black12,
+                  ),
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () async {
+                        await _storageService.remove('accessToken');
+
+                        Get.offAll(() => SignInView());
+
+                        CustomToast.showToast("Logout Successfully Done!");
+                      },
+                      child: Text(
+                        "Logout",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: AppColors.mainColor,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+Widget _infoTile(String iconPath, String title, String value) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        children: [
+          Image.asset(
+            iconPath,
+            height: 14.h,
+            width: 14.w,
+            fit: BoxFit.contain,
+          ),
+          SizedBox(width: 6.w),
+          CustomText(
+            text: title,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w400,
+            color: Colors.grey.shade600,
+          ),
+        ],
+      ),
+      SizedBox(height: 4.h),
+      CustomText(
+        text: value,
+        fontSize: 14.sp,
+        fontWeight: FontWeight.w500,
+        color: Colors.black,
+      ),
+    ],
+  );
+}
+
+// ✅ Skill Chip
+Widget _skillChip(String text) {
+  return Container(
+    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+    decoration: BoxDecoration(
+      color: AppColors.mainColor,
+      borderRadius: BorderRadius.circular(20.r),
+    ),
+    child: CustomText(
+      text: text,
+      fontSize: 12.sp,
+      fontWeight: FontWeight.w500,
+      color: Colors.white,
+    ),
+  );
 }
