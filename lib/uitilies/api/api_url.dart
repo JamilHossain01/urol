@@ -17,6 +17,13 @@ class ApiUrl {
           {required String searchTerm, required String limit}) =>
       "$baseUrl/users/unfriends?limit=$limit&searchTerm=$searchTerm";
 
+
+
+  static String myFriends(
+      {required String searchTerm}) =>
+      "$baseUrl/friends?searchTerm=$searchTerm";
+
+
   static String reviewStatistics({required String serviceId}) =>
       "$baseUrl/reviews/stats/$serviceId";
 

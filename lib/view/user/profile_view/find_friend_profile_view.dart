@@ -25,6 +25,7 @@ class FindProfileView extends StatelessWidget {
   final String? eventBadge;
   final String? eventName;
   final dynamic eventStatus;
+  final bool statusOfFollow;
 
   const FindProfileView({
     super.key,
@@ -44,6 +45,7 @@ class FindProfileView extends StatelessWidget {
     this.eventBadge,
     this.eventName,
     this.eventStatus,
+    required this.statusOfFollow,
   });
 
   @override
@@ -276,7 +278,6 @@ class FindProfileView extends StatelessWidget {
     );
   }
 
-  // Common Small UI Components
   Widget _infoTile(String icon, String title, String value) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
