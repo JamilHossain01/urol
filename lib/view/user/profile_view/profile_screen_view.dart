@@ -88,8 +88,8 @@ class _ProfileViewState extends State<ProfileView> {
                     : ProfileHeaderWithBelt(
                         imageUrl: _getProfileController
                                 .profile.value.data?.image
-                                .toString() ??
-                            "",
+                                ?.toString() ??
+                            "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
                         name: fullName,
                         beltRank: _getProfileController
                                 .profile.value.data?.beltRank
@@ -108,7 +108,7 @@ class _ProfileViewState extends State<ProfileView> {
                 } else {
                   final data = _getProfileController.profile.value.data;
                   return UserInfoCard(
-                    homeGym: data?.homeGym ?? "",
+                    homeGym: data?.homeGym ?? "N/A",
                     height: data?.height?.amount?.toString() ?? "",
                     weight: (() {
                       final weightStr = data?.weight?.toString() ?? "";
@@ -117,7 +117,7 @@ class _ProfileViewState extends State<ProfileView> {
                           .trim();
                     })(),
                     skills: data?.disciplines ?? [],
-                    favoriteQuote: data?.favouriteQuote ?? "",
+                    favoriteQuote: data?.favouriteQuote ?? "No quote added yet",
                   );
                 }
               }),

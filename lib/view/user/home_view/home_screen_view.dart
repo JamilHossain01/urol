@@ -61,13 +61,16 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                           return UserInfoSection(
                             name: fullName,
                             gymName: profileController
-                                .profile.value.data!.homeGym
-                                .toString(),
+                                    .profile.value.data?.homeGym
+                                    ?.toString() ??
+                                "N/A",
                             quote: profileController
-                                .profile.value.data!.favouriteQuote
-                                .toString(),
-                            image: profileController.profile.value.data!.image
-                                .toString(),
+                                    .profile.value.data?.favouriteQuote
+                                    ?.toString() ??
+                                "No quote added yet",
+                            image: profileController.profile.value.data?.image
+                                    ?.toString() ??
+                                "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
                             beltRank: profileController
                                     .profile.value.data?.beltRank
                                     .toString() ??

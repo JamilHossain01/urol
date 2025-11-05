@@ -9,9 +9,13 @@ class ApiUrl {
   static const String updateProfile = "$baseUrl/users/update-my-profile";
   static const String support = "$baseUrl/contacts/add";
   static const String changePassword = "$baseUrl/auth/change-password";
+  static const String addFriend = "$baseUrl/friends";
 
   // profile
   static const String profile = "$baseUrl/users/my-profile";
+  static String discoverFriends(
+          {required String searchTerm, required String limit}) =>
+      "$baseUrl/users/unfriends?limit=$limit&searchTerm=$searchTerm";
 
   static String reviewStatistics({required String serviceId}) =>
       "$baseUrl/reviews/stats/$serviceId";

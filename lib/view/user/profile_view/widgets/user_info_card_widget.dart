@@ -99,7 +99,6 @@ class UserInfoCard extends StatelessWidget {
             ],
           ),
 
-          SizedBox(height: 10.h),
 
           Divider(
             color: const Color(0xFF000000).withOpacity(0.10),
