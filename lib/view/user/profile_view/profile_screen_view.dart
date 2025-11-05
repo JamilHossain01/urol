@@ -91,9 +91,13 @@ class _ProfileViewState extends State<ProfileView> {
                                 .toString() ??
                             "",
                         name: fullName,
+                        beltRank: _getProfileController
+                                .profile.value.data?.beltRank
+                                .toString() ??
+                            "",
                       );
               }),
-              SizedBox(height: 20.h),
+              SizedBox(height: 10.h),
               // Home Gym Section
 
               Obx(() {

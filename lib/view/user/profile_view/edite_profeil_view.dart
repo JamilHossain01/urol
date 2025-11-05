@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:calebshirthum/uitilies/app_colors.dart';
+import 'package:calebshirthum/uitilies/custom_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -295,8 +296,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                             ? SizedBox(
                                 height: 20.h,
                                 width: 20.w,
-                                child: CircularProgressIndicator(
-                                    color: Colors.white, strokeWidth: 2))
+                                child: CustomLoader())
                             : CustomText(
                                 text: "Save",
                                 fontSize: 16.sp,
@@ -311,7 +311,7 @@ class _EditProfileViewState extends State<EditProfileView> {
               if (isLoading)
                 Container(
                     color: Colors.black54,
-                    child: Center(child: CircularProgressIndicator())),
+                    child: Center(child: CustomLoader())),
             ],
           );
         }),

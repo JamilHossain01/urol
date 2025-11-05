@@ -2,11 +2,14 @@ import 'package:calebshirthum/view/user/location_view/widgets/upload_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_app_bar_widget.dart';
 import '../../../common widget/custom_button_widget.dart';
 import '../../../common widget/custom_text_filed.dart';
+import '../../../common widget/success_screen_widget.dart';
 import '../../../uitilies/app_colors.dart';
 
 class ContactScreen extends StatelessWidget {
@@ -66,12 +69,18 @@ class ContactScreen extends StatelessWidget {
               fillColor: AppColors.backRoudnColors,
               hintTextColor: AppColors.hintTextColors,
             ),
-
             SizedBox(height: 20.h),
-
             CustomButtonWidget(
               btnText: 'Save',
-              onTap: () {},
+              onTap: () {
+                Get.to(() => SuccessScreen(
+                      title: 'dgd',
+                      message: 'dgff',
+                      buttonText: 'dfgd',
+                      buttonColor: AppColors.mainColor,
+                      onPressed: () {},
+                    ));
+              },
               iconWant: false,
               btnColor: AppColors.mainColor,
             )

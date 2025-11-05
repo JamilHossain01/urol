@@ -31,6 +31,7 @@ class FindProfileView extends StatelessWidget {
               ProfileHeaderWithBelt(
                 imageUrl: AppImages.person,
                 name: 'Caleb Shirtum',
+                beltRank: '',
               ),
 
               SizedBox(height: 20.h),

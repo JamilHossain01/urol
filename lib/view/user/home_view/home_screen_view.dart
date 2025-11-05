@@ -60,7 +60,6 @@ class _HomeScreenViewState extends State<HomeScreenView> {
 
                           return UserInfoSection(
                             name: fullName,
-                            belt: "Purple Belt",
                             gymName: profileController
                                 .profile.value.data!.homeGym
                                 .toString(),
@@ -69,6 +68,10 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                 .toString(),
                             image: profileController.profile.value.data!.image
                                 .toString(),
+                            beltRank: profileController
+                                    .profile.value.data?.beltRank
+                                    .toString() ??
+                                "",
                           );
                         }
                       },
