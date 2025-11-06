@@ -70,32 +70,7 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
     super.dispose();
   }
 
-  void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-      final gymData = {
-        'gymName': _gymNameController.text,
-        'description': _descriptionController.text,
-        'streetAddress': _streetAddressController.text,
-        'city': _cityController.text,
-        'state': _stateController.text,
-        'zipCode': _zipCodeController.text,
-        'phone': _phoneController.text,
-        'email': _emailController.text,
-        'website': _websiteController.text,
-        'facebook': _facebookController.text,
-        'instagram': _instagramController.text,
-        'schedule': {
-          'day': _selectedDay,
-          'startTime': _startTime,
-          'endTime': _endTime
-        },
-        'disciplines': _selectedDisciplines,
-      };
-      print('Gym Data: $gymData');
-      // Add API call or data persistence logic here
-      // Example: await ApiService.updateGym(gymData);
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +147,7 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
               ),
               CustomButtonWidget(
                 btnText: 'Save',
-                onTap: _submitForm,
+                onTap: (){},
                 iconWant: false,
                 btnColor: AppColors.mainColor,
               ),

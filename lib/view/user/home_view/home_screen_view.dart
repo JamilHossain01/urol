@@ -10,7 +10,9 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import '../../../common widget/custom text/custom_text_widget.dart';
+import '../../../common widget/custom_date_format.dart';
 import '../../../uitilies/app_images.dart';
+import '../../../uitilies/custom_loader.dart';
 import '../profile_view/widgets/event_card.dart';
 import 'controller/my_profile_controller.dart';
 
@@ -151,13 +153,29 @@ class _HomeScreenViewState extends State<HomeScreenView> {
               ),
             ),
             SizedBox(height: 10.h),
-            EventCard(
-                showCompetition: false,
-                title: "IBJJF World Championships 2024",
-                date: "March 15, 2025",
-                division: "NoGi Absolute",
-                location: "Buffalo, New York",
-                medalText: "GOLD"),
+            if (profileController.profile.value.data?.competition != null)
+              Obx(() {
+                return profileController.isLoading.value == true
+                    ? CustomLoader()
+                    : EventCard(
+                        title: profileController
+                                .profile.value.data?.competition?.eventName ??
+                            "",
+                        date: CustomDateFormatter.formatDate(profileController
+                                .profile.value.data?.competition?.eventDate
+                                .toString() ??
+                            ""),
+                        division: profileController
+                                .profile.value.data?.competition?.division ??
+                            "",
+                        location: profileController
+                                .profile.value.data?.competition?.city ??
+                            "",
+                        medalText: profileController
+                                .profile.value.data?.competition?.result ??
+                            "",
+                      );
+              }),
             SizedBox(height: 10.h),
           ],
         ),
