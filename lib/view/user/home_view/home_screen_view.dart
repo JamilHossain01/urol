@@ -158,6 +158,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                 return profileController.isLoading.value == true
                     ? CustomLoader()
                     : EventCard(
+                        showCompetition: false,
                         title: profileController
                                 .profile.value.data?.competition?.eventName ??
                             "",

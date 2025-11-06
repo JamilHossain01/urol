@@ -1,19 +1,18 @@
+import 'dart:io';
+import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/app_images.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-
+import 'package:image_picker/image_picker.dart';
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_app_bar_widget.dart';
 import '../../../common widget/custom_button_widget.dart';
 import '../../../common widget/custom_text_filed.dart';
 import '../../../common widget/dot_border_container.dart';
-import '../../../uitilies/app_colors.dart';
 import 'widgets/basic_info_widget.dart';
 import 'widgets/contact_info_widget.dart';
 import 'widgets/disciplines_widget.dart';
-import 'widgets/image_upload_widget.dart';
 import 'widgets/location_widget.dart';
 import 'widgets/open_mat_schedule_widget.dart';
 
@@ -27,6 +26,7 @@ class AddYourGymDetailsScreen extends StatefulWidget {
 
 class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
   final _formKey = GlobalKey<FormState>();
+
   final _gymNameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _streetAddressController = TextEditingController();
@@ -38,9 +38,9 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
   final _websiteController = TextEditingController();
   final _facebookController = TextEditingController();
   final _instagramController = TextEditingController();
-  String? _selectedDay;
-  String? _startTime;
-  String? _endTime;
+
+  List<File> _selectedImages = [];
+
   final List<String> _days = [
     'Monday',
     'Tuesday',
@@ -50,9 +50,28 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
     'Saturday',
     'Sunday'
   ];
+
   final List<String> _times = ['12:30 PM', '1:00 PM', '2:30 PM', '3:00 PM'];
 
+  List<Map<String, String?>> openMatSchedules = [
+    {'day': null, 'start': null, 'end': null}
+  ];
+
+  List<Map<String, String?>> classSchedules = [
+    {'day': null, 'start': null, 'end': null}
+  ];
+
   List<String> _selectedDisciplines = [];
+
+  Future<void> _pickImages() async {
+    final picker = ImagePicker();
+    final images = await picker.pickMultiImage();
+    if (images.isNotEmpty) {
+      setState(() {
+        _selectedImages.addAll(images.map((e) => File(e.path)).toList());
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -70,8 +89,6 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,18 +104,71 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ImageUploadWidget(),
+              /// Image picker section
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  ..._selectedImages.map((img) => Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.file(img,
+                                height: 80, width: 80, fit: BoxFit.cover),
+                          ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _selectedImages.remove(img);
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black54,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(Icons.close,
+                                    size: 16, color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                  GestureDetector(
+                    onTap: _pickImages,
+                    child: Container(
+                      height: 80,
+                      width: 80,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      child: const Icon(Icons.add_a_photo_outlined),
+                    ),
+                  ),
+                ],
+              ),
               Gap(8.h),
+
+              /// Basic info
               BasicInfoWidget(
                 gymNameController: _gymNameController,
                 descriptionController: _descriptionController,
               ),
+
+              /// Location
               LocationWidget(
                 streetAddressController: _streetAddressController,
                 cityController: _cityController,
                 stateController: _stateController,
                 zipCodeController: _zipCodeController,
               ),
+
+              /// Contact info
               ContactInfoWidget(
                 phoneController: _phoneController,
                 emailController: _emailController,
@@ -106,37 +176,77 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
                 facebookController: _facebookController,
                 instagramController: _instagramController,
               ),
-              OpenMatScheduleWidget(
-                addCC: 'Add More Days',
-                selectedDay: _selectedDay,
-                startTime: _startTime,
-                endTime: _endTime,
-                days: _days,
-                times: _times,
-                onDayChanged: (value) => setState(() => _selectedDay = value),
-                onStartTimeChanged: (value) =>
-                    setState(() => _startTime = value),
-                onEndTimeChanged: (value) => setState(() => _endTime = value),
-                onAddMoreDays: () {
-                  print("Add More Days tapped");
-                },
-              ),
-              OpenMatScheduleWidget(
-                showClassField: true,
-                selectedDay: _selectedDay,
-                startTime: _startTime,
-                endTime: _endTime,
-                days: _days,
-                times: _times,
-                onDayChanged: (value) => setState(() => _selectedDay = value),
-                onStartTimeChanged: (value) =>
-                    setState(() => _startTime = value),
-                onEndTimeChanged: (value) => setState(() => _endTime = value),
-                onAddMoreDays: () {
-                  // Implement logic to add more schedules
-                  print("Add More Days tapped");
-                },
-              ),
+
+              /// Dynamic Open Mat Schedule section
+              ...openMatSchedules.asMap().entries.map((entry) {
+                int index = entry.key;
+                var item = entry.value;
+
+                return OpenMatScheduleWidget(
+                  addCC: index == openMatSchedules.length - 1
+                      ? 'Add More Days'
+                      : null,
+                  selectedDay: item['day'],
+                  startTime: item['start'],
+                  endTime: item['end'],
+                  days: _days,
+                  times: _times,
+                  onDayChanged: (value) {
+                    setState(() => openMatSchedules[index]['day'] = value);
+                  },
+                  onStartTimeChanged: (value) {
+                    setState(() => openMatSchedules[index]['start'] = value);
+                  },
+                  onEndTimeChanged: (value) {
+                    setState(() => openMatSchedules[index]['end'] = value);
+                  },
+                  onAddMoreDays: () {
+                    setState(() {
+                      openMatSchedules
+                          .add({'day': null, 'start': null, 'end': null});
+                    });
+                  },
+                  onRemove: openMatSchedules.length > 1
+                      ? () {
+                          setState(() {
+                            openMatSchedules.removeAt(index);
+                          });
+                        }
+                      : null,
+                );
+              }),
+
+              /// dynamic class schedule section
+              ...classSchedules.asMap().entries.map((entry) {
+                int index = entry.key;
+                var item = entry.value;
+
+                return OpenMatScheduleWidget(
+                  showClassField: true,
+                  addCC: index == classSchedules.length - 1
+                      ? 'Add More Classes'
+                      : null,
+                  selectedDay: item['day'],
+                  startTime: item['start'],
+                  endTime: item['end'],
+                  days: _days,
+                  times: _times,
+                  name: item['name'],
+                  onDayChanged: (value) =>
+                      setState(() => classSchedules[index]['day'] = value),
+                  onStartTimeChanged: (value) =>
+                      setState(() => classSchedules[index]['start'] = value),
+                  onEndTimeChanged: (value) =>
+                      setState(() => classSchedules[index]['end'] = value),
+                  onAddMoreDays: () => setState(() => classSchedules.add(
+                      {'day': null, 'start': null, 'end': null, 'name': null})),
+                  onRemove: classSchedules.length > 1
+                      ? () => setState(() => classSchedules.removeAt(index))
+                      : null,
+                );
+              }),
+
+              /// Disciplines
               DisciplinesWidget(
                 selectedDisciplines: _selectedDisciplines,
                 onSelectionChanged: (disciplines) {
@@ -145,9 +255,16 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
                   });
                 },
               ),
+
+              /// Save Button
               CustomButtonWidget(
                 btnText: 'Save',
-                onTap: (){},
+                onTap: () {
+                  if (_formKey.currentState!.validate()) {
+                    debugPrint("Form Valid — Ready to Submit");
+                    debugPrint("Schedules: $openMatSchedules");
+                  }
+                },
                 iconWant: false,
                 btnColor: AppColors.mainColor,
               ),
