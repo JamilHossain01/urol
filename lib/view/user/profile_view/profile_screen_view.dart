@@ -126,60 +126,61 @@ class _ProfileViewState extends State<ProfileView> {
 
               SizedBox(height: 20.h),
 
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        SizedBox(
-                          child: Image.asset(
-                            AppImages.cup,
-                            height: 14.h,
-                            width: 14.w,
+              if (_getProfileController.profile.value.data?.competition != null)
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          SizedBox(
+                            child: Image.asset(
+                              AppImages.cup,
+                              height: 14.h,
+                              width: 14.w,
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 5.w,
-                        ),
-                        CustomText(
-                          text: "Recent Event Results",
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ],
-                    ),
-                  ],
+                          SizedBox(
+                            width: 5.w,
+                          ),
+                          CustomText(
+                            text: "Recent Event Results",
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
 
               SizedBox(height: 12.h),
-
-              Obx(() {
-                return _getProfileController.isLoading.value == true
-                    ? CustomLoader()
-                    : EventCard(
-                        title: _getProfileController
-                                .profile.value.data?.competition?.eventName ??
-                            "",
-                        date: CustomDateFormatter.formatDate(
-                            _getProfileController
-                                    .profile.value.data?.competition?.eventDate
-                                    .toString() ??
-                                ""),
-                        division: _getProfileController
-                                .profile.value.data?.competition?.division ??
-                            "",
-                        location: _getProfileController
-                                .profile.value.data?.competition?.city ??
-                            "",
-                        medalText: _getProfileController
-                                .profile.value.data?.competition?.result ??
-                            "",
-                      );
-              }),
+              if (_getProfileController.profile.value.data?.competition != null)
+                Obx(() {
+                  return _getProfileController.isLoading.value == true
+                      ? CustomLoader()
+                      : EventCard(
+                          title: _getProfileController
+                                  .profile.value.data?.competition?.eventName ??
+                              "",
+                          date: CustomDateFormatter.formatDate(
+                              _getProfileController.profile.value.data
+                                      ?.competition?.eventDate
+                                      .toString() ??
+                                  ""),
+                          division: _getProfileController
+                                  .profile.value.data?.competition?.division ??
+                              "",
+                          location: _getProfileController
+                                  .profile.value.data?.competition?.city ??
+                              "",
+                          medalText: _getProfileController
+                                  .profile.value.data?.competition?.result ??
+                              "",
+                        );
+                }),
 
               // Others Section
               Padding(

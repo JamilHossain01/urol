@@ -10,6 +10,7 @@ class ApiUrl {
   static const String support = "$baseUrl/contacts/add";
   static const String changePassword = "$baseUrl/auth/change-password";
   static const String addFriend = "$baseUrl/friends";
+  static const String competition = "$baseUrl/users/competition";
 
   // profile
   static const String profile = "$baseUrl/users/my-profile";
