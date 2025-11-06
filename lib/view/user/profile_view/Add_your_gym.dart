@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:calebshirthum/uitilies/app_colors.dart';
-import 'package:calebshirthum/uitilies/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -8,7 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_app_bar_widget.dart';
 import '../../../common widget/custom_button_widget.dart';
-import '../../../common widget/custom_text_filed.dart';
 import '../../../common widget/dot_border_container.dart';
 import 'widgets/basic_info_widget.dart';
 import 'widgets/contact_info_widget.dart';
@@ -104,54 +102,68 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              CustomText(
+                text: "Upload Images",
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w600,
+                color: AppColors.mainTextColors,
+              ),
+
+              SizedBox(height: 10),
+
               /// Image picker section
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: [
                   ..._selectedImages.map((img) => Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.file(img,
-                                height: 80, width: 80, fit: BoxFit.cover),
-                          ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _selectedImages.remove(img);
-                                });
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.black54,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(Icons.close,
-                                    size: 16, color: Colors.white),
-                              ),
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: DottedBorderBox(
+                          height: 80,
+                          width: 80,
+                          borderRadius: 10,
+                          borderColor: Colors.grey,
+                          borderWidth: 2,
+                          child: Image.file(img, fit: BoxFit.cover),
+                        ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedImages.remove(img);
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black54,
+                              shape: BoxShape.circle,
                             ),
+                            child: const Icon(Icons.close, size: 16, color: Colors.white),
                           ),
-                        ],
-                      )),
+                        ),
+                      ),
+                    ],
+                  )),
                   GestureDetector(
                     onTap: _pickImages,
-                    child: Container(
-                      height: 80,
-                      width: 80,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.grey),
-                      ),
-                      child: const Icon(Icons.add_a_photo_outlined),
+                    child: DottedBorderBox(
+                      height: 70,
+                      width: 130,
+                      borderRadius: 10,
+                      borderColor: Colors.grey.withOpacity(0.4),
+                      borderWidth: 2,
+                      icon: Icons.add_a_photo_outlined,
+                      iconColor: Colors.grey,
                     ),
                   ),
                 ],
               ),
+
               Gap(8.h),
 
               /// Basic info
