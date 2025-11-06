@@ -27,6 +27,17 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   final GetProfileController profileController =
       Get.put(GetProfileController());
 
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    profileController.getProfileController();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,49 +188,10 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                             "",
                       );
               }),
-            SizedBox(height: 10.h),
+            SizedBox(height: 20.h),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _eventInfo(String title, String value, String iconPath) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Image.asset(
-              iconPath,
-              height: 14.h,
-              width: 14.w,
-              fit: BoxFit.contain,
-            ),
-            SizedBox(width: 6.w),
-            CustomText(
-              text: title,
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w400,
-              color: Colors.grey.shade600,
-            ),
-          ],
-        ),
-        SizedBox(height: 4.h),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
-          decoration: BoxDecoration(
-            color: Color(0xFFE9E9E9),
-            borderRadius: BorderRadius.circular(20.r),
-          ),
-          child: CustomText(
-            text: value,
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF686868),
-          ),
-        ),
-      ],
     );
   }
 }
