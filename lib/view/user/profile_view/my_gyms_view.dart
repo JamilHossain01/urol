@@ -1,18 +1,16 @@
-import 'package:calebshirthum/common%20widget/comon_conatainer/custom_conatiner.dart';
 import 'package:calebshirthum/common%20widget/custom_app_bar_widget.dart';
+import 'package:calebshirthum/common%20widget/custom%20text/custom_text_widget.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
-import 'package:calebshirthum/uitilies/app_images.dart';
+import 'package:calebshirthum/uitilies/custom_loader.dart';
+import 'package:calebshirthum/view/user/location_view/widgets/gym_preview_card.dart';
 import 'package:calebshirthum/view/user/profile_view/controller/my_gym_controller.dart';
 import 'package:calebshirthum/view/user/profile_view/save_gyms_details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
-import '../../../common widget/custom text/custom_text_widget.dart';
-import '../location_view/gym_details_view.dart';
-import '../location_view/location_screen_view.dart';
-import '../location_view/widgets/gym_preview_card.dart';
+import '../../../common widget/not_found_widget.dart';
+import 'controller/delete_gym_controller.dart';
 
 class MyGymsView extends StatefulWidget {
   const MyGymsView({super.key});
@@ -22,70 +20,69 @@ class MyGymsView extends StatefulWidget {
 }
 
 class _MyGymsViewState extends State<MyGymsView> {
-
-
-
   final MyGymController _myGymController = Get.put(MyGymController());
+  final DeleteGymController _deleteGymController = Get.put(DeleteGymController());
 
-
-  // Dummy list of gyms
-  final List<Map<String, String>> gymList = List.generate(
-    7,
-        (index) => {
-      'gymName': 'GymNation Stars',
-      'location': '6157 Rd, California, USA',
-      'image': AppImages.gym1, // Use your own image paths here
-      'categories': 'Open Mat, BJJ, MMA', // Categories
-    },
-  );
+  @override
+  void initState() {
+    super.initState();
+    _myGymController.getMyGyms();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors.backRoudnColors,
-        appBar: CustomAppBar(title: 'My Gyms',        showLeadingIcon: true,
-        ),
-        body: ListView.builder(
-          // scrollDirection: Axis.vertical,
-          itemCount: gymList.length,
+      backgroundColor: AppColors.backRoudnColors,
+      appBar: const CustomAppBar(
+        title: 'My Gyms',
+        showLeadingIcon: true,
+      ),
+      body: Obx(() {
+        if (_myGymController.isLoading.value) {
+          return  CustomLoader();
+        }
+
+        final gyms = _myGymController.gums.value.data ?? [];
+
+        if (gyms.isEmpty) {
+          return Center(
+              child: NotFoundWidget(
+                imagePath: "assets/images/not_found.png",
+                message: "No Gym found!",
+              ));
+        }
+
+        return ListView.builder(
+          itemCount: gyms.length,
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           itemBuilder: (context, index) {
-            final gym = gymList[index];
+            final gym = gyms[index];
+
+            final imageUrl = (gym.images.isNotEmpty && gym.images.first.url != null)
+                ? gym.images.first.url!
+                : "https://via.placeholder.com/300x200.png?text=No+Image";
+
             return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 16),
+              padding: const EdgeInsets.symmetric(vertical: 5),
               child: GestureDetector(
-                onTap: (){
-                  Get.to(()=>SaveGymDetailsScreen());
+                onTap: () {
+                  Get.to(() => SaveGymDetailsScreen());
                 },
                 child: GymPreviewCard(
+                  delete: (){
+                    _deleteGymController.deleteGyms(gymId: gym.id.toString());
+                  },
                   showEditDelete: true,
-                  gymName: gym['gymName']!,
-                  location: gym['location']!,
-                  image: gym['image']!,
-                  categories: gym['categories']!.split(', '),
+                  gymName: gym.name ?? "Unnamed Gym",
+                  location: "${gym.city ?? ''}, ${gym.state ?? ''}",
+                  image: imageUrl,
+                  categories: gym.disciplines,
                 ),
               ),
             );
           },
-        ));
-  }
-
-  Widget _buildActivityButton(String text) {
-    return ElevatedButton(
-      onPressed: () {},
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFF000000).withOpacity(0.094),
-        foregroundColor: Colors.black,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      ),
-      child: CustomText(
-        text: text,
-        fontSize: 11.sp,
-        fontWeight: FontWeight.w500,
-        color: Color(0xFF686868),
-      ),
+        );
+      }),
     );
   }
 }

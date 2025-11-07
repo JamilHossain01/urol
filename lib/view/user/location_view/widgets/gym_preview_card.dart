@@ -13,6 +13,7 @@ class GymPreviewCard extends StatelessWidget {
   final String image, gymName, location;
   final List<String> categories;
   final bool showEditDelete;
+  final VoidCallback? delete;
 
   const GymPreviewCard({
     Key? key,
@@ -21,6 +22,7 @@ class GymPreviewCard extends StatelessWidget {
     required this.location,
     required this.categories,
     this.showEditDelete = false,
+     this.delete,
   }) : super(key: key);
 
   @override
@@ -45,7 +47,7 @@ class GymPreviewCard extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(8.r),
-                child: Image.asset(
+                child: Image.network(
                   image,
                   height: 120.h,
                   width: double.infinity,
@@ -53,7 +55,6 @@ class GymPreviewCard extends StatelessWidget {
                 ),
               ),
               if (showEditDelete) ...[
-                // Conditionally show the icons row on image
                 Positioned(
                   top: 8.h,
                   right: 8.w,
@@ -78,9 +79,9 @@ class GymPreviewCard extends StatelessWidget {
                       ),
                       SizedBox(width: 8.w),
                       GestureDetector(
-                        onTap: () {
-                          // TODO: Handle delete action
-                        },
+                        onTap:
+                        delete
+                        ,
                         child: Container(
                           padding: EdgeInsets.all(4.w),
                           decoration: BoxDecoration(

@@ -77,7 +77,7 @@ class BaseClient {
 
     var headers = {
       'Accept': 'application/json',
-      "Authorization": "$accessToken"
+      "Authorization": "Bearer $accessToken"
     };
 
     http.Response response =

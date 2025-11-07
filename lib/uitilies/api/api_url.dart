@@ -22,6 +22,13 @@ class ApiUrl {
 
 
 
+  static String deleteGym(
+      {required String gymId}) =>
+      "$baseUrl/gyms/$gymId";
+
+
+
+
   static String myFriends(
       {required String searchTerm}) =>
       "$baseUrl/friends?searchTerm=$searchTerm";
