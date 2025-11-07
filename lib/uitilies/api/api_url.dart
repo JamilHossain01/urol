@@ -20,25 +20,20 @@ class ApiUrl {
           {required String searchTerm, required String limit}) =>
       "$baseUrl/users/unfriends?limit=$limit&searchTerm=$searchTerm";
 
+  static String allEvent(
+          {required String searchTerm,
+          required String type,
+          required String state,
+          required String city}) =>
+      "$baseUrl/events?searchTerm=$searchTerm&type=$type&state=$state&city=$city&limit=99999999";
 
+  static String deleteGym({required String gymId}) => "$baseUrl/gyms/$gymId";
 
-  static String deleteGym(
-      {required String gymId}) =>
-      "$baseUrl/gyms/$gymId";
-
-
-
-
-  static String myFriends(
-      {required String searchTerm}) =>
+  static String myFriends({required String searchTerm}) =>
       "$baseUrl/friends?searchTerm=$searchTerm";
 
-
-  static String unFriend(
-      {required String friendId}) =>
+  static String unFriend({required String friendId}) =>
       "$baseUrl/friends/unfolow/$friendId";
-
-
 
   static String reviewStatistics({required String serviceId}) =>
       "$baseUrl/reviews/stats/$serviceId";

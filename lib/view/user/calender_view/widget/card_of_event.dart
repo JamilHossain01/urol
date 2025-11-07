@@ -61,7 +61,7 @@ class CardOfEvent extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8),
-                  child: Image.asset(
+                  child: Image.network(
                     image,
                     height: 120.h,
                     width: 70.w,

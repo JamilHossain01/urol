@@ -19,15 +19,9 @@ class SearchBarWithFilter extends StatelessWidget {
         Expanded(
           child: Container(
             decoration: BoxDecoration(
-              color: backgroundColor ?? Colors.white, // 👈 use optional color
+              color: backgroundColor ?? Colors.white,
               borderRadius: BorderRadius.circular(12.r),
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: Colors.black12.withOpacity(0.05),
-              //     blurRadius: 6,
-              //     offset: const Offset(0, 2),
-              //   ),
-              // ],
+
             ),
             child: TextField(
               decoration: InputDecoration(

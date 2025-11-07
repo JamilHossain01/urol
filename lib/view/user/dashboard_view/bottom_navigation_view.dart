@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_final_fields, prefer_const_constructors
 
 import 'package:calebshirthum/uitilies/app_images.dart';
-import 'package:calebshirthum/view/user/calender_view/calender_screen_view.dart';
+import 'package:calebshirthum/view/user/calender_view/event_screen.dart';
 import 'package:calebshirthum/view/user/home_view/home_screen_view.dart';
 import 'package:calebshirthum/view/user/profile_view/profile_screen_view.dart';
 import 'package:flutter/material.dart';
