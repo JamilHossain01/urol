@@ -2,6 +2,7 @@ import 'package:calebshirthum/common%20widget/comon_conatainer/custom_conatiner.
 import 'package:calebshirthum/common%20widget/custom_app_bar_widget.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/app_images.dart';
+import 'package:calebshirthum/view/user/profile_view/controller/my_gym_controller.dart';
 import 'package:calebshirthum/view/user/profile_view/save_gyms_details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,6 +22,12 @@ class MyGymsView extends StatefulWidget {
 }
 
 class _MyGymsViewState extends State<MyGymsView> {
+
+
+
+  final MyGymController _myGymController = Get.put(MyGymController());
+
+
   // Dummy list of gyms
   final List<Map<String, String>> gymList = List.generate(
     7,
