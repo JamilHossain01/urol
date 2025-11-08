@@ -74,7 +74,11 @@ class _EditGymDetailsScreenState extends State<EditGymDetailsScreen> {
         'website': _websiteController.text,
         'facebook': _facebookController.text,
         'instagram': _instagramController.text,
-        'schedule': {'day': _selectedDay, 'startTime': _startTime, 'endTime': _endTime},
+        'schedule': {
+          'day': _selectedDay,
+          'startTime': _startTime,
+          'endTime': _endTime
+        },
         'disciplines': _selectedDisciplines,
       };
       print('Gym Data: $gymData');
@@ -87,7 +91,9 @@ class _EditGymDetailsScreenState extends State<EditGymDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backRoudnColors,
-      appBar: CustomAppBar(title: "Add Gym",        showLeadingIcon: true,
+      appBar: CustomAppBar(
+        title: "Add Gym",
+        showLeadingIcon: true,
       ),
       body: Form(
         key: _formKey,
@@ -96,7 +102,6 @@ class _EditGymDetailsScreenState extends State<EditGymDetailsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ImageUploadWidget(),
               BasicInfoWidget(
                 gymNameController: _gymNameController,
                 descriptionController: _descriptionController,
@@ -121,7 +126,8 @@ class _EditGymDetailsScreenState extends State<EditGymDetailsScreen> {
                 days: _days,
                 times: _times,
                 onDayChanged: (value) => setState(() => _selectedDay = value),
-                onStartTimeChanged: (value) => setState(() => _startTime = value),
+                onStartTimeChanged: (value) =>
+                    setState(() => _startTime = value),
                 onEndTimeChanged: (value) => setState(() => _endTime = value),
                 onAddMoreDays: () {
                   // Implement logic to add more schedules
@@ -138,12 +144,11 @@ class _EditGymDetailsScreenState extends State<EditGymDetailsScreen> {
                 iconColor: Color(0xFF989898),
                 text: "Add More Classes",
                 fontSize: 14,
-                textColor:  Color(0xFF989898),
+                textColor: Color(0xFF989898),
                 direction: DottedBoxDirection.row,
                 spacing: 8,
               ),
               SizedBox(height: 10.h),
-
               DisciplinesWidget(
                 selectedDisciplines: _selectedDisciplines,
                 onSelectionChanged: (disciplines) {
@@ -152,11 +157,7 @@ class _EditGymDetailsScreenState extends State<EditGymDetailsScreen> {
                   });
                 },
               ),
-
               SizedBox(height: 20.h),
-
-
-
               CustomButtonWidget(
                 btnText: 'Save',
                 onTap: _submitForm,

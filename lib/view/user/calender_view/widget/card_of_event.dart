@@ -33,6 +33,16 @@ class CardOfEvent extends StatelessWidget {
     required this.websiteRedirect,
   }) : super(key: key);
 
+
+  String _shortenLink(String link) {
+    if (link.length > 35) {
+      return '${link.substring(0, 35)}...';
+    }
+    return link;
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -105,7 +115,7 @@ class CardOfEvent extends StatelessWidget {
                     children: [
                       Expanded(
                         child: CustomText(
-                          text: title,
+                          text:  _shortenLink(title),
                           textAlign: TextAlign.start,
                           maxLines: 7,
                           overflow: TextOverflow.ellipsis,
@@ -204,19 +214,24 @@ class CardOfEvent extends StatelessWidget {
                     onTap: websiteRedirect,
                     child: Row(
                       children: [
-                        CustomText(
-                          text: link,
-                          fontSize: 10.sp,
-                          color: Color(0xFF1D52FF),
+                        Expanded(
+                          child: CustomText(
+                            textAlign: TextAlign.start,
+                            text: _shortenLink(link),
+                            fontSize: 10.sp,
+                            color: const Color(0xFF1D52FF),
+                            overflow: TextOverflow.ellipsis, // Ensures no overflow
+                          ),
                         ),
-                        Icon(
+                        const Icon(
                           Icons.arrow_forward,
                           size: 12,
                           color: Color(0xFF1D52FF),
-                        )
+                        ),
                       ],
                     ),
                   ),
+
                 ],
               ),
             ),

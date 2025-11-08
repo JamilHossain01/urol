@@ -13,6 +13,7 @@ class ApiUrl {
   static const String competition = "$baseUrl/users/competition";
   static const String addGym = "$baseUrl/gyms";
   static const String myGyms = "$baseUrl/gyms/my-gyms";
+  static const String addEvents = "$baseUrl/events";
 
   // profile
   static const String profile = "$baseUrl/users/my-profile";

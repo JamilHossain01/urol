@@ -7,30 +7,22 @@ import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../common widget/dot_border_container.dart';
 import '../../../../uitilies/app_colors.dart';
 
-class ImageUploadWidget extends StatefulWidget {
-  const ImageUploadWidget({Key? key}) : super(key: key);
+class ImageUploadWidget extends StatelessWidget {
+  final XFile? selectedImage;
+  final Function(XFile) onImagePicked;
 
-  @override
-  State<ImageUploadWidget> createState() => _ImageUploadWidgetState();
-}
+  const ImageUploadWidget({
+    Key? key,
+    required this.selectedImage,
+    required this.onImagePicked,
+  }) : super(key: key);
 
-class _ImageUploadWidgetState extends State<ImageUploadWidget> {
-  final List<File> _images = [];
-  final ImagePicker _picker = ImagePicker();
-
-  Future<void> _pickImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+  Future<void> _pickImage(BuildContext context) async {
+    final picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
-      setState(() {
-        _images.add(File(image.path));
-      });
+      onImagePicked(image);
     }
-  }
-
-  void _removeImage(int index) {
-    setState(() {
-      _images.removeAt(index);
-    });
   }
 
   @override
@@ -44,64 +36,28 @@ class _ImageUploadWidgetState extends State<ImageUploadWidget> {
           fontWeight: FontWeight.w500,
           color: AppColors.mainTextColors,
         ),
-
         SizedBox(height: 10.h),
-
-        // 🖼️ Image list + upload box
-        SizedBox(
-          height: 90.h,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: _images.length + 1,
-            separatorBuilder: (_, __) => SizedBox(width: 10.w),
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                // ➕ Upload button
-                return GestureDetector(
-                  onTap: _pickImage,
-                  child: DottedBorderBox(),
-                );
-              } else {
-                final imageFile = _images[index - 1];
-                return Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8.r),
-                      child: Image.file(
-                        imageFile,
-                        height: 90.h,
-                        width: 120.w,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Positioned(
-                      top: 4,
-                      right: 4,
-                      child: GestureDetector(
-                        onTap: () => _removeImage(index - 1),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.6),
-                            shape: BoxShape.circle,
-                          ),
-                          padding: EdgeInsets.all(2.w),
-                          child: const Icon(
-                            Icons.close,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }
-            },
+        GestureDetector(
+          onTap: () => _pickImage(context),
+          child: Container(
+            height: 90.h,
+            width: 120.w,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.r),
+              border: Border.all(color: Colors.grey),
+            ),
+            child: selectedImage != null
+                ? ClipRRect(
+              borderRadius: BorderRadius.circular(8.r),
+              child: Image.file(
+                File(selectedImage!.path),
+                fit: BoxFit.cover,
+              ),
+            )
+                : DottedBorderBox(),
           ),
         ),
       ],
     );
   }
 }
-
-

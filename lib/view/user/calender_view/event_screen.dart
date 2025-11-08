@@ -1,4 +1,5 @@
 import 'package:calebshirthum/common%20widget/custom%20text/custom_text_widget.dart';
+import 'package:calebshirthum/common%20widget/custom_elipse_text.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/custom_toast.dart';
 import 'package:calebshirthum/view/user/calender_view/controller/get_event_controller.dart';
@@ -138,11 +139,12 @@ class _EventScreenViewState extends State<EventScreenView> {
                     return CardOfEvent(
                       date:
                           "${event.date?.month ?? ''}/${event.date?.day ?? ''}\n${event.date?.year ?? ''}",
-                      title: event.name ?? "Unnamed Event",
+                      title: customEllipsisText(event.name ?? "Unnamed Event",
+                          wordLimit: 5),
                       org: event.type ?? "",
                       location:
                           "${event.city ?? ''}, ${event.state ?? ''}, ${event.venue ?? ''}",
-                      status: statusText, // ✅ dynamic based on event date
+                      status: statusText,
                       daysLeft: daysLeftText,
                       price: "\$${event.registrationFee?.toString() ?? '0'}",
                       link: event.eventWebsite ?? "No website",

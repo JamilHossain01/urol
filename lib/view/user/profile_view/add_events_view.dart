@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:calebshirthum/common%20widget/custom_app_bar_widget.dart';
 import 'package:calebshirthum/common%20widget/custom_button_widget.dart';
+import 'package:calebshirthum/uitilies/custom_loader.dart';
+import 'package:calebshirthum/uitilies/custom_toast.dart';
 import 'package:calebshirthum/view/user/profile_view/controller/add_event_controller.dart';
 import 'package:calebshirthum/view/user/profile_view/controller/my_gym_controller.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/image_upload_widget.dart';
@@ -36,7 +38,7 @@ class _AddEventsViewState extends State<AddEventsView> {
   final _stateController = TextEditingController();
   final _zipCodeController = TextEditingController();
   final _nameController = TextEditingController();
-  final _descriptionController = TextEditingController();
+  final _registrationController = TextEditingController();
   final _phoneController = TextEditingController();
   final _emailController = TextEditingController();
   final _websiteController = TextEditingController();
@@ -111,8 +113,14 @@ class _AddEventsViewState extends State<AddEventsView> {
             children: [
               Gap(10.h),
 
-              /// Image Picker
-              ImageUploadWidget(),
+              ImageUploadWidget(
+                selectedImage: selectedImage,
+                onImagePicked: (image) {
+                  setState(() {
+                    selectedImage = image;
+                  });
+                },
+              ),
 
               Gap(15.h),
 
@@ -239,7 +247,7 @@ class _AddEventsViewState extends State<AddEventsView> {
                   color: AppColors.textFieldNameColor),
               Gap(4.h),
               CustomTextField(
-                  controller: _nameController,
+                  controller: _websiteController,
                   hintText: "Enter website or ticket link",
                   showObscure: false,
                   fillColor: AppColors.backRoudnColors,
@@ -247,6 +255,26 @@ class _AddEventsViewState extends State<AddEventsView> {
                   maxLines: 1),
 
               SizedBox(height: 10.h),
+
+
+
+
+              /// Event Name
+              CustomText(
+                  text: "Registration Fee",
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textFieldNameColor),
+              Gap(4.h),
+              CustomTextField(
+                  controller: _registrationController,
+                  hintText: "if registration fee available provide here..",
+                  showObscure: false,
+                  fillColor: AppColors.backRoudnColors,
+                  hintTextColor: AppColors.hintTextColors,
+                  maxLines: 1),
+
+
 
               /// Location Picker
               LocationWidget(
@@ -336,37 +364,59 @@ class _AddEventsViewState extends State<AddEventsView> {
 
               SizedBox(height: 20.h),
 
-              /// Submit Button
-              CustomButtonWidget(
-                btnColor: AppColors.mainColor,
-                btnText: "Submit",
-                onTap: () {
-                  if (_nameController.text.isEmpty ||
-                      _descriptionController.text.isEmpty) {
-                    Get.snackbar("Error", "Please fill all required fields");
-                    return;
-                  }
+              Obx(() {
+                return _addEventController.isLoading.value
+                    ? CustomLoader()
+                    : CustomButtonWidget(
+                        btnColor: AppColors.mainColor,
+                        btnText: "Submit",
+                        onTap: () {
+                          if (_nameController.text.isEmpty ||
+                              selectedDate == null) {
+                            CustomToast.showToast(
+                                "Event name, date, and time are required",
+                                isError: true);
+                            return;
+                          }
 
-                  _addEventController.addEvent(
-                    name: _nameController.text,
-                    street: _streetAddressController.text,
-                    state: _stateController.text,
-                    city: _cityController.text,
-                    zipCode: _zipCodeController.text,
-                    phone: _phoneController.text,
-                    email: _emailController.text,
-                    website: _websiteController.text,
-                    type: selectedEventType ?? "Seminar",
-                    date: selectedDate != null
-                        ? selectedDate!.toIso8601String()
-                        : "",
-                    registrationFee: 0,
-                    image: File(selectedImage!.path),
-                    gymId: selectedGym.toString(),
-                  );
-                },
-                iconWant: false,
-              ),
+                          if (selectedImage == null) {
+                            CustomToast.showToast("Please select an image",
+                                isError: true);
+                            return;
+                          }
+
+                          if (selectedGym == null) {
+                            CustomToast.showToast("Please select a gym",
+                                isError: true);
+                            return;
+                          }
+
+                          // Format date as YYYY-MM-DD
+                          final formattedDate =
+                              "${selectedDate!.year.toString().padLeft(4, '0')}-"
+                              "${selectedDate!.month.toString().padLeft(2, '0')}-"
+                              "${selectedDate!.day.toString().padLeft(2, '0')}";
+
+
+                          _addEventController.addEvent(
+                            name: _nameController.text,
+                            street: _streetAddressController.text,
+                            state: _stateController.text,
+                            city: _cityController.text,
+                            zipCode: _zipCodeController.text,
+                            phone: _phoneController.text,
+                            email: _emailController.text,
+                            website: _websiteController.text,
+                            type: selectedEventType ?? "Seminar",
+                            date: formattedDate,
+                            registrationFee: _registrationController.text,
+                            image: File(selectedImage!.path),
+                            gymId: selectedGym.toString(),
+                          );
+                        },
+                        iconWant: false,
+                      );
+              }),
 
               SizedBox(height: 30.h),
             ],

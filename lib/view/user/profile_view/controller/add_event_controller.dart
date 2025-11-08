@@ -26,13 +26,13 @@ class AddEventController extends GetxController {
     required String website,
     required String type,
     required String date,
-    required double registrationFee,
-    required File? image, // Single image
+    required dynamic registrationFee,
+    required File? image,
   }) async {
     try {
       isLoading(true);
 
-      final uri = Uri.parse(ApiUrl.addGym);
+      final uri = Uri.parse(ApiUrl.addEvents);
       final storage = StorageService();
       final accessToken = storage.read<String>('accessToken');
 
@@ -59,7 +59,6 @@ class AddEventController extends GetxController {
 
       request.fields['data'] = jsonEncode(payload);
 
-      // Add single image if it exists
       if (image != null) {
         request.files
             .add(await http.MultipartFile.fromPath('image', image.path));
@@ -67,7 +66,7 @@ class AddEventController extends GetxController {
 
       print("📦 Gym Payload: ${jsonEncode(payload)}");
 
-      // ---- Send request --------------------------------------------------
+      // ---- Send request ------------------------------------------------
       print("🚀 Sending POST to $uri");
       final streamedResponse = await request.send();
       final responseBody = await streamedResponse.stream.bytesToString();
@@ -80,16 +79,17 @@ class AddEventController extends GetxController {
           streamedResponse.statusCode == 201) {
         CustomToast.showToast("Event added successfully!", isError: false);
 
-        // Navigate to SuccessScreen
         Get.offAll(() => SuccessScreen(
-          title: "Success",
-          message: "Your event has been added successfully.",
-          buttonText: "Back to Home",
-          onPressed: () {
-            Get.offAll(() => DashboardView());
-          },
-          buttonColor: AppColors.mainColor,
-        ));
+              title: "Success",
+              message: "Your event has been added successfully.\n\n"
+                  "You can find this event in the 'My Events' section, "
+                  "and it will also be visible to others on the events list.",
+              buttonText: "Back to Home",
+              onPressed: () {
+                Get.offAll(() => DashboardView());
+              },
+              buttonColor: AppColors.mainColor,
+            ));
       } else {
         Map<String, dynamic> errorData = {};
         try {
