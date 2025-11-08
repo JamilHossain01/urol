@@ -1,11 +1,14 @@
 import 'dart:io';
 import 'package:calebshirthum/common%20widget/custom_app_bar_widget.dart';
 import 'package:calebshirthum/common%20widget/custom_button_widget.dart';
+import 'package:calebshirthum/view/user/profile_view/controller/add_event_controller.dart';
+import 'package:calebshirthum/view/user/profile_view/controller/my_gym_controller.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/image_upload_widget.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/location_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../common widget/custom text/custom_text_widget.dart';
@@ -24,25 +27,26 @@ class _AddEventsViewState extends State<AddEventsView> {
   TimeOfDay? selectedTime;
   String? selectedGym;
   String? selectedEventType;
-  String? selectedState;
-  String? selectedCity;
-  String? zipCode;
-  XFile? selectedImage;
 
-  // Latitude & Longitude for LocationWidget
   double? _lat;
   double? _long;
 
-  // Controllers for LocationWidget
   final _streetAddressController = TextEditingController();
   final _cityController = TextEditingController();
   final _stateController = TextEditingController();
   final _zipCodeController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _websiteController = TextEditingController();
 
-  final _gyms = ['Gym 1', 'Gym 2', 'Gym 3', 'Gym 4'];
+  XFile? selectedImage;
+
   final _eventTypes = ['Seminar', 'Tournament'];
-  final _states = ['State 1', 'State 2', 'State 3'];
-  final _cities = ['City 1', 'City 2', 'City 3'];
+
+  final AddEventController _addEventController = Get.put(AddEventController());
+  final MyGymController _myGymController = Get.put(MyGymController());
 
   // Date Picker
   Future<void> _selectDate(BuildContext context) async {
@@ -72,17 +76,23 @@ class _AddEventsViewState extends State<AddEventsView> {
     }
   }
 
-  // Image Picker
   Future<void> _pickImage() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? pickedFile =
-    await _picker.pickImage(source: ImageSource.gallery);
+        await _picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       setState(() {
         selectedImage = pickedFile;
       });
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _myGymController.getMyGyms();
   }
 
   @override
@@ -103,6 +113,7 @@ class _AddEventsViewState extends State<AddEventsView> {
 
               /// Image Picker
               ImageUploadWidget(),
+
               Gap(15.h),
 
               /// Basic Info
@@ -114,52 +125,65 @@ class _AddEventsViewState extends State<AddEventsView> {
               ),
               SizedBox(height: 12.h),
 
-              /// Gym Dropdown
-              CustomText(
-                text: "Select Gym",
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textFieldNameColor,
-              ),
-              Gap(4.h),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                decoration: BoxDecoration(
-                  color: AppColors.backRoudnColors,
-                  borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(color: AppColors.hintTextColors),
-                ),
-                child: DropdownButtonFormField<String>(
-                  isExpanded: true,
-                  decoration: const InputDecoration(border: InputBorder.none),
-                  value: selectedGym,
-                  hint: CustomText(
-                    text: "Select Gym",
-                    fontSize: 14.sp,
-                    color: AppColors.hintTextColors,
-                  ),
-                  items: _gyms.map((gym) {
-                    return DropdownMenuItem<String>(
-                      value: gym,
-                      child: CustomText(
-                        text: gym,
-                        fontSize: 14.sp,
-                        color: AppColors.mainTextColors,
+              /// Replace _gyms list with controller's gyms
+              Obx(
+                () => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomText(
+                      text: "Select Gym",
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textFieldNameColor,
+                    ),
+                    Gap(4.h),
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                      decoration: BoxDecoration(
+                        color: AppColors.backRoudnColors,
+                        borderRadius: BorderRadius.circular(8.r),
+                        border: Border.all(color: AppColors.hintTextColors),
                       ),
-                    );
-                  }).toList(),
-                  onChanged: (val) => setState(() => selectedGym = val),
+                      child: DropdownButtonFormField<String>(
+                        isExpanded: true,
+                        decoration:
+                            const InputDecoration(border: InputBorder.none),
+                        value: selectedGym,
+                        hint: CustomText(
+                          text: "Select Gym",
+                          fontSize: 14.sp,
+                          color: AppColors.hintTextColors,
+                        ),
+                        items: _myGymController.gums.value.data
+                            ?.map((gym) => DropdownMenuItem<String>(
+                                  value: gym.id, // store gym ID
+                                  child: CustomText(
+                                    text: gym.name ?? '',
+                                    fontSize: 14.sp,
+                                    color: AppColors.mainTextColors,
+                                  ),
+                                ))
+                            .toList(),
+                        onChanged: (val) {
+                          setState(() {
+                            selectedGym = val;
+                          });
+                          print("Selected Gym ID: $val");
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 10.h),
 
               /// Event Type Dropdown
               CustomText(
-                text: "Select Event Type",
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textFieldNameColor,
-              ),
+                  text: "Select Event Type",
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textFieldNameColor),
               Gap(4.h),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
@@ -173,20 +197,18 @@ class _AddEventsViewState extends State<AddEventsView> {
                   decoration: const InputDecoration(border: InputBorder.none),
                   value: selectedEventType,
                   hint: CustomText(
-                    text: "Select Event Type",
-                    fontSize: 14.sp,
-                    color: AppColors.hintTextColors,
-                  ),
-                  items: _eventTypes.map((event) {
-                    return DropdownMenuItem<String>(
-                      value: event,
-                      child: CustomText(
-                        text: event,
-                        fontSize: 14.sp,
-                        color: AppColors.mainTextColors,
-                      ),
-                    );
-                  }).toList(),
+                      text: "Select Event Type",
+                      fontSize: 14.sp,
+                      color: AppColors.hintTextColors),
+                  items: _eventTypes
+                      .map((event) => DropdownMenuItem<String>(
+                            value: event,
+                            child: CustomText(
+                                text: event,
+                                fontSize: 14.sp,
+                                color: AppColors.mainTextColors),
+                          ))
+                      .toList(),
                   onChanged: (val) => setState(() => selectedEventType = val),
                 ),
               ),
@@ -194,40 +216,36 @@ class _AddEventsViewState extends State<AddEventsView> {
 
               /// Event Name
               CustomText(
-                text: "Event Name",
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textFieldNameColor,
-              ),
+                  text: "Event Name",
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textFieldNameColor),
               Gap(4.h),
               CustomTextField(
-                hintText: "Enter event name",
-                showObscure: false,
-                fillColor: AppColors.backRoudnColors,
-                hintTextColor: AppColors.hintTextColors,
-                maxLines: 1,
-                validator: (value) =>
-                value!.isEmpty ? "Event name is required" : null,
-              ),
+                  controller: _nameController,
+                  hintText: "Enter event name",
+                  showObscure: false,
+                  fillColor: AppColors.backRoudnColors,
+                  hintTextColor: AppColors.hintTextColors,
+                  maxLines: 1),
+
               SizedBox(height: 10.h),
 
-              /// Event Description
+              /// Event Name
               CustomText(
-                text: "Event Description",
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textFieldNameColor,
-              ),
+                  text: "Website Link",
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textFieldNameColor),
               Gap(4.h),
               CustomTextField(
-                hintText: "Enter event description",
-                showObscure: false,
-                fillColor: AppColors.backRoudnColors,
-                hintTextColor: AppColors.hintTextColors,
-                maxLines: 5,
-                validator: (value) =>
-                value!.isEmpty ? "Description is required" : null,
-              ),
+                  controller: _nameController,
+                  hintText: "Enter website or ticket link",
+                  showObscure: false,
+                  fillColor: AppColors.backRoudnColors,
+                  hintTextColor: AppColors.hintTextColors,
+                  maxLines: 1),
+
               SizedBox(height: 10.h),
 
               /// Location Picker
@@ -246,106 +264,13 @@ class _AddEventsViewState extends State<AddEventsView> {
                   debugPrint("Selected Lat: $lat, Lng: $long");
                 },
               ),
-              SizedBox(height: 10.h),
-
-              /// State & City
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 160.w,
-                    padding:
-                    EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                    decoration: BoxDecoration(
-                      color: AppColors.backRoudnColors,
-                      borderRadius: BorderRadius.circular(8.r),
-                      border: Border.all(color: AppColors.hintTextColors),
-                    ),
-                    child: DropdownButtonFormField<String>(
-                      isExpanded: true,
-                      decoration: const InputDecoration(border: InputBorder.none),
-                      value: selectedState,
-                      hint: CustomText(
-                        text: "State",
-                        fontSize: 14.sp,
-                        color: AppColors.hintTextColors,
-                      ),
-                      items: _states.map((state) {
-                        return DropdownMenuItem<String>(
-                          value: state,
-                          child: CustomText(
-                            text: state,
-                            fontSize: 14.sp,
-                            color: AppColors.mainTextColors,
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (val) => setState(() => selectedState = val),
-                    ),
-                  ),
-                  SizedBox(width: 10.w),
-                  Container(
-                    width: 160.w,
-                    padding:
-                    EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                    decoration: BoxDecoration(
-                      color: AppColors.backRoudnColors,
-                      borderRadius: BorderRadius.circular(8.r),
-                      border: Border.all(color: AppColors.hintTextColors),
-                    ),
-                    child: DropdownButtonFormField<String>(
-                      isExpanded: true,
-                      decoration: const InputDecoration(border: InputBorder.none),
-                      value: selectedCity,
-                      hint: CustomText(
-                        text: "City",
-                        fontSize: 14.sp,
-                        color: AppColors.hintTextColors,
-                      ),
-                      items: _cities.map((city) {
-                        return DropdownMenuItem<String>(
-                          value: city,
-                          child: CustomText(
-                            text: city,
-                            fontSize: 14.sp,
-                            color: AppColors.mainTextColors,
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (val) => setState(() => selectedCity = val),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 10.h),
-
-              /// Zip Code
-              CustomText(
-                text: "Zip Code",
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.mainTextColors,
-              ),
-              Gap(4.h),
-              CustomTextField(
-                controller: _zipCodeController,
-                hintText: "Enter Zip Code",
-                showObscure: false,
-                fillColor: AppColors.backRoudnColors,
-                hintTextColor: AppColors.hintTextColors,
-                maxLines: 1,
-                validator: (value) =>
-                value!.isEmpty ? "Zip Code is required" : null,
-              ),
-              SizedBox(height: 20.h),
 
               /// Date & Time
               CustomText(
-                text: "Date & Time",
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w600,
-                color: AppColors.mainTextColors,
-              ),
+                  text: "Date & Time",
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.mainTextColors),
               SizedBox(height: 10.h),
               Row(
                 children: [
@@ -366,7 +291,7 @@ class _AddEventsViewState extends State<AddEventsView> {
                             CustomText(
                               text: selectedDate == null
                                   ? "Select Date"
-                                  : "${selectedDate?.toLocal()}".split(' ')[0],
+                                  : "${selectedDate!.toLocal()}".split(' ')[0],
                               fontSize: 14.sp,
                               color: AppColors.hintTextColors,
                             ),
@@ -395,7 +320,7 @@ class _AddEventsViewState extends State<AddEventsView> {
                             CustomText(
                               text: selectedTime == null
                                   ? "Select Time"
-                                  : "${selectedTime?.format(context)}",
+                                  : selectedTime!.format(context),
                               fontSize: 14.sp,
                               color: AppColors.hintTextColors,
                             ),
@@ -411,15 +336,38 @@ class _AddEventsViewState extends State<AddEventsView> {
 
               SizedBox(height: 20.h),
 
+              /// Submit Button
               CustomButtonWidget(
                 btnColor: AppColors.mainColor,
                 btnText: "Submit",
                 onTap: () {
-                  debugPrint(
-                      "Event Location: $_lat, $_long, Address: ${_streetAddressController.text}");
+                  if (_nameController.text.isEmpty ||
+                      _descriptionController.text.isEmpty) {
+                    Get.snackbar("Error", "Please fill all required fields");
+                    return;
+                  }
+
+                  _addEventController.addEvent(
+                    name: _nameController.text,
+                    street: _streetAddressController.text,
+                    state: _stateController.text,
+                    city: _cityController.text,
+                    zipCode: _zipCodeController.text,
+                    phone: _phoneController.text,
+                    email: _emailController.text,
+                    website: _websiteController.text,
+                    type: selectedEventType ?? "Seminar",
+                    date: selectedDate != null
+                        ? selectedDate!.toIso8601String()
+                        : "",
+                    registrationFee: 0,
+                    image: File(selectedImage!.path),
+                    gymId: selectedGym.toString(),
+                  );
                 },
                 iconWant: false,
               ),
+
               SizedBox(height: 30.h),
             ],
           ),
