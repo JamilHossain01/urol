@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../common widget/not_found_widget.dart';
 import '../../../common widget/seacr)with_filter_widgets.dart';
 import '../../../uitilies/custom_loader.dart';
 
@@ -21,14 +22,13 @@ class EventScreenView extends StatefulWidget {
 class _EventScreenViewState extends State<EventScreenView> {
   final GetEventController _getEventController = Get.put(GetEventController());
 
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _getEventController.getAllEvent("", "", "", "");
+    _getEventController.getAllEvent(
+        searchTerms: '', type: '', state: '', city: '');
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -55,13 +55,16 @@ class _EventScreenViewState extends State<EventScreenView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SearchBarWithFilter(
-              backgroundColor: const Color(0xFFF5F6F8),
+              backgroundColor: Colors.grey[200],
               onFilterTap: () {
                 _openFilterSheet(context);
               },
+              onSearchChanged: (text) {
+                _getEventController.getAllEvent(
+                    searchTerms: text, type: '', state: '', city: '');
+              },
             ),
             Gap(20.h),
-            // ✅ Display Current Month & Year
             CustomText(
               text: "${_getCurrentMonthName()} ${DateTime.now().year}",
               fontSize: 18.sp,
@@ -69,7 +72,6 @@ class _EventScreenViewState extends State<EventScreenView> {
               color: AppColors.mainTextColors,
             ),
             Gap(10.h),
-
             Expanded(
               child: Obx(() {
                 if (_getEventController.isLoading.value) {
@@ -83,12 +85,11 @@ class _EventScreenViewState extends State<EventScreenView> {
 
                 if (events.isEmpty) {
                   return Center(
-                    child: CustomText(
-                      text: "No events found.",
-                      fontSize: 14.sp,
-                      color: AppColors.mainTextColors,
-                    ),
-                  );
+                      child: Center(
+                          child: NotFoundWidget(
+                    imagePath: "assets/images/not_found.png",
+                    message: "No data found",
+                  )));
                 }
 
                 return ListView.builder(

@@ -15,7 +15,10 @@ class GetEventController extends GetxController {
   }
 
   void getAllEvent(
-      String searchTerms, String type, String state, String city) async {
+      {required String searchTerms,
+      required String type,
+      required String state,
+      required String city}) async {
     try {
       isLoading(true);
 
