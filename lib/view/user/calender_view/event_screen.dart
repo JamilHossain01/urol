@@ -1,5 +1,6 @@
 import 'package:calebshirthum/common%20widget/custom%20text/custom_text_widget.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
+import 'package:calebshirthum/uitilies/custom_toast.dart';
 import 'package:calebshirthum/view/user/calender_view/controller/get_event_controller.dart';
 import 'package:calebshirthum/view/user/calender_view/widget/card_of_event.dart';
 import 'package:calebshirthum/view/user/calender_view/widget/filter_event_bottom_sheet.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../common widget/not_found_widget.dart';
 import '../../../common widget/seacr)with_filter_widgets.dart';
 import '../../../uitilies/custom_loader.dart';
@@ -96,6 +98,43 @@ class _EventScreenViewState extends State<EventScreenView> {
                   itemCount: events.length,
                   itemBuilder: (context, index) {
                     final event = events[index];
+
+                    String daysLeftText = '';
+                    String statusText = 'Open';
+
+                    if (event.date != null) {
+                      final eventDate = event.date!;
+                      final now = DateTime.now();
+                      final difference = eventDate.difference(now).inDays;
+
+                      if (difference > 1) {
+                        daysLeftText = "$difference Days Left";
+                        statusText = "Open";
+                      } else if (difference == 1) {
+                        daysLeftText = "Tomorrow";
+                        statusText = "Open ";
+                      } else if (difference == 0) {
+                        daysLeftText = "Today";
+                        statusText = "1 Day Left";
+                      } else {
+                        daysLeftText = "Event Passed";
+                        statusText = "Closed";
+                      }
+                    } else {
+                      daysLeftText = "No Date";
+                      statusText = "Closed";
+                    }
+
+                    Future<void> _launchUrl(String link) async {
+                      final Uri _url = Uri.parse(link);
+
+                      if (!await launchUrl(_url,
+                          mode: LaunchMode.externalApplication)) {
+                        CustomToast.showToast("Could not launch the link",
+                            isError: true);
+                      }
+                    }
+
                     return CardOfEvent(
                       date:
                           "${event.date?.month ?? ''}/${event.date?.day ?? ''}\n${event.date?.year ?? ''}",
@@ -103,13 +142,21 @@ class _EventScreenViewState extends State<EventScreenView> {
                       org: event.type ?? "",
                       location:
                           "${event.city ?? ''}, ${event.state ?? ''}, ${event.venue ?? ''}",
-                      status: "Open Registration", // Static placeholder
-                      daysLeft: "2 Days", // Optional logic can be added
-                      price:
-                          "\$${event.registrationFee?.toString() ?? '0'}", // Dynamic
+                      status: statusText, // ✅ dynamic based on event date
+                      daysLeft: daysLeftText,
+                      price: "\$${event.registrationFee?.toString() ?? '0'}",
                       link: event.eventWebsite ?? "No website",
                       image: event.image?.url ??
                           "https://via.placeholder.com/300x200.png?text=No+Image",
+                      websiteRedirect: () async {
+                        final link = event.eventWebsite;
+                        if (link != null && link.isNotEmpty) {
+                          await _launchUrl(link);
+                        } else {
+                          CustomToast.showToast("Invalid event link",
+                              isError: true);
+                        }
+                      },
                     );
                   },
                 );

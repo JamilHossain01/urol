@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:calebshirthum/uitilies/app_images.dart';
+import 'package:calebshirthum/view/user/home_view/controller/my_profile_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,7 +18,9 @@ import '../../../uitilies/constant.dart';
 import 'bottom_navigation_view.dart';
 
 class EnableLocationView extends StatelessWidget {
-  const EnableLocationView({super.key});
+   EnableLocationView({super.key});
+
+  final GetProfileController _getProfileController = Get.put(GetProfileController());
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +62,9 @@ class EnableLocationView extends StatelessWidget {
                 btnColor: AppColors.mainColor,
                 btnText: "Enable Location",
                 onTap: () {
+                  _getProfileController.getProfileController();
                   Get.to(() => DashboardView());
+
                 },
                 iconWant: false)
           ],

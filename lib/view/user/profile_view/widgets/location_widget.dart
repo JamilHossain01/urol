@@ -1,18 +1,26 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:apple_maps_flutter/apple_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../common widget/custom_text_filed.dart';
 import '../../../../uitilies/app_colors.dart';
-
-
+import '../../location_view/widgets/location_picker_view.dart';
 
 class LocationWidget extends StatelessWidget {
   final TextEditingController streetAddressController;
+  final dynamic lat;
+  final dynamic long;
   final TextEditingController cityController;
   final TextEditingController stateController;
   final TextEditingController zipCodeController;
+  final void Function(double lat, double long)? onLocationChanged;
 
   const LocationWidget({
     super.key,
@@ -20,7 +28,47 @@ class LocationWidget extends StatelessWidget {
     required this.cityController,
     required this.stateController,
     required this.zipCodeController,
+    this.lat,
+    this.long,
+    this.onLocationChanged,
   });
+
+  Future<void> _pickLocation(BuildContext context) async {
+    await Get.bottomSheet(
+      LocationPickerModal(
+        initialPosition: lat != null && long != null ? LatLng(lat, long) : null,
+        onLocationSelected: (LatLng pos, String address) {
+          streetAddressController.text = address;
+
+          placemarkFromCoordinates(pos.latitude, pos.longitude)
+              .then((placemarks) {
+            if (placemarks.isNotEmpty) {
+              final p = placemarks.first;
+              cityController.text = p.locality ?? '';
+              stateController.text = p.administrativeArea ?? '';
+            }
+          }).catchError((e) {
+            debugPrint("Reverse geocoding failed: $e");
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Failed to fetch address details")),
+            );
+          });
+
+          // Send lat/long back to parent screen
+          if (onLocationChanged != null) {
+            onLocationChanged!(pos.latitude, pos.longitude);
+          }
+
+          Get.back(); // Close bottom sheet
+        },
+      ),
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,19 +89,23 @@ class LocationWidget extends StatelessWidget {
           color: AppColors.textFieldNameColor,
         ),
         Gap(4.h),
-
-        CustomTextField(
-          controller: streetAddressController,
-          hintText: "Street address",
-          showObscure: false,
-          fillColor: AppColors.backRoudnColors,
-          hintTextColor: AppColors.hintTextColors,
-          validator: (value) => value!.isEmpty ? "Address is required" : null,
+        GestureDetector(
+          onTap: () => _pickLocation(context),
+          child: AbsorbPointer(
+            child: CustomTextField(
+              controller: streetAddressController,
+              hintText: "Tap to pick location from map",
+              showObscure: false,
+              fillColor: AppColors.backRoudnColors,
+              hintTextColor: AppColors.hintTextColors,
+              validator: (value) =>
+                  value!.isEmpty ? "Address is required" : null,
+            ),
+          ),
         ),
         SizedBox(height: 12.h),
         Row(
           children: [
-
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,29 +116,14 @@ class LocationWidget extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                     color: AppColors.textFieldNameColor,
                   ),
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 14.w),
-                    decoration: BoxDecoration(
-                      color: AppColors.backRoudnColors,
-                      borderRadius: BorderRadius.circular(8.r),
-                      border: Border.all(color: Color(0xFFB9B9B9)),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: stateController.text.isNotEmpty ? stateController.text : null,
-                        hint: Text("Select One", style: TextStyle(fontSize: 13.sp)),
-                        items: ['California', 'Texas', 'New York', 'Florida']
-                            .map((state) => DropdownMenuItem(
-                          value: state,
-                          child: Text(state, style: TextStyle(fontSize: 13.sp)),
-                        ))
-                            .toList(),
-                        onChanged: (value) {
-                          stateController.text = value ?? '';
-                        },
-                      ),
-                    ),
+                  CustomTextField(
+                    controller: stateController,
+                    hintText: "Enter State",
+                    showObscure: false,
+                    fillColor: AppColors.backRoudnColors,
+                    hintTextColor: AppColors.hintTextColors,
+                    validator: (value) =>
+                        value!.isEmpty ? "State is required" : null,
                   ),
                 ],
               ),
@@ -108,12 +145,12 @@ class LocationWidget extends StatelessWidget {
                     showObscure: false,
                     fillColor: AppColors.backRoudnColors,
                     hintTextColor: AppColors.hintTextColors,
-                    validator: (value) => value!.isEmpty ? "City is required" : null,
+                    validator: (value) =>
+                        value!.isEmpty ? "City is required" : null,
                   ),
                 ],
               ),
             ),
-
           ],
         ),
         SizedBox(height: 12.h),
@@ -124,7 +161,6 @@ class LocationWidget extends StatelessWidget {
           color: AppColors.textFieldNameColor,
         ),
         Gap(4.h),
-
         CustomTextField(
           controller: zipCodeController,
           hintText: "Enter zip code",
@@ -138,3 +174,5 @@ class LocationWidget extends StatelessWidget {
     );
   }
 }
+
+// ===== LocationPickerModal =====

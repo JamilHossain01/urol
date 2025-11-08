@@ -16,6 +16,7 @@ class CardOfEvent extends StatelessWidget {
   final String status;
   final String price;
   final String link;
+  final VoidCallback websiteRedirect;
 
   // Constructor to accept parameters
   const CardOfEvent({
@@ -29,6 +30,7 @@ class CardOfEvent extends StatelessWidget {
     required this.status,
     required this.price,
     required this.link,
+    required this.websiteRedirect,
   }) : super(key: key);
 
   @override
@@ -199,7 +201,7 @@ class CardOfEvent extends StatelessWidget {
 
                   // Link
                   InkWell(
-                    onTap: () {},
+                    onTap: websiteRedirect,
                     child: Row(
                       children: [
                         CustomText(

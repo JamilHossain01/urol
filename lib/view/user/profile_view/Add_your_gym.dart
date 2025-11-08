@@ -18,7 +18,14 @@ import 'widgets/location_widget.dart';
 import 'widgets/open_mat_schedule_widget.dart';
 
 class AddYourGymDetailsScreen extends StatefulWidget {
-  const AddYourGymDetailsScreen({super.key});
+  final String? address;
+  final dynamic lat;
+  final dynamic long;
+  final String? state;
+  final String? city;
+
+  AddYourGymDetailsScreen(
+      {super.key, this.address, this.lat, this.long, this.state, this.city});
 
   @override
   _AddYourGymDetailsScreenState createState() =>
@@ -54,6 +61,20 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
     {'day': null, 'from': null, 'to': null}
   ];
 
+  double? _lat;
+  double? _long;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.address != null) _streetAddressController.text = widget.address!;
+    if (widget.city != null) _cityController.text = widget.city!;
+    if (widget.state != null) _stateController.text = widget.state!;
+    _lat = widget.lat;
+    _long = widget.long;
+  }
+
   final List<String> _days = [
     'Monday',
     'Tuesday',
@@ -64,7 +85,6 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
     'Sunday'
   ];
 
-  /// Converts "12:30 PM" -> total minutes (e.g. 750)
   int _convertTimeToMinutes(String time) {
     final parts = time.split(' ');
     final hourMinute = parts[0].split(':');
@@ -139,23 +159,6 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
     }
   }
 
-  // --- Dispose ---
-  @override
-  void dispose() {
-    _gymNameController.dispose();
-    _descriptionController.dispose();
-    _streetAddressController.dispose();
-    _cityController.dispose();
-    _stateController.dispose();
-    _zipCodeController.dispose();
-    _phoneController.dispose();
-    _emailController.dispose();
-    _websiteController.dispose();
-    _facebookController.dispose();
-    _instagramController.dispose();
-    super.dispose();
-  }
-
   // --- Validate schedules ---
   bool _validateSchedules(List<Map<String, dynamic>> schedules) {
     for (var s in schedules) {
@@ -223,8 +226,8 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
       website: _websiteController.text.trim(),
       facebook: _facebookController.text.trim(),
       instagram: _instagramController.text.trim(),
-      latitude: 34.5553,
-      longitude: 69.2075,
+      latitude: _lat,
+      longitude: _long,
       disciplines: _selectedDisciplines,
       matSchedules: openMatConverted,
       classSchedules: classConverted,
@@ -232,7 +235,6 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
     );
   }
 
-  // --- UI ---
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -324,6 +326,15 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
                         cityController: _cityController,
                         stateController: _stateController,
                         zipCodeController: _zipCodeController,
+                        lat: _lat,
+                        long: _long,
+                        onLocationChanged: (lat, long) {
+                          setState(() {
+                            _lat = lat;
+                            _long = long;
+                          });
+                          debugPrint("Selected Lat: $lat, Lng: $long");
+                        },
                       ),
 
                       ContactInfoWidget(

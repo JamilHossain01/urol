@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:calebshirthum/view/user/home_view/controller/my_profile_controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../../../uitilies/api/api_url.dart';
@@ -9,6 +10,9 @@ import '../../user/dashboard_view/enable_location_view.dart';
 class LoginController extends GetxController {
   var isLoading = false.obs;
   final StorageService _storageService = StorageService();
+
+  final GetProfileController _getProfileController =
+      Get.put(GetProfileController());
 
   Future<void> login({
     required String email,
@@ -44,6 +48,8 @@ class LoginController extends GetxController {
           await _storageService.write('_id', id);
 
           Get.offAll(() => EnableLocationView());
+
+          _getProfileController.getProfileController();
 
           CustomToast.showToast("Login Successfully Done!");
         } else {
