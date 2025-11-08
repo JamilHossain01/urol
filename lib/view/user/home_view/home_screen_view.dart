@@ -27,16 +27,12 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   final GetProfileController profileController =
       Get.put(GetProfileController());
 
-
-
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     profileController.getProfileController();
   }
-
 
   @override
   Widget build(BuildContext context) {

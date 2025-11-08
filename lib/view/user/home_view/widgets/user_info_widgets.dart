@@ -1,3 +1,4 @@
+import 'package:calebshirthum/common%20widget/custom_elipse_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -46,7 +47,7 @@ class UserInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomContainer(
-      height: 190.h,
+      height: 210.h,
       color: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -153,7 +154,7 @@ class UserInfoSection extends StatelessWidget {
             fontSize: 12.sp,
           ),
           CustomText(
-            text: '“$quote”', // Smart quotes
+            text: customEllipsisText('“$quote”', wordLimit: 15), // Smart quotes
             color: AppColors.pTextColors,
             fontWeight: FontWeight.w400,
             fontSize: 12.sp,
