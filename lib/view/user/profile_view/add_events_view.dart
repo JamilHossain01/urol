@@ -157,7 +157,7 @@ class _AddEventsViewState extends State<AddEventsView> {
                         ),
                         items: _myGymController.gums.value.data
                             ?.map((gym) => DropdownMenuItem<String>(
-                                  value: gym.id, // store gym ID
+                                  value: gym.id,
                                   child: CustomText(
                                     text: gym.name ?? '',
                                     fontSize: 14.sp,
