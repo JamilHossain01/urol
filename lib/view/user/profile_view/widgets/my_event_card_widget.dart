@@ -1,5 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart'
-    show CachedNetworkImage;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:calebshirthum/uitilies/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,20 +11,19 @@ import '../../../../uitilies/app_colors.dart';
 import '../../../../uitilies/custom_loader.dart';
 import '../../profile_view/edite_gyms_details.dart';
 
-class GymPreviewCard extends StatelessWidget {
-  final String image, gymName, location;
-  final List<String> categories;
+class MyEventCardWidget extends StatelessWidget {
+  final String image, eventName, location, eventDate;
   final bool showEditDelete;
   final VoidCallback? delete;
 
-  const GymPreviewCard({
+  const MyEventCardWidget({
     Key? key,
     required this.image,
-    required this.gymName,
     required this.location,
-    required this.categories,
     this.showEditDelete = false,
     this.delete,
+    required this.eventName,
+    required this.eventDate,
   }) : super(key: key);
 
   @override
@@ -51,22 +49,19 @@ class GymPreviewCard extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8.r),
                 child: CachedNetworkImage(
+                  height: 200,
                   imageUrl: image,
-                  height: 120.h,
                   width: double.infinity,
                   fit: BoxFit.cover,
                   placeholder: (context, url) => Center(
                     child: SizedBox(
-                      height: 30.h,
-                      width: 30.h,
+                      height: 25.h,
+                      width: 25.w,
                       child: CustomLoader(),
                     ),
                   ),
-                  errorWidget: (context, url, error) => Container(
-                    color: Colors.grey[300],
-                    alignment: Alignment.center,
-                    child: const Icon(Icons.broken_image, color: Colors.grey),
-                  ),
+                  errorWidget: (context, url, error) =>
+                      const Icon(Icons.error, color: Colors.red),
                 ),
               ),
               if (showEditDelete) ...[
@@ -116,7 +111,7 @@ class GymPreviewCard extends StatelessWidget {
           ),
           Gap(8.h),
           CustomText(
-            text: gymName,
+            text: eventName,
             fontSize: 18.sp,
             fontWeight: FontWeight.w700,
             color: AppColors.mainTextColors,
@@ -135,14 +130,15 @@ class GymPreviewCard extends StatelessWidget {
                 fontWeight: FontWeight.w500,
                 color: Color(0xFF4B4B4B),
               ),
+              CustomText(
+                text: eventDate,
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF4B4B4B),
+              ),
             ],
           ),
           Gap(5.h),
-          Wrap(
-            spacing: 6.w,
-            children:
-                categories.map((category) => _buildChip(category)).toList(),
-          ),
         ],
       ),
     );
@@ -164,96 +160,3 @@ class GymPreviewCard extends StatelessWidget {
     );
   }
 }
-// import 'package:flutter/material.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:gap/gap.dart';
-// import 'package:cached_network_image/cached_network_image.dart'; // Import cached network image package
-//
-// import '../../../../common widget/custom text/custom_text_widget.dart';
-// import '../../../../uitilies/app_colors.dart';
-//
-// class GymPreviewCard extends StatelessWidget {
-//   final String image, gymName, location;
-//   final List<String> categories;
-//
-//   const GymPreviewCard({
-//     Key? key,
-//     required this.image,
-//     required this.gymName,
-//     required this.location,
-//     required this.categories,
-//   }) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: EdgeInsets.all(8.w),
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         borderRadius: BorderRadius.circular(12.r),
-//         boxShadow: [
-//           BoxShadow(
-//             color: Colors.black12,
-//             blurRadius: 5,
-//             offset: const Offset(0, 2),
-//           ),
-//         ],
-//       ),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           // CachedNetworkImage to load image from URL and cache it
-//           ClipRRect(
-//             borderRadius: BorderRadius.circular(8.r),
-//             child: CachedNetworkImage(
-//               imageUrl: image, // Network URL for the image
-//               height: 120.h,
-//               width: double.infinity,
-//               fit: BoxFit.cover,
-//               placeholder: (context, url) => Center(
-//                 child: CircularProgressIndicator(), // Show loader while loading
-//               ),
-//               errorWidget: (context, url, error) => Icon(
-//                 Icons.error, // Show error icon if image loading fails
-//                 color: Colors.red,
-//               ),
-//             ),
-//           ),
-//           Gap(8.h),
-//           CustomText(
-//             text: gymName,
-//             fontSize: 16.sp,
-//             fontWeight: FontWeight.w600,
-//             color: AppColors.mainTextColors,
-//           ),
-//           CustomText(
-//             text: location,
-//             fontSize: 10.sp,
-//             fontWeight: FontWeight.w400,
-//             color: Colors.grey,
-//           ),
-//           Gap(5.h),
-//           Wrap(
-//             spacing: 6.w,
-//             children: categories.map((category) => _buildChip(category)).toList(),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   Widget _buildChip(String text) {
-//     return Container(
-//       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-//       decoration: BoxDecoration(
-//         color: Colors.grey.shade200,
-//         borderRadius: BorderRadius.circular(6.r),
-//       ),
-//       child: CustomText(
-//         text: text,
-//         fontSize: 10.sp,
-//         color: Colors.black87,
-//       ),
-//     );
-//   }
-// }

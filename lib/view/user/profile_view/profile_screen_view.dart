@@ -6,6 +6,7 @@ import 'package:calebshirthum/uitilies/custom_toast.dart';
 import 'package:calebshirthum/view/auth_view/login_auth_view.dart';
 import 'package:calebshirthum/view/user/profile_view/add_events_view.dart';
 import 'package:calebshirthum/view/user/profile_view/friend_screen_view.dart';
+import 'package:calebshirthum/view/user/profile_view/my_event_screen.dart';
 import 'package:calebshirthum/view/user/profile_view/my_gyms_view.dart';
 import 'package:calebshirthum/view/user/profile_view/profile_information_view.dart';
 import 'package:calebshirthum/view/user/profile_view/save_gyms.dart';
@@ -218,6 +219,11 @@ class _ProfileViewState extends State<ProfileView> {
                       text: "My Gyms",
                       iconPath: AppImages.myGym,
                       onTap: () => Get.to(() => MyGymsView()),
+                    ),
+                    OtherTile(
+                      text: "My Events",
+                      iconPath: AppImages.calenderA,
+                      onTap: () => Get.to(() => MyEventScreen()),
                     ),
                     OtherTile(
                       text: "Friends",

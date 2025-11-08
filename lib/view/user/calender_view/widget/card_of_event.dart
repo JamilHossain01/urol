@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:calebshirthum/uitilies/custom_loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,15 +35,12 @@ class CardOfEvent extends StatelessWidget {
     required this.websiteRedirect,
   }) : super(key: key);
 
-
   String _shortenLink(String link) {
     if (link.length > 35) {
       return '${link.substring(0, 35)}...';
     }
     return link;
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +62,6 @@ class CardOfEvent extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Event Image with Date Badge
           Stack(
             children: [
               ClipRRect(
@@ -73,11 +71,20 @@ class CardOfEvent extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8),
-                  child: Image.network(
-                    image,
+                  child: CachedNetworkImage(
+                    imageUrl: image,
                     height: 120.h,
                     width: 70.w,
                     fit: BoxFit.cover,
+                    placeholder: (context, url) => Center(
+                      child: SizedBox(
+                        height: 25.h,
+                        width: 25.w,
+                        child: CustomLoader(),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error, color: Colors.red),
                   ),
                 ),
               ),
@@ -115,7 +122,7 @@ class CardOfEvent extends StatelessWidget {
                     children: [
                       Expanded(
                         child: CustomText(
-                          text:  _shortenLink(title),
+                          text: _shortenLink(title),
                           textAlign: TextAlign.start,
                           maxLines: 7,
                           overflow: TextOverflow.ellipsis,
@@ -220,7 +227,8 @@ class CardOfEvent extends StatelessWidget {
                             text: _shortenLink(link),
                             fontSize: 10.sp,
                             color: const Color(0xFF1D52FF),
-                            overflow: TextOverflow.ellipsis, // Ensures no overflow
+                            overflow:
+                                TextOverflow.ellipsis, // Ensures no overflow
                           ),
                         ),
                         const Icon(
@@ -231,7 +239,6 @@ class CardOfEvent extends StatelessWidget {
                       ],
                     ),
                   ),
-
                 ],
               ),
             ),

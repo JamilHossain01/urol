@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'package:calebshirthum/view/auth_view/login_auth_view.dart';
+import 'package:calebshirthum/view/user/home_view/controller/my_profile_controller.dart';
 import 'package:get/get.dart';
 import '../../../uitilies/api/local_storage.dart';
 import '../../auth_view/log_in/view/log_in_view.dart';
@@ -11,6 +12,9 @@ class SplashController extends GetxController {
   Timer? timer;
   var opacity = 0.0.obs;
   final StorageService _storageService = Get.put(StorageService());
+
+  final GetProfileController _myProfileController =
+      Get.put(GetProfileController());
 
   @override
   void onInit() {
@@ -28,6 +32,8 @@ class SplashController extends GetxController {
       String? accessToken = await _storageService.read('accessToken');
 
       if (accessToken != null && accessToken.isNotEmpty) {
+        _myProfileController.getProfileController();
+
         Get.offAll(() => DashboardView());
       } else {
         Get.offAll(() => LogInView());

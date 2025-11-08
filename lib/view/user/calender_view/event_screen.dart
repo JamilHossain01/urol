@@ -27,7 +27,6 @@ class _EventScreenViewState extends State<EventScreenView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getEventController.getAllEvent(
         searchTerms: '', type: '', state: '', city: '');
@@ -70,7 +69,7 @@ class _EventScreenViewState extends State<EventScreenView> {
             Gap(20.h),
             CustomText(
               text: "${_getCurrentMonthName()} ${DateTime.now().year}",
-              fontSize: 18.sp,
+              fontSize: 15.sp,
               fontWeight: FontWeight.w600,
               color: AppColors.mainTextColors,
             ),
