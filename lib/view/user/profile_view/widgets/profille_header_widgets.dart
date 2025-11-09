@@ -49,7 +49,7 @@ class ProfileHeaderWithBelt extends StatelessWidget {
             // Profile Image with Tap to View
             GestureDetector(
               onTap: () {
-                Get.to(() => FullImageView(imageUrl: imageUrl));
+                Get.to(() => FullImageView(imageUrls: [imageUrl],));
               },
               child: CircleAvatar(
                 radius: 60.r,

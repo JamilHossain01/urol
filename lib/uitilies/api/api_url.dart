@@ -35,6 +35,10 @@ class ApiUrl {
   static String deleteEvent({required String eventId}) => "$baseUrl/events/$eventId";
 
 
+
+  static String gymDetails({required String gymId}) => "$baseUrl/gyms/$gymId";
+
+
   static String myFriends({required String searchTerm}) =>
       "$baseUrl/friends?searchTerm=$searchTerm";
 

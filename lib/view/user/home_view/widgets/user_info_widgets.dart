@@ -69,7 +69,9 @@ class UserInfoSection extends StatelessWidget {
       child: Row(
         children: [
           GestureDetector(
-            onTap: () => Get.to(() => FullImageView(imageUrl: image)),
+            onTap: () => Get.to(() => FullImageView(
+                  imageUrls: [image],
+                )),
             child: CircleAvatar(
               radius: 28.r,
               backgroundColor: Colors.transparent,
