@@ -8,12 +8,14 @@ class BuildInfoWidget extends StatelessWidget {
   final String iconPath;
   final String text;
   final String text1;
+  final VoidCallback? tap;
 
   const BuildInfoWidget({
     super.key,
     required this.iconPath,
     required this.text,
     required this.text1,
+     this.tap,
   });
 
   @override
@@ -39,12 +41,15 @@ class BuildInfoWidget extends StatelessWidget {
               ),
             ],
           ),
-          CustomText(
-            text: text1,
-            fontWeight: FontWeight.w600,
-            fontSize: 14.sp,
-            color: const Color(0xFF989898),
-          ),
+          GestureDetector(
+            onTap: tap,
+            child: CustomText(
+              text: text1,
+              fontWeight: FontWeight.w600,
+              fontSize: 14.sp,
+              color: const Color(0xFF989898),
+            ),
+          )
         ],
       ),
     );

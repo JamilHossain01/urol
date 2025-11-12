@@ -12,9 +12,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:gap/gap.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../common widget/comon_conatainer/custom_conatiner.dart';
 import '../../../common widget/custom_button_widget.dart';
 import '../../../uitilies/custom_loader.dart';
+import '../../../uitilies/custom_toast.dart';
 import '../profile_view/widgets/shimmer/full_image_view_shimmer.dart';
 
 class GymDetailsScreen extends StatefulWidget {
@@ -42,6 +44,24 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
       return '${link.substring(0, 20)}...';
     }
     return link;
+  }
+
+  Future<void> _launchUrl(String link) async {
+    final Uri _url = Uri.parse(link);
+
+    if (!await launchUrl(_url, mode: LaunchMode.externalApplication)) {
+      CustomToast.showToast("Could not launch the link", isError: true);
+    }
+  }
+
+  Future<void> _phoneCall(String num) async {
+    final Uri _url = Uri.parse("tel:$num");
+
+    if (await launchUrl(_url)) {
+      await launchUrl(_url);
+    } else {
+      throw 'Could not launch';
+    }
   }
 
   @override
@@ -82,8 +102,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                                   imageUrls: data.images
                                       .map((e) => e.url ?? '')
                                       .toList(), // all
-                                  initialIndex:
-                                      index,
+                                  initialIndex: index,
                                 ));
                           },
                           child: _buildGymImage(data.images[index].url ?? ''),
@@ -205,12 +224,14 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                           ),
                           Gap(5.h),
                           BuildInfoWidget(
+                            tap: () => _phoneCall(data.phone ?? ''),
                             iconPath: AppImages.call,
                             text: "Phone",
                             text1: data.phone ?? 'N/A',
                           ),
                           const Divider(),
                           BuildInfoWidget(
+                              tap: () => _launchUrl(data.website ?? ''),
                               iconPath: AppImages.earth2,
                               text: "Website",
                               text1: _shortenLink(
@@ -236,16 +257,28 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                               Row(
                                 children: [
                                   if (data.website != null)
-                                    Image.asset(AppImages.https,
-                                        height: 18.h, width: 18.w),
+                                    GestureDetector(
+                                      onTap: () =>
+                                          _launchUrl(data.website ?? ''),
+                                      child: Image.asset(AppImages.https,
+                                          height: 18.h, width: 18.w),
+                                    ),
                                   Gap(5.w),
                                   if (data.facebook != null)
-                                    Image.asset(AppImages.fb,
-                                        height: 18.h, width: 18.w),
+                                    GestureDetector(
+                                      onTap: () =>
+                                          _launchUrl(data.facebook ?? ''),
+                                      child: Image.asset(AppImages.fb,
+                                          height: 18.h, width: 18.w),
+                                    ),
                                   Gap(5.w),
                                   if (data.instagram != null)
-                                    Image.asset(AppImages.insta,
-                                        height: 18.h, width: 18.w),
+                                    GestureDetector(
+                                      onTap: () =>
+                                          _launchUrl(data.instagram ?? ''),
+                                      child: Image.asset(AppImages.insta,
+                                          height: 18.h, width: 18.w),
+                                    ),
                                 ],
                               ),
                             ],
@@ -279,9 +312,12 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                     Gap(20.h),
 
                     // ---------- CLAIM BUTTON ------------
+
                     CustomButtonWidget(
                       btnText: 'Claim This Gym',
-                      onTap: () => Get.to(() => const ClaimYourGymScreen()),
+                      onTap: () => Get.to(() => ClaimYourGymScreen(
+                            gymId: data.id.toString(),
+                          )),
                       iconWant: false,
                       btnColor: AppColors.mainColor,
                     ),

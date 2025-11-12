@@ -15,7 +15,6 @@ import '../location_view/claim_your_gym.dart';
 // Add the cached network image package
 import 'package:smooth_page_indicator/smooth_page_indicator.dart'; // Add Smooth Page Indicator
 
-
 class SaveGymDetailsScreen extends StatefulWidget {
   const SaveGymDetailsScreen({super.key});
 
@@ -79,13 +78,13 @@ class _SaveGymDetailsScreenState extends State<SaveGymDetailsScreen> {
                       ),
                     ),
                   ),
-
-                ),     Positioned(
+                ),
+                Positioned(
                   top: 40.h,
                   right: 16.w,
                   child: GestureDetector(
-                    onTap: (){
-                      Get.to(()=>SaveGymsView());
+                    onTap: () {
+                      Get.to(() => SaveGymsView());
                     },
                     child: const CircleAvatar(
                       radius: 20,
@@ -99,7 +98,6 @@ class _SaveGymDetailsScreenState extends State<SaveGymDetailsScreen> {
                       ),
                     ),
                   ),
-
                 ),
               ],
             ),
@@ -109,13 +107,14 @@ class _SaveGymDetailsScreenState extends State<SaveGymDetailsScreen> {
               child: Padding(
                 padding: EdgeInsets.only(top: 16.h),
                 child: SmoothPageIndicator(
-                  controller: _pageController,  // PageController to control the indicator
+                  controller:
+                      _pageController, // PageController to control the indicator
                   count: 3, // Total number of images
                   effect: ExpandingDotsEffect(
                     dotWidth: 8.w,
                     dotHeight: 8.h,
                     spacing: 6.w,
-                    activeDotColor: AppColors.mainColor,  // Active dot color
+                    activeDotColor: AppColors.mainColor, // Active dot color
                   ),
                 ),
               ),
@@ -165,7 +164,7 @@ class _SaveGymDetailsScreenState extends State<SaveGymDetailsScreen> {
                     textAlign: TextAlign.start,
                     fontWeight: FontWeight.w400,
                     text:
-                    "GymNation Stars gives a full view of the gym’s offerings, schedule, and amenities. At the top, users see the gym name, logo, star rating, and location linked to an interactive map. A brief overview highlights services, atmosphere, and training types, with a photo gallery for a visual tour.",
+                        "GymNation Stars gives a full view of the gym’s offerings, schedule, and amenities. At the top, users see the gym name, logo, star rating, and location linked to an interactive map. A brief overview highlights services, atmosphere, and training types, with a photo gallery for a visual tour.",
                     fontSize: 12.sp,
                     color: Color(0xFF686868),
                   ),
@@ -174,11 +173,11 @@ class _SaveGymDetailsScreenState extends State<SaveGymDetailsScreen> {
 
                   Gap(10.h),
                   CustomContainer(
-                    color:Color(0xFFF8F9FA),
+                    color: Color(0xFFF8F9FA),
                     borderColor: Color(0xFF989898),
-
                     height: 150.h,
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomText(
                           text: "Contact Information",
@@ -187,12 +186,14 @@ class _SaveGymDetailsScreenState extends State<SaveGymDetailsScreen> {
                           color: AppColors.mainTextColors,
                         ),
                         Gap(5.h),
-                        _buildInfoRow(AppImages.call, "(580) 559-7890","Phone"),
+                        _buildInfoRow(
+                            AppImages.call, "(580) 559-7890", "Phone"),
                         Divider(),
-                        _buildInfoRow(AppImages.teligram, "info@gymnation.com","Email"),
+                        _buildInfoRow(
+                            AppImages.teligram, "info@gymnation.com", "Email"),
                         Divider(),
-
-                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
                               children: [
@@ -218,7 +219,6 @@ class _SaveGymDetailsScreenState extends State<SaveGymDetailsScreen> {
                             ),
                           ],
                         ),
-
                       ],
                     ),
                   ),
@@ -237,22 +237,27 @@ class _SaveGymDetailsScreenState extends State<SaveGymDetailsScreen> {
                   _buildSchedule("4:00 - 6:00 PM", "Wed, Thu", "Open Mat"),
                   _buildSchedule("9:00 - 11:00 PM", "Sun, Mon", "Open Mat"),
                   _buildSchedule("4:00 - 6:00 PM", "Tue, Wed", "Open Mat"),
-                  Gap(10.h),  CustomText(
+                  Gap(10.h),
+                  CustomText(
                     text: "Class Schedule",
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
                     color: AppColors.mainTextColors,
                   ),
                   Gap(10.h),
-                  _buildSchedule("9:00 - 11:00 PM", "Monday", "BJJ Fundamentals"),
-                  _buildSchedule("4:00 - 6:00 PM", "Tuesday","Muay Thai Kickboxing"),
-                  _buildSchedule("9:00 - 11:00 PM", "Thursday","Advanced BJJ"),
+                  _buildSchedule(
+                      "9:00 - 11:00 PM", "Monday", "BJJ Fundamentals"),
+                  _buildSchedule(
+                      "4:00 - 6:00 PM", "Tuesday", "Muay Thai Kickboxing"),
+                  _buildSchedule("9:00 - 11:00 PM", "Thursday", "Advanced BJJ"),
                   Gap(10.h),
 
                   CustomButtonWidget(
                     btnText: 'Claim This Gym',
                     onTap: () {
-                      Get.to(()=>ClaimYourGymScreen());
+                      Get.to(() => ClaimYourGymScreen(
+                            gymId: '',
+                          ));
                     },
                     iconWant: false,
                     btnColor: AppColors.mainColor,
@@ -281,11 +286,11 @@ class _SaveGymDetailsScreenState extends State<SaveGymDetailsScreen> {
     );
   }
 
-  Widget _buildInfoRow(String iconPath,String text1, String text) {
+  Widget _buildInfoRow(String iconPath, String text1, String text) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 6.h),
-      child:
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             children: [
@@ -306,17 +311,19 @@ class _SaveGymDetailsScreenState extends State<SaveGymDetailsScreen> {
           CustomText(
             text: text1,
             fontWeight: FontWeight.w600,
-
             fontSize: 14.sp,
             color: const Color(0xFF989898),
           ),
-
         ],
       ),
     );
   }
 
-  Widget _buildSchedule(String time, String days,String name,) {
+  Widget _buildSchedule(
+    String time,
+    String days,
+    String name,
+  ) {
     return Container(
       padding: EdgeInsets.all(12.w),
       margin: EdgeInsets.only(bottom: 8.h),
@@ -331,9 +338,11 @@ class _SaveGymDetailsScreenState extends State<SaveGymDetailsScreen> {
           ),
         ],
       ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
@@ -352,11 +361,10 @@ class _SaveGymDetailsScreenState extends State<SaveGymDetailsScreen> {
                 fontSize: 10.sp,
                 color: Color(0xFF686868),
               ),
-
             ],
           ),
           CustomText(
-            text:name,
+            text: name,
             fontSize: 16.sp,
             color: AppColors.mainTextColors,
             fontWeight: FontWeight.w600,
@@ -373,8 +381,10 @@ class _SaveGymDetailsScreenState extends State<SaveGymDetailsScreen> {
       height: 220.h,
       width: double.infinity,
       fit: BoxFit.cover,
-      placeholder: (context, url) => Center(child: CircularProgressIndicator()), // Loading state
-      errorWidget: (context, url, error) => Image.asset(AppImages.gym2, fit: BoxFit.cover), // Fallback to AssetImage
+      placeholder: (context, url) =>
+          Center(child: CircularProgressIndicator()), // Loading state
+      errorWidget: (context, url, error) => Image.asset(AppImages.gym2,
+          fit: BoxFit.cover), // Fallback to AssetImage
     );
   }
 }

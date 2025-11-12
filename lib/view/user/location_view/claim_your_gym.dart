@@ -1,16 +1,79 @@
+// ignore_for_file: prefer_const_constructors, avoid_print
+
+import 'dart:io';
+import 'package:calebshirthum/uitilies/custom_loader.dart';
 import 'package:calebshirthum/view/user/location_view/widgets/upload_card.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:get/get.dart';
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_app_bar_widget.dart';
 import '../../../common widget/custom_button_widget.dart';
 import '../../../common widget/custom_text_filed.dart';
 import '../../../uitilies/app_colors.dart';
+import '../../../uitilies/custom_toast.dart';
+import '../profile_view/widgets/location_widget.dart';
+import 'controller/claim_your_gym_controller.dart';
 
-class ClaimYourGymScreen extends StatelessWidget {
-  const ClaimYourGymScreen({super.key});
+class ClaimYourGymScreen extends StatefulWidget {
+  final String gymId;
+
+  const ClaimYourGymScreen({super.key, required this.gymId});
+
+  @override
+  State<ClaimYourGymScreen> createState() => _ClaimYourGymScreenState();
+}
+
+class _ClaimYourGymScreenState extends State<ClaimYourGymScreen> {
+  double? _lat;
+  double? _long;
+
+  final TextEditingController _streetAddressController =
+      TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _stateController = TextEditingController();
+  final TextEditingController _zipCodeController = TextEditingController();
+
+  final ClaimYourGymController _claimYourGymController =
+      Get.put(ClaimYourGymController());
+
+  File? utilityBillFile;
+  File? businessLicenseFile;
+  File? taxDocumentFile;
+
+  @override
+  void dispose() {
+    _streetAddressController.dispose();
+    _cityController.dispose();
+    _stateController.dispose();
+    _zipCodeController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleClaimGym() async {
+    if (_emailController.text.isEmpty ||
+        _phoneController.text.isEmpty ||
+        utilityBillFile == null ||
+        businessLicenseFile == null ||
+        taxDocumentFile == null) {
+      CustomToast.showToast("All fields and documents are required!",
+          isError: true);
+      return;
+    }
+
+    await _claimYourGymController.claimYourGym(
+      utilityBill: utilityBillFile!,
+      businessLicense: businessLicenseFile!,
+      taxPhoto: taxDocumentFile!,
+      email: _emailController.text,
+      gymId: widget.gymId,
+      phone: _phoneController.text,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +109,7 @@ class ClaimYourGymScreen extends StatelessWidget {
             ),
             SizedBox(height: 6.h),
             CustomTextField(
+              controller: _emailController,
               hintText: "Enter the email",
               showObscure: false,
               fillColor: AppColors.backRoudnColors,
@@ -60,6 +124,7 @@ class ClaimYourGymScreen extends StatelessWidget {
             ),
             SizedBox(height: 6.h),
             CustomTextField(
+              controller: _phoneController,
               hintText: "+13462127336",
               showObscure: false,
               fillColor: AppColors.backRoudnColors,
@@ -73,78 +138,22 @@ class ClaimYourGymScreen extends StatelessWidget {
               color: AppColors.textFieldNameColor,
             ),
             SizedBox(height: 6.h),
-            Row(
-              children: [
-                // City
-                // State
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomText(
-                        text: "State",
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.mainTextColors,
-                      ),
-                      SizedBox(height: 6.h),
-                      SizedBox(
-                        height: 50.h,
-                        child: DropdownButtonFormField<String>(
-                          decoration: InputDecoration(
-                            hintText: "Select One",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.r),
-                              borderSide: BorderSide(
-                                  color: Colors.grey.shade300, width: 1),
-                            ),
-                            contentPadding:
-                            EdgeInsets.symmetric(horizontal: 10.w),
-                          ),
-                          items: ["NY", "CA", "TX"]
-                              .map((e) =>
-                              DropdownMenuItem(value: e, child: Text(e)))
-                              .toList(),
-                          onChanged: (_) {},
-                        ),
-                      ),
-                    ],
-                  ),
-                ),                        SizedBox(width: 10.w),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomText(
-                        text: "City",
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.mainTextColors,
-                      ),
-                      SizedBox(height: 6.h),
-                      SizedBox(
-                        height: 50.h,
-                        child: TextField(
-                          decoration: InputDecoration(
-                            hintText: "Enter City",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.r),
-                              borderSide: BorderSide(
-                                  color: Colors.grey.shade300, width: 1),
-                            ),
-                            contentPadding:
-                            EdgeInsets.symmetric(horizontal: 10.w),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-
-              ],
+            LocationWidget(
+              streetAddressController: _streetAddressController,
+              cityController: _cityController,
+              stateController: _stateController,
+              zipCodeController: _zipCodeController,
+              lat: _lat,
+              long: _long,
+              onLocationChanged: (lat, long) {
+                setState(() {
+                  _lat = lat;
+                  _long = long;
+                });
+                debugPrint("Selected Lat: $lat, Lng: $long");
+              },
             ),
-            // SizedBox(height: 8.h),
+            SizedBox(height: 14.h),
             CustomText(
               text: "Required Documents",
               fontSize: 14.sp,
@@ -155,24 +164,40 @@ class ClaimYourGymScreen extends StatelessWidget {
               text: "Upload one of these documents to verify ownership.",
               fontSize: 10.sp,
               fontWeight: FontWeight.w400,
-              color: Color(0xFF989898),
+              color: const Color(0xFF989898),
             ),
             SizedBox(height: 14.h),
-            UploadCard(title: 'Utility Bill'),
+            UploadCard(
+              title: 'Utility Bill',
+              onFileSelected: (file) {
+                setState(() => utilityBillFile = file);
+              },
+            ),
             SizedBox(height: 6.h),
-
-            UploadCard(title: 'Business License'),
+            UploadCard(
+              title: 'Business License',
+              onFileSelected: (file) {
+                setState(() => businessLicenseFile = file);
+              },
+            ),
             SizedBox(height: 6.h),
-
-            UploadCard(title: 'Tax Document'),
+            UploadCard(
+              title: 'Tax Document',
+              onFileSelected: (file) {
+                setState(() => taxDocumentFile = file);
+              },
+            ),
             SizedBox(height: 20.h),
-
-            CustomButtonWidget(
-              btnText: 'Claim Gym',
-              onTap: () {},
-              iconWant: false,
-              btnColor: AppColors.mainColor,
-            )
+            Obx(() {
+              return _claimYourGymController.isLoading.value
+                  ? CustomLoader()
+                  : CustomButtonWidget(
+                      btnText: 'Claim Gym',
+                      onTap: _handleClaimGym,
+                      iconWant: false,
+                      btnColor: AppColors.mainColor,
+                    );
+            }),
           ],
         ),
       ),

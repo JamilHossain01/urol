@@ -12,6 +12,7 @@ class ApiUrl {
   static const String addFriend = "$baseUrl/friends";
   static const String competition = "$baseUrl/users/competition";
   static const String addGym = "$baseUrl/gyms";
+  static const String claimGym = "$baseUrl/claim-reqs";
   static const String myGyms = "$baseUrl/gyms/my-gyms";
   static const String addEvents = "$baseUrl/events";
   static const String myEvent = "$baseUrl/events/my-events";
