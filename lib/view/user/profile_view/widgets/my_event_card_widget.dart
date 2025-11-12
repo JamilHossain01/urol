@@ -15,6 +15,7 @@ class MyEventCardWidget extends StatelessWidget {
   final String image, eventName, location, eventDate;
   final bool showEditDelete;
   final VoidCallback? delete;
+  final VoidCallback? edit;
 
   const MyEventCardWidget({
     Key? key,
@@ -23,7 +24,7 @@ class MyEventCardWidget extends StatelessWidget {
     this.showEditDelete = false,
     this.delete,
     required this.eventName,
-    required this.eventDate,
+    required this.eventDate, this.edit,
   }) : super(key: key);
 
   @override
@@ -72,9 +73,7 @@ class MyEventCardWidget extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       GestureDetector(
-                        onTap: () {
-                          Get.to(() => EditGymDetailsScreen());
-                        },
+                        onTap: edit,
                         child: Container(
                           padding: EdgeInsets.all(4.w),
                           decoration: BoxDecoration(

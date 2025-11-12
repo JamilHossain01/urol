@@ -6,6 +6,7 @@ import 'package:calebshirthum/view/user/profile_view/widgets/my_event_card_widge
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../common widget/not_found_widget.dart';
+import 'add_events_view.dart';
 import 'controller/delete_event_controller.dart';
 import 'controller/my_events_controller.dart' show MyEventsController;
 
@@ -61,6 +62,17 @@ class _MyEventScreenState extends State<MyEventScreen> {
               child: GestureDetector(
                 onTap: () {},
                 child: MyEventCardWidget(
+                  edit: () {
+                    Get.to(() => AddEventsView(
+                        eventImage: event.image?.url.toString(),
+                        eventName: event.name,
+                        eventLocation: event.venue,
+                        eventDate: event.date.toString(),
+                        eventId: event.id,
+                        eventWebsite: event.eventWebsite,
+                        regFee: event.registrationFee.toString(),
+                        isEdit: true));
+                  },
                   delete: () {
                     _deleteEventController.deleteGyms(
                         eventId: event.id.toString());

@@ -1,4 +1,5 @@
 import 'package:calebshirthum/common%20widget/custom%20text/custom_text_widget.dart';
+import 'package:calebshirthum/common%20widget/custom_elipse_text.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/app_images.dart';
 import 'package:calebshirthum/view/user/location_view/controller/gym_details_controller.dart';
@@ -177,8 +178,9 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                             color: Color(0xFF4B4B4B), size: 16),
                         Gap(5.w),
                         CustomText(
-                          text:
+                          text: customEllipsisText(
                               "${data.street ?? ''}, ${data.city ?? ''}, ${data.state ?? ''}",
+                              wordLimit: 9),
                           fontSize: 10.sp,
                           color: const Color(0xFF4B4B4B),
                         ),
@@ -313,14 +315,15 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
 
                     // ---------- CLAIM BUTTON ------------
 
-                    CustomButtonWidget(
-                      btnText: 'Claim This Gym',
-                      onTap: () => Get.to(() => ClaimYourGymScreen(
-                            gymId: data.id.toString(),
-                          )),
-                      iconWant: false,
-                      btnColor: AppColors.mainColor,
-                    ),
+                    if (data.isClaimed == true)
+                      CustomButtonWidget(
+                        btnText: 'Claim This Gym',
+                        onTap: () => Get.to(() => ClaimYourGymScreen(
+                              gymId: data.id.toString(),
+                            )),
+                        iconWant: false,
+                        btnColor: AppColors.mainColor,
+                      ),
                   ],
                 ),
               ),

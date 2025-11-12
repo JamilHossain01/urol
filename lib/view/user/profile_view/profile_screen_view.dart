@@ -213,7 +213,7 @@ class _ProfileViewState extends State<ProfileView> {
                     OtherTile(
                       text: "Add Event",
                       iconPath: AppImages.calenderA,
-                      onTap: () => Get.to(() => AddEventsView()),
+                      onTap: () => Get.to(() => AddEventsView(isEdit: false,)),
                     ),
                     OtherTile(
                       text: "My Gyms",

@@ -16,9 +16,37 @@ import 'package:image_picker/image_picker.dart';
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_text_filed.dart';
 import '../../../uitilies/app_colors.dart';
+import 'controller/edit_event_controller.dart';
 
 class AddEventsView extends StatefulWidget {
-  const AddEventsView({super.key});
+  final bool isEdit;
+  final String? eventId;
+  final String? eventName;
+  final String? eventDate;
+  final String? eventTime;
+  final String? eventLocation;
+  final String? eventImage;
+  final String? eventWebsite;
+  final String? regFee;
+  final String? zipCode;
+  final String? image;
+  final String? gymId;
+
+  const AddEventsView({
+    super.key,
+    required this.isEdit,
+    this.eventId,
+    this.eventName,
+    this.eventDate,
+    this.eventTime,
+    this.eventLocation,
+    this.eventImage,
+    this.eventWebsite,
+    this.regFee,
+    this.zipCode,
+    this.gymId,
+    this.image,
+  });
 
   @override
   State<AddEventsView> createState() => _AddEventsViewState();
@@ -49,12 +77,46 @@ class _AddEventsViewState extends State<AddEventsView> {
 
   final AddEventController _addEventController = Get.put(AddEventController());
   final MyGymController _myGymController = Get.put(MyGymController());
+  final EditEventController _editEventController =
+      Get.put(EditEventController());
 
-  // Date Picker
+  @override
+  void initState() {
+    super.initState();
+    _myGymController.getMyGyms();
+
+    // Initialize edit data
+    if (widget.isEdit) {
+      _nameController.text = widget.eventName ?? '';
+      _websiteController.text = widget.eventWebsite ?? '';
+      _registrationController.text = widget.regFee ?? '';
+      _streetAddressController.text = widget.eventLocation ?? '';
+      _zipCodeController.text = widget.zipCode ?? '';
+
+      if (widget.eventDate != null && widget.eventDate!.isNotEmpty) {
+        selectedDate = DateTime.tryParse(widget.eventDate!);
+      }
+      if (widget.eventTime != null && widget.eventTime!.isNotEmpty) {
+        final parts = widget.eventTime!.split(':');
+        if (parts.length >= 2) {
+          selectedTime = TimeOfDay(
+            hour: int.tryParse(parts[0]) ?? 0,
+            minute: int.tryParse(parts[1]) ?? 0,
+          );
+        }
+      }
+
+      selectedGym = widget.gymId;
+
+      selectedEventType =
+          _eventTypes.contains(widget.eventName) ? widget.eventName : null;
+    }
+  }
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: selectedDate ?? DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
@@ -65,11 +127,10 @@ class _AddEventsViewState extends State<AddEventsView> {
     }
   }
 
-  // Time Picker
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.now(),
+      initialTime: selectedTime ?? TimeOfDay.now(),
     );
     if (picked != null) {
       setState(() {
@@ -78,31 +139,12 @@ class _AddEventsViewState extends State<AddEventsView> {
     }
   }
 
-  Future<void> _pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        selectedImage = pickedFile;
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _myGymController.getMyGyms();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBar(
-        title: 'Add Events',
+      appBar: CustomAppBar(
+        title: widget.isEdit ? 'Edit Event' : "Add Events",
         showLeadingIcon: true,
       ),
       body: Padding(
@@ -115,6 +157,7 @@ class _AddEventsViewState extends State<AddEventsView> {
 
               ImageUploadWidget(
                 selectedImage: selectedImage,
+                initialImageUrl: widget.image ?? widget.eventImage,
                 onImagePicked: (image) {
                   setState(() {
                     selectedImage = image;
@@ -133,9 +176,17 @@ class _AddEventsViewState extends State<AddEventsView> {
               ),
               SizedBox(height: 12.h),
 
-              /// Replace _gyms list with controller's gyms
-              Obx(
-                () => Column(
+              /// Gym Dropdown
+              Obx(() {
+                final gyms = _myGymController.gums.value.data ?? [];
+
+                // Reset selectedGym if not found in the list
+                if (selectedGym != null &&
+                    !gyms.any((g) => g.id == selectedGym)) {
+                  selectedGym = null;
+                }
+
+                return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomText(
@@ -163,8 +214,8 @@ class _AddEventsViewState extends State<AddEventsView> {
                           fontSize: 14.sp,
                           color: AppColors.hintTextColors,
                         ),
-                        items: _myGymController.gums.value.data
-                            ?.map((gym) => DropdownMenuItem<String>(
+                        items: gyms
+                            .map((gym) => DropdownMenuItem<String>(
                                   value: gym.id,
                                   child: CustomText(
                                     text: gym.name ?? '',
@@ -182,8 +233,9 @@ class _AddEventsViewState extends State<AddEventsView> {
                       ),
                     ),
                   ],
-                ),
-              ),
+                );
+              }),
+
               SizedBox(height: 10.h),
 
               /// Event Type Dropdown
@@ -220,6 +272,7 @@ class _AddEventsViewState extends State<AddEventsView> {
                   onChanged: (val) => setState(() => selectedEventType = val),
                 ),
               ),
+
               SizedBox(height: 10.h),
 
               /// Event Name
@@ -239,7 +292,7 @@ class _AddEventsViewState extends State<AddEventsView> {
 
               SizedBox(height: 10.h),
 
-              /// Event Name
+              /// Website Link
               CustomText(
                   text: "Website Link",
                   fontSize: 12.sp,
@@ -256,10 +309,7 @@ class _AddEventsViewState extends State<AddEventsView> {
 
               SizedBox(height: 10.h),
 
-
-
-
-              /// Event Name
+              /// Registration Fee
               CustomText(
                   text: "Registration Fee",
                   fontSize: 12.sp,
@@ -273,8 +323,6 @@ class _AddEventsViewState extends State<AddEventsView> {
                   fillColor: AppColors.backRoudnColors,
                   hintTextColor: AppColors.hintTextColors,
                   maxLines: 1),
-
-
 
               /// Location Picker
               LocationWidget(
@@ -364,59 +412,83 @@ class _AddEventsViewState extends State<AddEventsView> {
 
               SizedBox(height: 20.h),
 
-              Obx(() {
-                return _addEventController.isLoading.value
-                    ? CustomLoader()
-                    : CustomButtonWidget(
-                        btnColor: AppColors.mainColor,
-                        btnText: "Submit",
-                        onTap: () {
-                          if (_nameController.text.isEmpty ||
-                              selectedDate == null) {
-                            CustomToast.showToast(
-                                "Event name, date, and time are required",
-                                isError: true);
-                            return;
-                          }
+            Obx(() {
+              final isLoading = _addEventController.isLoading.value ||
+                  _editEventController.isLoading.value;
 
-                          if (selectedImage == null) {
-                            CustomToast.showToast("Please select an image",
-                                isError: true);
-                            return;
-                          }
+              return isLoading
+                  ? CustomLoader()
+                  : CustomButtonWidget(
+                btnColor: AppColors.mainColor,
+                btnText: widget.isEdit ? "Update Event" : "Submit",
+                onTap: () {
+                  if (_nameController.text.isEmpty || selectedDate == null) {
+                    CustomToast.showToast(
+                      "Event name and date are required",
+                      isError: true,
+                    );
+                    return;
+                  }
 
-                          if (selectedGym == null) {
-                            CustomToast.showToast("Please select a gym",
-                                isError: true);
-                            return;
-                          }
+                  if (selectedGym == null) {
+                    CustomToast.showToast("Please select a gym", isError: true);
+                    return;
+                  }
 
-                          // Format date as YYYY-MM-DD
-                          final formattedDate =
-                              "${selectedDate!.year.toString().padLeft(4, '0')}-"
-                              "${selectedDate!.month.toString().padLeft(2, '0')}-"
-                              "${selectedDate!.day.toString().padLeft(2, '0')}";
+                  final formattedDate =
+                      "${selectedDate!.year.toString().padLeft(4, '0')}-"
+                      "${selectedDate!.month.toString().padLeft(2, '0')}-"
+                      "${selectedDate!.day.toString().padLeft(2, '0')}";
 
+                  // ✅ Allow edit without new image (use existing one if not changed)
+                  final imageFile = selectedImage != null
+                      ? File(selectedImage!.path)
+                      : null;
 
-                          _addEventController.addEvent(
-                            name: _nameController.text,
-                            street: _streetAddressController.text,
-                            state: _stateController.text,
-                            city: _cityController.text,
-                            zipCode: _zipCodeController.text,
-                            phone: _phoneController.text,
-                            email: _emailController.text,
-                            website: _websiteController.text,
-                            type: selectedEventType ?? "Seminar",
-                            date: formattedDate,
-                            registrationFee: _registrationController.text,
-                            image: File(selectedImage!.path),
-                            gymId: selectedGym.toString(),
-                          );
-                        },
-                        iconWant: false,
-                      );
-              }),
+                  if (!widget.isEdit) {
+                    if (imageFile == null) {
+                      CustomToast.showToast("Please select an image", isError: true);
+                      return;
+                    }
+
+                    _addEventController.addEvent(
+                      name: _nameController.text,
+                      street: _streetAddressController.text,
+                      state: _stateController.text,
+                      city: _cityController.text,
+                      zipCode: _zipCodeController.text,
+                      phone: _phoneController.text,
+                      email: _emailController.text,
+                      website: _websiteController.text,
+                      type: selectedEventType ?? "Seminar",
+                      date: formattedDate,
+                      registrationFee: _registrationController.text,
+                      image: imageFile,
+                      gymId: selectedGym.toString(),
+                    );
+                  } else {
+                    _editEventController.updateEvent(
+                      name: _nameController.text,
+                      street: _streetAddressController.text,
+                      state: _stateController.text,
+                      city: _cityController.text,
+                      zipCode: _zipCodeController.text,
+                      phone: _phoneController.text,
+                      email: _emailController.text,
+                      website: _websiteController.text,
+                      type: selectedEventType ?? "Seminar",
+                      date: formattedDate,
+                      registrationFee: _registrationController.text,
+                      image: imageFile, // ✅ only send if changed
+                      gymId: selectedGym.toString(),
+                      eventId: widget.eventId.toString(),
+                    );
+                  }
+                },
+                iconWant: false,
+              );
+            }),
+
 
               SizedBox(height: 30.h),
             ],

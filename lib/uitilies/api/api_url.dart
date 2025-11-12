@@ -23,6 +23,11 @@ class ApiUrl {
           {required String searchTerm, required String limit}) =>
       "$baseUrl/users/unfriends?limit=$limit&searchTerm=$searchTerm";
 
+  static String editEvent(
+      {required String id}) =>
+      "$baseUrl/events/$id";
+
+
   static String allEvent(
           {required String searchTerm,
           required String type,
