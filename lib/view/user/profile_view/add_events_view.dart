@@ -467,6 +467,11 @@ class _AddEventsViewState extends State<AddEventsView> {
                       gymId: selectedGym.toString(),
                     );
                   } else {
+                    
+                    
+                    print("Selected image $selectedImage");
+                    
+                    
                     _editEventController.updateEvent(
                       name: _nameController.text,
                       street: _streetAddressController.text,
@@ -479,7 +484,7 @@ class _AddEventsViewState extends State<AddEventsView> {
                       type: selectedEventType ?? "Seminar",
                       date: formattedDate,
                       registrationFee: _registrationController.text,
-                      image: imageFile, // ✅ only send if changed
+                      image: imageFile,
                       gymId: selectedGym.toString(),
                       eventId: widget.eventId.toString(),
                     );
