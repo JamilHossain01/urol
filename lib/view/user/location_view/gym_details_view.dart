@@ -35,7 +35,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
   void initState() {
     super.initState();
     _getGymDetailsController.getGymDetails(
-      gymId: "690ed0d703272a8691479e2b",
+      gymId: "690ef46bf68c74f27ce553b4",
     );
   }
 
