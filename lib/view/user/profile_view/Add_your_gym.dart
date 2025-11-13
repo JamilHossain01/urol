@@ -47,6 +47,7 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
   final _emailController = TextEditingController();
   final _websiteController = TextEditingController();
   final _facebookController = TextEditingController();
+  final _classNameController = TextEditingController();
   final _instagramController = TextEditingController();
 
   // --- Data ---
@@ -58,7 +59,7 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
   ];
 
   List<Map<String, dynamic>> classSchedules = [
-    {'day': null, 'from': null, 'to': null}
+    {'day': null, "name": null, 'from': null, 'to': null}
   ];
 
   double? _lat;
@@ -208,6 +209,7 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
 
     final List<Map<String, dynamic>> classConverted = classSchedules
         .map((s) => {
+              'name': _classNameController.text,
               'day': s['day'],
               'from': _convertTimeToMinutes(s['from']),
               'to': _convertTimeToMinutes(s['to'])
@@ -383,6 +385,7 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
                         var item = entry.value;
 
                         return OpenMatScheduleWidget(
+                          classNameController: _classNameController,
                           showClassField: true,
                           addCC: index == classSchedules.length - 1
                               ? 'Add More Classes'

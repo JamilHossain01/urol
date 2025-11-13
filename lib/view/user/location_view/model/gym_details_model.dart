@@ -21,7 +21,6 @@ class GymDetailsModel {
 
 class Data {
   Data({
-    required this.location,
     required this.id,
     required this.images,
     required this.name,
@@ -40,12 +39,13 @@ class Data {
     required this.disciplines,
     required this.isClaimed,
     required this.user,
+    required this.location,
     required this.createdAt,
     required this.updatedAt,
     required this.v,
+    required this.isSaved,
   });
 
-  final Location? location;
   final String? id;
   final List<Image> images;
   final String? name;
@@ -59,18 +59,19 @@ class Data {
   final String? website;
   final String? facebook;
   final String? instagram;
-  final List<MatSchedule> matSchedules;
-  final List<dynamic> classSchedules;
+  final List<Schedule> matSchedules;
+  final List<Schedule> classSchedules;
   final List<String> disciplines;
   final bool? isClaimed;
   final String? user;
+  final Location? location;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final int? v;
+  final bool? isSaved;
 
   factory Data.fromJson(Map<String, dynamic> json){
     return Data(
-      location: json["location"] == null ? null : Location.fromJson(json["location"]),
       id: json["_id"],
       images: json["images"] == null ? [] : List<Image>.from(json["images"]!.map((x) => Image.fromJson(x))),
       name: json["name"],
@@ -84,14 +85,49 @@ class Data {
       website: json["website"],
       facebook: json["facebook"],
       instagram: json["instagram"],
-      matSchedules: json["mat_schedules"] == null ? [] : List<MatSchedule>.from(json["mat_schedules"]!.map((x) => MatSchedule.fromJson(x))),
-      classSchedules: json["class_schedules"] == null ? [] : List<dynamic>.from(json["class_schedules"]!.map((x) => x)),
+      matSchedules: json["mat_schedules"] == null ? [] : List<Schedule>.from(json["mat_schedules"]!.map((x) => Schedule.fromJson(x))),
+      classSchedules: json["class_schedules"] == null ? [] : List<Schedule>.from(json["class_schedules"]!.map((x) => Schedule.fromJson(x))),
       disciplines: json["disciplines"] == null ? [] : List<String>.from(json["disciplines"]!.map((x) => x)),
       isClaimed: json["isClaimed"],
       user: json["user"],
+      location: json["location"] == null ? null : Location.fromJson(json["location"]),
       createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
       updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
       v: json["__v"],
+      isSaved: json["isSaved"],
+    );
+  }
+
+}
+
+class Schedule {
+  Schedule({
+    required this.day,
+    required this.from,
+    required this.fromView,
+    required this.to,
+    required this.toView,
+    required this.name,
+    required this.id,
+  });
+
+  final String? day;
+  final int? from;
+  final String? fromView;
+  final int? to;
+  final String? toView;
+  final String? name;
+  final String? id;
+
+  factory Schedule.fromJson(Map<String, dynamic> json){
+    return Schedule(
+      day: json["day"],
+      from: json["from"],
+      fromView: json["from_view"],
+      to: json["to"],
+      toView: json["to_view"],
+      name: json["name"],
+      id: json["_id"],
     );
   }
 
@@ -120,47 +156,17 @@ class Image {
 
 class Location {
   Location({
-    required this.type,
     required this.coordinates,
+    required this.type,
   });
 
-  final String? type;
   final List<double> coordinates;
+  final String? type;
 
   factory Location.fromJson(Map<String, dynamic> json){
     return Location(
-      type: json["type"],
       coordinates: json["coordinates"] == null ? [] : List<double>.from(json["coordinates"]!.map((x) => x)),
-    );
-  }
-
-}
-
-class MatSchedule {
-  MatSchedule({
-    required this.day,
-    required this.from,
-    required this.fromView,
-    required this.to,
-    required this.toView,
-    required this.id,
-  });
-
-  final String? day;
-  final int? from;
-  final String? fromView;
-  final int? to;
-  final String? toView;
-  final String? id;
-
-  factory MatSchedule.fromJson(Map<String, dynamic> json){
-    return MatSchedule(
-      day: json["day"],
-      from: json["from"],
-      fromView: json["from_view"],
-      to: json["to"],
-      toView: json["to_view"],
-      id: json["_id"],
+      type: json["type"],
     );
   }
 

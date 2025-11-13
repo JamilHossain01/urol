@@ -169,6 +169,8 @@ class _MapScreenViewState extends State<MapScreenView> {
                       AppImages.gym1, // Default image if not available
                   categories:
                       (selectedGymDetails['categories'] ?? '').split(', '),
+                  showDelete: true,
+                  showEdit: true,
                 ),
               ),
             ),

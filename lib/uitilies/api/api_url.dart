@@ -16,7 +16,7 @@ class ApiUrl {
   static const String myGyms = "$baseUrl/gyms/my-gyms";
   static const String addEvents = "$baseUrl/events";
   static const String myEvent = "$baseUrl/events/my-events";
-
+  static const String savedGym = "$baseUrl/save";
   // profile
   static const String profile = "$baseUrl/users/my-profile";
   static String discoverFriends(
@@ -36,10 +36,11 @@ class ApiUrl {
       "$baseUrl/events?searchTerm=$searchTerm&type=$type&state=$state&city=$city&limit=99999999";
 
   static String deleteGym({required String gymId}) => "$baseUrl/gyms/$gymId";
-
+  static String deleteBookMarkGym({required String gymId}) => "$baseUrl/save/$gymId";
 
   static String deleteEvent({required String eventId}) => "$baseUrl/events/$eventId";
 
+  static String addGymBookmarks() => "$baseUrl/save";
 
 
   static String gymDetails({required String gymId}) => "$baseUrl/gyms/$gymId";

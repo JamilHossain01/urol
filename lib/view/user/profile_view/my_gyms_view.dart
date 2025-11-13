@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../common widget/not_found_widget.dart';
+import '../location_view/gym_details_view.dart';
 import 'controller/delete_gym_controller.dart';
 
 class MyGymsView extends StatefulWidget {
@@ -66,13 +67,14 @@ class _MyGymsViewState extends State<MyGymsView> {
               padding: const EdgeInsets.symmetric(vertical: 5),
               child: GestureDetector(
                 onTap: () {
-                  Get.to(() => SaveGymDetailsScreen());
+                  Get.to(() => GymDetailsScreen());
                 },
                 child: GymPreviewCard(
                   delete: (){
                     _deleteGymController.deleteGyms(gymId: gym.id.toString());
                   },
-                  showEditDelete: true,
+                  showDelete: true,
+                  showEdit: true,
                   gymName: gym.name ?? "Unnamed Gym",
                   location: "${gym.city ?? ''}, ${gym.state ?? ''}",
                   image: imageUrl,

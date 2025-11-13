@@ -16,10 +16,11 @@ class OpenMatScheduleWidget extends StatelessWidget {
   final ValueChanged<String?> onStartTimeChanged;
   final ValueChanged<String?> onEndTimeChanged;
   final VoidCallback onAddMoreDays;
-  final VoidCallback? onRemove; // ✅ new optional remove callback
+  final VoidCallback? onRemove;
   final bool showClassField;
   final String? addCC;
-  final String? name;
+  final TextEditingController? classNameController; // ✅ pass controller from parent
+  final ValueChanged<String>? onClassNameChanged; // ✅ callback to update parent
 
   const OpenMatScheduleWidget({
     super.key,
@@ -33,15 +34,14 @@ class OpenMatScheduleWidget extends StatelessWidget {
     required this.onEndTimeChanged,
     required this.onAddMoreDays,
     this.showClassField = false,
-    this.name,
     this.addCC,
-    this.onRemove, // ✅ new
+    this.onRemove,
+    this.classNameController,
+    this.onClassNameChanged,
   });
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController classNameController = TextEditingController();
-
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(12.w),
@@ -74,7 +74,7 @@ class OpenMatScheduleWidget extends StatelessWidget {
           Gap(8.h),
 
           /// Class name field (optional)
-          if (showClassField) ...[
+          if (showClassField && classNameController != null) ...[
             CustomText(
               text: "Class name",
               fontSize: 12.sp,

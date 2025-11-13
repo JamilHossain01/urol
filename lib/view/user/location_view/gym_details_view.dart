@@ -2,6 +2,7 @@ import 'package:calebshirthum/common%20widget/custom%20text/custom_text_widget.d
 import 'package:calebshirthum/common%20widget/custom_elipse_text.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/app_images.dart';
+import 'package:calebshirthum/view/user/location_view/controller/add_booksmarks_controller.dart';
 import 'package:calebshirthum/view/user/location_view/controller/gym_details_controller.dart';
 import 'package:calebshirthum/view/user/location_view/widgets/build_info_widget.dart';
 import 'package:calebshirthum/view/user/location_view/widgets/build_schdule_widget.dart';
@@ -32,11 +33,14 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
   final GetGymDetailsController _getGymDetailsController =
       Get.put(GetGymDetailsController());
 
+  final AddGymBookMarksController _addGymBookMarksController =
+      Get.put(AddGymBookMarksController());
+
   @override
   void initState() {
     super.initState();
     _getGymDetailsController.getGymDetails(
-      gymId: "690ef46bf68c74f27ce553b4",
+      gymId: "6915b1cdbadffcd28961959c",
     );
   }
 
@@ -102,7 +106,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                             Get.to(() => FullImageView(
                                   imageUrls: data.images
                                       .map((e) => e.url ?? '')
-                                      .toList(), // all
+                                      .toList(),
                                   initialIndex: index,
                                 ));
                           },
@@ -127,11 +131,16 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                     top: 40.h,
                     right: 16.w,
                     child: GestureDetector(
-                      onTap: () => Get.to(() => const SaveGymsView()),
-                      child: const CircleAvatar(
+                      onTap: () {
+                        _addGymBookMarksController.addGym(gymId: data.id);
+                      },
+                      child: CircleAvatar(
                         radius: 20,
                         backgroundColor: Colors.black54,
-                        child: Icon(Icons.bookmark_border, color: Colors.white),
+                        child: data.isSaved == true
+                            ? Icon(Icons.bookmark, color: Colors.white)
+                            : Icon(Icons.bookmark_add_outlined,
+                                color: Colors.white),
                       ),
                     ),
                   ),
@@ -311,11 +320,33 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                       ),
                     ],
 
+                    Gap(10.h),
+
+                    // ---------- C SCHEDULE ------------
+                    if (data.classSchedules.isNotEmpty) ...[
+                      CustomText(
+                        text: "Class Schedule",
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.mainTextColors,
+                      ),
+                      Gap(10.h),
+                      Column(
+                        children: data.classSchedules.map((s) {
+                          return BuildScheduleWidget(
+                            days: s.day ?? '',
+                            time: "${s.fromView ?? ''} - ${s.toView ?? ''}",
+                            name: s.name.toString() ?? "Class Session",
+                          );
+                        }).toList(),
+                      ),
+                    ],
+
                     Gap(20.h),
 
                     // ---------- CLAIM BUTTON ------------
 
-                    if (data.isClaimed == true)
+                    if (data.isClaimed == false)
                       CustomButtonWidget(
                         btnText: 'Claim This Gym',
                         onTap: () => Get.to(() => ClaimYourGymScreen(
