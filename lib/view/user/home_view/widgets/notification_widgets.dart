@@ -13,7 +13,7 @@ class NotificationBell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      clipBehavior: Clip.none, // Allow the notification badge to overflow
+      clipBehavior: Clip.none,
       children: [
         GestureDetector(
           onTap: () {
@@ -24,20 +24,19 @@ class NotificationBell extends StatelessWidget {
             width: 40.w,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50),
-              color: Colors.grey.withOpacity(0.1), // Adjusted to a neutral color
+              color: Colors.grey.withOpacity(0.1),
             ),
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Image.asset(
-                'assets/images/bell.png', // Replace with your bell icon path
-                height: 24.h, // Adjust the size of the bell icon
+                'assets/images/bell.png',
+                height: 24.h,
                 width: 24.w,
               ),
             ),
           ),
         ),
-        // Notification Badge
-        if (notificationCount > 0) // Only show badge if there's a notification
+        if (notificationCount > 0)
           Positioned(
             top: -4.h,
             right: -4.w,

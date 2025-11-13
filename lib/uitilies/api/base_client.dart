@@ -114,6 +114,49 @@ class BaseClient {
     }
   }
 
+
+  /// ✅ Added PUT Request
+  static Future<http.Response> putRequest({
+    required String api,
+     Map<String, dynamic>? body,
+    Map<String, String>? extraHeaders,
+  }) async {
+    debugPrint('\nYou hit (PUT): $api');
+    debugPrint('Request Body: ${jsonEncode(body)}');
+
+    final StorageService _storageService = Get.put(StorageService());
+    String? accessToken = _storageService.read<String>('accessToken');
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      "Authorization": "Bearer $accessToken",
+      ...?extraHeaders,
+    };
+
+    try {
+      final response = await http.put(
+        Uri.parse(api),
+        headers: headers,
+        body: jsonEncode(body),
+      );
+
+      debugPrint('Status: ${response.statusCode}');
+      debugPrint('Response: ${response.body}');
+
+      return response;
+    } on SocketException {
+      throw noInternetMessage;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+
+
+
+
+
   static multipartAddRequest({
     required String api,
     required Map<String, String> body,

@@ -17,6 +17,7 @@ class ApiUrl {
   static const String addEvents = "$baseUrl/events";
   static const String myEvent = "$baseUrl/events/my-events";
   static const String savedGym = "$baseUrl/save";
+  static const String allNotification = "$baseUrl/notifications";
   // profile
   static const String profile = "$baseUrl/users/my-profile";
   static String discoverFriends(
@@ -26,6 +27,13 @@ class ApiUrl {
   static String editEvent(
       {required String id}) =>
       "$baseUrl/events/$id";
+
+
+
+  static String readNotificationSingle(
+      {required String id}) =>
+      "$baseUrl/notifications/make-read/$id";
+
 
 
   static String allEvent(
