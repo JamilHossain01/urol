@@ -18,23 +18,21 @@ class ApiUrl {
   static const String myEvent = "$baseUrl/events/my-events";
   static const String savedGym = "$baseUrl/save";
   static const String allNotification = "$baseUrl/notifications";
-  // profile
   static const String profile = "$baseUrl/users/my-profile";
   static String discoverFriends(
           {required String searchTerm, required String limit}) =>
       "$baseUrl/users/unfriends?limit=$limit&searchTerm=$searchTerm";
 
-  static String editEvent(
-      {required String id}) =>
-      "$baseUrl/events/$id";
+  static String editEvent({required String id}) => "$baseUrl/events/$id";
 
+  static String mapGym(
+          {required String searchTerm,
+          required dynamic distance,
+          required String disciplines}) =>
+      "$baseUrl/gyms/mats?searchTerm=$searchTerm&disciplines=$disciplines&distance=$distance";
 
-
-  static String readNotificationSingle(
-      {required String id}) =>
+  static String readNotificationSingle({required String id}) =>
       "$baseUrl/notifications/make-read/$id";
-
-
 
   static String allEvent(
           {required String searchTerm,
@@ -44,15 +42,15 @@ class ApiUrl {
       "$baseUrl/events?searchTerm=$searchTerm&type=$type&state=$state&city=$city&limit=99999999";
 
   static String deleteGym({required String gymId}) => "$baseUrl/gyms/$gymId";
-  static String deleteBookMarkGym({required String gymId}) => "$baseUrl/save/$gymId";
+  static String deleteBookMarkGym({required String gymId}) =>
+      "$baseUrl/save/$gymId";
 
-  static String deleteEvent({required String eventId}) => "$baseUrl/events/$eventId";
+  static String deleteEvent({required String eventId}) =>
+      "$baseUrl/events/$eventId";
 
   static String addGymBookmarks() => "$baseUrl/save";
 
-
   static String gymDetails({required String gymId}) => "$baseUrl/gyms/$gymId";
-
 
   static String myFriends({required String searchTerm}) =>
       "$baseUrl/friends?searchTerm=$searchTerm";
