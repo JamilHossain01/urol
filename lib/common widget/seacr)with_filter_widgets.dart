@@ -17,7 +17,6 @@ class SearchBarWithFilter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        // 🔍 Search Field
         Expanded(
           child: Container(
             decoration: BoxDecoration(
@@ -25,7 +24,7 @@ class SearchBarWithFilter extends StatelessWidget {
               borderRadius: BorderRadius.circular(12.r),
             ),
             child: TextField(
-              onChanged: onSearchChanged, // 👈 Trigger callback on typing
+              onChanged: onSearchChanged,
               decoration: InputDecoration(
                 hintText: "Search here...",
                 hintStyle: TextStyle(
@@ -38,7 +37,7 @@ class SearchBarWithFilter extends StatelessWidget {
                 ),
                 border: InputBorder.none,
                 contentPadding:
-                EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
+                    EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
               ),
             ),
           ),

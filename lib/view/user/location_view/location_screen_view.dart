@@ -1,4 +1,7 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:calebshirthum/common widget/custom_button_widget.dart';
+import 'package:calebshirthum/view/user/location_view/controller/all_map_gym_controller.dart';
 import 'package:calebshirthum/view/user/location_view/widgets/gym_preview_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,65 +23,70 @@ class MapScreenView extends StatefulWidget {
 }
 
 class _MapScreenViewState extends State<MapScreenView> {
+  final AllMapGymController _allMapGymController =
+      Get.put(AllMapGymController());
+
   AppleMapController? mapController;
-  double distance = 2; // Distance in miles for radius
-  String selectedCategory = "Open Mat";
-  String? selectedGym;
-  double _zoomLevel = 14.0;
+  double distance = 2;
+  List<String> selectedCategories = [];
+  String searchTerm = "";
+  String? selectedGymId;
+  double _zoomLevel = 12.0;
 
-  LatLng? _currentLocation; // User current location
+  LatLng? _currentLocation;
   Set<Annotation> markers = {};
-  Set<Circle> circles = {}; // Circle to show radius
+  Set<Circle> circles = {};
 
-  final LatLng _center = const LatLng(38.5816, -121.4944);
-
-  final List<Map<String, String>> gymList = [
-    {
-      'gymName': 'GymNation Stars',
-      'location': '6157 Rd, California, USA',
-      'image': AppImages.gym1,
-      'categories': 'Open Mat, BJJ, MMA',
-    },
-    {
-      'gymName': 'BJJ Academy',
-      'location': '1234 Rd, California, USA',
-      'image': AppImages.gym2,
-      'categories': 'BJJ, MMA',
-    },
-    {
-      'gymName': 'MMA Fitness Gym',
-      'location': '7890 Rd, California, USA',
-      'image': AppImages.gym3,
-      'categories': 'MMA, Boxing',
-    },
-    {
-      'gymName': 'Victory BJJ Academy',
-      'location': '2345 Rd, California, USA',
-      'image': AppImages.gym2,
-      'categories': 'BJJ',
-    },
-    {
-      'gymName': 'Fight Club Gym',
-      'location': '6789 Rd, California, USA',
-      'image': AppImages.gym2,
-      'categories': 'Boxing, MMA',
-    },
-    {
-      'gymName': 'The Arena Combat Academy',
-      'location': '4321 Rd, California, USA',
-      'image': AppImages.gym2,
-      'categories': 'MMA, Kickboxing',
-    },
-  ];
+  final LatLng _fallbackCenter = const LatLng(38.5816, -121.4944);
 
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
-    _createMarkers();
+    _init();
   }
 
-  /// Fetch user current location and add circle
+  /// INIT
+  Future<void> _init() async {
+    print("🔵 INIT STARTED — Calling API + location");
+    await _fetchGyms();
+    await _getCurrentLocation();
+  }
+
+  /// FETCH GYMS FROM API
+  Future<void> _fetchGyms() async {
+    try {
+      print("🟡 Fetching gyms from API...");
+      print(
+          "➡ Distance: $distance | Categories: ${selectedCategories.join(',')} | Search: $searchTerm");
+
+      await _allMapGymController.getAllMapGym(
+        distance: distance,
+        searchTerm: searchTerm,
+        disciplines: selectedCategories.join(","), // comma separated
+      );
+
+      final data = _allMapGymController.profile.value.data ?? [];
+      print("🟢 API Response → Total gyms: ${data.length}");
+
+      for (var g in data) {
+        print(
+            "🏋 Gym: ${g.name} | ID: ${g.id} | coords: ${g.location?.coordinates}");
+      }
+
+      await _createMarkersFromAPI();
+      _moveCameraToGyms(searchTerm: searchTerm);
+    } catch (e, st) {
+      print("❌ _fetchGyms error: $e");
+      print(st);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to load gyms. Try again.")),
+        );
+      }
+    }
+  }
+
+  /// GET USER LOCATION
   Future<void> _getCurrentLocation() async {
     try {
       LocationPermission permission = await Geolocator.checkPermission();
@@ -89,191 +97,230 @@ class _MapScreenViewState extends State<MapScreenView> {
       if (permission == LocationPermission.denied ||
           permission == LocationPermission.deniedForever) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Location permission is required.")),
+          SnackBar(content: Text("Location permission required.")),
         );
         return;
       }
 
       final position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
-
       _currentLocation = LatLng(position.latitude, position.longitude);
 
-      // Add circle for distance
-      circles = {
-        Circle(
-          circleId: CircleId('current_location_radius'),
-          center: _currentLocation!,
-          radius: distance * 369.34,
-          fillColor: Colors.red.withOpacity(0.2),
-          strokeColor: Colors.red.withOpacity(0.5), //
-          strokeWidth: 4,
-        )
-      };
+      _updateCircleForDistance(_currentLocation!);
 
       markers.add(
         Annotation(
-          annotationId: AnnotationId('current_location_marker'),
+          annotationId: AnnotationId('userLocation'),
           position: _currentLocation!,
           icon: BitmapDescriptor.defaultAnnotation,
-          infoWindow: const InfoWindow(title: 'You are here'),
+          infoWindow: InfoWindow(title: 'You are here'),
         ),
       );
 
-      if (mapController != null) {
-        mapController!.animateCamera(
-          CameraUpdate.newCameraPosition(
-            CameraPosition(target: _currentLocation!, zoom: _zoomLevel),
-          ),
-        );
-      }
+      mapController?.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(target: _currentLocation!, zoom: _zoomLevel),
+        ),
+      );
 
       setState(() {});
     } catch (e) {
-      print("Error fetching location: $e");
+      print("❌ Location error: $e");
     }
   }
 
-  Future<void> _createMarkers() async {
-    final BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(size: Size(100, 100)),
+  /// CREATE MARKERS FROM API DATA
+  Future<void> _createMarkersFromAPI() async {
+    final gyms = _allMapGymController.profile.value.data ?? [];
+
+    final customIcon = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(size: Size(80, 80)),
       "assets/images/small.png",
     );
 
-    setState(() {
-      markers = gymList.asMap().entries.map((entry) {
-        final index = entry.key;
-        final gym = entry.value;
+    Set<Annotation> tempMarkers = {};
 
-        return Annotation(
-          annotationId: AnnotationId(index.toString()),
-          position: LatLng(38.5826 + index * 0.01, -121.4944 + index * 0.01),
-          icon: customIcon,
-          infoWindow: InfoWindow(title: gym['gymName']),
-          onTap: () => _onMarkerTapped(gym['gymName'].toString()),
+    for (var gym in gyms) {
+      if (gym.location?.coordinates.length == 2) {
+        double lon = gym.location!.coordinates[0];
+        double lat = gym.location!.coordinates[1];
+
+        tempMarkers.add(
+          Annotation(
+            annotationId: AnnotationId(gym.id ?? ""),
+            position: LatLng(lat, lon),
+            icon: customIcon,
+            infoWindow: InfoWindow(title: gym.name ?? "Gym"),
+            onTap: () => _onMarkerTapped(gym.id ?? ""),
+          ),
         );
-      }).toSet();
+      }
+    }
+
+    setState(() {
+      markers.addAll(tempMarkers);
     });
   }
 
-  void _onMarkerTapped(String gymName) {
+  void _onMarkerTapped(String gymId) {
     setState(() {
-      selectedGym = gymName;
+      selectedGymId = gymId;
     });
   }
 
   void _zoomIn() {
-    if (_zoomLevel < 20.0) {
+    if (_zoomLevel < 20) {
       setState(() {
-        _zoomLevel += 1;
-        mapController?.animateCamera(
-          CameraUpdate.newCameraPosition(
-            CameraPosition(
-                target: _currentLocation ?? _center, zoom: _zoomLevel),
-          ),
-        );
+        _zoomLevel++;
       });
+      mapController?.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(
+            target: _currentLocation ?? _fallbackCenter, zoom: _zoomLevel),
+      ));
     }
   }
 
   void _zoomOut() {
-    if (_zoomLevel > 5.0) {
+    if (_zoomLevel > 5) {
       setState(() {
-        _zoomLevel -= 1;
-        mapController?.animateCamera(
-          CameraUpdate.newCameraPosition(
-            CameraPosition(
-                target: _currentLocation ?? _center, zoom: _zoomLevel),
-          ),
-        );
+        _zoomLevel--;
       });
+      mapController?.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(
+            target: _currentLocation ?? _fallbackCenter, zoom: _zoomLevel),
+      ));
     }
+  }
+
+  /// MOVE CAMERA TO ALL GYMS OR SEARCH MATCH
+  void _moveCameraToGyms({String? searchTerm}) {
+    final gyms = _allMapGymController.profile.value.data ?? [];
+    if (gyms.isEmpty) return;
+
+    LatLng? targetPosition;
+
+    // Check if searchTerm matches any gym name or city
+    if (searchTerm != null && searchTerm.isNotEmpty) {
+      final match = gyms.firstWhereOrNull(
+        (g) =>
+            g.name?.toLowerCase().contains(searchTerm.toLowerCase()) == true ||
+            g.city?.toLowerCase().contains(searchTerm.toLowerCase()) == true,
+      );
+      if (match != null && match.location?.coordinates.length == 2) {
+        targetPosition = LatLng(
+          match.location!.coordinates[1],
+          match.location!.coordinates[0],
+        );
+      }
+    }
+
+    // If no search match, use average of all gyms
+    if (targetPosition == null) {
+      double sumLat = 0;
+      double sumLon = 0;
+      int count = 0;
+
+      for (var g in gyms) {
+        if (g.location?.coordinates.length == 2) {
+          sumLon += g.location!.coordinates[0];
+          sumLat += g.location!.coordinates[1];
+          count++;
+        }
+      }
+
+      if (count == 0) return;
+      targetPosition = LatLng(sumLat / count, sumLon / count);
+    }
+
+    // Move camera to the target position
+    mapController?.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(target: targetPosition, zoom: 15),
+      ),
+    );
+
+    _updateCircleForDistance(targetPosition);
+  }
+
+  /// UPDATE DISTANCE CIRCLE
+  void _updateCircleForDistance(LatLng center) {
+    circles = {
+      Circle(
+        circleId: CircleId('radius'),
+        center: center,
+        radius: distance * 1609.34, // miles to meters
+        fillColor: Colors.green.withOpacity(0.2),
+        strokeColor: Colors.green.withOpacity(0.4),
+        strokeWidth: 3,
+      )
+    };
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    // Find the details of the selected gym
-    final selectedGymDetails = gymList.firstWhere(
-      (gym) => gym['gymName'] == selectedGym,
-      orElse: () => {},
-    );
+    final selectedGym = _allMapGymController.profile.value.data
+        ?.firstWhereOrNull((g) => g.id == selectedGymId);
 
     return Scaffold(
       body: Stack(
         children: [
           AppleMap(
             initialCameraPosition: CameraPosition(
-                target: _currentLocation ?? _center, zoom: _zoomLevel),
+                target: _currentLocation ?? _fallbackCenter, zoom: _zoomLevel),
             annotations: markers,
             circles: circles,
             onMapCreated: (controller) {
               mapController = controller;
-              _getCurrentLocation(); // Always center on current location
+              _getCurrentLocation();
             },
             myLocationEnabled: true,
           ),
 
-          /// 🔍 Search Bar + Filter
+          /// Search Bar
           Positioned(
             top: 50.h,
             right: 16.w,
             left: 16.w,
             child: SearchBarWithFilter(
               backgroundColor: Colors.white,
+              onSearchChanged: (text) {
+                searchTerm = text;
+              },
               onFilterTap: () => _openFilterSheet(context),
             ),
           ),
 
-          /// Gym Preview Bottom List
-          if (selectedGym != null) ...[
+          /// Bottom Preview Card
+          if (selectedGym != null)
             Positioned(
               bottom: 20.h,
               left: 16.w,
               right: 16.w,
               child: GestureDetector(
-                onTap: () => Get.to(() => const GymDetailsScreen()),
+                onTap: () => Get.to(() => GymDetailsScreen()),
                 child: GymPreviewCard(
-                  gymName: selectedGymDetails['gymName'] ?? 'No Gym Name',
-                  location: selectedGymDetails['location'] ?? 'No Location',
-                  image: selectedGymDetails['image'] ?? AppImages.gym1,
-                  categories:
-                      (selectedGymDetails['categories'] ?? '').split(', '),
-                  showDelete: true,
-                  showEdit: true,
+                  gymName: selectedGym.name ?? "No Name",
+                  location: selectedGym.city ?? "No Location",
+                  image: selectedGym.images.isNotEmpty
+                      ? selectedGym.images.first.url ?? AppImages.gym1
+                      : AppImages.gym1,
+                  categories: selectedGym.disciplines,
+                  showDelete: false,
+                  showEdit: false,
                 ),
               ),
             ),
-          ],
 
-          /// Zoom In/Out Buttons
+          /// Zoom Buttons
           Positioned(
             bottom: 10.h,
             right: 16.w,
             child: Column(
               children: [
-                GestureDetector(
-                  onTap: _zoomIn,
-                  child: Container(
-                    padding: EdgeInsets.all(8.w),
-                    decoration: BoxDecoration(
-                      color: AppColors.mainColor,
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                    child: const Icon(Icons.add, color: Colors.white),
-                  ),
-                ),
+                _zoomBtn(Icons.add, _zoomIn),
                 Gap(10.h),
-                GestureDetector(
-                  onTap: _zoomOut,
-                  child: Container(
-                    padding: EdgeInsets.all(8.w),
-                    decoration: BoxDecoration(
-                      color: AppColors.mainColor,
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                    child: const Icon(Icons.remove, color: Colors.white),
-                  ),
-                ),
+                _zoomBtn(Icons.remove, _zoomOut),
               ],
             ),
           ),
@@ -282,49 +329,58 @@ class _MapScreenViewState extends State<MapScreenView> {
     );
   }
 
+  Widget _zoomBtn(IconData icon, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(8.w),
+        decoration: BoxDecoration(
+          color: AppColors.mainColor,
+          borderRadius: BorderRadius.circular(8.r),
+        ),
+        child: Icon(icon, color: Colors.white),
+      ),
+    );
+  }
+
+  /// FILTER SHEET
   void _openFilterSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
-      ),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16.r))),
       builder: (context) {
         return StatefulBuilder(
-          builder: (context, setModalState) {
+          builder: (context, setStateSheet) {
             return Padding(
               padding: EdgeInsets.all(16.w),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () => Navigator.pop(context),
-                      ),
+                          icon: Icon(Icons.close),
+                          onPressed: () => Navigator.pop(context)),
                       CustomText(
-                        text: "Filter",
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.mainTextColors,
-                      ),
+                          text: "Filter",
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w600),
                       CustomText(
-                        text: "See All",
-                        fontSize: 12.sp,
-                        color: const Color(0xFF686868),
-                      ),
+                          text: "See All",
+                          fontSize: 12.sp,
+                          color: Color(0xFF686868)),
                     ],
                   ),
                   Gap(15.h),
+
+                  /// Category Filter
                   CustomText(
-                    text: "Category",
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.mainTextColors,
-                  ),
+                      text: "Category",
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w500),
                   Gap(8.h),
                   Wrap(
                     spacing: 8.w,
@@ -337,37 +393,31 @@ class _MapScreenViewState extends State<MapScreenView> {
                                 label: CustomText(
                                   text: cat,
                                   fontSize: 12.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: selectedCategory == cat
+                                  color: selectedCategories.contains(cat)
                                       ? Colors.white
                                       : Colors.black,
                                 ),
-                                selected: selectedCategory == cat,
-                                onSelected: (val) {
-                                  setModalState(() {
-                                    selectedCategory = cat;
-                                  });
+                                selected: selectedCategories.contains(cat),
+                                onSelected: (_) {
+                                  if (selectedCategories.contains(cat)) {
+                                    selectedCategories.remove(cat);
+                                  } else {
+                                    selectedCategories.add(cat);
+                                  }
+                                  setStateSheet(() {});
                                 },
                               ),
                             )
                             .toList(),
                   ),
                   Gap(15.h),
+
+                  /// Distance
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CustomText(
-                        text: "Location Distance",
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.mainTextColors,
-                      ),
-                      CustomText(
-                        text: "Miles",
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.pTextColors,
-                      ),
+                      CustomText(text: "Location Distance", fontSize: 16.sp),
+                      CustomText(text: "Miles", fontSize: 14.sp),
                     ],
                   ),
                   Row(
@@ -377,25 +427,26 @@ class _MapScreenViewState extends State<MapScreenView> {
                           value: distance,
                           min: 1,
                           max: 50,
-                          divisions: 50,
                           activeColor: AppColors.mainColor,
                           onChanged: (val) =>
-                              setModalState(() => distance = val),
+                              setStateSheet(() => distance = val),
                         ),
                       ),
-                      CustomText(
-                        text: "${distance.toInt()}m",
-                        fontSize: 12.sp,
-                        color: Colors.grey,
-                      ),
+                      CustomText(text: "${distance.toInt()}m", fontSize: 12.sp),
                     ],
                   ),
+
                   Gap(20.h),
+
+                  /// APPLY FILTER
                   CustomButtonWidget(
                     btnColor: AppColors.mainColor,
                     btnTextColor: Colors.white,
                     btnText: 'Apply Filter',
-                    onTap: () => Navigator.pop(context),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      await _fetchGyms();
+                    },
                     iconWant: false,
                   )
                 ],
