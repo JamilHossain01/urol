@@ -3,6 +3,7 @@ import 'package:calebshirthum/view/user/location_view/widgets/gym_preview_card.d
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:apple_maps_flutter/apple_maps_flutter.dart';
 import '../../../common widget/custom text/custom_text_widget.dart';
@@ -20,12 +21,17 @@ class MapScreenView extends StatefulWidget {
 
 class _MapScreenViewState extends State<MapScreenView> {
   AppleMapController? mapController;
-  double distance = 2;
+  double distance = 2; // Distance in miles for radius
   String selectedCategory = "Open Mat";
-  String? selectedGym; // Track the selected gym
-  double _zoomLevel = 14.0; // Default zoom level
+  String? selectedGym;
+  double _zoomLevel = 14.0;
 
-  // Updated gym list with unique names
+  LatLng? _currentLocation; // User current location
+  Set<Annotation> markers = {};
+  Set<Circle> circles = {}; // Circle to show radius
+
+  final LatLng _center = const LatLng(38.5816, -121.4944);
+
   final List<Map<String, String>> gymList = [
     {
       'gymName': 'GymNation Stars',
@@ -65,13 +71,67 @@ class _MapScreenViewState extends State<MapScreenView> {
     },
   ];
 
-  final LatLng _center = const LatLng(38.5816, -121.4944);
-  Set<Annotation> markers = {};
-
   @override
   void initState() {
     super.initState();
+    _getCurrentLocation();
     _createMarkers();
+  }
+
+  /// Fetch user current location and add circle
+  Future<void> _getCurrentLocation() async {
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Location permission is required.")),
+        );
+        return;
+      }
+
+      final position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+
+      _currentLocation = LatLng(position.latitude, position.longitude);
+
+      // Add circle for distance
+      circles = {
+        Circle(
+          circleId: CircleId('current_location_radius'),
+          center: _currentLocation!,
+          radius: distance * 369.34,
+          fillColor: Colors.red.withOpacity(0.2),
+          strokeColor: Colors.red.withOpacity(0.5), //
+          strokeWidth: 4,
+        )
+      };
+
+      markers.add(
+        Annotation(
+          annotationId: AnnotationId('current_location_marker'),
+          position: _currentLocation!,
+          icon: BitmapDescriptor.defaultAnnotation,
+          infoWindow: const InfoWindow(title: 'You are here'),
+        ),
+      );
+
+      if (mapController != null) {
+        mapController!.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(target: _currentLocation!, zoom: _zoomLevel),
+          ),
+        );
+      }
+
+      setState(() {});
+    } catch (e) {
+      print("Error fetching location: $e");
+    }
   }
 
   Future<void> _createMarkers() async {
@@ -96,20 +156,22 @@ class _MapScreenViewState extends State<MapScreenView> {
     });
   }
 
-  // Handle marker tap and update the selected gym
   void _onMarkerTapped(String gymName) {
     setState(() {
-      selectedGym = gymName; // Set the selected gym's name
+      selectedGym = gymName;
     });
   }
 
-  // Function to update the zoom level
   void _zoomIn() {
     if (_zoomLevel < 20.0) {
       setState(() {
         _zoomLevel += 1;
-        mapController?.animateCamera(CameraUpdate.newCameraPosition(
-            CameraPosition(target: _center, zoom: _zoomLevel)));
+        mapController?.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+                target: _currentLocation ?? _center, zoom: _zoomLevel),
+          ),
+        );
       });
     }
   }
@@ -118,8 +180,12 @@ class _MapScreenViewState extends State<MapScreenView> {
     if (_zoomLevel > 5.0) {
       setState(() {
         _zoomLevel -= 1;
-        mapController?.animateCamera(CameraUpdate.newCameraPosition(
-            CameraPosition(target: _center, zoom: _zoomLevel)));
+        mapController?.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+                target: _currentLocation ?? _center, zoom: _zoomLevel),
+          ),
+        );
       });
     }
   }
@@ -136,10 +202,14 @@ class _MapScreenViewState extends State<MapScreenView> {
       body: Stack(
         children: [
           AppleMap(
-            initialCameraPosition:
-                CameraPosition(target: _center, zoom: _zoomLevel),
+            initialCameraPosition: CameraPosition(
+                target: _currentLocation ?? _center, zoom: _zoomLevel),
             annotations: markers,
-            onMapCreated: (controller) => mapController = controller,
+            circles: circles,
+            onMapCreated: (controller) {
+              mapController = controller;
+              _getCurrentLocation(); // Always center on current location
+            },
             myLocationEnabled: true,
           ),
 
@@ -154,7 +224,7 @@ class _MapScreenViewState extends State<MapScreenView> {
             ),
           ),
 
-          /// Gym Preview Bottom List (shows if a gym is selected)
+          /// Gym Preview Bottom List
           if (selectedGym != null) ...[
             Positioned(
               bottom: 20.h,
@@ -165,8 +235,7 @@ class _MapScreenViewState extends State<MapScreenView> {
                 child: GymPreviewCard(
                   gymName: selectedGymDetails['gymName'] ?? 'No Gym Name',
                   location: selectedGymDetails['location'] ?? 'No Location',
-                  image: selectedGymDetails['image'] ??
-                      AppImages.gym1, // Default image if not available
+                  image: selectedGymDetails['image'] ?? AppImages.gym1,
                   categories:
                       (selectedGymDetails['categories'] ?? '').split(', '),
                   showDelete: true,
@@ -213,7 +282,6 @@ class _MapScreenViewState extends State<MapScreenView> {
     );
   }
 
-  /// 🧾 Filter Bottom Sheet
   void _openFilterSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -264,7 +332,7 @@ class _MapScreenViewState extends State<MapScreenView> {
                         ["Open Mat", "Jiu Jitsu", "Judo", "MMA", "Wrestling"]
                             .map(
                               (cat) => ChoiceChip(
-                                backgroundColor: const Color(0xFFF5F5F5),
+                                backgroundColor: AppColors.mainColor,
                                 selectedColor: AppColors.mainColor,
                                 label: CustomText(
                                   text: cat,
