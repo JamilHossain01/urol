@@ -62,16 +62,11 @@ class _MapScreenViewState extends State<MapScreenView> {
       await _allMapGymController.getAllMapGym(
         distance: distance,
         searchTerm: searchTerm,
-        disciplines: selectedCategories.join(","), // comma separated
+        disciplines: selectedCategories.join(","),
       );
 
       final data = _allMapGymController.profile.value.data ?? [];
       print("🟢 API Response → Total gyms: ${data.length}");
-
-      for (var g in data) {
-        print(
-            "🏋 Gym: ${g.name} | ID: ${g.id} | coords: ${g.location?.coordinates}");
-      }
 
       await _createMarkersFromAPI();
       _moveCameraToGyms(searchTerm: searchTerm);
