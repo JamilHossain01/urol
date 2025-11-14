@@ -27,6 +27,8 @@ class _LocationPickerModalState extends State<LocationPickerModal> {
   double _currentZoom = 17;
   bool isLoading = true;
 
+  final TextEditingController searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -58,12 +60,16 @@ class _LocationPickerModalState extends State<LocationPickerModal> {
         selectedPosition = widget.initialPosition ?? currentPosition;
         isLoading = false;
       });
+
+      if (selectedPosition != null) {
+        _updateAddress(selectedPosition!);
+      }
     } catch (e) {
       debugPrint("Failed to get location: $e");
     }
   }
 
-  Future<void> _getAddressFromLatLng(LatLng pos) async {
+  Future<void> _updateAddress(LatLng pos) async {
     try {
       final placemarks =
           await placemarkFromCoordinates(pos.latitude, pos.longitude);
@@ -76,6 +82,29 @@ class _LocationPickerModalState extends State<LocationPickerModal> {
       }
     } catch (e) {
       debugPrint("Failed to get address: $e");
+    }
+  }
+
+  Future<void> _searchLocation(String query) async {
+    if (query.isEmpty) return;
+    try {
+      List<Location> locations = await locationFromAddress(query);
+      if (locations.isNotEmpty && mapController != null) {
+        final loc = locations.first;
+        LatLng target = LatLng(loc.latitude, loc.longitude);
+        setState(() {
+          selectedPosition = target;
+        });
+
+        // Move camera to the searched location with zoom 8
+        mapController!.moveCamera(CameraUpdate.newCameraPosition(
+          CameraPosition(target: target, zoom: 8),
+        ));
+
+        _updateAddress(target);
+      }
+    } catch (e) {
+      debugPrint("Location search failed: $e");
     }
   }
 
@@ -101,6 +130,7 @@ class _LocationPickerModalState extends State<LocationPickerModal> {
           ? Center(child: CircularProgressIndicator())
           : Stack(
               children: [
+                // Map
                 AppleMap(
                   initialCameraPosition: CameraPosition(
                     target: selectedPosition ?? currentPosition!,
@@ -110,7 +140,7 @@ class _LocationPickerModalState extends State<LocationPickerModal> {
                   onMapCreated: (controller) => mapController = controller,
                   onTap: (pos) {
                     setState(() => selectedPosition = pos);
-                    _getAddressFromLatLng(pos);
+                    _updateAddress(pos);
                   },
                   annotations: {
                     if (selectedPosition != null)
@@ -138,6 +168,31 @@ class _LocationPickerModalState extends State<LocationPickerModal> {
                       ),
                   },
                 ),
+
+                // Search Bar
+                Positioned(
+                  top: 16,
+                  left: 16,
+                  right: 16,
+                  child: Material(
+                    elevation: 2,
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white, // Background color
+                    child: TextField(
+                      controller: searchController,
+                      textInputAction: TextInputAction.search,
+                      onChanged: _searchLocation, // Auto search as typing
+                      decoration: InputDecoration(
+                        hintText: "Search location",
+                        prefixIcon: Icon(Icons.search),
+                        border: InputBorder.none,
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                      ),
+                    ),
+                  ),
+                ),
+
                 // Zoom buttons
                 Positioned(
                   right: 16,
@@ -162,6 +217,7 @@ class _LocationPickerModalState extends State<LocationPickerModal> {
                     ],
                   ),
                 ),
+
                 // Bottom card
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -200,20 +256,15 @@ class _LocationPickerModalState extends State<LocationPickerModal> {
                               onPressed: selectedPosition == null
                                   ? null
                                   : () {
-                                // Print latitude and longitude
-                                debugPrint(
-                                    "Selected Lat: ${selectedPosition!.latitude}, Lng: ${selectedPosition!.longitude}");
-                                debugPrint("Selected Address: $selectedAddress");
-
-                                widget.onLocationSelected(selectedPosition!, selectedAddress);
-                              },
+                                      widget.onLocationSelected(
+                                          selectedPosition!, selectedAddress);
+                                    },
                               icon: Icon(Icons.check, color: Colors.white),
                               label: Text(
                                 "Confirm Location",
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),
-
                           ],
                         ),
                       ),

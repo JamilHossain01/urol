@@ -26,7 +26,7 @@ class SearchBarWithFilter extends StatelessWidget {
             child: TextField(
               onChanged: onSearchChanged,
               decoration: InputDecoration(
-                hintText: "Search here...",
+                hintText: "Search location here...",
                 hintStyle: TextStyle(
                   fontSize: 14.sp,
                   color: const Color(0xFFB9B9B9),
