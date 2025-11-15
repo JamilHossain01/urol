@@ -20,6 +20,7 @@ import '../../../uitilies/custom_loader.dart';
 import '../location_view/location_screen_view.dart';
 import '../profile_view/widgets/event_card.dart';
 import 'controller/my_profile_controller.dart';
+import 'controller/unread_notification_controller.dart';
 
 class HomeScreenView extends StatefulWidget {
   HomeScreenView({super.key});
@@ -36,12 +37,15 @@ class _HomeScreenViewState extends State<HomeScreenView> {
 
   final CurrentLocationService _locationService =
       Get.put(CurrentLocationService());
+  final UnreadNotificationController _unreadNotificationController =
+      Get.put(UnreadNotificationController());
 
   @override
   void initState() {
     super.initState();
     profileController.getProfileController();
     _getCurrentLocationAndUpdateMats();
+    _unreadNotificationController.getUnReadController();
   }
 
   Future<void> _getCurrentLocationAndUpdateMats() async {
@@ -164,13 +168,12 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                             null ||
                         _openMatsController.openMats.value.data!.isEmpty) {
                       return Padding(
-                        padding: EdgeInsets.symmetric(vertical: 20.h),
-                        child: Center(
-                            child: NotFoundWidget(
-                              imagePath: "assets/images/not_found.png",
-                              message: "Sorry, No nearby mats found!",
-                            ))
-                      );
+                          padding: EdgeInsets.symmetric(vertical: 20.h),
+                          child: Center(
+                              child: NotFoundWidget(
+                            imagePath: "assets/images/not_found.png",
+                            message: "Sorry, No nearby mats found!",
+                          )));
                     } else {
                       return NearbyMatsSection(
                         mats: _openMatsController.openMats.value.data!.map((e) {
