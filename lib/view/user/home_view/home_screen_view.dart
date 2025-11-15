@@ -4,6 +4,7 @@ import 'package:calebshirthum/uitilies/constant.dart';
 import 'package:calebshirthum/view/user/home_view/controller/open_mats_controller.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/greeting_section_widgets.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/nearby_mats_section.dart';
+import 'package:calebshirthum/view/user/home_view/widgets/shimmer/event_shimmer_portion.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/shimmer/shimmer_card_of_map.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/shimmer/user_info_shimmer.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/user_info_widgets.dart';
@@ -230,7 +231,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
             if (profileController.profile.value.data?.competition != null)
               Obx(() {
                 return profileController.isLoading.value == true
-                    ? CustomLoader()
+                    ? EventCardShimmer()
                     : EventCard(
                         showCompetition: false,
                         title: profileController

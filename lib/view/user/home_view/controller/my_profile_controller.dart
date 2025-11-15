@@ -18,6 +18,7 @@ class GetProfileController extends GetxController {
   void getProfileController() async {
     try {
       isLoading(true);
+      final startTime = DateTime.now();
 
       dynamic responseBody = await BaseClient.handleResponse(
         await BaseClient.getRequest(api: ApiUrl.profile),
@@ -28,6 +29,11 @@ class GetProfileController extends GetxController {
         print("fetched: ${profile.value}");
       } else {
         throw 'Failed to load profile data: ${responseBody['message']}';
+      }
+
+      final elapsed = DateTime.now().difference(startTime).inMilliseconds;
+      if (elapsed < 1000) {
+        await Future.delayed(Duration(milliseconds: 1000 - elapsed));
       }
     } catch (e) {
       print("Error loading profile: $e");

@@ -41,8 +41,8 @@ class OpenMatsController extends GetxController {
       }
 
       final elapsed = DateTime.now().difference(startTime).inMilliseconds;
-      if (elapsed < 2000) {
-        await Future.delayed(Duration(milliseconds: 2000 - elapsed));
+      if (elapsed < 1000) {
+        await Future.delayed(Duration(milliseconds: 1000 - elapsed));
       }
     } catch (e) {
       print("Error loading profile: $e");
