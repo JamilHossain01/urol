@@ -1,3 +1,5 @@
+import 'package:calebshirthum/view/user/dashboard_view/bottom_navigation_view.dart';
+import 'package:calebshirthum/view/user/profile_view/controller/all_notification_read_controller.dart';
 import 'package:calebshirthum/view/user/profile_view/controller/get_all_notification_controller.dart';
 import 'package:calebshirthum/view/user/profile_view/model/notification_model.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/notification_item_widget.dart';
@@ -5,6 +7,7 @@ import 'package:calebshirthum/view/user/profile_view/widgets/notification_sectio
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_app_bar_widget.dart';
 import '../../../common widget/not_found_widget.dart';
 import '../../../uitilies/custom_loader.dart';
@@ -23,6 +26,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   final GetReadAllNotificationController _readController =
       Get.put(GetReadAllNotificationController());
+
+  final AllNotificationReadController _allNotificationReadController =
+      Get.put(AllNotificationReadController());
 
   List<NotificationData> todayNotifications = [];
   List<NotificationData> previousNotifications = [];
@@ -62,7 +68,29 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
+        leading: GestureDetector(
+          onTap: () {
+            Get.offAll(() => DashboardView());
+          },
+          child: Icon(Icons.arrow_back_ios),
+        ),
+        actions: [
+          Obx(() {
+            return _allNotificationReadController.isLoading.value == true
+                ? CustomLoader()
+                : GestureDetector(
+                    onTap: () {
+                      _allNotificationReadController.getReadAll();
+                    },
+                    child: Icon(
+                      Icons.notifications_paused_rounded,
+                      size: 30,
+                    ),
+                  );
+          }),
+          SizedBox(width: 20)
+        ],
         title: 'Notifications',
         showLeadingIcon: true,
       ),
@@ -93,7 +121,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   title: 'Today',
                   notifications: todayNotifications
                       .map((n) => NotificationItem(
-                            isRead: n.isRead ?? false,
+                            isRead: (n.isRead ?? false).obs,
                             title: n.title ?? '',
                             subtitle: " ${n.message ?? ''}",
                             time: _formatTime(n.createdAt),
@@ -110,7 +138,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   title: 'Previous Day',
                   notifications: previousNotifications
                       .map((n) => NotificationItem(
-                            isRead: n.isRead ?? false,
+                            isRead: (n.isRead ?? false).obs,
                             title: n.title ?? '',
                             subtitle: " ${n.message ?? ''}",
                             time: _formatTime(n.createdAt),
