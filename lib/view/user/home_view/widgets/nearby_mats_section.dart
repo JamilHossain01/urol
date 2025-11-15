@@ -1,5 +1,6 @@
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/common widget/custom text/custom_text_widget.dart';
+import 'package:calebshirthum/view/user/home_view/widgets/shimmer/shimmer_card_of_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -43,8 +44,7 @@ class _NearbyMatsSectionState extends State<NearbyMatsSection> {
   }
 
   void _simulateLoading() async {
-    // simulate 2 seconds shimmer
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 3));
     if (mounted) {
       setState(() {
         _isLoading = false;
@@ -86,7 +86,7 @@ class _NearbyMatsSectionState extends State<NearbyMatsSection> {
                   1,
                   (index) => Padding(
                     padding: EdgeInsets.only(bottom: 10.h),
-                    child: _buildShimmerCard(),
+                    child: ShimmerCardWidgetOfMap(),
                   ),
                 ),
               )
@@ -212,77 +212,7 @@ class _NearbyMatsSectionState extends State<NearbyMatsSection> {
     );
   }
 
-  Widget _buildShimmerCard() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 10.h),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.r),
-        color: Colors.white,
-      ),
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: ShimmerWidget.rectangular(
-              height: 70.h,
-              width: 90.w,
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Title & distance
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ShimmerWidget.rectangular(
-                        height: 14.h,
-                        width: 120.w,
-                        borderRadius: BorderRadius.circular(6.r),
-                      ),
-                      ShimmerWidget.rectangular(
-                        height: 12.h,
-                        width: 40.w,
-                        borderRadius: BorderRadius.circular(6.r),
-                      ),
-                    ],
-                  ),
-                  Gap(5.h),
-                  // Days
-                  ShimmerWidget.rectangular(
-                    height: 12.h,
-                    width: 80.w,
-                    borderRadius: BorderRadius.circular(6.r),
-                  ),
-                  Gap(5.h),
-                  // Time row
-                  Row(
-                    children: [
-                      ShimmerWidget.rectangular(
-                        height: 12.h,
-                        width: 14.w,
-                        borderRadius: BorderRadius.circular(6.r),
-                      ),
-                      Gap(4.w),
-                      ShimmerWidget.rectangular(
-                        height: 12.h,
-                        width: 50.w,
-                        borderRadius: BorderRadius.circular(6.r),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+
 }
 
 class ShimmerWidget extends StatelessWidget {

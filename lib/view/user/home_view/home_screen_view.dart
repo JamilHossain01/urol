@@ -4,6 +4,7 @@ import 'package:calebshirthum/uitilies/constant.dart';
 import 'package:calebshirthum/view/user/home_view/controller/open_mats_controller.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/greeting_section_widgets.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/nearby_mats_section.dart';
+import 'package:calebshirthum/view/user/home_view/widgets/shimmer/shimmer_card_of_map.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/shimmer/user_info_shimmer.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/user_info_widgets.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_date_format.dart';
 import '../../../uitilies/app_images.dart';
 import '../../../uitilies/custom_loader.dart';
+import '../location_view/location_screen_view.dart';
 import '../profile_view/widgets/event_card.dart';
 import 'controller/my_profile_controller.dart';
 
@@ -131,19 +133,65 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                     );
                   }),
                   Gap(10.h),
-                  NearbyMatsSection(
-                    mats: [
-                      MatCardData(
-                        name: "The Fight Club",
-                        distance: "0.5 km",
-                        days: "Sun, Tue",
-                        time: "4:00 - 6:00 PM",
-                        image: AppImages.gym1,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomText(
+                        color: AppColors.mainTextColors,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14.h,
+                        text: "Nearby Open Mats",
                       ),
-
-
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(() => MapScreenView());
+                        },
+                        child: CustomText(
+                          color: AppColors.mainColor,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 10.h,
+                          text: "View All on Map",
+                        ),
+                      ),
                     ],
                   ),
+                  Gap(10.h),
+                  Obx(() {
+                    if (_openMatsController.isLoading.value == true) {
+                      return ShimmerCardWidgetOfMap();
+                    } else if (_openMatsController.openMats.value.data ==
+                            null ||
+                        _openMatsController.openMats.value.data!.isEmpty) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20.h),
+                        child: Center(
+                          child: CustomText(
+                            text: "No nearby mats available",
+                            fontSize: 14.sp,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return NearbyMatsSection(
+                        mats: _openMatsController.openMats.value.data!.map((e) {
+                          return MatCardData(
+                            name: e.name ?? "N/A",
+                            distance: e.distance?.toStringAsFixed(1) ?? "0 km",
+                            days: e.matSchedules.isNotEmpty
+                                ? e.matSchedules.map((s) => s.day).join(", ")
+                                : "N/A",
+                            time: e.matSchedules.isNotEmpty
+                                ? "${e.matSchedules.first.fromView} - ${e.matSchedules.first.toView}"
+                                : "N/A",
+                            image: e.images.isNotEmpty
+                                ? e.images.first.url ?? ""
+                                : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
+                          );
+                        }).toList(),
+                      );
+                    }
+                  }),
                   Gap(10.h),
                 ],
               ),
