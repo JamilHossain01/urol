@@ -1,5 +1,6 @@
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/constant.dart';
+import 'package:calebshirthum/view/user/home_view/controller/open_mats_controller.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/greeting_section_widgets.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/nearby_mats_section.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/shimmer/user_info_shimmer.dart';
@@ -27,11 +28,16 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   final GetProfileController profileController =
       Get.put(GetProfileController());
 
+  final OpenMatsController _openMatsController = Get.put(OpenMatsController());
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     profileController.getProfileController();
+
+    _openMatsController.getOpenMatsController(
+        lat: "", long: "", hour: "", dayName: "", minute: "");
   }
 
   @override

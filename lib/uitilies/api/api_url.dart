@@ -25,6 +25,9 @@ class ApiUrl {
 
   static String editEvent({required String id}) => "$baseUrl/events/$id";
 
+  static String getOpenMats({required String lat,required String long,required String hour,required String dayName,required String minute}) =>
+      "$baseUrl/gyms/mats/near-me?day=$dayName&hour=$hour&minute=$minute&long=$long&lat=$lat";
+
   static String mapGym(
           {required String searchTerm,
           required dynamic distance,

@@ -96,7 +96,6 @@ class _LocationPickerModalState extends State<LocationPickerModal> {
           selectedPosition = target;
         });
 
-        // Move camera to the searched location with zoom 8
         mapController!.moveCamera(CameraUpdate.newCameraPosition(
           CameraPosition(target: target, zoom: 8),
         ));
