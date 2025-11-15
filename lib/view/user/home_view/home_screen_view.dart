@@ -1,3 +1,4 @@
+import 'package:calebshirthum/common%20widget/current_location_service.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/constant.dart';
 import 'package:calebshirthum/view/user/home_view/controller/open_mats_controller.dart';
@@ -30,14 +31,49 @@ class _HomeScreenViewState extends State<HomeScreenView> {
 
   final OpenMatsController _openMatsController = Get.put(OpenMatsController());
 
+  final CurrentLocationService _locationService =
+      Get.put(CurrentLocationService());
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     profileController.getProfileController();
+    _getCurrentLocationAndUpdateMats();
+  }
+
+  Future<void> _getCurrentLocationAndUpdateMats() async {
+    bool granted = await _locationService.requestPermission();
+    if (!granted) return;
+
+    var pos = await _locationService.getCurrentLocation();
+    if (pos == null) return;
+
+    await _locationService.saveLatLong(pos.latitude, pos.longitude);
+
+    DateTime now = DateTime.now().toUtc();
+    String day = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ][now.weekday - 1];
+
+    String hour = now.hour.toString();
+    String minute = now.minute.toString().padLeft(2, '0');
+
+    print("Lat: ${pos.latitude}, Long: ${pos.longitude}");
+    print("Today: $day, Time (UTC): $hour:$minute");
 
     _openMatsController.getOpenMatsController(
-        lat: "", long: "", hour: "", dayName: "", minute: "");
+      lat: pos.latitude.toString(),
+      long: pos.longitude.toString(),
+      hour: hour,
+      dayName: day,
+      minute: minute,
+    );
   }
 
   @override
@@ -55,7 +91,6 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                   Gap(50.h),
                   GreetingSection(),
                   Gap(10.h),
-
                   Obx(() {
                     bool isLoading = profileController.isLoading.value;
                     return FutureBuilder(
@@ -95,7 +130,6 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                       },
                     );
                   }),
-
                   Gap(10.h),
                   NearbyMatsSection(
                     mats: [
@@ -106,34 +140,11 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                         time: "4:00 - 6:00 PM",
                         image: AppImages.gym1,
                       ),
-                      MatCardData(
-                        name: "Powerhouse Gym",
-                        distance: "1 km",
-                        days: "Sun - Tue",
-                        time: "4:00 - 6:00 PM",
-                        image: AppImages.gym2,
-                      ),
-                      MatCardData(
-                        name: "Victory BJJ",
-                        distance: "2 km",
-                        days: "Wed, Fri",
-                        time: "9:00 - 11:00 PM",
-                        image: AppImages.gym3,
-                      ),
+
+
                     ],
                   ),
                   Gap(10.h),
-
-                  // EventResultsSection(
-                  //   events: [
-                  //     EventResultData(
-                  //       event: "IBJJF World Championships 2024",
-                  //       division: "NoGi Absolute",
-                  //       location: "Buffalo, New York",
-                  //       result: "GOLD",
-                  //     ),
-                  //   ],
-                  // ),
                 ],
               ),
             ),

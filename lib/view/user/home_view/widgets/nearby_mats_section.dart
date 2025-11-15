@@ -1,17 +1,11 @@
-import 'package:calebshirthum/view/user/location_view/gym_details_view.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:calebshirthum/uitilies/app_colors.dart';
+import 'package:calebshirthum/common widget/custom text/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-
-import '../../../../common widget/custom text/custom_text_widget.dart';
-import '../../../../uitilies/app_colors.dart';
-
-import 'package:gap/gap.dart';
-
+import 'package:shimmer/shimmer.dart';
+import '../../location_view/gym_details_view.dart';
 import '../../location_view/location_screen_view.dart';
 
 class MatCardData {
@@ -30,10 +24,33 @@ class MatCardData {
   });
 }
 
-class NearbyMatsSection extends StatelessWidget {
+class NearbyMatsSection extends StatefulWidget {
   final List<MatCardData> mats;
 
   const NearbyMatsSection({super.key, required this.mats});
+
+  @override
+  State<NearbyMatsSection> createState() => _NearbyMatsSectionState();
+}
+
+class _NearbyMatsSectionState extends State<NearbyMatsSection> {
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _simulateLoading();
+  }
+
+  void _simulateLoading() async {
+    // simulate 2 seconds shimmer
+    await Future.delayed(Duration(seconds: 2));
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,30 +80,40 @@ class NearbyMatsSection extends StatelessWidget {
           ],
         ),
         Gap(10.h),
-        ...mats.map(
-          (mat) => GestureDetector(
-              onTap: () {
-                Get.to(() => GymDetailsScreen());
-              },
-              child: _buildNearbyMatCard(
-                mat.name,
-                mat.distance,
-                mat.days,
-                mat.time,
-                mat.image,
-              )),
-        ),
+        _isLoading
+            ? Column(
+                children: List.generate(
+                  1,
+                  (index) => Padding(
+                    padding: EdgeInsets.only(bottom: 10.h),
+                    child: _buildShimmerCard(),
+                  ),
+                ),
+              )
+            : Column(
+                children: widget.mats
+                    .map(
+                      (mat) => GestureDetector(
+                        onTap: () {
+                          Get.to(() => GymDetailsScreen());
+                        },
+                        child: _buildNearbyMatCard(
+                          mat.name,
+                          mat.distance,
+                          mat.days,
+                          mat.time,
+                          mat.image,
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
       ],
     );
   }
 
   Widget _buildNearbyMatCard(
-    String name,
-    String distance,
-    String days,
-    String time,
-    String image,
-  ) {
+      String name, String distance, String days, String time, String image) {
     return Container(
       margin: EdgeInsets.only(bottom: 10.h),
       decoration: BoxDecoration(
@@ -120,6 +147,7 @@ class NearbyMatsSection extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Title & Distance
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -146,17 +174,7 @@ class NearbyMatsSection extends StatelessWidget {
                     ],
                   ),
                   Gap(5.h),
-                  // Row(
-                  //   children: [
-                  //     const Icon(Icons.calendar_today, size: 12, color: Colors.grey),
-                  //     Gap(4.w),
-                  //     CustomText(
-                  //       color: const Color(0xFF686868),
-                  //       fontSize: 12.h,
-                  //       text: days,
-                  //     ),
-                  //   ],
-                  // ),
+                  // Days
                   Container(
                     decoration: BoxDecoration(
                         color: Color(0xFFF5F5F5),
@@ -172,7 +190,7 @@ class NearbyMatsSection extends StatelessWidget {
                     ),
                   ),
                   Gap(5.h),
-
+                  // Time Row
                   Row(
                     children: [
                       const Icon(Icons.access_time,
@@ -190,6 +208,107 @@ class NearbyMatsSection extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildShimmerCard() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 10.h),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.r),
+        color: Colors.white,
+      ),
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: ShimmerWidget.rectangular(
+              height: 70.h,
+              width: 90.w,
+              borderRadius: BorderRadius.circular(12.r),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Title & distance
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ShimmerWidget.rectangular(
+                        height: 14.h,
+                        width: 120.w,
+                        borderRadius: BorderRadius.circular(6.r),
+                      ),
+                      ShimmerWidget.rectangular(
+                        height: 12.h,
+                        width: 40.w,
+                        borderRadius: BorderRadius.circular(6.r),
+                      ),
+                    ],
+                  ),
+                  Gap(5.h),
+                  // Days
+                  ShimmerWidget.rectangular(
+                    height: 12.h,
+                    width: 80.w,
+                    borderRadius: BorderRadius.circular(6.r),
+                  ),
+                  Gap(5.h),
+                  // Time row
+                  Row(
+                    children: [
+                      ShimmerWidget.rectangular(
+                        height: 12.h,
+                        width: 14.w,
+                        borderRadius: BorderRadius.circular(6.r),
+                      ),
+                      Gap(4.w),
+                      ShimmerWidget.rectangular(
+                        height: 12.h,
+                        width: 50.w,
+                        borderRadius: BorderRadius.circular(6.r),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ShimmerWidget extends StatelessWidget {
+  final double width;
+  final double height;
+  final BorderRadius? borderRadius;
+
+  const ShimmerWidget.rectangular({
+    super.key,
+    required this.width,
+    required this.height,
+    this.borderRadius,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey.shade100,
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: Colors.grey.shade300,
+          borderRadius: borderRadius ?? BorderRadius.circular(8),
+        ),
       ),
     );
   }
