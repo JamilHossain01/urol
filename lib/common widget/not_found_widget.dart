@@ -24,7 +24,7 @@ class NotFoundWidget extends StatelessWidget {
     this.iconColor,
     this.textAlign = TextAlign.center,
   })  : assert(imagePath != null || iconData != null,
-  "Either imagePath or iconData must be provided"),
+            "Either imagePath or iconData must be provided"),
         super(key: key);
 
   @override
@@ -33,6 +33,7 @@ class NotFoundWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          SizedBox(height: 20),
           if (imagePath != null)
             Image.asset(
               imagePath!,
@@ -53,6 +54,7 @@ class NotFoundWidget extends StatelessWidget {
             color: AppColors.pTextColors,
             textAlign: textAlign,
           ),
+          SizedBox(height: 20),
         ],
       ),
     );

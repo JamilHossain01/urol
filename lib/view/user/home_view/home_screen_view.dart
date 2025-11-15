@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_date_format.dart';
+import '../../../common widget/not_found_widget.dart';
 import '../../../uitilies/app_images.dart';
 import '../../../uitilies/custom_loader.dart';
 import '../location_view/location_screen_view.dart';
@@ -165,12 +166,10 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                       return Padding(
                         padding: EdgeInsets.symmetric(vertical: 20.h),
                         child: Center(
-                          child: CustomText(
-                            text: "No nearby mats available",
-                            fontSize: 14.sp,
-                            color: Colors.grey,
-                          ),
-                        ),
+                            child: NotFoundWidget(
+                              imagePath: "assets/images/not_found.png",
+                              message: "Sorry, No nearby mats found!",
+                            ))
                       );
                     } else {
                       return NearbyMatsSection(
