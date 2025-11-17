@@ -1,4 +1,5 @@
 import 'package:calebshirthum/common%20widget/current_location_service.dart';
+import 'package:calebshirthum/common%20widget/custom_elipse_text.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/constant.dart';
 import 'package:calebshirthum/view/user/home_view/controller/open_mats_controller.dart';
@@ -117,11 +118,11 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                           String fullName = "$firstName $lastName".trim();
 
                           return UserInfoSection(
-                            name: fullName,
+                            name: customEllipsisText(fullName, wordLimit: 3),
                             gymName: profileController
                                     .profile.value.data?.homeGym
                                     ?.toString() ??
-                                "N/A",
+                                "No home gym added yet",
                             quote: profileController
                                     .profile.value.data?.favouriteQuote
                                     ?.toString() ??
@@ -228,30 +229,34 @@ class _HomeScreenViewState extends State<HomeScreenView> {
               ),
             ),
             SizedBox(height: 10.h),
-            if (profileController.profile.value.data?.competition != null)
-              Obx(() {
-                return profileController.isLoading.value == true
-                    ? EventCardShimmer()
-                    : EventCard(
-                        showCompetition: false,
-                        title: profileController
-                                .profile.value.data?.competition?.eventName ??
-                            "",
-                        date: CustomDateFormatter.formatDate(profileController
-                                .profile.value.data?.competition?.eventDate
-                                .toString() ??
-                            ""),
-                        division: profileController
-                                .profile.value.data?.competition?.division ??
-                            "",
-                        location: profileController
-                                .profile.value.data?.competition?.city ??
-                            "",
-                        medalText: profileController
-                                .profile.value.data?.competition?.result ??
-                            "",
-                      );
-              }),
+            Obx(() {
+              final competition =
+                  profileController.profile.value.data?.competition;
+
+              if (profileController.isLoading.value) {
+                return EventCardShimmer();
+              }
+
+              if (competition == null) {
+                return Center(
+                    child: NotFoundWidget(
+                  imagePath: "assets/images/not_found.png",
+                  message: "No recent event found",
+                ));
+              }
+
+              // 👉 If data available
+              return EventCard(
+                showCompetition: false,
+                title: competition.eventName ?? "",
+                date: CustomDateFormatter.formatDate(
+                  competition.eventDate.toString(),
+                ),
+                division: competition.division ?? "",
+                location: competition.city ?? "",
+                medalText: competition.result ?? "",
+              );
+            }),
             SizedBox(height: 20.h),
           ],
         ),

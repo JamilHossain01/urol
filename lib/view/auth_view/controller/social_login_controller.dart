@@ -34,7 +34,7 @@ class SocialLoginController extends GetxController {
       print("Request Body: $map");
 
       var response = await http.post(
-        Uri.parse(ApiUrl.login),
+        Uri.parse(ApiUrl.socialLogin),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(map),
       );

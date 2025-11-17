@@ -15,17 +15,44 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>com.ujitsu.app</string>
+	<string>uJitsu</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+
+	<!-- GOOGLE SIGN-IN URL SCHEME -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<!-- Correct REVERSED_CLIENT_ID -->
+				<string>com.googleusercontent.apps.252734026318-r0ijkvnhfclvjn3ov1ki4shvfn5dbae7</string>
+			</array>
+		</dict>
+
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<!-- This is fine for Apple Sign In -->
+				<string>com.ujitsugym.app</string>
+			</array>
+		</dict>
+	</array>
+
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+
+	<!-- Permissions -->
 	<key>NSCameraUsageDescription</key>
 	<string>We need access to your camera to take profile and gym photos.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -36,14 +63,18 @@
 	<string>We need permission to save photos to your library if you take a new photo.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need access to your photo library to upload existing images for your profile or gym.</string>
+
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
 	<array/>
+
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+
+	<!-- Orientation -->
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

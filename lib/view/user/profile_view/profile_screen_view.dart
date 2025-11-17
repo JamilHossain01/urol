@@ -158,30 +158,30 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
 
               SizedBox(height: 12.h),
-              if (_getProfileController.profile.value.data?.competition != null)
-                Obx(() {
-                  return _getProfileController.isLoading.value == true
-                      ? CustomLoader()
-                      : EventCard(
-                          title: _getProfileController
-                                  .profile.value.data?.competition?.eventName ??
-                              "",
-                          date: CustomDateFormatter.formatDate(
-                              _getProfileController.profile.value.data
-                                      ?.competition?.eventDate
-                                      .toString() ??
-                                  ""),
-                          division: _getProfileController
-                                  .profile.value.data?.competition?.division ??
-                              "",
-                          location: _getProfileController
-                                  .profile.value.data?.competition?.city ??
-                              "",
-                          medalText: _getProfileController
-                                  .profile.value.data?.competition?.result ??
-                              "",
-                        );
-                }),
+              Obx(() {
+                return _getProfileController.isLoading.value == true
+                    ? CustomLoader()
+                    : EventCard(
+                        showCompetition: true,
+                        title: _getProfileController
+                                .profile.value.data?.competition?.eventName ??
+                            "Not added yet",
+                        date: CustomDateFormatter.formatDate(
+                            _getProfileController
+                                    .profile.value.data?.competition?.eventDate
+                                    .toString() ??
+                                "n/a"),
+                        division: _getProfileController
+                                .profile.value.data?.competition?.division ??
+                            "Not division added yet",
+                        location: _getProfileController
+                                .profile.value.data?.competition?.city ??
+                            "n/a",
+                        medalText: _getProfileController
+                                .profile.value.data?.competition?.result ??
+                            "Not added yet",
+                      );
+              }),
 
               // Others Section
               Padding(
@@ -213,7 +213,9 @@ class _ProfileViewState extends State<ProfileView> {
                     OtherTile(
                       text: "Add Event",
                       iconPath: AppImages.calenderA,
-                      onTap: () => Get.to(() => AddEventsView(isEdit: false,)),
+                      onTap: () => Get.to(() => AddEventsView(
+                            isEdit: false,
+                          )),
                     ),
                     OtherTile(
                       text: "My Gyms",

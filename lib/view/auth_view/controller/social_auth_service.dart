@@ -1,10 +1,13 @@
 import 'dart:io';
+import 'package:calebshirthum/view/auth_view/controller/social_login_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  final SocialLoginController _socialLoginController = SocialLoginController();
 
   // ----------------------------
   // Google Sign-In
@@ -22,7 +25,7 @@ class AuthService {
 
       // Obtain the auth details
       final GoogleSignInAuthentication googleAuth =
-      await googleUser.authentication;
+          await googleUser.authentication;
 
       // Create a credential for Firebase
       final credential = GoogleAuthProvider.credential(
@@ -32,9 +35,16 @@ class AuthService {
 
       // Sign in with Firebase
       final UserCredential userCredential =
-      await _auth.signInWithCredential(credential);
+          await _auth.signInWithCredential(credential);
 
       print("Google Sign-In successful: ${userCredential.user?.displayName}");
+
+      _socialLoginController.socialLogin(
+        email: userCredential.user?.email ?? "",
+        image: userCredential.user?.photoURL ?? "",
+        firstName: userCredential.user?.displayName ?? "",
+      );
+
       return userCredential;
     } catch (e) {
       print("Error during Google Sign-In: $e");
@@ -65,7 +75,7 @@ class AuthService {
       );
 
       final UserCredential userCredential =
-      await _auth.signInWithCredential(oauthCredential);
+          await _auth.signInWithCredential(oauthCredential);
 
       print("Apple Sign-In successful: ${userCredential.user?.displayName}");
       return userCredential;

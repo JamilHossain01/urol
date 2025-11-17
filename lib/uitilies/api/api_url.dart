@@ -17,10 +17,10 @@ class ApiUrl {
   static const String addEvents = "$baseUrl/events";
   static const String myEvent = "$baseUrl/events/my-events";
   static const String savedGym = "$baseUrl/save";
+  static const String socialLogin = "$baseUrl/auth/social-login";
   static const String allNotification = "$baseUrl/notifications";
 
   static const String profile = "$baseUrl/users/my-profile";
-  static const String socialLogin = "$baseUrl/auth/social-login";
 
   static const String notificationUnread =
       "$baseUrl/notifications/unread-count";

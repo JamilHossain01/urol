@@ -3,6 +3,7 @@
 import 'package:calebshirthum/uitilies/app_images.dart';
 import 'package:calebshirthum/uitilies/custom_loader.dart';
 import 'package:calebshirthum/uitilies/custom_toast.dart';
+import 'package:calebshirthum/view/auth_view/controller/social_auth_service.dart';
 import 'package:calebshirthum/view/auth_view/sign_up_view.dart';
 import 'package:calebshirthum/view/auth_view/widget/social_login_button.dart';
 import 'package:flutter/material.dart';
@@ -31,15 +32,14 @@ class _SignInViewState extends State<SignInView> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  final AuthService _authService = Get.put(AuthService());
+
   bool _keepMeLoggedIn = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-
-          showLeadingIcon: false,
-          title: ''),
+      appBar: CustomAppBar(showLeadingIcon: false, title: ''),
       backgroundColor: Colors.white,
       body: Stack(
         children: [
@@ -220,7 +220,7 @@ class _SignInViewState extends State<SignInView> {
                       SocialLoginButtons(
                         onGoogleTap: () {
                           print("Google login tapped");
-                          // TODO: Add Google login logic here
+                          _authService.signInWithGoogle();
                         },
                         onAppleTap: () {
                           print("Apple login tapped");
