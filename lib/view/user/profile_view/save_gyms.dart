@@ -68,7 +68,7 @@ class _SaveGymsViewState extends State<SaveGymsView> {
               padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
               child: GestureDetector(
                 onTap: () {
-                  Get.to(() => GymDetailsScreen());
+                  Get.to(() => GymDetailsScreen(gymId: gym.id.toString(),));
                 },
                 child: GymPreviewCard(
                   gymName: gym.gym?.name.toString() ?? "n/a",

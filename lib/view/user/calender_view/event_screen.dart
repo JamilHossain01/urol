@@ -65,6 +65,7 @@ class _EventScreenViewState extends State<EventScreenView> {
                 _getEventController.getAllEvent(
                     searchTerms: text, type: '', state: '', city: '');
               },
+              hintText: 'Search here....',
             ),
             Gap(20.h),
             CustomText(

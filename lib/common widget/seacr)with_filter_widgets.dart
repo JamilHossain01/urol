@@ -4,13 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class SearchBarWithFilter extends StatelessWidget {
   final VoidCallback onFilterTap;
   final Color? backgroundColor;
-  final ValueChanged<String>? onSearchChanged; // 👈 Callback for search text
+  final String hintText;
+  final ValueChanged<String>? onSearchChanged;
 
   const SearchBarWithFilter({
     Key? key,
     required this.onFilterTap,
     this.backgroundColor,
     this.onSearchChanged,
+    required this.hintText,
   }) : super(key: key);
 
   @override
@@ -26,7 +28,7 @@ class SearchBarWithFilter extends StatelessWidget {
             child: TextField(
               onChanged: onSearchChanged,
               decoration: InputDecoration(
-                hintText: "Search location here...",
+                hintText: hintText,
                 hintStyle: TextStyle(
                   fontSize: 14.sp,
                   color: const Color(0xFFB9B9B9),

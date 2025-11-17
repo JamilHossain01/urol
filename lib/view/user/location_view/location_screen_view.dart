@@ -285,6 +285,7 @@ class _MapScreenViewState extends State<MapScreenView> {
                 _moveCameraToGyms(searchTerm: searchTerm);
               },
               onFilterTap: () => _openFilterSheet(context),
+              hintText: 'Search location here...',
             ),
           ),
 
@@ -295,7 +296,9 @@ class _MapScreenViewState extends State<MapScreenView> {
               left: 16.w,
               right: 16.w,
               child: GestureDetector(
-                onTap: () => Get.to(() => GymDetailsScreen()),
+                onTap: () => Get.to(() => GymDetailsScreen(
+                      gymId: selectedGym.id.toString(),
+                    )),
                 child: GymPreviewCard(
                   gymName: selectedGym.name ?? "No Name",
                   location: selectedGym.city ?? "No Location",

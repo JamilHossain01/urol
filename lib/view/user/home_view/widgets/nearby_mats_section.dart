@@ -95,7 +95,9 @@ class _NearbyMatsSectionState extends State<NearbyMatsSection> {
                     .map(
                       (mat) => GestureDetector(
                         onTap: () {
-                          Get.to(() => GymDetailsScreen());
+                          Get.to(() => GymDetailsScreen(
+                                gymId: '',
+                              ));
                         },
                         child: _buildNearbyMatCard(
                           mat.name,
@@ -211,8 +213,6 @@ class _NearbyMatsSectionState extends State<NearbyMatsSection> {
       ),
     );
   }
-
-
 }
 
 class ShimmerWidget extends StatelessWidget {

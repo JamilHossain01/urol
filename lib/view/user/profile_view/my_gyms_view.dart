@@ -67,7 +67,7 @@ class _MyGymsViewState extends State<MyGymsView> {
               padding: const EdgeInsets.symmetric(vertical: 5),
               child: GestureDetector(
                 onTap: () {
-                  Get.to(() => GymDetailsScreen());
+                  Get.to(() => GymDetailsScreen(gymId: gym.id.toString(),));
                 },
                 child: GymPreviewCard(
                   delete: (){

@@ -22,7 +22,9 @@ import '../../../uitilies/custom_toast.dart';
 import '../profile_view/widgets/shimmer/full_image_view_shimmer.dart';
 
 class GymDetailsScreen extends StatefulWidget {
-  const GymDetailsScreen({super.key});
+  final String gymId;
+
+  const GymDetailsScreen({super.key, required this.gymId});
 
   @override
   State<GymDetailsScreen> createState() => _GymDetailsScreenState();
@@ -40,7 +42,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
   void initState() {
     super.initState();
     _getGymDetailsController.getGymDetails(
-      gymId: "6915b1cdbadffcd28961959c",
+      gymId: widget.gymId,
     );
   }
 
