@@ -227,8 +227,7 @@ class CardOfEvent extends StatelessWidget {
                             text: _shortenLink(link),
                             fontSize: 10.sp,
                             color: const Color(0xFF1D52FF),
-                            overflow:
-                                TextOverflow.ellipsis, // Ensures no overflow
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         const Icon(

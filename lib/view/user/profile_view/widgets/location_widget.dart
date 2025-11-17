@@ -18,6 +18,7 @@ class LocationWidget extends StatelessWidget {
   final dynamic lat;
   final dynamic long;
   final TextEditingController cityController;
+  final bool? zipCode;
   final TextEditingController stateController;
   final TextEditingController zipCodeController;
   final void Function(double lat, double long)? onLocationChanged;
@@ -31,6 +32,7 @@ class LocationWidget extends StatelessWidget {
     this.lat,
     this.long,
     this.onLocationChanged,
+    this.zipCode,
   });
 
   Future<void> _pickLocation(BuildContext context) async {
@@ -154,21 +156,24 @@ class LocationWidget extends StatelessWidget {
           ],
         ),
         SizedBox(height: 12.h),
-        CustomText(
-          text: "Zip Code",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w600,
-          color: AppColors.textFieldNameColor,
-        ),
+        if (zipCode != false)
+          CustomText(
+            text: "Zip Code",
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w600,
+            color: AppColors.textFieldNameColor,
+          ),
         Gap(4.h),
-        CustomTextField(
-          controller: zipCodeController,
-          hintText: "Enter zip code",
-          showObscure: false,
-          fillColor: AppColors.backRoudnColors,
-          hintTextColor: AppColors.hintTextColors,
-          validator: (value) => value!.isEmpty ? "Zip code is required" : null,
-        ),
+        if (zipCode != false)
+          CustomTextField(
+            controller: zipCodeController,
+            hintText: "Enter zip code",
+            showObscure: false,
+            fillColor: AppColors.backRoudnColors,
+            hintTextColor: AppColors.hintTextColors,
+            validator: (value) =>
+                value!.isEmpty ? "Zip code is required" : null,
+          ),
         SizedBox(height: 20.h),
       ],
     );

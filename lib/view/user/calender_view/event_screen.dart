@@ -25,11 +25,18 @@ class EventScreenView extends StatefulWidget {
 class _EventScreenViewState extends State<EventScreenView> {
   final GetEventController _getEventController = Get.put(GetEventController());
 
+  /// THIS VARIABLE HOLDS SELECTED EVENT TYPE
+  String selectedEventType = "All Events";
+
   @override
   void initState() {
     super.initState();
     _getEventController.getAllEvent(
-        searchTerms: '', type: '', state: '', city: '');
+      searchTerms: '',
+      type: '',
+      state: '',
+      city: '',
+    );
   }
 
   @override
@@ -56,6 +63,7 @@ class _EventScreenViewState extends State<EventScreenView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            /// SEARCH BAR
             SearchBarWithFilter(
               backgroundColor: Colors.grey[200],
               onFilterTap: () {
@@ -63,36 +71,46 @@ class _EventScreenViewState extends State<EventScreenView> {
               },
               onSearchChanged: (text) {
                 _getEventController.getAllEvent(
-                    searchTerms: text, type: '', state: '', city: '');
+                  searchTerms: text,
+                  type: '',
+                  state: '',
+                  city: '',
+                );
               },
               hintText: 'Search here....',
             ),
-            Gap(20.h),
-            CustomText(
-              text: "${_getCurrentMonthName()} ${DateTime.now().year}",
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w600,
-              color: AppColors.mainTextColors,
+
+            Gap(8.h),
+
+            /// SELECTED EVENT TYPE TEXT
+            Text(
+              selectedEventType,
+              style: TextStyle(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
             ),
+
             Gap(10.h),
+
+            /// EVENT LIST
             Expanded(
               child: Obx(() {
                 if (_getEventController.isLoading.value) {
-                  return Center(
-                    child: CustomLoader(),
-                  );
+                  return Center(child: CustomLoader());
                 }
 
                 final events =
                     _getEventController.allEvent.value.data?.data ?? [];
 
                 if (events.isEmpty) {
-                  return Center(
-                      child: Center(
-                          child: NotFoundWidget(
-                    imagePath: "assets/images/not_found.png",
-                    message: "No data found",
-                  )));
+                  return const Center(
+                    child: NotFoundWidget(
+                      imagePath: "assets/images/not_found.png",
+                      message: "No event found",
+                    ),
+                  );
                 }
 
                 return ListView.builder(
@@ -113,7 +131,7 @@ class _EventScreenViewState extends State<EventScreenView> {
                         statusText = "Open";
                       } else if (difference == 1) {
                         daysLeftText = "Tomorrow";
-                        statusText = "Open ";
+                        statusText = "Open";
                       } else if (difference == 0) {
                         daysLeftText = "Today";
                         statusText = "1 Day Left";
@@ -131,16 +149,20 @@ class _EventScreenViewState extends State<EventScreenView> {
 
                       if (!await launchUrl(_url,
                           mode: LaunchMode.externalApplication)) {
-                        CustomToast.showToast("Could not launch the link",
-                            isError: true);
+                        CustomToast.showToast(
+                          "Could not launch the link",
+                          isError: true,
+                        );
                       }
                     }
 
                     return CardOfEvent(
                       date:
                           "${event.date?.month ?? ''}/${event.date?.day ?? ''}\n${event.date?.year ?? ''}",
-                      title: customEllipsisText(event.name ?? "Unnamed Event",
-                          wordLimit: 5),
+                      title: customEllipsisText(
+                        event.name ?? "Unnamed Event",
+                        wordLimit: 5,
+                      ),
                       org: event.type ?? "",
                       location:
                           "${event.city ?? ''}, ${event.state ?? ''}, ${event.venue ?? ''}",
@@ -155,8 +177,10 @@ class _EventScreenViewState extends State<EventScreenView> {
                         if (link != null && link.isNotEmpty) {
                           await _launchUrl(link);
                         } else {
-                          CustomToast.showToast("Invalid event link",
-                              isError: true);
+                          CustomToast.showToast(
+                            "Invalid event link",
+                            isError: true,
+                          );
                         }
                       },
                     );
@@ -170,8 +194,9 @@ class _EventScreenViewState extends State<EventScreenView> {
     );
   }
 
-  void _openFilterSheet(BuildContext context) {
-    showModalBottomSheet(
+  /// FILTER BOTTOM SHEET
+  void _openFilterSheet(BuildContext context) async {
+    final result = await showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
@@ -181,24 +206,25 @@ class _EventScreenViewState extends State<EventScreenView> {
         return const FilterBottomSheet();
       },
     );
-  }
 
-  // ✅ Helper: Get Current Month Name
-  String _getCurrentMonthName() {
-    final months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
-    ];
-    return months[DateTime.now().month - 1];
+    if (result != null) {
+      final eventType = result["eventType"] ?? "";
+      final city = result["city"] ?? "";
+      final state = result["state"] ?? "";
+
+      /// SET VALUE IMMEDIATELY
+      setState(() {
+        selectedEventType =
+            eventType.isEmpty ? "All Events" : eventType.toString();
+      });
+
+      /// CALL API
+      _getEventController.getAllEvent(
+        searchTerms: '',
+        type: eventType,
+        state: state,
+        city: city,
+      );
+    }
   }
 }
