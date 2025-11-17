@@ -4,6 +4,7 @@ import 'package:calebshirthum/uitilies/app_images.dart';
 import 'package:calebshirthum/uitilies/custom_loader.dart';
 import 'package:calebshirthum/uitilies/custom_toast.dart';
 import 'package:calebshirthum/view/auth_view/sign_up_view.dart';
+import 'package:calebshirthum/view/auth_view/widget/social_login_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -216,37 +217,15 @@ class _SignInViewState extends State<SignInView> {
                       SizedBox(height: 20),
 
                       // Google + Apple Sign-in buttons
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.all(8),
-                              child: Image(
-                                image: AssetImage("assets/images/google.png"),
-                                width: 30,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.all(8),
-                              child: Image(
-                                image: AssetImage(AppImages.appleIcon),
-                                width: 30,
-                              ),
-                            ),
-                          ),
-                        ],
+                      SocialLoginButtons(
+                        onGoogleTap: () {
+                          print("Google login tapped");
+                          // TODO: Add Google login logic here
+                        },
+                        onAppleTap: () {
+                          print("Apple login tapped");
+                          // TODO: Add Apple login logic here
+                        },
                       ),
                       SizedBox(height: 20),
 

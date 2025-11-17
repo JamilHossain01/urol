@@ -25,7 +25,6 @@ class EventScreenView extends StatefulWidget {
 class _EventScreenViewState extends State<EventScreenView> {
   final GetEventController _getEventController = Get.put(GetEventController());
 
-  /// THIS VARIABLE HOLDS SELECTED EVENT TYPE
   String selectedEventType = "All Events";
 
   @override

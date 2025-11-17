@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "252734026318",
+    "project_id": "ujitsugym",
+    "storage_bucket": "ujitsugym.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:252734026318:android:62b4bcc64bfca140c6891f",
+        "android_client_info": {
+          "package_name": "com.ujitsugym.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqppNGHJs2NdRbzEO_SQ4-2ktW_-Bbevo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

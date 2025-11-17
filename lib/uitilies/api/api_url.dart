@@ -18,16 +18,26 @@ class ApiUrl {
   static const String myEvent = "$baseUrl/events/my-events";
   static const String savedGym = "$baseUrl/save";
   static const String allNotification = "$baseUrl/notifications";
+
   static const String profile = "$baseUrl/users/my-profile";
-  static const String notificationUnread = "$baseUrl/notifications/unread-count";
-  static const String allNotificationRead = "$baseUrl/notifications/make-read-all";
+  static const String socialLogin = "$baseUrl/auth/social-login";
+
+  static const String notificationUnread =
+      "$baseUrl/notifications/unread-count";
+  static const String allNotificationRead =
+      "$baseUrl/notifications/make-read-all";
   static String discoverFriends(
           {required String searchTerm, required String limit}) =>
       "$baseUrl/users/unfriends?limit=$limit&searchTerm=$searchTerm";
 
   static String editEvent({required String id}) => "$baseUrl/events/$id";
 
-  static String getOpenMats({required String lat,required String long,required String hour,required String dayName,required String minute}) =>
+  static String getOpenMats(
+          {required String lat,
+          required String long,
+          required String hour,
+          required String dayName,
+          required String minute}) =>
       "$baseUrl/gyms/mats/near-me?day=$dayName&hour=$hour&minute=$minute&long=$long&lat=$lat";
 
   static String mapGym(

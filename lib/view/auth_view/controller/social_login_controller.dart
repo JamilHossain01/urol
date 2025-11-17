@@ -7,16 +7,17 @@ import '../../../uitilies/api/local_storage.dart';
 import '../../../uitilies/custom_toast.dart';
 import '../../user/dashboard_view/enable_location_view.dart';
 
-class LoginController extends GetxController {
+class SocialLoginController extends GetxController {
   var isLoading = false.obs;
   final StorageService _storageService = StorageService();
 
   final GetProfileController _getProfileController =
       Get.put(GetProfileController());
 
-  Future<void> login({
+  Future<void> socialLogin({
     required String email,
-    required String password,
+    required String image,
+    required String firstName,
   }) async {
     try {
       isLoading(true);
@@ -25,8 +26,9 @@ class LoginController extends GetxController {
 
       var map = <String, dynamic>{
         "email": email,
-        "password": password,
-        "fcmToken": fcmToken,
+        "image": image,
+        "first_name": firstName
+        // "fcmToken": fcmToken,
       };
 
       print("Request Body: $map");
