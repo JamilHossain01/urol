@@ -30,7 +30,8 @@ class EditGymController extends GetxController {
     required List<String> disciplines,
     required List<Map<String, dynamic>> matSchedules,
     required List<Map<String, dynamic>> classSchedules,
-    required List<File> images,
+    required List<File> newImages,
+    required List<String> existingImages, // <-- NEW
   }) async {
     try {
       isLoading(true);
@@ -45,6 +46,7 @@ class EditGymController extends GetxController {
         request.headers['Authorization'] = 'Bearer $accessToken';
       }
 
+      // ---- Payload with existing images ----
       final Map<String, dynamic> payload = {
         "name": name,
         "description": description,
@@ -60,38 +62,38 @@ class EditGymController extends GetxController {
         "mat_schedules": matSchedules,
         "class_schedules": classSchedules,
         "disciplines": disciplines,
+        "images": existingImages,
         "location": {
           "coordinates": [longitude, latitude]
         }
       };
 
       request.fields['data'] = jsonEncode(payload);
-
       print("📦 Gym Payload: ${jsonEncode(payload)}");
 
-      for (var i = 0; i < images.length; i++) {
+      // ---- Attach new images ----
+      for (var i = 0; i < newImages.length; i++) {
         final file = await http.MultipartFile.fromPath(
           'images',
-          images[i].path,
-          filename: images[i].path.split('/').last,
+          newImages[i].path,
+          filename: newImages[i].path.split('/').last,
         );
         request.files.add(file);
-        print("📸 Attached image: ${file.filename}");
+        print("📸 Attached new image: ${file.filename}");
       }
 
-      // ---- Send request --------------------------------------------------
-      print("🚀 Sending POST to $uri");
+      // ---- Send request ----
+      print("🚀 Sending PATCH to $uri");
       final streamedResponse = await request.send();
       final responseBody = await streamedResponse.stream.bytesToString();
 
       print("📡 Status Code: ${streamedResponse.statusCode}");
       print("📄 Response Body: $responseBody");
 
-      // ---- Handle response ----------------------------------------------
+      // ---- Handle response ----
       if (streamedResponse.statusCode == 200 ||
           streamedResponse.statusCode == 201) {
-        final json = jsonDecode(responseBody);
-        CustomToast.showToast("Gym added successfully!", isError: false);
+        CustomToast.showToast("Gym updated successfully!", isError: false);
         Get.offAll(() => DashboardView());
       } else {
         Map<String, dynamic> errorData = {};
@@ -100,14 +102,13 @@ class EditGymController extends GetxController {
         } catch (_) {
           errorData = {'message': 'Unknown server error'};
         }
-
         final msg = errorData['message'] ??
             errorData['error'] ??
             'Server error: ${streamedResponse.statusCode}';
         CustomToast.showToast(msg, isError: true);
       }
     } catch (e) {
-      print("❌ AddGymController error: $e");
+      print("❌ EditGymController error: $e");
       CustomToast.showToast(e.toString(), isError: true);
     } finally {
       isLoading(false);

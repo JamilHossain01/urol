@@ -77,6 +77,22 @@ class _MyGymsViewState extends State<MyGymsView> {
                 child: GymPreviewCard(
                   editTap: () {
                     Get.to(() => EditGymView(
+                          gymClassSchedules: gym.classSchedules
+                              ?.map((s) => {
+                                    'day': s.day,
+                                    'from': s.from,
+                                    'to': s.to,
+                                  })
+                              .toList(),
+                          gymOpenMatSchedules: gym.matSchedules
+                              ?.map((s) => {
+                                    'day': s.day,
+                                    'from': s.from,
+                                    'to': s.to,
+                                  })
+                              .toList(),
+                          long: gym.location!.coordinates.first,
+                          lat: gym.location!.coordinates.last,
                           gymDisciplines: gym.disciplines,
                           gymImages: gym.images
                               .map((e) => e.url)
@@ -95,7 +111,7 @@ class _MyGymsViewState extends State<MyGymsView> {
                           gymWebsite: gym.website ?? "",
                           gymFacebook: gym.facebook ?? "",
                           gymInstagram: gym.instagram ?? "",
-                          gymClassName: gym.name ?? "",
+                          gymClassName: gym.classSchedules.first.name ?? "",
                         ));
                   },
                   delete: () {

@@ -38,29 +38,34 @@ class EditGymView extends StatefulWidget {
   final String gymClassName;
   final List<String>? gymImages;
   final List<String>? gymDisciplines;
+  final List<Map<String, dynamic>>? gymOpenMatSchedules;
+  final List<Map<String, dynamic>>? gymClassSchedules;
 
-  EditGymView(
-      {super.key,
-      this.address,
-      this.lat,
-      this.long,
-      this.state,
-      this.city,
-      required this.gymId,
-      required this.gymName,
-      required this.gymDescription,
-      required this.gymStreetAddress,
-      required this.gymCity,
-      required this.gymState,
-      required this.gymZipCode,
-      required this.gymPhone,
-      required this.gymEmail,
-      required this.gymWebsite,
-      required this.gymFacebook,
-      required this.gymInstagram,
-      required this.gymClassName,
-      this.gymImages,
-      this.gymDisciplines});
+  EditGymView({
+    super.key,
+    this.address,
+    this.lat,
+    this.long,
+    this.state,
+    this.city,
+    required this.gymId,
+    required this.gymName,
+    required this.gymDescription,
+    required this.gymStreetAddress,
+    required this.gymCity,
+    required this.gymState,
+    required this.gymZipCode,
+    required this.gymPhone,
+    required this.gymEmail,
+    required this.gymWebsite,
+    required this.gymFacebook,
+    required this.gymInstagram,
+    required this.gymClassName,
+    this.gymImages,
+    this.gymDisciplines,
+    this.gymOpenMatSchedules,
+    this.gymClassSchedules,
+  });
 
   @override
   _EditGymViewState createState() => _EditGymViewState();
@@ -71,6 +76,8 @@ class _EditGymViewState extends State<EditGymView> {
   final _editGymController = Get.put(EditGymController());
 
   List<String> _existingImageUrls = [];
+  List<File> _selectedImages = [];
+  List<String> _selectedDisciplines = [];
 
   final _gymNameController = TextEditingController();
   final _descriptionController = TextEditingController();
@@ -85,47 +92,11 @@ class _EditGymViewState extends State<EditGymView> {
   final _classNameController = TextEditingController();
   final _instagramController = TextEditingController();
 
-  List<File> _selectedImages = [];
-  List<String> _selectedDisciplines = [];
-
-  List<Map<String, dynamic>> openMatSchedules = [
-    {'day': null, 'from': null, 'to': null}
-  ];
-
-  List<Map<String, dynamic>> classSchedules = [
-    {'day': null, "name": null, 'from': null, 'to': null}
-  ];
+  List<Map<String, String?>> openMatSchedules = [];
+  List<Map<String, String?>> classSchedules = [];
 
   double? _lat;
   double? _long;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    _gymNameController.text = widget.gymName;
-    _descriptionController.text = widget.gymDescription;
-    _streetAddressController.text = widget.gymStreetAddress;
-    _cityController.text = widget.gymCity;
-    _stateController.text = widget.gymState;
-    _zipCodeController.text = widget.gymZipCode;
-    _phoneController.text = widget.gymPhone;
-    _emailController.text = widget.gymEmail;
-    _websiteController.text = widget.gymWebsite;
-    _facebookController.text = widget.gymFacebook;
-    _instagramController.text = widget.gymInstagram;
-    _classNameController.text = widget.gymClassName;
-
-    _lat = widget.lat;
-    _long = widget.long;
-
-    /// Pre-fill disciplines
-    _selectedDisciplines = List<String>.from(widget.gymDisciplines ?? []);
-
-    /// Pre-fill existing image URLs (if backend provides them)
-    _existingImageUrls = widget.gymImages ?? [];
-  }
 
   final List<String> _days = [
     'Monday',
@@ -136,19 +107,6 @@ class _EditGymViewState extends State<EditGymView> {
     'Saturday',
     'Sunday'
   ];
-
-  int _convertTimeToMinutes(String time) {
-    final parts = time.split(' ');
-    final hourMinute = parts[0].split(':');
-    int hour = int.parse(hourMinute[0]);
-    int minute = int.parse(hourMinute[1]);
-    final period = parts[1].toUpperCase();
-
-    if (period == 'PM' && hour != 12) hour += 12;
-    if (period == 'AM' && hour == 12) hour = 0;
-
-    return hour * 60 + minute;
-  }
 
   final List<String> _times = [
     '12:00 AM',
@@ -201,6 +159,98 @@ class _EditGymViewState extends State<EditGymView> {
     '11:30 PM',
   ];
 
+  @override
+  void initState() {
+    super.initState();
+
+    _gymNameController.text = widget.gymName;
+    _descriptionController.text = widget.gymDescription;
+    _streetAddressController.text = widget.gymStreetAddress;
+    _cityController.text = widget.gymCity;
+    _stateController.text = widget.gymState;
+    _zipCodeController.text = widget.gymZipCode;
+    _phoneController.text = widget.gymPhone;
+    _emailController.text = widget.gymEmail;
+    _websiteController.text = widget.gymWebsite;
+    _facebookController.text = widget.gymFacebook;
+    _instagramController.text = widget.gymInstagram;
+    _classNameController.text = widget.gymClassName;
+
+    _lat = widget.lat;
+    _long = widget.long;
+
+    _selectedDisciplines = List<String>.from(widget.gymDisciplines ?? []);
+    _existingImageUrls = widget.gymImages ?? [];
+
+    // Initialize schedules as Strings
+    openMatSchedules = widget.gymOpenMatSchedules != null &&
+            widget.gymOpenMatSchedules!.isNotEmpty
+        ? widget.gymOpenMatSchedules!
+            .map((s) => {
+                  'day': s['day']?.toString(),
+                  'from': s['from']?.toString(),
+                  'to': s['to']?.toString(),
+                })
+            .toList()
+        : [
+            {'day': null, 'from': null, 'to': null}
+          ];
+
+    classSchedules =
+        widget.gymClassSchedules != null && widget.gymClassSchedules!.isNotEmpty
+            ? widget.gymClassSchedules!
+                .map((s) => <String, String?>{
+                      'day': s['day']?.toString(),
+                      'name': s['name']?.toString() ?? widget.gymClassName,
+                      'from': s['from']?.toString(),
+                      'to': s['to']?.toString(),
+                    })
+                .toList()
+            : [
+                {
+                  'day': null,
+                  'name': widget.gymClassName,
+                  'from': null,
+                  'to': null
+                }
+              ];
+  }
+
+  int? convertTimeStringToMinutes(dynamic time) {
+    if (time == null) return null;
+
+    // If it's already an int, just return it
+    if (time is int) return time;
+
+    // If it's numeric string like "870"
+    if (time is String && int.tryParse(time) != null) {
+      return int.parse(time);
+    }
+
+    if (time is String && time.contains(' ')) {
+      try {
+        final parts = time.split(' ');
+        if (parts.length != 2) return null;
+
+        final hm = parts[0].split(':');
+        if (hm.length != 2) return null;
+
+        int hour = int.parse(hm[0]);
+        int minute = int.parse(hm[1]);
+        String period = parts[1];
+
+        if (period == 'PM' && hour != 12) hour += 12;
+        if (period == 'AM' && hour == 12) hour = 0;
+
+        return hour * 60 + minute;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    return null;
+  }
+
   Future<void> _pickImages() async {
     final picker = ImagePicker();
     final images = await picker.pickMultiImage();
@@ -211,58 +261,21 @@ class _EditGymViewState extends State<EditGymView> {
     }
   }
 
-  // --- Validate schedules ---
-  bool _validateSchedules(List<Map<String, dynamic>> schedules) {
-    for (var s in schedules) {
-      if (s['day'] == null || s['from'] == null || s['to'] == null) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  // --- Validate & Submit ---
   Future<void> _submitGym() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    if (_selectedImages.isEmpty) {
-      Get.snackbar("Error", "Please upload at least one image",
-          backgroundColor: Colors.red, colorText: Colors.white);
-      return;
-    }
-
-    if (_selectedDisciplines.isEmpty) {
-      Get.snackbar("Error", "Please select at least one discipline",
-          backgroundColor: Colors.red, colorText: Colors.white);
-      return;
-    }
-
-    if (!_validateSchedules(openMatSchedules)) {
-      Get.snackbar("Error", "Please fill all open mat schedule fields",
-          backgroundColor: Colors.red, colorText: Colors.white);
-      return;
-    }
-
-    if (!_validateSchedules(classSchedules)) {
-      Get.snackbar("Error", "Please fill all class schedule fields",
-          backgroundColor: Colors.red, colorText: Colors.white);
-      return;
-    }
-
     final List<Map<String, dynamic>> openMatConverted = openMatSchedules
         .map((s) => {
               'day': s['day'],
-              'from': _convertTimeToMinutes(s['from']),
-              'to': _convertTimeToMinutes(s['to'])
+              'from': convertTimeStringToMinutes(s['from']),
+              'to': convertTimeStringToMinutes(s['to']),
             })
         .toList();
 
     final List<Map<String, dynamic>> classConverted = classSchedules
         .map((s) => {
-              'name': _classNameController.text,
+              'name': s['name'],
               'day': s['day'],
-              'from': _convertTimeToMinutes(s['from']),
-              'to': _convertTimeToMinutes(s['to'])
+              'from': convertTimeStringToMinutes(s['from']),
+              'to': convertTimeStringToMinutes(s['to']),
             })
         .toList();
 
@@ -283,8 +296,9 @@ class _EditGymViewState extends State<EditGymView> {
       disciplines: _selectedDisciplines,
       matSchedules: openMatConverted,
       classSchedules: classConverted,
-      images: _selectedImages,
       gymId: widget.gymId,
+      newImages: _selectedImages,
+      existingImages: _existingImageUrls,
     );
   }
 
@@ -292,10 +306,7 @@ class _EditGymViewState extends State<EditGymView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backRoudnColors,
-      appBar: const CustomAppBar(
-        title: "Edit Gym",
-        showLeadingIcon: true,
-      ),
+      appBar: const CustomAppBar(title: "Edit Gym", showLeadingIcon: true),
       body: Obx(() => Stack(
             children: [
               Form(
@@ -307,19 +318,15 @@ class _EditGymViewState extends State<EditGymView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomText(
-                        text: "Upload Images",
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.mainTextColors,
-                      ),
+                          text: "Upload Images",
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.mainTextColors),
                       const SizedBox(height: 10),
-
-                      /// Image Picker
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
                         children: [
-
                           GestureDetector(
                             onTap: _pickImages,
                             child: DottedBorderBox(
@@ -352,9 +359,8 @@ class _EditGymViewState extends State<EditGymView> {
                                       },
                                       child: Container(
                                         decoration: const BoxDecoration(
-                                          color: Colors.black54,
-                                          shape: BoxShape.circle,
-                                        ),
+                                            color: Colors.black54,
+                                            shape: BoxShape.circle),
                                         child: const Icon(Icons.close,
                                             size: 16, color: Colors.white),
                                       ),
@@ -363,49 +369,45 @@ class _EditGymViewState extends State<EditGymView> {
                                 ],
                               )),
                           ..._selectedImages.map((img) => Stack(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: DottedBorderBox(
-                                  height: 80,
-                                  width: 80,
-                                  borderRadius: 10,
-                                  borderColor: Colors.grey,
-                                  borderWidth: 2,
-                                  child: Image.file(img, fit: BoxFit.cover),
-                                ),
-                              ),
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _selectedImages.remove(img);
-                                    });
-                                  },
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                      color: Colors.black54,
-                                      shape: BoxShape.circle,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: DottedBorderBox(
+                                      height: 80,
+                                      width: 80,
+                                      borderRadius: 10,
+                                      borderColor: Colors.grey,
+                                      borderWidth: 2,
+                                      child: Image.file(img, fit: BoxFit.cover),
                                     ),
-                                    child: const Icon(Icons.close,
-                                        size: 16, color: Colors.white),
                                   ),
-                                ),
-                              ),
-                            ],
-                          )),
+                                  Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _selectedImages.remove(img);
+                                        });
+                                      },
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                            color: Colors.black54,
+                                            shape: BoxShape.circle),
+                                        child: const Icon(Icons.close,
+                                            size: 16, color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )),
                         ],
                       ),
 
                       Gap(10.h),
-
                       BasicInfoWidget(
-                        gymNameController: _gymNameController,
-                        descriptionController: _descriptionController,
-                      ),
-
+                          gymNameController: _gymNameController,
+                          descriptionController: _descriptionController),
                       LocationWidget(
                         streetAddressController: _streetAddressController,
                         cityController: _cityController,
@@ -418,10 +420,8 @@ class _EditGymViewState extends State<EditGymView> {
                             _lat = lat;
                             _long = long;
                           });
-                          debugPrint("Selected Lat: $lat, Lng: $long");
                         },
                       ),
-
                       ContactInfoWidget(
                         phoneController: _phoneController,
                         emailController: _emailController,
@@ -434,7 +434,6 @@ class _EditGymViewState extends State<EditGymView> {
                       ...openMatSchedules.asMap().entries.map((entry) {
                         int index = entry.key;
                         var item = entry.value;
-
                         return OpenMatScheduleWidget(
                           addCC: index == openMatSchedules.length - 1
                               ? 'Add More Days'
@@ -466,7 +465,6 @@ class _EditGymViewState extends State<EditGymView> {
                       ...classSchedules.asMap().entries.map((entry) {
                         int index = entry.key;
                         var item = entry.value;
-
                         return OpenMatScheduleWidget(
                           classNameController: _classNameController,
                           showClassField: true,
@@ -485,8 +483,12 @@ class _EditGymViewState extends State<EditGymView> {
                           onEndTimeChanged: (value) =>
                               setState(() => item['to'] = value),
                           onAddMoreDays: () => setState(() {
-                            classSchedules
-                                .add({'day': null, 'from': null, 'to': null});
+                            classSchedules.add({
+                              'day': null,
+                              'from': null,
+                              'to': null,
+                              'name': _classNameController.text
+                            });
                           }),
                           onRemove: classSchedules.length > 1
                               ? () => setState(() {
@@ -504,15 +506,12 @@ class _EditGymViewState extends State<EditGymView> {
                           });
                         },
                       ),
-
                       Gap(10.h),
-
                       CustomButtonWidget(
-                        btnText: 'Edit Gym',
-                        onTap: _submitGym,
-                        iconWant: false,
-                        btnColor: AppColors.mainColor,
-                      ),
+                          btnText: 'Edit Gym',
+                          onTap: _submitGym,
+                          iconWant: false,
+                          btnColor: AppColors.mainColor),
                       Gap(20.h),
                     ],
                   ),
@@ -520,11 +519,8 @@ class _EditGymViewState extends State<EditGymView> {
               ),
               if (_editGymController.isLoading.value)
                 Container(
-                  color: Colors.black26,
-                  child: Center(
-                    child: CustomLoader(),
-                  ),
-                ),
+                    color: Colors.black26,
+                    child: Center(child: CustomLoader())),
             ],
           )),
     );

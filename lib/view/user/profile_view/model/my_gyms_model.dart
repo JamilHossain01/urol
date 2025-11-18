@@ -101,20 +101,29 @@ class Schedule {
   Schedule({
     required this.day,
     required this.from,
+    required this.fromView,
     required this.to,
+    required this.toView,
+    required this.name,
     required this.id,
   });
 
   final String? day;
   final int? from;
+  final String? fromView;
   final int? to;
+  final String? toView;
+  final String? name;
   final String? id;
 
   factory Schedule.fromJson(Map<String, dynamic> json){
     return Schedule(
       day: json["day"],
       from: json["from"],
+      fromView: json["from_view"],
       to: json["to"],
+      toView: json["to_view"],
+      name: json["name"],
       id: json["_id"],
     );
   }
@@ -144,17 +153,17 @@ class Image {
 
 class Location {
   Location({
-    required this.coordinates,
     required this.type,
+    required this.coordinates,
   });
 
-  final List<double> coordinates;
   final String? type;
+  final List<double> coordinates;
 
   factory Location.fromJson(Map<String, dynamic> json){
     return Location(
-      coordinates: json["coordinates"] == null ? [] : List<double>.from(json["coordinates"]!.map((x) => x)),
       type: json["type"],
+      coordinates: json["coordinates"] == null ? [] : List<double>.from(json["coordinates"]!.map((x) => x)),
     );
   }
 

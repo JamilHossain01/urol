@@ -19,8 +19,8 @@ class OpenMatScheduleWidget extends StatelessWidget {
   final VoidCallback? onRemove;
   final bool showClassField;
   final String? addCC;
-  final TextEditingController? classNameController; // ✅ pass controller from parent
-  final ValueChanged<String>? onClassNameChanged; // ✅ callback to update parent
+  final TextEditingController? classNameController;
+  final ValueChanged<String>? onClassNameChanged;
 
   const OpenMatScheduleWidget({
     super.key,
@@ -201,7 +201,7 @@ class OpenMatScheduleWidget extends StatelessWidget {
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
-          value: value,
+          value: (value != null && items.contains(value)) ? value : null,
           hint: Text(
             hint,
             style: TextStyle(
@@ -221,4 +221,5 @@ class OpenMatScheduleWidget extends StatelessWidget {
       ),
     );
   }
+
 }
