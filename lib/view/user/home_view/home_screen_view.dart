@@ -9,6 +9,7 @@ import 'package:calebshirthum/view/user/home_view/widgets/shimmer/event_shimmer_
 import 'package:calebshirthum/view/user/home_view/widgets/shimmer/shimmer_card_of_map.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/shimmer/user_info_shimmer.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/user_info_widgets.dart';
+import 'package:calebshirthum/view/user/location_view/gym_details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -181,7 +182,9 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                         mats: _openMatsController.openMats.value.data!.map((e) {
                           return MatCardData(
                             name: e.name ?? "N/A",
-                            distance: e.distance?.toStringAsFixed(1) ?? "0 km",
+                            distance: e.distance != null
+                                ? "${(e.distance! / 1000).toStringAsFixed(1)} km"
+                                : "0 km",
                             days: e.matSchedules.isNotEmpty
                                 ? e.matSchedules.map((s) => s.day).join(", ")
                                 : "N/A",
@@ -191,6 +194,10 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                             image: e.images.isNotEmpty
                                 ? e.images.first.url ?? ""
                                 : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
+                            onTap: () {
+                              Get.to(() =>
+                                  GymDetailsScreen(gymId: e.id.toString()));
+                            },
                           );
                         }).toList(),
                       );

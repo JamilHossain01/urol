@@ -224,7 +224,7 @@ class _SignInViewState extends State<SignInView> {
                         },
                         onAppleTap: () {
                           print("Apple login tapped");
-                          // TODO: Add Apple login logic here
+                          _authService.signInWithApple();
                         },
                       ),
                       SizedBox(height: 20),

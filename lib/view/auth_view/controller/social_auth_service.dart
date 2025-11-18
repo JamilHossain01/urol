@@ -52,16 +52,14 @@ class AuthService {
     }
   }
 
-  // ----------------------------
-  // Apple Sign-In (iOS only)
-  // ----------------------------
-  Future<UserCredential?> signInWithApple() async {
+  Future<void> signInWithApple() async {
     try {
       if (!Platform.isIOS) {
         print("Apple Sign-In only available on iOS.");
-        return null;
+        return;
       }
 
+      // Get Apple ID credentials
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
@@ -75,25 +73,47 @@ class AuthService {
       );
 
       final UserCredential userCredential =
-          await _auth.signInWithCredential(oauthCredential);
+      await FirebaseAuth.instance.signInWithCredential(oauthCredential);
 
-      print("Apple Sign-In successful: ${userCredential.user?.displayName}");
-      return userCredential;
+      print("Apple Sign-In successful");
+      print("Firebase user email: ${userCredential.user?.email}");
+      print("Firebase displayName: ${userCredential.user?.displayName}");
+
+
+      // Optionally, continue with Firebase sign-in if you want
+      /*
+    final oauthCredential = OAuthProvider("apple.com").credential(
+      idToken: appleCredential.identityToken,
+      accessToken: appleCredential.authorizationCode,
+    );
+
+    final UserCredential userCredential =
+        await _auth.signInWithCredential(oauthCredential);
+
+    print("Apple Sign-In successful: ${userCredential.user?.displayName}");
+
+    _socialLoginController.socialLogin(
+      email: userCredential.user?.email ?? "",
+      image: userCredential.user?.photoURL ?? "",
+      firstName: userCredential.user?.displayName ?? "",
+    );
+
+    return userCredential;
+    */
     } catch (e) {
       print("Error during Apple Sign-In: $e");
-      return null;
     }
   }
 
-  // ----------------------------
-  // Sign Out (Google/Apple/Firebase)
-  // ----------------------------
+
+
+
   Future<void> signOut() async {
     try {
       if (Platform.isAndroid || Platform.isIOS) {
         await GoogleSignIn().signOut(); // Google Sign-Out
       }
-      await _auth.signOut(); // Firebase Sign-Out
+      await _auth.signOut();
       print("User signed out successfully");
     } catch (e) {
       print("Error signing out: $e");

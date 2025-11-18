@@ -4,10 +4,7 @@ import 'package:calebshirthum/view/user/home_view/widgets/shimmer/shimmer_card_o
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../location_view/gym_details_view.dart';
-import '../../location_view/location_screen_view.dart';
 
 class MatCardData {
   final String name;
@@ -15,6 +12,7 @@ class MatCardData {
   final String days;
   final String time;
   final String image;
+  final VoidCallback onTap;
 
   MatCardData({
     required this.name,
@@ -22,6 +20,7 @@ class MatCardData {
     required this.days,
     required this.time,
     required this.image,
+    required this.onTap,
   });
 }
 
@@ -57,28 +56,6 @@ class _NearbyMatsSectionState extends State<NearbyMatsSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CustomText(
-              color: AppColors.mainTextColors,
-              fontWeight: FontWeight.w600,
-              fontSize: 14.h,
-              text: "Nearby Open Mats",
-            ),
-            GestureDetector(
-              onTap: () {
-                Get.to(() => MapScreenView());
-              },
-              child: CustomText(
-                color: AppColors.mainColor,
-                fontWeight: FontWeight.w600,
-                fontSize: 10.h,
-                text: "View All on Map",
-              ),
-            ),
-          ],
-        ),
         Gap(10.h),
         _isLoading
             ? Column(
@@ -94,11 +71,7 @@ class _NearbyMatsSectionState extends State<NearbyMatsSection> {
                 children: widget.mats
                     .map(
                       (mat) => GestureDetector(
-                        onTap: () {
-                          Get.to(() => GymDetailsScreen(
-                                gymId: '',
-                              ));
-                        },
+                        onTap: mat.onTap,
                         child: _buildNearbyMatCard(
                           mat.name,
                           mat.distance,
@@ -135,7 +108,7 @@ class _NearbyMatsSectionState extends State<NearbyMatsSection> {
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12.r),
-              child: Image.asset(
+              child: Image.network(
                 image,
                 height: 70.h,
                 width: 90.w,
@@ -156,7 +129,7 @@ class _NearbyMatsSectionState extends State<NearbyMatsSection> {
                       CustomText(
                         color: AppColors.mainTextColors,
                         fontWeight: FontWeight.w600,
-                        fontSize: 14.h,
+                        fontSize: 12.h,
                         text: name,
                       ),
                       Container(
@@ -186,7 +159,7 @@ class _NearbyMatsSectionState extends State<NearbyMatsSection> {
                           horizontal: 8, vertical: 4),
                       child: CustomText(
                         color: const Color(0xFF686868),
-                        fontSize: 12.h,
+                        fontSize: 10.h,
                         text: days,
                       ),
                     ),
