@@ -32,6 +32,8 @@ class ApiUrl {
 
   static String editEvent({required String id}) => "$baseUrl/events/$id";
 
+  static String editGym({required String id}) => "$baseUrl/gyms/$id";
+
   static String getOpenMats(
           {required String lat,
           required String long,

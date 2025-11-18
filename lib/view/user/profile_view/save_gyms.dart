@@ -77,6 +77,7 @@ class _SaveGymsViewState extends State<SaveGymsView> {
                   categories: gym.gym?.disciplines ?? [],
                   showDelete: true,
                   showEdit: false,
+                  gymId: gym.gym?.id?.toString() ?? '',
                   delete: () {
                     _deleteSavedController.deleteBookmarksGyms(
                         gymId: gym.gym?.id.toString());

@@ -17,7 +17,9 @@ class GymPreviewCard extends StatelessWidget {
   final List<String> categories;
   final bool showDelete;
   final bool showEdit;
+  final String? gymId;
   final VoidCallback? delete;
+  final VoidCallback? editTap;
 
   const GymPreviewCard({
     Key? key,
@@ -28,6 +30,8 @@ class GymPreviewCard extends StatelessWidget {
     this.delete,
     required this.showDelete,
     required this.showEdit,
+    this.gymId,
+    this.editTap,
   }) : super(key: key);
 
   @override
@@ -79,13 +83,11 @@ class GymPreviewCard extends StatelessWidget {
                   children: [
                     if (showEdit)
                       GestureDetector(
-                        onTap: () {
-                          Get.to(() => EditGymDetailsScreen());
-                        },
+                        onTap: editTap,
                         child: Container(
                           padding: EdgeInsets.all(4.w),
                           decoration: BoxDecoration(
-                            color: Colors.black54, // semi-transparent overlay
+                            color: Colors.black54,
                             shape: BoxShape.circle,
                             border: Border.all(
                                 color: Colors.white,

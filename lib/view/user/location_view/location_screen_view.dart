@@ -308,6 +308,7 @@ class _MapScreenViewState extends State<MapScreenView> {
                   categories: selectedGym.disciplines,
                   showDelete: false,
                   showEdit: false,
+                  gymId: selectedGym.id?.toString() ?? '',
                 ),
               ),
             ),
