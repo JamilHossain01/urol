@@ -1,5 +1,6 @@
 import 'package:calebshirthum/common%20widget/comon_conatainer/custom_conatiner.dart';
 import 'package:calebshirthum/common%20widget/custom_app_bar_widget.dart';
+import 'package:calebshirthum/common%20widget/custom_elipse_text.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/custom_loader.dart';
 import 'package:calebshirthum/view/user/location_view/gym_details_view.dart';
@@ -74,14 +75,16 @@ class _SaveGymsViewState extends State<SaveGymsView> {
                 },
                 child: GymPreviewCard(
                   gymName: gym.gym?.name.toString() ?? "n/a",
-                  location: gym.gym?.street.toString() ?? "n/a",
+                  location: customEllipsisText(
+                      gym.gym?.street.toString() ?? "n/a",
+                      wordLimit: 5),
                   image: gym.gym?.images.first.url ?? '',
                   categories: gym.gym?.disciplines ?? [],
                   showDelete: true,
                   showEdit: false,
                   delete: () {
                     _deleteSavedController.deleteBookmarksGyms(
-                        gymId: gym.gym?.id.toString());
+                        gymId: gym.id.toString());
                   },
                 ),
               ),
@@ -92,7 +95,6 @@ class _SaveGymsViewState extends State<SaveGymsView> {
     );
   }
 
-  // Optional helper for tags or buttons (not used directly here)
   Widget _buildActivityButton(String text) {
     return ElevatedButton(
       onPressed: () {},

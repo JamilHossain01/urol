@@ -25,20 +25,24 @@ class DeleteSavedController extends GetxController {
 
       dynamic responseBody = await BaseClient.handleResponse(
         await BaseClient.deleteRequest(
-            api: ApiUrl.deleteBookMarkGym(gymId: gymId)),
+          api: ApiUrl.deleteBookMarkGym(gymId: gymId),
+        ),
       );
 
       if (responseBody['success'] == true) {
-        CustomToast.showToast("Bookmarked Gym Delete Successfully Done",
-            isError: false);
+        CustomToast.showToast(
+          responseBody['message'] ?? "Success",
+          isError: false,
+        );
+
         _getSavedGymController.getSavedGym();
 
         print("fetched: ${gums.value}");
       } else {
-        throw 'Failed to load profile data: ${responseBody['message']}';
+        throw 'Failed: ${responseBody['message']}';
       }
     } catch (e) {
-      print("Error loading profile: $e");
+      print("Error: $e");
     } finally {
       isLoading(false);
     }
