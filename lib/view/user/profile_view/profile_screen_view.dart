@@ -40,6 +40,28 @@ class _ProfileViewState extends State<ProfileView> {
 
   final RxBool _showShimmerFor2s = true.obs;
 
+
+
+
+
+  String cmToFeetInch(dynamic cm) {
+    // Convert cm → total inches
+    dynamic totalInches = cm / 2.54;
+
+    // Extract feet
+    dynamic feet = totalInches ~/ 12;
+
+    // Remaining inches
+    dynamic inches = totalInches % 12;
+
+    return "$feet' ${inches.toStringAsFixed(0)}\"";
+  }
+
+
+
+
+
+
   @override
   void initState() {
     super.initState();
@@ -112,7 +134,9 @@ class _ProfileViewState extends State<ProfileView> {
                   final data = _getProfileController.profile.value.data;
                   return UserInfoCard(
                     homeGym: data?.homeGym ?? "N/A",
-                    height: data?.height?.amount?.toString() ?? "",
+                    height: data?.height?.amount != null
+                        ? cmToFeetInch(data!.height!.amount!)
+                        : "",
                     weight: (() {
                       final weightStr = data?.weight?.toString() ?? "";
                       return weightStr

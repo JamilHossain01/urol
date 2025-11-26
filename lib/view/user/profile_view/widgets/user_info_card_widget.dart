@@ -10,7 +10,7 @@ import '../edite_profeil_view.dart';
 
 class UserInfoCard extends StatelessWidget {
   final String homeGym;
-  final String height;
+  final dynamic height;
   final String weight;
   final List<String> skills;
   final String favoriteQuote;
