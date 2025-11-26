@@ -58,7 +58,6 @@ class AuthService {
         return;
       }
 
-      // Get Apple ID credentials
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
@@ -74,40 +73,43 @@ class AuthService {
       final UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(oauthCredential);
 
-      print("Apple Sign-In successful");
-      print("Firebase user email: ${userCredential.user?.email}");
-      print("Firebase displayName: ${userCredential.user?.displayName}");
-
       final email = userCredential.user?.email ?? "";
 
-      final firstName = email.contains('@') ? email.split('@')[0] : email;
+      // --- FIRST NAME HANDLING ---
+      String firstName = "";
+
+      // 1. Apple fullName (only available on FIRST login)
+      if (appleCredential.givenName != null &&
+          appleCredential!.givenName!.isNotEmpty) {
+        firstName = appleCredential.givenName!;
+      }
+      // 2. Firebase displayName
+      else if (userCredential.user?.displayName != null &&
+          userCredential.user!.displayName!.isNotEmpty) {
+        firstName = userCredential.user!.displayName!;
+      }
+      // 3. Fallback: email username
+      else if (email.contains('@')) {
+        firstName = email.split('@')[0];
+      }
+
+      // --- IMAGE HANDLING (APPLE NEVER RETURNS PHOTO) ---
+      final image = userCredential.user?.photoURL ?? "";
+
+      final finalImage = (image.isEmpty)
+          ? "https://ui-avatars.com/api/?name=$firstName"
+          : image;
+
+      print("Apple Sign-In successful");
+      print("Email: $email");
+      print("First Name Used: $firstName");
+      print("Image Used: $finalImage");
 
       _socialLoginController.socialLogin(
-        email: userCredential.user?.email ?? "",
-        image: userCredential.user?.photoURL ?? "",
-        firstName: firstName ?? "",
+        email: email,
+        image: finalImage,
+        firstName: firstName,
       );
-
-      // Optionally, continue with Firebase sign-in if you want
-      /*
-    final oauthCredential = OAuthProvider("apple.com").credential(
-      idToken: appleCredential.identityToken,
-      accessToken: appleCredential.authorizationCode,
-    );
-
-    final UserCredential userCredential =
-        await _auth.signInWithCredential(oauthCredential);
-
-    print("Apple Sign-In successful: ${userCredential.user?.displayName}");
-
-    _socialLoginController.socialLogin(
-      email: userCredential.user?.email ?? "",
-      image: userCredential.user?.photoURL ?? "",
-      firstName: userCredential.user?.displayName ?? "",
-    );
-
-    return userCredential;
-    */
     } catch (e) {
       print("Error during Apple Sign-In: $e");
     }
