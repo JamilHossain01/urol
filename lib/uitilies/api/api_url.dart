@@ -1,5 +1,5 @@
 class ApiUrl {
-  static const String baseUrl = "http://10.10.10.9:4300/api";
+  static const String baseUrl = "https://server.thejiujitsuapp.com/api";
 
   static const String login = "$baseUrl/auth/login";
   static const String forgetPass = "$baseUrl/auth/forgot-password";

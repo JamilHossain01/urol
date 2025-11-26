@@ -14,7 +14,6 @@ class AuthService {
   // ----------------------------
   Future<UserCredential?> signInWithGoogle() async {
     try {
-      // Trigger the Google authentication flow
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
       if (googleUser == null) {
@@ -73,12 +72,21 @@ class AuthService {
       );
 
       final UserCredential userCredential =
-      await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+          await FirebaseAuth.instance.signInWithCredential(oauthCredential);
 
       print("Apple Sign-In successful");
       print("Firebase user email: ${userCredential.user?.email}");
       print("Firebase displayName: ${userCredential.user?.displayName}");
 
+      final email = userCredential.user?.email ?? "";
+
+      final firstName = email.contains('@') ? email.split('@')[0] : email;
+
+      _socialLoginController.socialLogin(
+        email: userCredential.user?.email ?? "",
+        image: userCredential.user?.photoURL ?? "",
+        firstName: firstName ?? "",
+      );
 
       // Optionally, continue with Firebase sign-in if you want
       /*
@@ -105,13 +113,10 @@ class AuthService {
     }
   }
 
-
-
-
   Future<void> signOut() async {
     try {
       if (Platform.isAndroid || Platform.isIOS) {
-        await GoogleSignIn().signOut(); // Google Sign-Out
+        await GoogleSignIn().signOut();
       }
       await _auth.signOut();
       print("User signed out successfully");

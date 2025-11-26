@@ -68,7 +68,9 @@ class _SaveGymsViewState extends State<SaveGymsView> {
               padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 16.w),
               child: GestureDetector(
                 onTap: () {
-                  Get.to(() => GymDetailsScreen(gymId: gym.id.toString(),));
+                  Get.to(() => GymDetailsScreen(
+                        gymId: gym.gym!.id.toString(),
+                      ));
                 },
                 child: GymPreviewCard(
                   gymName: gym.gym?.name.toString() ?? "n/a",
@@ -77,7 +79,6 @@ class _SaveGymsViewState extends State<SaveGymsView> {
                   categories: gym.gym?.disciplines ?? [],
                   showDelete: true,
                   showEdit: false,
-                  gymId: gym.gym?.id?.toString() ?? '',
                   delete: () {
                     _deleteSavedController.deleteBookmarksGyms(
                         gymId: gym.gym?.id.toString());
