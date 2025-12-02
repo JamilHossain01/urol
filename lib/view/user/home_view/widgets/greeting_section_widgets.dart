@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../uitilies/app_colors.dart';
 import '../controller/unread_notification_controller.dart';
 import 'notification_widgets.dart';
@@ -26,9 +24,9 @@ class GreetingSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "uJitsu",
+              "The Jiu Jitsu",
               style: GoogleFonts.libreBaskerville(
-                fontSize: 18.sp,
+                fontSize: 16.sp,
                 color: AppColors.mainColor,
               ),
             )

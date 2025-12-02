@@ -1,3 +1,4 @@
+import 'package:calebshirthum/uitilies/custom_loader.dart';
 import 'package:calebshirthum/view/user/profile_view/controller/add_competition_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +89,7 @@ class _AddCompetitionResultScreenState
             SizedBox(height: 24.h),
             Obx(() {
               return _addCompetitionController.isLoading.value
-                  ? Center(child: CircularProgressIndicator())
+                  ? Center(child: CustomLoader())
                   : CustomButtonWidget(
                       btnText: 'Save',
                       onTap: _saveCompetition,

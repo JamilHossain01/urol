@@ -260,7 +260,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                   competition.eventDate.toString(),
                 ),
                 division: competition.division ?? "",
-                location: competition.city ?? "",
+                location: "${competition.city}, ${competition.state}" ?? "n/a",
                 medalText: competition.result ?? "",
               );
             }),
