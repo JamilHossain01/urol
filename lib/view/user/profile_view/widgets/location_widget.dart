@@ -6,7 +6,6 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:apple_maps_flutter/apple_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
 
 import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../common widget/custom_text_filed.dart';
@@ -38,12 +37,12 @@ class LocationWidget extends StatelessWidget {
   Future<void> _pickLocation(BuildContext context) async {
     await Get.bottomSheet(
       LocationPickerModal(
-        initialPosition: lat != null && long != null ? LatLng(lat, long) : null,
-        onLocationSelected: (LatLng pos, String address) {
+        initialLat: lat,
+        initialLng: long,
+        onLocationSelected: (double selLat, double selLng, String address) {
           streetAddressController.text = address;
 
-          placemarkFromCoordinates(pos.latitude, pos.longitude)
-              .then((placemarks) {
+          placemarkFromCoordinates(selLat, selLng).then((placemarks) {
             if (placemarks.isNotEmpty) {
               final p = placemarks.first;
               cityController.text = p.locality ?? '';
@@ -58,7 +57,7 @@ class LocationWidget extends StatelessWidget {
 
           // Send lat/long back to parent screen
           if (onLocationChanged != null) {
-            onLocationChanged!(pos.latitude, pos.longitude);
+            onLocationChanged!(selLat, selLng);
           }
 
           Get.back(); // Close bottom sheet

@@ -1,16 +1,21 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:calebshirthum/common widget/custom_button_widget.dart';
 import 'package:calebshirthum/view/user/location_view/controller/all_map_gym_controller.dart';
 import 'package:calebshirthum/view/user/location_view/widgets/filter_sheet.dart';
 import 'package:calebshirthum/view/user/location_view/widgets/gym_preview_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:apple_maps_flutter/apple_maps_flutter.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
+
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/seacr)with_filter_widgets.dart';
 import '../../../uitilies/app_colors.dart';
@@ -30,7 +35,9 @@ class _MapScreenViewState extends State<MapScreenView> {
   final AllMapGymController _allMapGymController =
       Get.put(AllMapGymController());
 
-  AppleMapController? mapController;
+  AppleMapController? appleMapController;
+  gmap.GoogleMapController? googleMapController;
+
   double distance = 2;
   List<String> selectedCategories = [];
   String searchTerm = "";
@@ -41,6 +48,9 @@ class _MapScreenViewState extends State<MapScreenView> {
   Set<Annotation> markers = {};
   Set<Circle> circles = {};
 
+  Uint8List? customGoogleIconBytes;
+  BitmapDescriptor? customAppleIcon;
+
   final LatLng _fallbackCenter = const LatLng(38.5816, -121.4944);
 
   @override
@@ -49,43 +59,40 @@ class _MapScreenViewState extends State<MapScreenView> {
     _init();
   }
 
-  /// INIT
   Future<void> _init() async {
-    print("🔵 INIT STARTED — Calling API + location");
+    await _loadMarkerIcons(); // LOAD YOUR COMMON ICON
     await _fetchGyms();
     await _getCurrentLocation();
   }
 
-  /// FETCH GYMS FROM API
+  /// 🔥 Load your asset marker once
+  Future<void> _loadMarkerIcons() async {
+    // Apple Map icon
+    customAppleIcon = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(size: Size(80, 80)),
+      "assets/images/small.png",
+    );
+
+    // Google Map icon → needs loading bytes manually
+    ByteData data = await rootBundle.load("assets/images/small.png");
+    customGoogleIconBytes = data.buffer.asUint8List();
+  }
+
   Future<void> _fetchGyms() async {
     try {
-      print("🟡 Fetching gyms from API...");
-      print(
-          "➡ Distance: $distance | Categories: ${selectedCategories.join(',')} | Search: $searchTerm");
-
       await _allMapGymController.getAllMapGym(
         distance: distance,
         searchTerm: searchTerm,
         disciplines: selectedCategories.join(","),
       );
 
-      final data = _allMapGymController.profile.value.data ?? [];
-      print("🟢 API Response → Total gyms: ${data.length}");
-
       await _createMarkersFromAPI();
       _moveCameraToGyms(searchTerm: searchTerm);
     } catch (e, st) {
-      print("❌ _fetchGyms error: $e");
-      print(st);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Failed to load gyms. Try again.")),
-        );
-      }
+      debugPrint("Fetch gyms error: $e\n$st");
     }
   }
 
-  /// GET USER LOCATION
   Future<void> _getCurrentLocation() async {
     try {
       LocationPermission permission = await Geolocator.checkPermission();
@@ -103,10 +110,10 @@ class _MapScreenViewState extends State<MapScreenView> {
 
       final position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
+
       _currentLocation = LatLng(position.latitude, position.longitude);
 
-      _updateCircleForDistance(_currentLocation!);
-
+      /// Add default User Marker
       markers.add(
         Annotation(
           annotationId: AnnotationId('userLocation'),
@@ -116,38 +123,31 @@ class _MapScreenViewState extends State<MapScreenView> {
         ),
       );
 
-      mapController?.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(target: _currentLocation!, zoom: _zoomLevel),
-        ),
-      );
+      _animateToPosition(_currentLocation!, _zoomLevel);
 
       setState(() {});
     } catch (e) {
-      print("❌ Location error: $e");
+      debugPrint("Location error: $e");
     }
   }
 
   Future<void> _createMarkersFromAPI() async {
     final gyms = _allMapGymController.profile.value.data ?? [];
 
-    final customIcon = await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(size: Size(80, 80)),
-      "assets/images/small.png",
-    );
-
-    Set<Annotation> tempMarkers = {};
+    Set<Annotation> temp = {};
 
     for (var gym in gyms) {
       if (gym.location?.coordinates.length == 2) {
         double lon = gym.location!.coordinates[0];
         double lat = gym.location!.coordinates[1];
 
-        tempMarkers.add(
+        temp.add(
           Annotation(
             annotationId: AnnotationId(gym.id ?? ""),
             position: LatLng(lat, lon),
-            icon: customIcon,
+            icon: customAppleIcon!,
+
+            /// 🔥 SAME ICON FOR APPLE
             infoWindow: InfoWindow(title: gym.name ?? "Gym"),
             onTap: () => _onMarkerTapped(gym.id ?? ""),
           ),
@@ -155,9 +155,7 @@ class _MapScreenViewState extends State<MapScreenView> {
       }
     }
 
-    setState(() {
-      markers.addAll(tempMarkers);
-    });
+    setState(() => markers.addAll(temp));
   }
 
   void _onMarkerTapped(String gymId) {
@@ -166,33 +164,27 @@ class _MapScreenViewState extends State<MapScreenView> {
     });
   }
 
-  void _zoomIn() {
-    if (_zoomLevel < 20) {
-      setState(() {
-        _zoomLevel++;
-      });
-      mapController?.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(
-            target: _currentLocation ?? _fallbackCenter, zoom: _zoomLevel),
-      ));
-    }
-  }
-
-  void _zoomOut() {
-    if (_zoomLevel > 5) {
-      setState(() {
-        _zoomLevel--;
-      });
-      mapController?.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(
-            target: _currentLocation ?? _fallbackCenter, zoom: _zoomLevel),
-      ));
+  void _animateToPosition(LatLng pos, double zoom) {
+    if (Platform.isIOS && appleMapController != null) {
+      appleMapController!.animateCamera(
+        CameraUpdate.newCameraPosition(CameraPosition(target: pos, zoom: zoom)),
+      );
+    } else if (Platform.isAndroid && googleMapController != null) {
+      googleMapController!.animateCamera(
+        gmap.CameraUpdate.newCameraPosition(
+          gmap.CameraPosition(
+            target: gmap.LatLng(pos.latitude, pos.longitude),
+            zoom: zoom,
+          ),
+        ),
+      );
     }
   }
 
   Future<void> _moveCameraToGyms({String? searchTerm}) async {
     final gyms = _allMapGymController.profile.value.data ?? [];
-    LatLng? targetPosition;
+
+    LatLng? target;
 
     if (searchTerm != null && searchTerm.isNotEmpty) {
       final match = gyms.firstWhereOrNull(
@@ -202,54 +194,78 @@ class _MapScreenViewState extends State<MapScreenView> {
       );
 
       if (match != null && match.location?.coordinates.length == 2) {
-        targetPosition = LatLng(
-            match.location!.coordinates[1], match.location!.coordinates[0]);
-      } else {
-        targetPosition = await LocationService.getLatLngFromAddress(searchTerm);
+        target = LatLng(
+          match.location!.coordinates[1],
+          match.location!.coordinates[0],
+        );
       }
     }
 
-    // fallback to average of gyms or default center
-    targetPosition ??= gyms.isNotEmpty
-        ? LatLng(
-            gyms
-                    .where((g) => g.location?.coordinates.length == 2)
-                    .map((g) => g.location!.coordinates[1])
-                    .reduce((a, b) => a + b) /
-                gyms.length,
-            gyms
-                    .where((g) => g.location?.coordinates.length == 2)
-                    .map((g) => g.location!.coordinates[0])
-                    .reduce((a, b) => a + b) /
-                gyms.length)
-        : _fallbackCenter;
+    target ??= _fallbackCenter;
 
-    mapController?.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(target: targetPosition, zoom: 8),
-      ),
-    );
+    _animateToPosition(target, 12);
 
     circles = {
-      LocationService.createDistanceCircle(
-          center: targetPosition, distanceInMiles: distance)
+      Circle(
+        circleId: CircleId("radius"),
+        center: target,
+        radius: distance * 1400,
+        fillColor: Colors.green.withOpacity(0.2),
+        strokeColor: Colors.green.withOpacity(0.5),
+        strokeWidth: 7,
+      )
     };
+
     setState(() {});
   }
 
-  /// UPDATE DISTANCE CIRCLE
-  void _updateCircleForDistance(LatLng center) {
-    circles = {
-      Circle(
-        circleId: CircleId('radius'),
-        center: center,
-        radius: distance * 1609.34, // miles to meters
-        fillColor: Colors.green.withOpacity(0.2),
-        strokeColor: Colors.green.withOpacity(0.4),
-        strokeWidth: 3,
-      )
-    };
-    setState(() {});
+  /// 🔥 Convert Apple Markers → Google Markers using SAME ICON
+  Set<gmap.Marker> get googleMarkers {
+    return markers.map((ann) {
+      bool isUser = ann.annotationId.value == 'userLocation';
+
+      return gmap.Marker(
+        markerId: gmap.MarkerId(ann.annotationId.value),
+        position: gmap.LatLng(
+          ann.position.latitude,
+          ann.position.longitude,
+        ),
+        icon: isUser
+            ? gmap.BitmapDescriptor.defaultMarker
+            : gmap.BitmapDescriptor.fromBytes(
+                customGoogleIconBytes!), // Gym icon
+        infoWindow: gmap.InfoWindow(title: ann.infoWindow?.title),
+        onTap: () => _onMarkerTapped(ann.annotationId.value),
+      );
+    }).toSet();
+  }
+
+  /// Convert Apple Circles to Google Circles
+  Set<gmap.Circle> get googleCircles {
+    return circles.map((c) {
+      return gmap.Circle(
+        circleId: gmap.CircleId(c.circleId.value),
+        center: gmap.LatLng(c.center.latitude, c.center.longitude),
+        radius: c.radius,
+        fillColor: c.fillColor,
+        strokeColor: c.strokeColor,
+        strokeWidth: c.strokeWidth,
+      );
+    }).toSet();
+  }
+
+  void _zoomIn() {
+    if (_zoomLevel < 20) {
+      _zoomLevel++;
+      _animateToPosition(_currentLocation ?? _fallbackCenter, _zoomLevel);
+    }
+  }
+
+  void _zoomOut() {
+    if (_zoomLevel > 5) {
+      _zoomLevel--;
+      _animateToPosition(_currentLocation ?? _fallbackCenter, _zoomLevel);
+    }
   }
 
   @override
@@ -260,19 +276,38 @@ class _MapScreenViewState extends State<MapScreenView> {
     return Scaffold(
       body: Stack(
         children: [
-          AppleMap(
-            initialCameraPosition: CameraPosition(
-                target: _currentLocation ?? _fallbackCenter, zoom: _zoomLevel),
-            annotations: markers,
-            circles: circles,
-            onMapCreated: (controller) {
-              mapController = controller;
-              _getCurrentLocation();
-            },
-            myLocationEnabled: true,
-          ),
+          Platform.isIOS
+              ? AppleMap(
+                  initialCameraPosition: CameraPosition(
+                    target: _currentLocation ?? _fallbackCenter,
+                    zoom: _zoomLevel,
+                  ),
+                  annotations: markers,
+                  circles: circles,
+                  onMapCreated: (c) {
+                    appleMapController = c;
+                    _getCurrentLocation();
+                  },
+                  myLocationEnabled: true,
+                )
+              : gmap.GoogleMap(
+                  initialCameraPosition: gmap.CameraPosition(
+                    target: gmap.LatLng(
+                      (_currentLocation ?? _fallbackCenter).latitude,
+                      (_currentLocation ?? _fallbackCenter).longitude,
+                    ),
+                    zoom: _zoomLevel,
+                  ),
+                  markers: googleMarkers,
+                  circles: googleCircles,
+                  onMapCreated: (c) {
+                    googleMapController = c;
+                    _getCurrentLocation();
+                  },
+                  myLocationEnabled: true,
+                ),
 
-          /// Search Bar
+          // Search Bar
           Positioned(
             top: 50.h,
             right: 16.w,
@@ -281,7 +316,6 @@ class _MapScreenViewState extends State<MapScreenView> {
               backgroundColor: Colors.white,
               onSearchChanged: (text) async {
                 searchTerm = text;
-
                 _moveCameraToGyms(searchTerm: searchTerm);
               },
               onFilterTap: () => _openFilterSheet(context),
@@ -289,16 +323,15 @@ class _MapScreenViewState extends State<MapScreenView> {
             ),
           ),
 
-          /// Bottom Preview Card
+          // Bottom Preview Card
           if (selectedGym != null)
             Positioned(
               bottom: 20.h,
               left: 16.w,
               right: 16.w,
               child: GestureDetector(
-                onTap: () => Get.to(() => GymDetailsScreen(
-                      gymId: selectedGym.id.toString(),
-                    )),
+                onTap: () => Get.to(
+                    () => GymDetailsScreen(gymId: selectedGym.id.toString())),
                 child: GymPreviewCard(
                   gymName: selectedGym.name ?? "No Name",
                   location: selectedGym.city ?? "No Location",
@@ -313,7 +346,7 @@ class _MapScreenViewState extends State<MapScreenView> {
               ),
             ),
 
-          /// Zoom Buttons
+          // Zoom Buttons
           Positioned(
             bottom: 10.h,
             right: 16.w,
@@ -349,7 +382,8 @@ class _MapScreenViewState extends State<MapScreenView> {
       context: context,
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16.r))),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+      ),
       builder: (context) {
         return FilterSheet(
           selectedCategories: selectedCategories,
@@ -357,11 +391,6 @@ class _MapScreenViewState extends State<MapScreenView> {
           onApply: (List<String> categories, double newDistance) async {
             selectedCategories = categories;
             distance = newDistance;
-
-            if (_currentLocation != null)
-              _updateCircleForDistance(_currentLocation!);
-
-            // Fetch gyms with new filters
             await _fetchGyms();
           },
         );
