@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'package:calebshirthum/view/auth_view/login_auth_view.dart';
+import 'package:calebshirthum/view/splash_view/onboarding_view.dart';
 import 'package:calebshirthum/view/user/home_view/controller/my_profile_controller.dart';
 import 'package:get/get.dart';
 import '../../../uitilies/api/local_storage.dart';
@@ -36,7 +37,7 @@ class SplashController extends GetxController {
 
         Get.offAll(() => DashboardView());
       } else {
-        Get.offAll(() => LogInView());
+        Get.offAll(() => OnboardingView());
       }
     });
   }
