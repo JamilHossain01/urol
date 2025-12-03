@@ -1,7 +1,7 @@
 class AppImages {
   static String logo = "assets/images/mainLog.png";
   static String splash = "assets/images/Login.png";
-  static String splash1 = "assets/images/Splash 3 (2).png";
+  static String splash1 = "assets/images/Splash.png";
 
   static String googleIcon = "assets/images/google.png";
   static String appleIcon = "assets/images/apple-logo-svgrepo-com 1 (1).png";
