@@ -40,10 +40,6 @@ class _ProfileViewState extends State<ProfileView> {
 
   final RxBool _showShimmerFor2s = true.obs;
 
-
-
-
-
   String cmToFeetInch(dynamic cm) {
     // Convert cm → total inches
     dynamic totalInches = cm / 2.54;
@@ -56,11 +52,6 @@ class _ProfileViewState extends State<ProfileView> {
 
     return "$feet' ${inches.toStringAsFixed(0)}\"";
   }
-
-
-
-
-
 
   @override
   void initState() {
@@ -186,6 +177,19 @@ class _ProfileViewState extends State<ProfileView> {
                 return _getProfileController.isLoading.value == true
                     ? CustomLoader()
                     : EventCard(
+                        medalColor: _getProfileController
+                                    .profile.value.data?.competition?.result ==
+                                "Gold"
+                            ? Colors.amber
+                            : _getProfileController.profile.value.data
+                                        ?.competition?.result ==
+                                    "Silver"
+                                ? Colors.grey
+                                : _getProfileController.profile.value.data
+                                            ?.competition?.result ==
+                                        "Bronze"
+                                    ? Colors.brown
+                                    : Colors.brown,
                         showCompetition: true,
                         title: _getProfileController
                                 .profile.value.data?.competition?.eventName ??
@@ -204,6 +208,19 @@ class _ProfileViewState extends State<ProfileView> {
                         medalText: _getProfileController
                                 .profile.value.data?.competition?.result ??
                             "Not added yet",
+                        medalIcon: _getProfileController
+                                    .profile.value.data?.competition?.result ==
+                                "Gold"
+                            ? "assets/images/gold.png"
+                            : _getProfileController.profile.value.data
+                                        ?.competition?.result ==
+                                    "Silver"
+                                ? "assets/images/silver.png"
+                                : _getProfileController.profile.value.data
+                                            ?.competition?.result ==
+                                        "Bronze"
+                                    ? "assets/images/bronze.png"
+                                    : "assets/images/dnp.png",
                       );
               }),
 

@@ -13,7 +13,7 @@ class EventCard extends StatelessWidget {
   final String? location;
   final String? medalText;
   final Color? medalColor;
-  final String? medalIcon;
+  final String medalIcon;
   final bool showCompetition;
 
   const EventCard({
@@ -24,7 +24,8 @@ class EventCard extends StatelessWidget {
     this.location,
     this.medalText,
     this.medalColor,
-    this.medalIcon,  this.showCompetition = true,
+    required this.medalIcon,
+    this.showCompetition = true,
   }) : super(key: key);
 
   @override
@@ -50,7 +51,7 @@ class EventCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomText(
-                  text:  title ?? "Event Title",
+                  text: title ?? "Event Title",
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                   color: Colors.black,
@@ -72,14 +73,16 @@ class EventCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                 Divider(
+                Divider(
                   color: Color(0xFF000000).withOpacity(0.10),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _eventInfo("Division", division ?? "N/A", AppImages.division),
-                    _eventInfo("Location", location ?? "Unknown", AppImages.Location),
+                    _eventInfo(
+                        "Division", division ?? "N/A", AppImages.division),
+                    _eventInfo(
+                        "Location", location ?? "Unknown", AppImages.Location),
                   ],
                 ),
                 SizedBox(height: 6.h),
@@ -99,7 +102,7 @@ class EventCard extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Image.asset(
-                                medalIcon ?? AppImages.badge,
+                                medalIcon,
                                 height: 20.h,
                                 width: 20.w,
                               ),
@@ -114,10 +117,11 @@ class EventCard extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 8.h),
-                      if(showCompetition)...[
+                      if (showCompetition) ...[
                         Divider(
                           color: Color(0xFF000000).withOpacity(0.10),
-                        ),                        GestureDetector(
+                        ),
+                        GestureDetector(
                           onTap: () {
                             Get.to(() => AddCompetitionResultScreen());
                           },
@@ -129,7 +133,6 @@ class EventCard extends StatelessWidget {
                           ),
                         ),
                       ]
-
                     ],
                   ),
                 ),

@@ -254,6 +254,22 @@ class _HomeScreenViewState extends State<HomeScreenView> {
 
               // 👉 If data available
               return EventCard(
+
+                medalColor: competition.result == "Gold"
+                    ? Colors.amber
+                    : competition.result == "Silver"
+                        ? Colors.grey
+                        : competition.result == "Bronze"
+                            ? Colors.brown
+                            : Colors.grey,
+
+                medalIcon: competition.result == "Gold"
+                    ? "assets/images/gold.png"
+                    : competition.result == "Silver"
+                        ? "assets/images/silver.png"
+                        : competition.result == "Bronze"
+                            ? "assets/images/bronze.png"
+                            : "assets/images/dnp.png",
                 showCompetition: false,
                 title: competition.eventName ?? "",
                 date: CustomDateFormatter.formatDate(
