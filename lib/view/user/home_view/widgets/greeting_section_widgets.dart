@@ -13,30 +13,32 @@ class GreetingSection extends StatelessWidget {
   GreetingSection({super.key});
 
   final UnreadNotificationController _unreadNotificationController =
-  Get.put(UnreadNotificationController());
+      Get.put(UnreadNotificationController());
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          "Jiu Jitsu App",
-          style: GoogleFonts.libreBaskerville(
-            fontSize: 16.sp,
-            color: AppColors.mainColor,
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Jiu Jitsu App",
+              style: GoogleFonts.libreBaskerville(
+                fontSize: 16.sp,
+                color: AppColors.mainColor,
+              ),
+            )
+          ],
         ),
-
-        /// 🚀 No loader — silent background refresh
         Obx(() {
           return NotificationBell(
             notificationCount:
-            _unreadNotificationController.count.value,
+                _unreadNotificationController.unread.value.data ?? 0,
           );
         })
       ],
     );
   }
 }
-

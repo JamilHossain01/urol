@@ -6,7 +6,7 @@ import '../../../../uitilies/api/base_client.dart';
 import '../model/unread_notification_model.dart';
 
 class UnreadNotificationController extends GetxController {
-  var isLoading = false.obs;
+  var isLoading = false.obs; // used internally, not for UI
   var unread = NotificationUnreadModel().obs;
 
   @override
@@ -27,12 +27,13 @@ class UnreadNotificationController extends GetxController {
         unread.value = NotificationUnreadModel.fromJson(responseBody);
         print("fetched: ${unread.value}");
       } else {
-        throw 'Failed to load profile data: ${responseBody['message']}';
+        print('Failed to load: ${responseBody['message']}');
       }
     } catch (e) {
-      print("Error loading profile: $e");
+      print("Error loading notifications: $e");
     } finally {
       isLoading(false);
     }
   }
 }
+

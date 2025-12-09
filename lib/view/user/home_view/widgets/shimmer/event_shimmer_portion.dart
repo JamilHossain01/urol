@@ -1,4 +1,4 @@
-// event_card_shimmer.dart
+// event_shimmer_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
@@ -9,7 +9,7 @@ class EventCardShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -19,14 +19,13 @@ class EventCardShimmer extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _shimmerBox(width: 150.w, height: 18.h), // Title
           SizedBox(height: 10.h),
 
           Row(
             children: [
               _circleShimmer(16.w),
               SizedBox(width: 8.w),
-              _shimmerBox(width: 100.w, height: 14.h), // Date
+              _shimmerBox(width: 100.w, height: 14.h),
             ],
           ),
 
@@ -59,8 +58,7 @@ class EventCardShimmer extends StatelessWidget {
     );
   }
 
-  // ---- Shimmer Widgets -----
-
+  // ---- Shimmer Helper Widgets ----
   Widget _shimmerBox({required double width, required double height}) {
     return Shimmer.fromColors(
       baseColor: Colors.grey.shade300,
@@ -102,3 +100,4 @@ class EventCardShimmer extends StatelessWidget {
     );
   }
 }
+

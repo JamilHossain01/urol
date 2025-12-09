@@ -4,6 +4,7 @@ import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/custom_toast.dart';
 import 'package:calebshirthum/view/user/calender_view/controller/get_event_controller.dart';
 import 'package:calebshirthum/view/user/calender_view/widget/card_of_event.dart';
+import 'package:calebshirthum/view/user/calender_view/widget/card_of_shimmer_event.dart';
 import 'package:calebshirthum/view/user/calender_view/widget/filter_event_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,6 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../common widget/not_found_widget.dart';
 import '../../../common widget/seacr)with_filter_widgets.dart';
 import '../../../uitilies/custom_loader.dart';
+import '../home_view/widgets/shimmer/event_shimmer_portion.dart';
 
 class EventScreenView extends StatefulWidget {
   const EventScreenView({super.key});
@@ -97,7 +99,7 @@ class _EventScreenViewState extends State<EventScreenView> {
             Expanded(
               child: Obx(() {
                 if (_getEventController.isLoading.value) {
-                  return Center(child: CustomLoader());
+                  return Center(child: EventShimmerListScreen());
                 }
 
                 final events =

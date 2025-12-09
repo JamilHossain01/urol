@@ -20,7 +20,6 @@ class CardOfEvent extends StatelessWidget {
   final String link;
   final VoidCallback websiteRedirect;
 
-  // Constructor to accept parameters
   const CardOfEvent({
     Key? key,
     required this.image,
