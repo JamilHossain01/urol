@@ -33,7 +33,7 @@ class MapScreenView extends StatefulWidget {
 
 class _MapScreenViewState extends State<MapScreenView> {
   final AllMapGymController _allMapGymController =
-      Get.put(AllMapGymController());
+  Get.put(AllMapGymController());
 
   AppleMapController? appleMapController;
   gmap.GoogleMapController? googleMapController;
@@ -59,21 +59,29 @@ class _MapScreenViewState extends State<MapScreenView> {
     _init();
   }
 
+  @override
+  void dispose() {
+    appleMapController = null;
+    googleMapController = null;
+    super.dispose();
+  }
+
   Future<void> _init() async {
-    await _loadMarkerIcons(); // LOAD YOUR COMMON ICON
+    await _loadMarkerIcons();
+    if (!mounted) return;
+
     await _fetchGyms();
+    if (!mounted) return;
+
     await _getCurrentLocation();
   }
 
-  /// 🔥 Load your asset marker once
   Future<void> _loadMarkerIcons() async {
-    // Apple Map icon
     customAppleIcon = await BitmapDescriptor.fromAssetImage(
       ImageConfiguration(size: Size(80, 80)),
       "assets/images/small.png",
     );
 
-    // Google Map icon → needs loading bytes manually
     ByteData data = await rootBundle.load("assets/images/small.png");
     customGoogleIconBytes = data.buffer.asUint8List();
   }
@@ -86,10 +94,13 @@ class _MapScreenViewState extends State<MapScreenView> {
         disciplines: selectedCategories.join(","),
       );
 
+      if (!mounted) return;
       await _createMarkersFromAPI();
+
+      if (!mounted) return;
       _moveCameraToGyms(searchTerm: searchTerm);
-    } catch (e, st) {
-      debugPrint("Fetch gyms error: $e\n$st");
+    } catch (e) {
+      debugPrint("Fetch gyms error: $e");
     }
   }
 
@@ -102,6 +113,7 @@ class _MapScreenViewState extends State<MapScreenView> {
 
       if (permission == LocationPermission.denied ||
           permission == LocationPermission.deniedForever) {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Location permission required.")),
         );
@@ -113,7 +125,6 @@ class _MapScreenViewState extends State<MapScreenView> {
 
       _currentLocation = LatLng(position.latitude, position.longitude);
 
-      /// Add default User Marker
       markers.add(
         Annotation(
           annotationId: AnnotationId('userLocation'),
@@ -123,9 +134,10 @@ class _MapScreenViewState extends State<MapScreenView> {
         ),
       );
 
-      _animateToPosition(_currentLocation!, _zoomLevel);
-
+      if (!mounted) return;
       setState(() {});
+
+      _animateToPosition(_currentLocation!, _zoomLevel);
     } catch (e) {
       debugPrint("Location error: $e");
     }
@@ -133,7 +145,6 @@ class _MapScreenViewState extends State<MapScreenView> {
 
   Future<void> _createMarkersFromAPI() async {
     final gyms = _allMapGymController.profile.value.data ?? [];
-
     Set<Annotation> temp = {};
 
     for (var gym in gyms) {
@@ -146,8 +157,6 @@ class _MapScreenViewState extends State<MapScreenView> {
             annotationId: AnnotationId(gym.id ?? ""),
             position: LatLng(lat, lon),
             icon: customAppleIcon!,
-
-            /// 🔥 SAME ICON FOR APPLE
             infoWindow: InfoWindow(title: gym.name ?? "Gym"),
             onTap: () => _onMarkerTapped(gym.id ?? ""),
           ),
@@ -155,10 +164,12 @@ class _MapScreenViewState extends State<MapScreenView> {
       }
     }
 
+    if (!mounted) return;
     setState(() => markers.addAll(temp));
   }
 
   void _onMarkerTapped(String gymId) {
+    if (!mounted) return;
     setState(() {
       selectedGymId = gymId;
     });
@@ -183,15 +194,12 @@ class _MapScreenViewState extends State<MapScreenView> {
 
   Future<void> _moveCameraToGyms({String? searchTerm}) async {
     final gyms = _allMapGymController.profile.value.data ?? [];
-
     LatLng? target;
 
     if (searchTerm != null && searchTerm.isNotEmpty) {
-      final match = gyms.firstWhereOrNull(
-        (g) =>
-            g.name?.toLowerCase().contains(searchTerm.toLowerCase()) == true ||
-            g.city?.toLowerCase().contains(searchTerm.toLowerCase()) == true,
-      );
+      final match = gyms.firstWhereOrNull((g) =>
+      g.name?.toLowerCase().contains(searchTerm.toLowerCase()) == true ||
+          g.city?.toLowerCase().contains(searchTerm.toLowerCase()) == true);
 
       if (match != null && match.location?.coordinates.length == 2) {
         target = LatLng(
@@ -216,31 +224,25 @@ class _MapScreenViewState extends State<MapScreenView> {
       )
     };
 
+    if (!mounted) return;
     setState(() {});
   }
 
-  /// 🔥 Convert Apple Markers → Google Markers using SAME ICON
   Set<gmap.Marker> get googleMarkers {
     return markers.map((ann) {
       bool isUser = ann.annotationId.value == 'userLocation';
-
       return gmap.Marker(
         markerId: gmap.MarkerId(ann.annotationId.value),
-        position: gmap.LatLng(
-          ann.position.latitude,
-          ann.position.longitude,
-        ),
+        position: gmap.LatLng(ann.position.latitude, ann.position.longitude),
         icon: isUser
             ? gmap.BitmapDescriptor.defaultMarker
-            : gmap.BitmapDescriptor.fromBytes(
-                customGoogleIconBytes!), // Gym icon
+            : gmap.BitmapDescriptor.fromBytes(customGoogleIconBytes!),
         infoWindow: gmap.InfoWindow(title: ann.infoWindow?.title),
         onTap: () => _onMarkerTapped(ann.annotationId.value),
       );
     }).toSet();
   }
 
-  /// Convert Apple Circles to Google Circles
   Set<gmap.Circle> get googleCircles {
     return circles.map((c) {
       return gmap.Circle(
@@ -278,36 +280,35 @@ class _MapScreenViewState extends State<MapScreenView> {
         children: [
           Platform.isIOS
               ? AppleMap(
-                  initialCameraPosition: CameraPosition(
-                    target: _currentLocation ?? _fallbackCenter,
-                    zoom: _zoomLevel,
-                  ),
-                  annotations: markers,
-                  circles: circles,
-                  onMapCreated: (c) {
-                    appleMapController = c;
-                    _getCurrentLocation();
-                  },
-                  myLocationEnabled: true,
-                )
+            initialCameraPosition: CameraPosition(
+              target: _currentLocation ?? _fallbackCenter,
+              zoom: _zoomLevel,
+            ),
+            annotations: markers,
+            circles: circles,
+            onMapCreated: (c) {
+              appleMapController = c;
+              _getCurrentLocation();
+            },
+            myLocationEnabled: true,
+          )
               : gmap.GoogleMap(
-                  initialCameraPosition: gmap.CameraPosition(
-                    target: gmap.LatLng(
-                      (_currentLocation ?? _fallbackCenter).latitude,
-                      (_currentLocation ?? _fallbackCenter).longitude,
-                    ),
-                    zoom: _zoomLevel,
-                  ),
-                  markers: googleMarkers,
-                  circles: googleCircles,
-                  onMapCreated: (c) {
-                    googleMapController = c;
-                    _getCurrentLocation();
-                  },
-                  myLocationEnabled: true,
-                ),
+            initialCameraPosition: gmap.CameraPosition(
+              target: gmap.LatLng(
+                (_currentLocation ?? _fallbackCenter).latitude,
+                (_currentLocation ?? _fallbackCenter).longitude,
+              ),
+              zoom: _zoomLevel,
+            ),
+            markers: googleMarkers,
+            circles: googleCircles,
+            onMapCreated: (c) {
+              googleMapController = c;
+              _getCurrentLocation();
+            },
+            myLocationEnabled: true,
+          ),
 
-          // Search Bar
           Positioned(
             top: 50.h,
             right: 16.w,
@@ -323,7 +324,6 @@ class _MapScreenViewState extends State<MapScreenView> {
             ),
           ),
 
-          // Bottom Preview Card
           if (selectedGym != null)
             Positioned(
               bottom: 20.h,
@@ -331,7 +331,7 @@ class _MapScreenViewState extends State<MapScreenView> {
               right: 16.w,
               child: GestureDetector(
                 onTap: () => Get.to(
-                    () => GymDetailsScreen(gymId: selectedGym.id.toString())),
+                        () => GymDetailsScreen(gymId: selectedGym.id.toString())),
                 child: GymPreviewCard(
                   gymName: selectedGym.name ?? "No Name",
                   location: selectedGym.city ?? "No Location",
@@ -346,7 +346,6 @@ class _MapScreenViewState extends State<MapScreenView> {
               ),
             ),
 
-          // Zoom Buttons
           Positioned(
             bottom: 10.h,
             right: 16.w,

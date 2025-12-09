@@ -49,7 +49,7 @@ class NotFoundWidget extends StatelessWidget {
             ),
           CustomText(
             text: message,
-            fontSize: 16.sp,
+            fontSize: 14.sp,
             fontWeight: FontWeight.w500,
             color: AppColors.pTextColors,
             textAlign: textAlign,

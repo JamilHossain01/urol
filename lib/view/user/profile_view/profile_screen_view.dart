@@ -58,7 +58,7 @@ class _ProfileViewState extends State<ProfileView> {
     super.initState();
     _getProfileController.getProfileController();
 
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         _showShimmerFor2s.value = false;
       });
@@ -99,7 +99,7 @@ class _ProfileViewState extends State<ProfileView> {
                     _getProfileController.profile.value.data?.lastName ?? "";
                 String fullName = "$firstName $lastName".trim();
 
-                return _getProfileController.isLoading.value
+                return _getProfileController.isLoading.value == true
                     ? ProfileHeaderShimmer()
                     : ProfileHeaderWithBelt(
                         imageUrl: _getProfileController
@@ -117,9 +117,7 @@ class _ProfileViewState extends State<ProfileView> {
               // Home Gym Section
 
               Obx(() {
-                if (_showShimmerFor2s.value) {
-                  return UserInfoCardShimmer();
-                } else if (_getProfileController.isLoading.value) {
+                if (_getProfileController.isLoading.value) {
                   return UserInfoCardShimmer();
                 } else {
                   final data = _getProfileController.profile.value.data;
@@ -193,7 +191,7 @@ class _ProfileViewState extends State<ProfileView> {
                         showCompetition: true,
                         title: _getProfileController
                                 .profile.value.data?.competition?.eventName ??
-                            "Not added yet",
+                            "No competition results yet!",
                         date: CustomDateFormatter.formatDate(
                             _getProfileController
                                     .profile.value.data?.competition?.eventDate
@@ -204,10 +202,10 @@ class _ProfileViewState extends State<ProfileView> {
                             "Not division added yet",
                         location: _getProfileController
                                 .profile.value.data?.competition?.city ??
-                            "n/a",
+                            "No location yet",
                         medalText: _getProfileController
                                 .profile.value.data?.competition?.result ??
-                            "Not added yet",
+                            " No competition results yet",
                         medalIcon: _getProfileController
                                     .profile.value.data?.competition?.result ==
                                 "Gold"
@@ -220,7 +218,7 @@ class _ProfileViewState extends State<ProfileView> {
                                             ?.competition?.result ==
                                         "Bronze"
                                     ? "assets/images/bronze.png"
-                                    : "assets/images/dnp.png",
+                                    : "assets/icon/icon.png",
                       );
               }),
 

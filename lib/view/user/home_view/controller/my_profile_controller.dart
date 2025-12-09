@@ -31,10 +31,6 @@ class GetProfileController extends GetxController {
         throw 'Failed to load profile data: ${responseBody['message']}';
       }
 
-      final elapsed = DateTime.now().difference(startTime).inMilliseconds;
-      if (elapsed < 1000) {
-        await Future.delayed(Duration(milliseconds: 1000 - elapsed));
-      }
     } catch (e) {
       print("Error loading profile: $e");
     } finally {

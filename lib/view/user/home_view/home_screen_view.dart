@@ -104,7 +104,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                   Obx(() {
                     bool isLoading = profileController.isLoading.value;
                     return FutureBuilder(
-                      future: Future.delayed(Duration(seconds: 1)),
+                      future: Future.delayed(Duration(microseconds: 6)),
                       builder: (context, snapshot) {
                         if (isLoading ||
                             snapshot.connectionState != ConnectionState.done) {
@@ -175,7 +175,8 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                           child: Center(
                               child: NotFoundWidget(
                             imagePath: "assets/images/not_found.png",
-                            message: "Sorry, No nearby mats found!",
+                            message:
+                                "Sorry, no open mats currently happening \nnear you!",
                           )));
                     } else {
                       return NearbyMatsSection(
@@ -248,13 +249,12 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                 return Center(
                     child: NotFoundWidget(
                   imagePath: "assets/images/not_found.png",
-                  message: "No recent event found",
+                  message: "No recent event results yet!",
                 ));
               }
 
               // 👉 If data available
               return EventCard(
-
                 medalColor: competition.result == "Gold"
                     ? Colors.amber
                     : competition.result == "Silver"
@@ -262,7 +262,6 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                         : competition.result == "Bronze"
                             ? Colors.brown
                             : Colors.grey,
-
                 medalIcon: competition.result == "Gold"
                     ? "assets/images/gold.png"
                     : competition.result == "Silver"
