@@ -62,7 +62,7 @@ class CardOfShimmerEvent extends StatelessWidget {
                       SizedBox(height: 6.h),
                       Container(
                         height: 10.h,
-                        width: 180.w,
+                        width: 150.w,
                         decoration: BoxDecoration(
                           color: Colors.grey.shade200,
                           borderRadius: BorderRadius.circular(20.r),
@@ -74,7 +74,6 @@ class CardOfShimmerEvent extends StatelessWidget {
                       // Location
                       Row(
                         children: [
-                          SizedBox(width: 4.w),
                           Container(
                             height: 12.h,
                             width: 40.w,

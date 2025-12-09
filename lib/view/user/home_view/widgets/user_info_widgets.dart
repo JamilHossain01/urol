@@ -80,7 +80,8 @@ class UserInfoSection extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: const Color(0xFFBC6068), width: 2.w),
+                  border:
+                      Border.all(color: const Color(0xFFBC6068), width: 2.w),
                 ),
                 child: CircleAvatar(
                   radius: 28.r,
@@ -89,9 +90,7 @@ class UserInfoSection extends StatelessWidget {
               ),
             ),
           ),
-
           Gap(10.w),
-
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -163,6 +162,7 @@ class UserInfoSection extends StatelessWidget {
             fontSize: 12.sp,
           ),
           CustomText(
+            textAlign: TextAlign.start,
             text: customEllipsisText('“$quote”', wordLimit: 15),
             color: AppColors.pTextColors,
             fontWeight: FontWeight.w400,
