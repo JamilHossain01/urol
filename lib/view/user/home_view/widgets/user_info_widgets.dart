@@ -12,7 +12,7 @@ import '../../profile_view/widgets/shimmer/full_image_view_shimmer.dart';
 
 class UserInfoSection extends StatelessWidget {
   final String name;
-  final String beltRank; // ← API belt rank: "White", "Blue", etc.
+  final String? beltRank; // make nullable
   final String gymName;
   final String image;
   final String quote;
@@ -26,21 +26,23 @@ class UserInfoSection extends StatelessWidget {
     required this.quote,
   });
 
-  String get _beltImagePath {
-    final rank = beltRank.trim();
+  /// RETURN NULL WHEN NO VALID BELT — SO NOTHING IS SHOWN
+  String? get _beltImagePath {
+    final rank = (beltRank ?? "").trim();
+
     switch (rank) {
       case 'White':
-        return "assets/images/White.png";
+        return "assets/icon/white_high.png";
       case 'Blue':
-        return "assets/images/Blue.png";
+        return "assets/icon/blue_high.png";
       case 'Purple':
-        return "assets/images/Purple.png";
+        return "assets/icon/purple_high.png";
       case 'Brown':
-        return "assets/images/Brown.png";
+        return "assets/icon/brown_high.png";
       case 'Black':
-        return "assets/images/Black.png";
+        return "assets/icon/black_high.png";
       default:
-        return "assets/images/Blue.png";
+        return null; // show NOTHING
     }
   }
 
@@ -64,32 +66,32 @@ class UserInfoSection extends StatelessWidget {
   }
 
   Widget _buildUserProfile() {
+    final beltPath = _beltImagePath;
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 1.h),
       child: Row(
         children: [
           GestureDetector(
-            onTap: () => Get.to(() => FullImageView(
-                  imageUrls: [image],
-                )),
+            onTap: () => Get.to(() => FullImageView(imageUrls: [image])),
             child: CircleAvatar(
               radius: 28.r,
               backgroundColor: Colors.transparent,
               child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border:
-                      Border.all(color: const Color(0xFFBC6068), width: 2.w),
+                  border: Border.all(color: const Color(0xFFBC6068), width: 2.w),
                 ),
                 child: CircleAvatar(
                   radius: 28.r,
                   backgroundImage: NetworkImage(image),
-                  onBackgroundImageError: (_, __) {},
                 ),
               ),
             ),
           ),
+
           Gap(10.w),
+
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -99,14 +101,19 @@ class UserInfoSection extends StatelessWidget {
                 fontSize: 20.sp,
                 text: name,
               ),
+
               Gap(4.h),
-              // Dynamic Belt Image
-              Image.asset(
-                _beltImagePath,
-                width: 100.w,
-                height: 20.h,
-                fit: BoxFit.contain,
-              ),
+
+              // SHOW BELT ONLY IF VALID
+              if (beltPath != null)
+                Image.asset(
+                  beltPath,
+                  width: 100.w,
+                  height: 20.h,
+                  fit: BoxFit.contain,
+                )
+              else
+                SizedBox.shrink(), // nothing shown
             ],
           ),
         ],
@@ -156,13 +163,12 @@ class UserInfoSection extends StatelessWidget {
             fontSize: 12.sp,
           ),
           CustomText(
-            text: customEllipsisText('“$quote”', wordLimit: 15), // Smart quotes
+            text: customEllipsisText('“$quote”', wordLimit: 15),
             color: AppColors.pTextColors,
             fontWeight: FontWeight.w400,
             fontSize: 12.sp,
             maxLines: 10,
             overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.start,
           ),
         ],
       ),

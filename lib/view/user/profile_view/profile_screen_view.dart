@@ -44,7 +44,6 @@ class _ProfileViewState extends State<ProfileView> {
     // Convert cm → total inches
     dynamic totalInches = cm / 2.54;
 
-    // Extract feet
     dynamic feet = totalInches ~/ 12;
 
     // Remaining inches
@@ -56,7 +55,6 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   void initState() {
     super.initState();
-    _getProfileController.getProfileController();
 
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {

@@ -46,7 +46,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   @override
   void initState() {
     super.initState();
-    profileController.getProfileController();
+   // profileController.getProfileController();
     _getCurrentLocationAndUpdateMats();
     _unreadNotificationController.getUnReadController();
   }

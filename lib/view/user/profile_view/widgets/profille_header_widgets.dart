@@ -11,45 +11,47 @@ import '../../../../uitilies/app_images.dart';
 class ProfileHeaderWithBelt extends StatelessWidget {
   final String imageUrl;
   final String name;
-  final String beltRank; // ← Add this
+  final String? beltRank; // make nullable
 
   const ProfileHeaderWithBelt({
     Key? key,
     required this.imageUrl,
     required this.name,
-    required this.beltRank,
+    this.beltRank, // nullable now
   }) : super(key: key);
 
-  String get _beltImagePath {
-    final rank = beltRank.trim();
+  String? get _beltImagePath {
+    final rank = beltRank?.trim() ?? "";
+
     switch (rank) {
       case 'White':
-        return "assets/images/White.png";
+        return "assets/icon/white_high.png";
       case 'Blue':
-        return "assets/images/Blue.png";
+        return "assets/icon/blue_high.png";
       case 'Purple':
-        return "assets/images/Purple.png";
+        return "assets/icon/purple_high.png";
       case 'Brown':
-        return "assets/images/Brown.png";
-
+        return "assets/icon/brown_high.png";
       case 'Black':
-        return "assets/images/Black.png";
+        return "assets/icon/black_high.png";
       default:
-        return "assets/images/Blue.png";
+        return null; // return null (means show nothing)
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final beltPath = _beltImagePath;
+
     return Column(
       children: [
         Stack(
           alignment: Alignment.bottomCenter,
           children: [
-            // Profile Image with Tap to View
+            // Profile Image with Tap
             GestureDetector(
               onTap: () {
-                Get.to(() => FullImageView(imageUrls: [imageUrl],));
+                Get.to(() => FullImageView(imageUrls: [imageUrl]));
               },
               child: CircleAvatar(
                 radius: 60.r,
@@ -65,24 +67,27 @@ class ProfileHeaderWithBelt extends StatelessWidget {
                   child: CircleAvatar(
                     radius: 55.r,
                     backgroundImage: NetworkImage(imageUrl),
-                    onBackgroundImageError: (_, __) {
-                      // Optional: show placeholder
-                    },
                   ),
                 ),
               ),
             ),
 
-            // Dynamic Belt Image
-            Positioned(
-              bottom: 0,
-              child: Image.asset(
-                _beltImagePath,
-                width: 100.w,
-                height: 20.h,
-                fit: BoxFit.contain,
+            // Dynamic Belt Image (only if exists)
+            if (beltPath != null)
+              Positioned(
+                bottom: 0,
+                child: Image.asset(
+                  beltPath,
+                  width: 110.w,
+                  height: 20.h,
+                  fit: BoxFit.contain,
+                ),
+              )
+            else
+              Positioned(
+                bottom: 0,
+                child: SizedBox(height: 0, width: 0), // show nothing
               ),
-            ),
           ],
         ),
 
@@ -100,3 +105,4 @@ class ProfileHeaderWithBelt extends StatelessWidget {
     );
   }
 }
+
