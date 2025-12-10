@@ -210,13 +210,17 @@ class _ProfileViewState extends State<ProfileView> {
                             ? "assets/images/gold.png"
                             : _getProfileController.profile.value.data
                                         ?.competition?.result ==
-                                    "Silver"
-                                ? "assets/images/silver.png"
+                                    "DNP"
+                                ? "assets/images/bronze.png"
                                 : _getProfileController.profile.value.data
                                             ?.competition?.result ==
-                                        "Bronze"
-                                    ? "assets/images/bronze.png"
-                                    : "assets/icon/icon.png",
+                                        "Silver"
+                                    ? "assets/images/silver.png"
+                                    : _getProfileController.profile.value.data
+                                                ?.competition?.result ==
+                                            "Bronze"
+                                        ? "assets/images/bronze.png"
+                                        : "assets/icon/icon.png",
                       );
               }),
 

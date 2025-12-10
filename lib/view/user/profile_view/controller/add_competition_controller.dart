@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:calebshirthum/view/user/home_view/controller/my_profile_controller.dart';
 import 'package:get/get.dart';
 import '../../../../common widget/success_screen_widget.dart';
 import '../../../../uitilies/api/api_url.dart';
@@ -9,6 +10,9 @@ import '../../../../view/user/dashboard_view/bottom_navigation_view.dart';
 
 class AddCompetitionController extends GetxController {
   var isLoading = false.obs;
+
+
+  final GetProfileController _profileController = Get.put(GetProfileController());
 
   Future<void> addCompetition({
     required String eventName,
@@ -55,6 +59,9 @@ class AddCompetitionController extends GetxController {
             buttonText: "Go to Dashboard",
             buttonColor: AppColors.mainColor,
             onPressed: () {
+
+              _profileController.getProfileController();
+
               Get.offAll(() => DashboardView());
             },
           ),

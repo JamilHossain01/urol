@@ -149,15 +149,15 @@ class _UserInfoCardState extends State<UserInfoCard> {
                   Text(
                     "“${widget.favoriteQuote}”",
                     maxLines: isExpanded ? null : 2,
-                    overflow:
-                    isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+                    overflow: isExpanded
+                        ? TextOverflow.visible
+                        : TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w400,
                       color: Colors.black87,
                     ),
                   ),
-
                   if (isOverflowing)
                     GestureDetector(
                       onTap: () {
