@@ -12,7 +12,7 @@ import '../../profile_view/widgets/shimmer/full_image_view_shimmer.dart';
 
 class UserInfoSection extends StatelessWidget {
   final String name;
-  final String? beltRank; // make nullable
+  final String? beltRank;
   final String gymName;
   final String image;
   final String quote;

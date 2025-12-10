@@ -8,20 +8,28 @@ import '../../../../uitilies/app_colors.dart';
 import '../../../../uitilies/app_images.dart';
 import '../edite_profeil_view.dart';
 
-class UserInfoCard extends StatelessWidget {
+class UserInfoCard extends StatefulWidget {
   final String homeGym;
   final dynamic height;
   final String weight;
   final List<String> skills;
   final String favoriteQuote;
 
-  const UserInfoCard(
-      {super.key,
-      required this.homeGym,
-      required this.height,
-      required this.weight,
-      required this.skills,
-      required this.favoriteQuote});
+  const UserInfoCard({
+    super.key,
+    required this.homeGym,
+    required this.height,
+    required this.weight,
+    required this.skills,
+    required this.favoriteQuote,
+  });
+
+  @override
+  State<UserInfoCard> createState() => _UserInfoCardState();
+}
+
+class _UserInfoCardState extends State<UserInfoCard> {
+  bool isExpanded = false; // For See more / See less
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +75,7 @@ class UserInfoCard extends StatelessWidget {
                     color: AppColors.pTextColors,
                   ),
                   CustomText(
-                    text: homeGym,
+                    text: widget.homeGym,
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w600,
                     color: Colors.black,
@@ -82,9 +90,9 @@ class UserInfoCard extends StatelessWidget {
           /// 📏 Height and Weight Row
           Row(
             children: [
-              _infoTile(AppImages.scale, "Height", "$height"),
+              _infoTile(AppImages.scale, "Height", "${widget.height}"),
               Gap(10.w),
-              _infoTile(AppImages.kg, "Weight", "$weight lb"),
+              _infoTile(AppImages.kg, "Weight", "${widget.weight} lb"),
             ],
           ),
 
@@ -95,10 +103,9 @@ class UserInfoCard extends StatelessWidget {
             spacing: 6.w,
             runSpacing: 6.h,
             children: [
-              for (var skill in skills) _skillChip(skill),
+              for (var skill in widget.skills) _skillChip(skill),
             ],
           ),
-
 
           Divider(
             color: const Color(0xFF000000).withOpacity(0.10),
@@ -113,13 +120,66 @@ class UserInfoCard extends StatelessWidget {
             color: const Color(0xFF4B4B4B),
           ),
           SizedBox(height: 10.h),
-          CustomText(
-            maxLines: 2,
-            textAlign: TextAlign.start,
-            text: "“$favoriteQuote”",
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w400,
-            color: Colors.black87,
+
+          /// QUOTE + SEE MORE / SEE LESS
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final span = TextSpan(
+                text: "“${widget.favoriteQuote}”",
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black87,
+                ),
+              );
+
+              final tp = TextPainter(
+                text: span,
+                maxLines: 2,
+                textDirection: TextDirection.ltr,
+              );
+
+              tp.layout(maxWidth: constraints.maxWidth);
+
+              bool isOverflowing = tp.didExceedMaxLines;
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "“${widget.favoriteQuote}”",
+                    maxLines: isExpanded ? null : 2,
+                    overflow:
+                    isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black87,
+                    ),
+                  ),
+
+                  if (isOverflowing)
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isExpanded = !isExpanded;
+                        });
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 6.h),
+                        child: Text(
+                          isExpanded ? "See less" : "See more",
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.mainColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
           ),
 
           SizedBox(height: 8.h),
