@@ -15,6 +15,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../common widget/not_found_widget.dart';
 import '../../../common widget/seacr)with_filter_widgets.dart';
 import '../../../uitilies/custom_loader.dart';
+import '../event_view/widget/event_details_content.dart';
+import '../event_view/widget/event_details_modal.dart';
 import '../home_view/widgets/shimmer/event_shimmer_portion.dart';
 
 class EventScreenView extends StatefulWidget {
@@ -157,33 +159,52 @@ class _EventScreenViewState extends State<EventScreenView> {
                       }
                     }
 
-                    return CardOfEvent(
-                      date:
-                          "${event.date?.month ?? ''}/${event.date?.day ?? ''}\n${event.date?.year ?? ''}",
-                      title: customEllipsisText(
-                        event.name ?? "Unnamed Event",
-                        wordLimit: 5,
-                      ),
-                      org: event.type ?? "",
-                      location:
-                          "${event.city ?? ''}, ${event.state ?? ''}, ${event.venue ?? ''}",
-                      status: statusText,
-                      daysLeft: daysLeftText,
-                      price: "\$${event.registrationFee?.toString() ?? '0'}",
-                      link: event.eventWebsite ?? "No website",
-                      image: event.image?.url ??
-                          "https://via.placeholder.com/300x200.png?text=No+Image",
-                      websiteRedirect: () async {
-                        final link = event.eventWebsite;
-                        if (link != null && link.isNotEmpty) {
-                          await _launchUrl(link);
-                        } else {
-                          CustomToast.showToast(
-                            "Invalid event link",
-                            isError: true,
-                          );
-                        }
+                    return GestureDetector(
+                      onTap: () {
+                        CustomBottomSheet.show(
+                            context: context,
+                            title: "Event Details",
+                            child: EventDetailsContent(
+                              imageUrl: event.image?.url ??
+                                  "https://via.placeholder.com/300x200.png?text=No+Image",
+                              location:
+                                  "${event.city ?? ''}, ${event.state ?? ''}, ${event.venue ?? ''}",
+                              eventType: event.type ?? "",
+                              registrationFee:
+                                  "\$${event.registrationFee?.toString() ?? '0'}",
+                              link: event.eventWebsite.toString(),
+                              day: daysLeftText,
+                              staus: statusText,
+                            ));
                       },
+                      child: CardOfEvent(
+                        date:
+                            "${event.date?.month ?? ''}/${event.date?.day ?? ''}\n${event.date?.year ?? ''}",
+                        title: customEllipsisText(
+                          event.name ?? "Unnamed Event",
+                          wordLimit: 5,
+                        ),
+                        org: event.type ?? "",
+                        location:
+                            "${event.city ?? ''}, ${event.state ?? ''}, ${event.venue ?? ''}",
+                        status: statusText,
+                        daysLeft: daysLeftText,
+                        price: "\$${event.registrationFee?.toString() ?? '0'}",
+                        link: event.eventWebsite ?? "No website",
+                        image: event.image?.url ??
+                            "https://via.placeholder.com/300x200.png?text=No+Image",
+                        websiteRedirect: () async {
+                          final link = event.eventWebsite;
+                          if (link != null && link.isNotEmpty) {
+                            await _launchUrl(link);
+                          } else {
+                            CustomToast.showToast(
+                              "Invalid event link",
+                              isError: true,
+                            );
+                          }
+                        },
+                      ),
                     );
                   },
                 );
