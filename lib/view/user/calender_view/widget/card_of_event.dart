@@ -4,9 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 
 import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../uitilies/app_colors.dart';
+import '../../profile_view/widgets/shimmer/full_image_view_shimmer.dart';
 
 class CardOfEvent extends StatelessWidget {
   final String image;
@@ -69,23 +72,27 @@ class CardOfEvent extends StatelessWidget {
                   bottomLeft: Radius.circular(12.r),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: CachedNetworkImage(
-                    imageUrl: image,
-                    height: 120.h,
-                    width: 70.w,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Center(
-                      child: SizedBox(
-                        height: 25.h,
-                        width: 25.w,
-                        child: CustomLoader(),
+                    padding: const EdgeInsets.only(left: 8),
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.to(() => FullImageView(imageUrls: [image]));
+                      },
+                      child: CachedNetworkImage(
+                        imageUrl: image,
+                        height: 120.h,
+                        width: 70.w,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Center(
+                          child: SizedBox(
+                            height: 25.h,
+                            width: 25.w,
+                            child: CustomLoader(),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error, color: Colors.red),
                       ),
-                    ),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error, color: Colors.red),
-                  ),
-                ),
+                    )),
               ),
               Positioned(
                 top: 8.h,

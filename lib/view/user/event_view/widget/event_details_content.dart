@@ -1,7 +1,10 @@
 import 'package:calebshirthum/uitilies/app_colors.dart';
+import 'package:calebshirthum/view/user/profile_view/widgets/shimmer/full_image_view_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:calebshirthum/common widget/custom text/custom_text_widget.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../uitilies/custom_toast.dart';
@@ -43,14 +46,45 @@ class EventDetailsContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(16.r),
-          child: Image.network(
-            imageUrl,
-            height: 140.h,
-            width: double.infinity,
-            fit: BoxFit.cover,
-          ),
-        ),
+            borderRadius: BorderRadius.circular(16.r),
+            child: GestureDetector(
+              onTap: () {
+                Get.to(() => FullImageView(imageUrls: [imageUrl]));
+              },
+              child: Image.network(
+                imageUrl,
+                height: 140.h,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+
+                  return Container(
+                    height: 140.h,
+                    width: double.infinity,
+                    color: Colors.grey.shade200,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        valueColor: AlwaysStoppedAnimation(AppColors.mainColor),
+                      ),
+                    ),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    height: 140.h,
+                    width: double.infinity,
+                    color: Colors.grey.shade300,
+                    child: Icon(
+                      Icons.broken_image,
+                      size: 40.sp,
+                      color: Colors.grey,
+                    ),
+                  );
+                },
+              ),
+            )),
 
         SizedBox(height: 20.h),
 
@@ -120,11 +154,7 @@ class EventDetailsContent extends StatelessWidget {
 
         GestureDetector(
           onTap: () {
-            if (registrationFee.startsWith("http")) {
-              _launchUrl(registrationFee);
-            } else {
-              CustomToast.showToast("Invalid link", isError: true);
-            }
+            _launchUrl(link);
           },
           child: Container(
             width: double.infinity,

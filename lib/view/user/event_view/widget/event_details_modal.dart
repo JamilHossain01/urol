@@ -11,6 +11,8 @@ class CustomBottomSheet {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      isDismissible: true,
+      enableDrag: true,
       backgroundColor: Colors.transparent,
       builder: (_) {
         return DraggableScrollableSheet(
