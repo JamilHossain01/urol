@@ -301,7 +301,7 @@ class _AddEventsViewState extends State<AddEventsView> {
               Gap(4.h),
               CustomTextField(
                   controller: _websiteController,
-                  hintText: "Enter website or ticket link",
+                  hintText: "Enter website link",
                   showObscure: false,
                   fillColor: AppColors.backRoudnColors,
                   hintTextColor: AppColors.hintTextColors,
@@ -318,7 +318,7 @@ class _AddEventsViewState extends State<AddEventsView> {
               Gap(4.h),
               CustomTextField(
                   controller: _registrationController,
-                  hintText: "if registration fee available provide here..",
+                  hintText: "if registration fee if applicable..",
                   showObscure: false,
                   fillColor: AppColors.backRoudnColors,
                   hintTextColor: AppColors.hintTextColors,
