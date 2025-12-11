@@ -35,13 +35,10 @@ Future<void> main() async {
   // Initialize storage
   await GetStorage.init();
 
-  // Initialize language controller
   await Get.put(LanguageController()).initStorage();
 
-  // Initialize Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // Request notification permissions
   await _requestNotificationPermissions();
 
   // Set up background handler
@@ -62,7 +59,6 @@ Future<void> main() async {
     print("Error retrieving FCM token: $e");
   }
 
-  // Configure local notifications
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -83,7 +79,6 @@ Future<void> main() async {
     },
   );
 
-  // Handle foreground notifications
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print('Foreground message received: ${message.notification?.title}');
     _showNotification(
@@ -95,7 +90,9 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
-// Fetch APNs Token (for iOS)
+
+
+
 Future<void> fetchAPNSToken(FirebaseMessaging messaging) async {
   try {
     String? apnsToken = await messaging.getAPNSToken();
