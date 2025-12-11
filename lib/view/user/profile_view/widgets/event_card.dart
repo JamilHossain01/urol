@@ -13,7 +13,7 @@ class EventCard extends StatelessWidget {
   final String? location;
   final String? medalText;
   final Color? medalColor;
-  final String medalIcon;
+  final Widget medalIcon;
   final bool showCompetition;
 
   const EventCard({
@@ -101,11 +101,7 @@ class EventCard extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image.asset(
-                                medalIcon,
-                                height: 20.h,
-                                width: 20.w,
-                              ),
+                              medalIcon,
                               CustomText(
                                 color: medalColor ?? AppColors.orangeColor,
                                 fontSize: 14.h,

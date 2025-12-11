@@ -52,6 +52,36 @@ class _ProfileViewState extends State<ProfileView> {
     return "$feet' ${inches.toStringAsFixed(0)}\"";
   }
 
+  Widget _buildMedalIcon(String? result) {
+    if (result == "Gold") {
+      return Image.asset(
+        "assets/images/gold.png",
+        height: 22,
+        width: 22,
+      );
+    } else if (result == "Silver") {
+      return Image.asset(
+        "assets/images/silver.png",
+        height: 22,
+        width: 22,
+      );
+    } else if (result == "Bronze") {
+      return Image.asset(
+        "assets/images/bronze.png",
+        height: 22,
+        width: 22,
+      );
+    } else if (result == "DNP") {
+      return Image.asset(
+        "assets/images/bronze.png",
+        height: 22,
+        width: 22,
+      );
+    }
+
+    return Container();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -185,42 +215,38 @@ class _ProfileViewState extends State<ProfileView> {
                                             ?.competition?.result ==
                                         "Bronze"
                                     ? Colors.brown
-                                    : Colors.brown,
+                                    : Colors.black45,
+
                         showCompetition: true,
+
                         title: _getProfileController
                                 .profile.value.data?.competition?.eventName ??
                             "No competition results yet!",
+
                         date: CustomDateFormatter.formatDate(
-                            _getProfileController
-                                    .profile.value.data?.competition?.eventDate
-                                    .toString() ??
-                                "n/a"),
+                          _getProfileController
+                                  .profile.value.data?.competition?.eventDate
+                                  ?.toString() ??
+                              "n/a",
+                        ),
+
                         division: _getProfileController
                                 .profile.value.data?.competition?.division ??
                             "Not division added yet",
+
                         location: _getProfileController
                                 .profile.value.data?.competition?.city ??
                             "No location yet",
+
                         medalText: _getProfileController
                                 .profile.value.data?.competition?.result ??
-                            " No competition results yet",
-                        medalIcon: _getProfileController
-                                    .profile.value.data?.competition?.result ==
-                                "Gold"
-                            ? "assets/images/gold.png"
-                            : _getProfileController.profile.value.data
-                                        ?.competition?.result ==
-                                    "DNP"
-                                ? "assets/images/bronze.png"
-                                : _getProfileController.profile.value.data
-                                            ?.competition?.result ==
-                                        "Silver"
-                                    ? "assets/images/silver.png"
-                                    : _getProfileController.profile.value.data
-                                                ?.competition?.result ==
-                                            "Bronze"
-                                        ? "assets/images/bronze.png"
-                                        : "assets/icon/icon.png",
+                            "No competition results yet",
+
+                        // ✅ FIXED MEDAL ICON (always Widget, never string)
+                        medalIcon: _buildMedalIcon(
+                          _getProfileController
+                              .profile.value.data?.competition?.result,
+                        ),
                       );
               }),
 

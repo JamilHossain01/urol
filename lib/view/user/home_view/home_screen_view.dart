@@ -46,7 +46,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   @override
   void initState() {
     super.initState();
-   // profileController.getProfileController();
+    // profileController.getProfileController();
     _getCurrentLocationAndUpdateMats();
     _unreadNotificationController.getUnReadController();
   }
@@ -88,6 +88,59 @@ class _HomeScreenViewState extends State<HomeScreenView> {
 
   @override
   Widget build(BuildContext context) {
+    Widget getMedalIcon(String? result) {
+      switch (result) {
+        case "Gold":
+          return Image.asset(
+            "assets/images/gold.png",
+            width: 24,
+            height: 24,
+          );
+        case "Silver":
+          return Image.asset(
+            "assets/images/silver.png",
+            width: 24,
+            height: 24,
+          );
+        case "Bronze":
+          return Image.asset(
+            "assets/images/bronze.png",
+            width: 24,
+            height: 24,
+          );
+
+        case "DNP":
+          return Image.asset(
+            "assets/images/bronze.png",
+            width: 24,
+            height: 24,
+          );
+
+        default:
+          return Image.asset(
+            "assets/images/dnp.png",
+            width: 24,
+            height: 24,
+          );
+      }
+    }
+
+    Color getMedalColor(String? result) {
+      switch (result) {
+        case "Gold":
+          return Colors.amber;
+        case "Silver":
+          return Colors.grey;
+        case "Bronze":
+          return Colors.brown;
+        case "DNP":
+          return Colors.brown;
+
+        default:
+          return Colors.grey;
+      }
+    }
+
     return Scaffold(
       backgroundColor: Color(0xffF8F9FA),
       body: SingleChildScrollView(
@@ -255,20 +308,8 @@ class _HomeScreenViewState extends State<HomeScreenView> {
 
               // 👉 If data available
               return EventCard(
-                medalColor: competition.result == "Gold"
-                    ? Colors.amber
-                    : competition.result == "Silver"
-                        ? Colors.grey
-                        : competition.result == "Bronze"
-                            ? Colors.brown
-                            : Colors.grey,
-                medalIcon: competition.result == "Gold"
-                    ? "assets/images/gold.png"
-                    : competition.result == "Silver"
-                        ? "assets/images/silver.png"
-                        : competition.result == "Bronze"
-                            ? "assets/images/bronze.png"
-                            : "assets/images/dnp.png",
+                medalColor: getMedalColor(competition.result),
+                medalIcon: getMedalIcon(competition.result),
                 showCompetition: false,
                 title: competition.eventName ?? "",
                 date: CustomDateFormatter.formatDate(
