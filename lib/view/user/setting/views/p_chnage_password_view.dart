@@ -115,12 +115,10 @@ class ChangedNewPasswordView extends StatelessWidget {
                               }
 
                               // 3. STRONG PASSWORD CHECK (DIRECT LOGIC — NO FUNCTION CALL)
-                              if (newPass.length < 8 ||
-                                  !RegExp(r'[A-Z]').hasMatch(newPass) ||
-                                  !RegExp(r'[0-9]').hasMatch(newPass) ||
-                                  !RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(newPass)) {
+                              if (newPass.length < 8
+                                ) {
                                 CustomToast.showToast(
-                                  "Password must be 8+ chars with uppercase, number & special character",
+                                  "Password must be 8+ chars",
                                   isError: true,
                                 );
                                 return;

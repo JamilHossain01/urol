@@ -37,9 +37,7 @@ class _SignUpViewState extends State<SignUpView> {
 
   /// 🔒 Password Strength Validation Function
   bool _isStrongPassword(String password) {
-    final regex =
-        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
-    return regex.hasMatch(password);
+    return password.length >= 8;
   }
 
   /// ✅ Validation before signup
@@ -69,7 +67,7 @@ class _SignUpViewState extends State<SignUpView> {
 
     if (!_isStrongPassword(password)) {
       CustomToast.showToast(
-        "Password must include uppercase, lowercase, number, special char & be at least 8 chars",
+        "Password at least 8 chars",
         isError: true,
       );
       return;
