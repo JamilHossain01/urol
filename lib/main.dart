@@ -14,7 +14,6 @@ import 'package:get_storage/get_storage.dart';
 
 import 'common widget/language widget/controller/language_controller.dart';
 import 'common widget/language widget/dep.dart' as dep;
-import 'common widget/language widget/message.dart';
 import 'firebase_options.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -43,6 +42,11 @@ Future<void> main() async {
 
   // Set up background handler
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  /// land-scope mode off
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
 
   // Get FCM token
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -89,9 +93,6 @@ Future<void> main() async {
 
   runApp(MyApp());
 }
-
-
-
 
 Future<void> fetchAPNSToken(FirebaseMessaging messaging) async {
   try {
