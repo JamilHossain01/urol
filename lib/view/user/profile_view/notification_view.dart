@@ -42,6 +42,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Future<void> _fetchNotifications() async {
     await _controller.getNotification();
 
+
+    _allNotificationReadController.getReadAll();
+
     final notifications = _controller.notification.value.data?.data ?? [];
     final now = DateTime.now();
 
@@ -75,27 +78,27 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           },
           child: Icon(Icons.arrow_back_ios),
         ),
-        actions: [
-          Obx(() {
-            return _allNotificationReadController.isLoading.value == true
-                ? CustomLoader()
-                : GestureDetector(
-                    onTap: () {
-                      _allNotificationReadController.getReadAll();
-                    },
-                    child: Icon(
-                      Icons.notifications_paused_rounded,
-                      size: 30,
-                    ),
-                  );
-          }),
-          SizedBox(width: 20)
-        ],
+        // actions: [
+        //   Obx(() {
+        //     return _allNotificationReadController.isLoading.value == true
+        //         ? CustomLoader()
+        //         : GestureDetector(
+        //             onTap: () {
+        //               _allNotificationReadController.getReadAll();
+        //             },
+        //             child: Icon(
+        //               Icons.notifications_paused_rounded,
+        //               size: 30,
+        //             ),
+        //           );
+        //   }),
+        //   SizedBox(width: 20)
+        // ],
         title: 'Notifications',
         showLeadingIcon: true,
       ),
       body: Obx(() {
-        if (_controller.isLoading.value || _readController.isLoading.value) {
+        if (_controller.isLoading.value ) {
           return Center(child: CustomLoader());
         }
 

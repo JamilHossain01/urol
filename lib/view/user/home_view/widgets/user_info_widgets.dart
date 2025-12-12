@@ -211,11 +211,11 @@ class UserInfoSection extends StatelessWidget {
           ),
           CustomText(
             textAlign: TextAlign.start,
-            text: customEllipsisText('“$quote”', wordLimit: 15),
+            text: customEllipsisText('“$quote”', wordLimit: 12),
             color: AppColors.pTextColors,
             fontWeight: FontWeight.w400,
             fontSize: 12.sp,
-            maxLines: 10,
+            maxLines: 3,
             overflow: TextOverflow.ellipsis,
           ),
         ],

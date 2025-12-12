@@ -27,9 +27,9 @@ class AllNotificationReadController extends GetxController {
       );
 
       if (responseBody['success'] == true) {
-        _controller.getNotification();
-        CustomToast.showToast("All notification read successfully done",
-            isError: false);
+        //   _controller.getNotification();
+        // CustomToast.showToast("All notification read successfully done",
+        //     isError: false);
       } else {
         throw 'Failed to load profile data: ${responseBody['message']}';
       }

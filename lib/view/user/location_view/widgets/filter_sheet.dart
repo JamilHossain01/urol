@@ -120,7 +120,7 @@ class _FilterSheetState extends State<FilterSheet> {
                 child: Slider(
                   value: _distance,
                   min: 1,
-                  max: 50,
+                  max: 100,
                   activeColor: AppColors.mainColor,
                   onChanged: (val) => setState(() => _distance = val),
                 ),

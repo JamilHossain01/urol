@@ -24,7 +24,7 @@ class GreetingSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Jiu Jitsu App",
+              "Jiu Jitsu",
               style: GoogleFonts.libreBaskerville(
                 fontSize: 16.sp,
                 color: AppColors.mainColor,

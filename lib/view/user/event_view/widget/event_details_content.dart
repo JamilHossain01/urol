@@ -113,12 +113,12 @@ class EventDetailsContent extends StatelessWidget {
             _infoCard(
               icon: Icons.event,
               title: "Event Type",
-              value: eventType,
+              value: eventType, color: Colors.black,
             ),
             _infoCard(
               icon: Icons.attach_money,
               title: "Reg. Fee",
-              value: registrationFee,
+              value: registrationFee, color: Colors.black,
             ),
           ],
         ),
@@ -132,12 +132,12 @@ class EventDetailsContent extends StatelessWidget {
             _infoCard(
               icon: Icons.data_exploration_outlined,
               title: "Days Left",
-              value: day,
+              value: day, color: Colors.black,
             ),
             _infoCard(
               icon: Icons.access_alarm,
               title: "Status",
-              value: staus,
+              value: staus, color: staus == "Open" ? Colors.green : Colors.red,
             ),
           ],
         ),
@@ -197,6 +197,7 @@ class EventDetailsContent extends StatelessWidget {
     required IconData icon,
     required String title,
     required String value,
+    required Color color,
   }) {
     return Expanded(
       child: Container(
@@ -212,20 +213,18 @@ class EventDetailsContent extends StatelessWidget {
           children: [
             Icon(icon, size: 26.sp, color: AppColors.mainColor),
             SizedBox(height: 10.h),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 12.sp,
-                color: Colors.black54,
-                fontWeight: FontWeight.w500,
-              ),
+            CustomText(
+              text: title,
+              fontSize: 12.sp,
+              color: Colors.black54,
+              fontWeight: FontWeight.w500,
             ),
             SizedBox(height: 4.h),
             CustomText(
               text: value,
               fontSize: 15.sp,
               fontWeight: FontWeight.w700,
-              color: Colors.black87,
+              color:  color ?? Colors.black87,
             ),
           ],
         ),

@@ -33,7 +33,7 @@ class MapScreenView extends StatefulWidget {
 
 class _MapScreenViewState extends State<MapScreenView> {
   final AllMapGymController _allMapGymController =
-  Get.put(AllMapGymController());
+      Get.put(AllMapGymController());
 
   AppleMapController? appleMapController;
   gmap.GoogleMapController? googleMapController;
@@ -198,7 +198,7 @@ class _MapScreenViewState extends State<MapScreenView> {
 
     if (searchTerm != null && searchTerm.isNotEmpty) {
       final match = gyms.firstWhereOrNull((g) =>
-      g.name?.toLowerCase().contains(searchTerm.toLowerCase()) == true ||
+          g.name?.toLowerCase().contains(searchTerm.toLowerCase()) == true ||
           g.city?.toLowerCase().contains(searchTerm.toLowerCase()) == true);
 
       if (match != null && match.location?.coordinates.length == 2) {
@@ -217,10 +217,10 @@ class _MapScreenViewState extends State<MapScreenView> {
       Circle(
         circleId: CircleId("radius"),
         center: target,
-        radius: distance * 1400,
+        radius: distance * 1700,
         fillColor: Colors.green.withOpacity(0.2),
         strokeColor: Colors.green.withOpacity(0.5),
-        strokeWidth: 7,
+        strokeWidth: 6,
       )
     };
 
@@ -280,35 +280,34 @@ class _MapScreenViewState extends State<MapScreenView> {
         children: [
           Platform.isIOS
               ? AppleMap(
-            initialCameraPosition: CameraPosition(
-              target: _currentLocation ?? _fallbackCenter,
-              zoom: _zoomLevel,
-            ),
-            annotations: markers,
-            circles: circles,
-            onMapCreated: (c) {
-              appleMapController = c;
-              _getCurrentLocation();
-            },
-            myLocationEnabled: true,
-          )
+                  initialCameraPosition: CameraPosition(
+                    target: _currentLocation ?? _fallbackCenter,
+                    zoom: _zoomLevel,
+                  ),
+                  annotations: markers,
+                  circles: circles,
+                  onMapCreated: (c) {
+                    appleMapController = c;
+                    _getCurrentLocation();
+                  },
+                  myLocationEnabled: true,
+                )
               : gmap.GoogleMap(
-            initialCameraPosition: gmap.CameraPosition(
-              target: gmap.LatLng(
-                (_currentLocation ?? _fallbackCenter).latitude,
-                (_currentLocation ?? _fallbackCenter).longitude,
-              ),
-              zoom: _zoomLevel,
-            ),
-            markers: googleMarkers,
-            circles: googleCircles,
-            onMapCreated: (c) {
-              googleMapController = c;
-              _getCurrentLocation();
-            },
-            myLocationEnabled: true,
-          ),
-
+                  initialCameraPosition: gmap.CameraPosition(
+                    target: gmap.LatLng(
+                      (_currentLocation ?? _fallbackCenter).latitude,
+                      (_currentLocation ?? _fallbackCenter).longitude,
+                    ),
+                    zoom: _zoomLevel,
+                  ),
+                  markers: googleMarkers,
+                  circles: googleCircles,
+                  onMapCreated: (c) {
+                    googleMapController = c;
+                    _getCurrentLocation();
+                  },
+                  myLocationEnabled: true,
+                ),
           Positioned(
             top: 50.h,
             right: 16.w,
@@ -323,7 +322,6 @@ class _MapScreenViewState extends State<MapScreenView> {
               hintText: 'Search location here...',
             ),
           ),
-
           if (selectedGym != null)
             Positioned(
               bottom: 20.h,
@@ -331,7 +329,7 @@ class _MapScreenViewState extends State<MapScreenView> {
               right: 16.w,
               child: GestureDetector(
                 onTap: () => Get.to(
-                        () => GymDetailsScreen(gymId: selectedGym.id.toString())),
+                    () => GymDetailsScreen(gymId: selectedGym.id.toString())),
                 child: GymPreviewCard(
                   gymName: selectedGym.name ?? "No Name",
                   location: selectedGym.city ?? "No Location",
@@ -345,7 +343,6 @@ class _MapScreenViewState extends State<MapScreenView> {
                 ),
               ),
             ),
-
           Positioned(
             bottom: 10.h,
             right: 16.w,
