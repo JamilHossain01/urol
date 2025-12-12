@@ -15,6 +15,8 @@ class UserInfoSection extends StatelessWidget {
   final String? beltRank;
   final String gymName;
   final String image;
+  final String weight;
+  final String height;
   final String quote;
 
   const UserInfoSection({
@@ -24,6 +26,8 @@ class UserInfoSection extends StatelessWidget {
     required this.gymName,
     required this.image,
     required this.quote,
+    required this.weight,
+    required this.height,
   });
 
   /// RETURN NULL WHEN NO VALID BELT — SO NOTHING IS SHOWN
@@ -49,13 +53,21 @@ class UserInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomContainer(
-      height: 210.h,
+      height: 250.h,
       color: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildUserProfile(),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              _infoTile(AppImages.scale, "Height", "${height}"),
+              Gap(10.w),
+              _infoTile(AppImages.kg, "Weight", "${weight} lb"),
+            ],
+          ),
           Divider(color: const Color(0xFF000000).withOpacity(0.10)),
           _buildUserLocation(),
           Divider(color: const Color(0xFF000000).withOpacity(0.10)),
@@ -116,6 +128,42 @@ class UserInfoSection extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  /// 🔹 Info Tile for Height / Weight
+  Widget _infoTile(String iconPath, String label, String value) {
+    return Expanded(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF5F5F5),
+          borderRadius: BorderRadius.circular(8.r),
+        ),
+        child: Row(
+          children: [
+            Image.asset(iconPath, height: 20.h, width: 20.w),
+            SizedBox(width: 8.w),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomText(
+                  text: label,
+                  fontSize: 10.sp,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.pTextColors,
+                ),
+                CustomText(
+                  text: value,
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -125,6 +125,18 @@ class _HomeScreenViewState extends State<HomeScreenView> {
       }
     }
 
+    String cmToFeetInch(dynamic cm) {
+      // Convert cm → total inches
+      dynamic totalInches = cm / 2.54;
+
+      dynamic feet = totalInches ~/ 12;
+
+      // Remaining inches
+      dynamic inches = totalInches % 12;
+
+      return "$feet' ${inches.toStringAsFixed(0)}\"";
+    }
+
     Color getMedalColor(String? result) {
       switch (result) {
         case "Gold":
@@ -188,6 +200,22 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                     .profile.value.data?.beltRank
                                     .toString() ??
                                 "",
+                            weight: (() {
+                              final weightStr = profileController
+                                      .profile.value.data?.weight
+                                      ?.toString() ??
+                                  "";
+                              return weightStr
+                                  .replaceAll(
+                                      RegExp(r'kg', caseSensitive: false), '')
+                                  .trim();
+                            })(),
+                            height: profileController
+                                        .profile.value.data?.height?.amount !=
+                                    null
+                                ? cmToFeetInch(profileController
+                                    .profile.value.data?.height?.amount)
+                                : "n/a",
                           );
                         }
                       },

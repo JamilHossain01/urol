@@ -5,6 +5,7 @@ import 'package:calebshirthum/uitilies/custom_loader.dart';
 import 'package:calebshirthum/uitilies/custom_toast.dart';
 import 'package:calebshirthum/view/auth_view/login_auth_view.dart';
 import 'package:calebshirthum/view/user/profile_view/add_events_view.dart';
+import 'package:calebshirthum/view/user/profile_view/controller/my_gym_controller.dart';
 import 'package:calebshirthum/view/user/profile_view/friend_screen_view.dart';
 import 'package:calebshirthum/view/user/profile_view/my_event_screen.dart';
 import 'package:calebshirthum/view/user/profile_view/my_gyms_view.dart';
@@ -37,6 +38,8 @@ class ProfileView extends StatefulWidget {
 class _ProfileViewState extends State<ProfileView> {
   final GetProfileController _getProfileController =
       Get.put(GetProfileController());
+
+  final MyGymController _myGymController = Get.put(MyGymController());
 
   final RxBool _showShimmerFor2s = true.obs;
 
@@ -91,6 +94,8 @@ class _ProfileViewState extends State<ProfileView> {
         _showShimmerFor2s.value = false;
       });
     });
+
+    _myGymController.getMyGyms();
   }
 
   @override
@@ -277,23 +282,33 @@ class _ProfileViewState extends State<ProfileView> {
                       iconPath: AppImages.add,
                       onTap: () => Get.to(() => AddYourGymDetailsScreen()),
                     ),
-                    OtherTile(
-                      text: "Add Event",
-                      iconPath: AppImages.calenderA,
-                      onTap: () => Get.to(() => AddEventsView(
-                            isEdit: false,
-                          )),
-                    ),
-                    OtherTile(
-                      text: "My Gyms",
-                      iconPath: AppImages.myGym,
-                      onTap: () => Get.to(() => MyGymsView()),
-                    ),
-                    OtherTile(
-                      text: "My Events",
-                      iconPath: AppImages.calenderA,
-                      onTap: () => Get.to(() => MyEventScreen()),
-                    ),
+                    Obx(() {
+                      final gyms = _myGymController.gums.value.data;
+                      if (gyms == null || gyms.isEmpty)
+                        return SizedBox.shrink();
+
+                      return Column(
+                        children: [
+                          OtherTile(
+                            text: "Add Event",
+                            iconPath: AppImages.calenderA,
+                            onTap: () => Get.to(() => AddEventsView(
+                                  isEdit: false,
+                                )),
+                          ),
+                          OtherTile(
+                            text: "My Gyms",
+                            iconPath: AppImages.myGym,
+                            onTap: () => Get.to(() => MyGymsView()),
+                          ),
+                          OtherTile(
+                            text: "My Events",
+                            iconPath: AppImages.calenderA,
+                            onTap: () => Get.to(() => MyEventScreen()),
+                          ),
+                        ],
+                      );
+                    }),
                     OtherTile(
                       text: "Friends",
                       iconPath: AppImages.friend,
@@ -321,51 +336,6 @@ class _ProfileViewState extends State<ProfileView> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  // Helper Widgets
-  Widget _infoTile(String iconPath, String title, String value) {
-    return Expanded(
-      child: Row(
-        children: [
-          Image.asset(iconPath, height: 18.h, width: 18.w),
-          SizedBox(width: 4.w),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomText(
-                text: title,
-                fontSize: 10.sp,
-                fontWeight: FontWeight.w500,
-                color: AppColors.pTextColors,
-              ),
-              CustomText(
-                text: value,
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _skillChip(String skill) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-      decoration: BoxDecoration(
-        color: AppColors.mainColor.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(6.r),
-      ),
-      child: CustomText(
-        text: skill,
-        fontSize: 10.sp,
-        fontWeight: FontWeight.w500,
-        color: AppColors.mainColor,
       ),
     );
   }
@@ -458,54 +428,5 @@ void showLogoutDialog(BuildContext context, {VoidCallback? onConfirm}) {
         ),
       );
     },
-  );
-}
-
-Widget _infoTile(String iconPath, String title, String value) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Row(
-        children: [
-          Image.asset(
-            iconPath,
-            height: 14.h,
-            width: 14.w,
-            fit: BoxFit.contain,
-          ),
-          SizedBox(width: 6.w),
-          CustomText(
-            text: title,
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w400,
-            color: Colors.grey.shade600,
-          ),
-        ],
-      ),
-      SizedBox(height: 4.h),
-      CustomText(
-        text: value,
-        fontSize: 14.sp,
-        fontWeight: FontWeight.w500,
-        color: Colors.black,
-      ),
-    ],
-  );
-}
-
-// ✅ Skill Chip
-Widget _skillChip(String text) {
-  return Container(
-    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-    decoration: BoxDecoration(
-      color: AppColors.mainColor,
-      borderRadius: BorderRadius.circular(20.r),
-    ),
-    child: CustomText(
-      text: text,
-      fontSize: 12.sp,
-      fontWeight: FontWeight.w500,
-      color: Colors.white,
-    ),
   );
 }
