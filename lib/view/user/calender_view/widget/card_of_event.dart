@@ -21,6 +21,8 @@ class CardOfEvent extends StatelessWidget {
   final String status;
   final String price;
   final String link;
+  final Color statusColor;
+  final Color leftDaysColor;
   final VoidCallback websiteRedirect;
 
   const CardOfEvent({
@@ -35,6 +37,8 @@ class CardOfEvent extends StatelessWidget {
     required this.price,
     required this.link,
     required this.websiteRedirect,
+    required this.statusColor,
+    required this.leftDaysColor,
   }) : super(key: key);
 
   String _shortenLink(String link) {
@@ -178,7 +182,7 @@ class CardOfEvent extends StatelessWidget {
                         padding: EdgeInsets.symmetric(
                             horizontal: 6.w, vertical: 2.h),
                         decoration: BoxDecoration(
-                          color: Color(0xFf22C65F),
+                          color: leftDaysColor,
                           borderRadius: BorderRadius.circular(6.r),
                         ),
                         child: CustomText(
@@ -193,7 +197,7 @@ class CardOfEvent extends StatelessWidget {
                         padding: EdgeInsets.symmetric(
                             horizontal: 6.w, vertical: 2.h),
                         decoration: BoxDecoration(
-                          color: Color(0xFFFFBB24),
+                          color: statusColor,
                           borderRadius: BorderRadius.circular(6.r),
                         ),
                         child: CustomText(

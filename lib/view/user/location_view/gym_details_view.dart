@@ -316,7 +316,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                           return BuildScheduleWidget(
                             days: s.day ?? '',
                             time: "${s.fromView ?? ''} - ${s.toView ?? ''}",
-                            name: 'Mat Session',
+                            name: 'Open Mat Session',
                           );
                         }).toList(),
                       ),

@@ -159,6 +159,12 @@ class _EventScreenViewState extends State<EventScreenView> {
                       }
                     }
 
+                    Color statusColor =
+                        statusText == "Open" ? Colors.green : Colors.red;
+
+                    Color leftDaysColor =
+                        statusText == "Open" ? Colors.green : Colors.red;
+
                     return GestureDetector(
                       onTap: () {
                         CustomBottomSheet.show(
@@ -204,6 +210,8 @@ class _EventScreenViewState extends State<EventScreenView> {
                             );
                           }
                         },
+                        statusColor: statusColor,
+                        leftDaysColor: leftDaysColor,
                       ),
                     );
                   },
