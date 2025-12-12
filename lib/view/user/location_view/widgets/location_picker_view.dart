@@ -73,6 +73,8 @@ class _LocationPickerModalState extends State<LocationPickerModal> {
 
   Future<void> _updateAddress() async {
     try {
+      if (selectedLat == null || selectedLng == null) return;
+
       List<Placemark> marks =
       await placemarkFromCoordinates(selectedLat!, selectedLng!);
 
@@ -80,12 +82,16 @@ class _LocationPickerModalState extends State<LocationPickerModal> {
         Placemark p = marks.first;
 
         setState(() {
+          // Format as: <Label>, Street, City, State ZIP
           selectedAddress =
-          "${p.street}, ${p.locality}, ${p.administrativeArea}";
+          "${p.street}, ${p.locality}, ${p.administrativeArea} ${p.postalCode ?? ''}";
         });
       }
-    } catch (e) {}
+    } catch (e) {
+      print("Error formatting address: $e");
+    }
   }
+
 
   /// SEARCH LOCATION
   Future<void> _searchLocation(String query) async {

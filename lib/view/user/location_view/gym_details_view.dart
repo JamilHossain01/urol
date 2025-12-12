@@ -190,7 +190,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                         Gap(5.w),
                         CustomText(
                           text: customEllipsisText(
-                              "${data.street ?? ''}, ${data.city ?? ''}, ${data.state ?? ''}",
+                              "${data.city ?? ''}, ${data.state ?? ''}, ${data.zipCode ?? ''}",
                               wordLimit: 9),
                           fontSize: 10.sp,
                           color: const Color(0xFF4B4B4B),

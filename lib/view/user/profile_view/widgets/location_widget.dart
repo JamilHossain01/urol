@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:apple_maps_flutter/apple_maps_flutter.dart';
 
 import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../common widget/custom_text_filed.dart';
@@ -45,8 +44,9 @@ class LocationWidget extends StatelessWidget {
           placemarkFromCoordinates(selLat, selLng).then((placemarks) {
             if (placemarks.isNotEmpty) {
               final p = placemarks.first;
-              cityController.text = p.locality ?? '';
+              cityController.text = p.street ?? '';
               stateController.text = p.administrativeArea ?? '';
+              zipCodeController.text = p.postalCode ?? '';
             }
           }).catchError((e) {
             debugPrint("Reverse geocoding failed: $e");
@@ -94,7 +94,7 @@ class LocationWidget extends StatelessWidget {
           onTap: () => _pickLocation(context),
           child: AbsorbPointer(
             child: CustomTextField(
-              controller: streetAddressController,
+              controller: cityController,
               hintText: "Tap to pick location from map",
               showObscure: false,
               fillColor: AppColors.backRoudnColors,
