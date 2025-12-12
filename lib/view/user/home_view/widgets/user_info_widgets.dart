@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:calebshirthum/common%20widget/custom_elipse_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -97,7 +98,7 @@ class UserInfoSection extends StatelessWidget {
                 ),
                 child: CircleAvatar(
                   radius: 28.r,
-                  backgroundImage: NetworkImage(image),
+                  backgroundImage: CachedNetworkImageProvider(image),
                 ),
               ),
             ),

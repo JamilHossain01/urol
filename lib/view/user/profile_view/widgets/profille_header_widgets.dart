@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/shimmer/full_image_view_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -66,13 +67,12 @@ class ProfileHeaderWithBelt extends StatelessWidget {
                   ),
                   child: CircleAvatar(
                     radius: 55.r,
-                    backgroundImage: NetworkImage(imageUrl),
+                    backgroundImage: CachedNetworkImageProvider(imageUrl),
                   ),
                 ),
               ),
             ),
 
-            // Dynamic Belt Image (only if exists)
             if (beltPath != null)
               Positioned(
                 bottom: 0,
@@ -105,4 +105,3 @@ class ProfileHeaderWithBelt extends StatelessWidget {
     );
   }
 }
-
