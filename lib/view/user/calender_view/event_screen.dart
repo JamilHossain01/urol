@@ -137,7 +137,7 @@ class _EventScreenViewState extends State<EventScreenView> {
                         statusText = "Open";
                       } else if (difference == 0) {
                         daysLeftText = "Today";
-                        statusText = "1 Day Left";
+                        statusText = "Open";
                       } else {
                         daysLeftText = "Event Passed";
                         statusText = "Closed";
@@ -163,7 +163,9 @@ class _EventScreenViewState extends State<EventScreenView> {
                         statusText == "Open" ? Colors.green : Colors.red;
 
                     Color leftDaysColor =
-                        statusText == "Open" ? Colors.green : Colors.red;
+                        daysLeftText == "Today" || statusText == "Open"
+                            ? Colors.green
+                            : Colors.red;
 
                     return GestureDetector(
                       onTap: () {
