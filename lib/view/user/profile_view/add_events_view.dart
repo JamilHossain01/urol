@@ -73,7 +73,7 @@ class _AddEventsViewState extends State<AddEventsView> {
 
   XFile? selectedImage;
 
-  final _eventTypes = ['Seminar', 'Tournament'];
+  final _eventTypes = ['Seminar', 'Tournament','Super Fight','Open Mat'];
 
   final AddEventController _addEventController = Get.put(AddEventController());
   final MyGymController _myGymController = Get.put(MyGymController());
