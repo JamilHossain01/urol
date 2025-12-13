@@ -237,7 +237,7 @@ class _ProfileViewState extends State<ProfileView> {
 
                         division: _getProfileController
                                 .profile.value.data?.competition?.division ??
-                            "Not division added yet",
+                            "No Division",
 
                         location: _getProfileController
                                 .profile.value.data?.competition?.city ??

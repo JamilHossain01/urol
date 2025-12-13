@@ -56,7 +56,7 @@ class UserInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomContainer(
-      height: 290.h,
+      height: 280.h,
       color: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,

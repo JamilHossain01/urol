@@ -9,7 +9,7 @@ class CustomDateFormatter {
 
       return DateFormat(_defaultFormat).format(date);
     } catch (e) {
-      return 'No competition results yet';
+      return 'No result';
     }
   }
 }
