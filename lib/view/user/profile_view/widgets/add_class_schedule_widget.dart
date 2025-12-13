@@ -1,9 +1,11 @@
+import 'package:calebshirthum/common%20widget/custom_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../common widget/custom_text_filed.dart';
+import '../../../../common widget/dot_border_container.dart';
 import '../../../../uitilies/app_colors.dart';
 
 class ClassSchedule {
@@ -209,9 +211,8 @@ class _ClassScheduleWidgetState extends State<ClassScheduleWidget> {
               SizedBox(height: 12.h),
               Gap(12.h),
 
-              // Save Button
-              ElevatedButton(
-                onPressed: () {
+              GestureDetector(
+                onTap: () {
                   if (classNameController.text.isEmpty ||
                       selectedDay == null ||
                       startTime == null ||
@@ -240,7 +241,19 @@ class _ClassScheduleWidgetState extends State<ClassScheduleWidget> {
                     widget.onScheduleAdded!(schedule);
                   }
                 },
-                child: const Text("Save"),
+                child: DottedBorderBox(
+                  height: 30.h,
+                  width: double.infinity,
+                  borderColor: const Color(0xFF989898),
+                  borderWidth: 2,
+                  iconSize: 24,
+                  iconColor: const Color(0xFF989898),
+                  text: "Save Classes",
+                  fontSize: 14,
+                  textColor: const Color(0xFF989898),
+                  direction: DottedBoxDirection.row,
+                  spacing: 8,
+                ),
               ),
             ],
           ),
