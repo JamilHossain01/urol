@@ -216,6 +216,8 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                 ? cmToFeetInch(profileController
                                     .profile.value.data?.height?.amount)
                                 : "n/a",
+                            skills: profileController
+                                .profile.value.data!.disciplines,
                           );
                         }
                       },

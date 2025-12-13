@@ -19,6 +19,7 @@ class UserInfoSection extends StatelessWidget {
   final String weight;
   final String height;
   final String quote;
+  final List<String> skills;
 
   const UserInfoSection({
     super.key,
@@ -29,6 +30,7 @@ class UserInfoSection extends StatelessWidget {
     required this.quote,
     required this.weight,
     required this.height,
+    required this.skills,
   });
 
   /// RETURN NULL WHEN NO VALID BELT — SO NOTHING IS SHOWN
@@ -54,7 +56,7 @@ class UserInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomContainer(
-      height: 250.h,
+      height: 290.h,
       color: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -69,6 +71,14 @@ class UserInfoSection extends StatelessWidget {
               _infoTile(AppImages.kg, "Weight", "${weight} lb"),
             ],
           ),
+          SizedBox(height: 10),
+          skills.isEmpty
+              ? SizedBox.shrink()
+              : Wrap(
+                  spacing: 6.w,
+                  runSpacing: 6.h,
+                  children: skills.map(_skillChip).toList(),
+                ),
           Divider(color: const Color(0xFF000000).withOpacity(0.10)),
           _buildUserLocation(),
           Divider(color: const Color(0xFF000000).withOpacity(0.10)),
@@ -129,6 +139,22 @@ class UserInfoSection extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _skillChip(String text) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+      decoration: BoxDecoration(
+        color: AppColors.mainColor.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      child: CustomText(
+        text: text,
+        fontSize: 12.sp,
+        fontWeight: FontWeight.w500,
+        color: AppColors.mainColor,
       ),
     );
   }
