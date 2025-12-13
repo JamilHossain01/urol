@@ -332,7 +332,8 @@ class _MapScreenViewState extends State<MapScreenView> {
                     () => GymDetailsScreen(gymId: selectedGym.id.toString())),
                 child: GymPreviewCard(
                   gymName: selectedGym.name ?? "No Name",
-                  location: selectedGym.city ?? "No Location",
+                  location:
+                      "${selectedGym.city ?? ''}, ${selectedGym.state ?? ''}, ${selectedGym.zipCode ?? ''}",
                   image: selectedGym.images.isNotEmpty
                       ? selectedGym.images.first.url ?? AppImages.gym1
                       : AppImages.gym1,
