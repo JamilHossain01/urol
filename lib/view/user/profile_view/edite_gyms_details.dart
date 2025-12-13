@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:calebshirthum/uitilies/app_colors.dart';
+import 'package:calebshirthum/view/user/profile_view/widgets/add_class_schedule_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -462,41 +463,71 @@ class _EditGymViewState extends State<EditGymView> {
                       }),
 
                       /// Class Schedule
-                      ...classSchedules.asMap().entries.map((entry) {
-                        int index = entry.key;
-                        var item = entry.value;
-                        return OpenMatScheduleWidget(
-                          classNameController: _classNameController,
-                          showClassField: true,
-                          addCC: index == classSchedules.length - 1
-                              ? 'Add More Classes'
-                              : null,
-                          selectedDay: item['day'],
-                          startTime: item['from'],
-                          endTime: item['to'],
-                          days: _days,
-                          times: _times,
-                          onDayChanged: (value) =>
-                              setState(() => item['day'] = value),
-                          onStartTimeChanged: (value) =>
-                              setState(() => item['from'] = value),
-                          onEndTimeChanged: (value) =>
-                              setState(() => item['to'] = value),
-                          onAddMoreDays: () => setState(() {
-                            classSchedules.add({
-                              'day': null,
-                              'from': null,
-                              'to': null,
-                              'name': _classNameController.text
-                            });
-                          }),
-                          onRemove: classSchedules.length > 1
-                              ? () => setState(() {
-                                    classSchedules.removeAt(index);
-                                  })
-                              : null,
-                        );
-                      }),
+                      if (classSchedules.isNotEmpty)
+                        Column(
+                          children: [
+                            // Class Schedule Widget
+                            ClassScheduleWidget(
+                              days: _days,
+                              times: _times,
+                              onScheduleAdded: (schedule) {
+                                setState(() {
+                                  classSchedules.add({
+                                    'name': schedule.className,
+                                    'day': schedule.day,
+                                    'from': schedule.startTime,
+                                    'to': schedule.endTime,
+                                  });
+                                });
+                              },
+                            ),
+
+                            // Display schedules only if list is not empty
+                            if (classSchedules.isNotEmpty)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children:
+                                    classSchedules.asMap().entries.map((entry) {
+                                  final index = entry.key;
+                                  final c = entry.value;
+
+                                  // Safety check to avoid null
+                                  if (c['name'] == null ||
+                                      c['day'] == null ||
+                                      c['from'] == null ||
+                                      c['to'] == null) {
+                                    return const SizedBox(); // Skip rendering null items
+                                  }
+
+                                  return Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 4.h),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            "${c['name']} - ${c['day']} (${c['from']} to ${c['to']})",
+                                            style: TextStyle(fontSize: 14.sp),
+                                          ),
+                                        ),
+                                        IconButton(
+                                          icon: Icon(Icons.delete,
+                                              color: Colors.red, size: 20.sp),
+                                          onPressed: () {
+                                            setState(() {
+                                              classSchedules.removeAt(index);
+                                            });
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                          ],
+                        ),
 
                       DisciplinesWidget(
                         selectedDisciplines: _selectedDisciplines,

@@ -173,49 +173,50 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
 
   // --- Validate & Submit ---
   Future<void> _submitGym() async {
-    if (!_formKey.currentState!.validate()) return;
+    debugPrint("SAVE CLICKED");
+
+    if (!_formKey.currentState!.validate()) {
+      debugPrint("FORM INVALID");
+      return;
+    }
 
     if (_selectedImages.isEmpty) {
-      Get.snackbar("Error", "Please upload at least one image",
-          backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar("Error", "Please upload at least one image");
       return;
     }
 
     if (_selectedDisciplines.isEmpty) {
-      Get.snackbar("Error", "Please select at least one discipline",
-          backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar("Error", "Please select at least one discipline");
       return;
     }
 
     if (!_validateSchedules(openMatSchedules)) {
-      Get.snackbar("Error", "Please fill all open mat schedule fields",
-          backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar("Error", "Complete open mat schedules");
       return;
     }
 
-    if (!_validateSchedules(classSchedules)) {
-      Get.snackbar("Error", "Please fill all class schedule fields",
-          backgroundColor: Colors.red, colorText: Colors.white);
-      return;
-    }
-
-    // Convert selected times (e.g. "12:30 PM") to total minutes
-    final List<Map<String, dynamic>> openMatConverted = openMatSchedules
+    final openMatConverted = openMatSchedules
         .map((s) => {
-              'day': s['day'],
-              'from': _convertTimeToMinutes(s['from']),
-              'to': _convertTimeToMinutes(s['to'])
-            })
+      'day': s['day'],
+      'from': _convertTimeToMinutes(s['from']),
+      'to': _convertTimeToMinutes(s['to']),
+    })
         .toList();
 
-    final List<Map<String, dynamic>> classConverted = classSchedules
+    final classConverted = classSchedules
+        .where((s) =>
+    s['name'] != null &&
+        s['day'] != null &&
+        s['from'] != null &&
+        s['to'] != null)
         .map((s) => {
-              'name': _classNameController.text,
-              'day': s['day'],
-              'from': _convertTimeToMinutes(s['from']),
-              'to': _convertTimeToMinutes(s['to'])
-            })
+      'name': s['name'] as String,
+      'day': s['day'] as String,
+      'from': _convertTimeToMinutes(s['from'] as String),
+      'to': _convertTimeToMinutes(s['to'] as String),
+    })
         .toList();
+
 
     await _addGymController.addGym(
       name: _gymNameController.text.trim(),
@@ -236,6 +237,8 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
       classSchedules: classConverted,
       images: _selectedImages,
     );
+
+    debugPrint("GYM SUBMITTED SUCCESS");
   }
 
   @override
