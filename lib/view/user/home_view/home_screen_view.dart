@@ -20,6 +20,7 @@ import '../../../common widget/custom_date_format.dart';
 import '../../../common widget/not_found_widget.dart';
 import '../../../uitilies/app_images.dart';
 import '../../../uitilies/custom_loader.dart';
+import '../event_view/controller/get_all_event_result_controller.dart';
 import '../event_view/recent_event_all_view.dart';
 import '../location_view/location_screen_view.dart';
 import '../profile_view/widgets/event_card.dart';
@@ -44,10 +45,14 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   final UnreadNotificationController _unreadNotificationController =
       Get.put(UnreadNotificationController());
 
+  final GetAllEventResultController _getAllEventResultController =
+      Get.put(GetAllEventResultController());
+
   @override
   void initState() {
     super.initState();
     // profileController.getProfileController();
+    _getAllEventResultController.getAllEventResult();
     _getCurrentLocationAndUpdateMats();
     _unreadNotificationController.getUnReadController();
   }
@@ -318,7 +323,6 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                       ),
                     ],
                   ),
-
                   GestureDetector(
                     onTap: () {
                       Get.to(() => RecentEventAllView());
@@ -330,41 +334,59 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                       text: "View All",
                     ),
                   ),
-
-
-
                 ],
               ),
             ),
             SizedBox(height: 10.h),
             Obx(() {
-              final competition =
-                  profileController.profile.value.data?.competition;
+              final events =
+                  _getAllEventResultController.profile.value.data ?? [];
 
-              if (profileController.isLoading.value) {
+              // 1️⃣ Loading state
+              if (_getAllEventResultController.isLoading.value) {
                 return EventCardShimmer();
               }
 
-              if (competition == null) {
+              // 2️⃣ No data state
+              if (events.isEmpty) {
                 return Center(
-                    child: NotFoundWidget(
-                  imagePath: "assets/images/not_found.png",
-                  message: "No recent event results yet!",
-                ));
+                  child: NotFoundWidget(
+                    imagePath: "assets/images/not_found.png",
+                    message: "No recent event results yet!",
+                  ),
+                );
               }
 
-              // 👉 If data available
-              return EventCard(
-                medalColor: getMedalColor(competition.result),
-                medalIcon: getMedalIcon(competition.result),
-                showCompetition: false,
-                title: competition.eventName ?? "",
-                date: CustomDateFormatter.formatDate(
-                  competition.eventDate.toString(),
-                ),
-                division: competition.division ?? "",
-                location: "${competition.city}, ${competition.state}" ?? "n/a",
-                medalText: competition.result ?? "",
+              // 3️⃣ Take latest 3 events (assuming latest are last)
+              final latestThree = events.length > 3
+                  ? events.sublist(events.length - 3)
+                  : events;
+
+              return ListView.builder(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: latestThree.length,
+                itemBuilder: (context, index) {
+                  final competition = latestThree[index];
+
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: EventCard(
+                      medalColor: getMedalColor(competition.result),
+                      medalIcon: getMedalIcon(competition.result),
+                      showCompetition: false,
+                      title: competition.eventName ?? "",
+                      date: CustomDateFormatter.formatDate(
+                        competition.eventDate?.toIso8601String() ?? "",
+                      ),
+                      division: competition.division ?? "",
+                      location:
+                          "${competition.city ?? ""}${competition.state != null ? ", ${competition.state}" : ""}",
+                      medalText: competition.result ?? "",
+                    ),
+                  );
+                },
               );
             }),
             SizedBox(height: 20.h),

@@ -7,6 +7,7 @@ import 'package:get/get_instance/src/extension_instance.dart';
 
 import '../../../common widget/custom_date_format.dart';
 import '../../../common widget/not_found_widget.dart';
+import '../home_view/widgets/shimmer/event_shimmer_portion.dart';
 import '../profile_view/widgets/event_card.dart';
 import 'controller/get_all_event_result_controller.dart';
 import 'model/get_all_event_model.dart';
@@ -55,7 +56,7 @@ class RecentEventAllView extends StatelessWidget {
       body: Obx(() {
         // 1️⃣ LOADING
         if (_controller.isLoading.value) {
-          return Center(child: CustomLoader());
+          return Center(child: EventCardShimmer());
         }
 
         final List<CompetitionData> events =
