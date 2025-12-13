@@ -1,33 +1,39 @@
 // ignore_for_file: avoid_print
 
 import 'package:calebshirthum/uitilies/custom_toast.dart';
-import 'package:calebshirthum/view/user/profile_view/controller/my_events_controller.dart';
 import 'package:get/get.dart';
 import '../../../../uitilies/api/api_url.dart';
 import '../../../../uitilies/api/base_client.dart';
+import '../model/get_all_event_model.dart';
+import 'get_all_event_result_controller.dart';
 
-class DeleteEventController extends GetxController {
+class DeleteResultEventController extends GetxController {
   var isLoading = false.obs;
+  var gums = CompetitionModel().obs;
 
-  final MyEventsController _myEventsController = Get.put(MyEventsController());
+  final GetAllEventResultController _getAllEventResultController =
+      Get.put(GetAllEventResultController());
 
   @override
   void onInit() {
     super.onInit();
   }
 
-  void deleteEvent({required dynamic eventId}) async {
+  void deleteResultEvent({required dynamic eventResultId}) async {
     try {
       isLoading(true);
 
       dynamic responseBody = await BaseClient.handleResponse(
         await BaseClient.deleteRequest(
-            api: ApiUrl.deleteEvent(eventId: eventId)),
+            api: ApiUrl.eventResultDelete(eventResultId: eventResultId)),
       );
 
       if (responseBody['success'] == true) {
-        CustomToast.showToast("Event Delete Successfully Done", isError: false);
-        _myEventsController.getMyEvents();
+        CustomToast.showToast("Event Result Delete Successfully Done",
+            isError: false);
+        _getAllEventResultController.getAllEventResult();
+
+        print("fetched: ${gums.value}");
       } else {
         throw 'Failed to load profile data: ${responseBody['message']}';
       }

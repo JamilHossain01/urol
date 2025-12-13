@@ -1,22 +1,29 @@
 import 'package:calebshirthum/common%20widget/custom_app_bar_widget.dart';
-import 'package:calebshirthum/uitilies/custom_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
 
 import '../../../common widget/custom_date_format.dart';
 import '../../../common widget/not_found_widget.dart';
 import '../home_view/widgets/shimmer/event_shimmer_portion.dart';
+import '../profile_view/controller/delete_event_controller.dart';
 import '../profile_view/widgets/event_card.dart';
+import 'controller/delete_event_controller.dart';
 import 'controller/get_all_event_result_controller.dart';
 import 'model/get_all_event_model.dart';
 
-class RecentEventAllView extends StatelessWidget {
-  RecentEventAllView({super.key});
+class RecentEventAllView extends StatefulWidget {
+  const RecentEventAllView({super.key});
 
+  @override
+  State<RecentEventAllView> createState() => _RecentEventAllViewState();
+}
+
+class _RecentEventAllViewState extends State<RecentEventAllView> {
   final GetAllEventResultController _controller =
       Get.put(GetAllEventResultController());
+
+  final DeleteResultEventController _deleteEventController =
+      Get.put(DeleteResultEventController());
 
   Color getMedalColor(String? result) {
     switch (result) {
@@ -49,29 +56,36 @@ class RecentEventAllView extends StatelessWidget {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(title: "All Events Result"),
       body: Obx(() {
-        // 1️⃣ LOADING
+        // 1️⃣ Loading
         if (_controller.isLoading.value) {
-          return Center(child: EventCardShimmer());
+          return const Center(child: EventCardShimmer());
         }
 
         final List<CompetitionData> events =
             _controller.profile.value.data ?? [];
 
-        // 2️⃣ NO DATA
+        // 2️⃣ No Data
         if (events.isEmpty) {
-          return Center(
-              child: NotFoundWidget(
-            imagePath: "assets/images/not_found.png",
-            message: "No event results yet!",
-          ));
+          return const Center(
+            child: NotFoundWidget(
+              imagePath: "assets/images/not_found.png",
+              message: "No event results yet!",
+            ),
+          );
         }
 
-        // 3️⃣ DATA LIST
+        // 3️⃣ List
         return ListView.builder(
           itemCount: events.length,
           itemBuilder: (context, index) {
@@ -80,6 +94,10 @@ class RecentEventAllView extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: EventCard(
+                onDelete: () {
+                  _deleteEventController.deleteResultEvent(eventResultId: item.id);
+                },
+                showDeleteButton: true,
                 medalColor: getMedalColor(item.result),
                 medalIcon: getMedalIcon(item.result),
                 showCompetition: false,

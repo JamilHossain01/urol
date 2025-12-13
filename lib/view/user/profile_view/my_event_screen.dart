@@ -74,7 +74,7 @@ class _MyEventScreenState extends State<MyEventScreen> {
                         isEdit: true));
                   },
                   delete: () {
-                    _deleteEventController.deleteGyms(
+                    _deleteEventController.deleteEvent(
                         eventId: event.id.toString());
                   },
                   showEditDelete: true,

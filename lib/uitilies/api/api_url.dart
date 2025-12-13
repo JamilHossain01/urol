@@ -60,6 +60,12 @@ class ApiUrl {
       "$baseUrl/events?searchTerm=$searchTerm&type=$type&state=$state&city=$city&limit=99999999";
 
   static String deleteGym({required String gymId}) => "$baseUrl/gyms/$gymId";
+
+
+  static String eventResultDelete({required String eventResultId}) => "$baseUrl/competitions/$eventResultId";
+
+
+
   static String deleteBookMarkGym({required String gymId}) =>
       "$baseUrl/save/$gymId";
 
