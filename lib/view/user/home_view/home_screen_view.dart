@@ -20,6 +20,7 @@ import '../../../common widget/custom_date_format.dart';
 import '../../../common widget/not_found_widget.dart';
 import '../../../uitilies/app_images.dart';
 import '../../../uitilies/custom_loader.dart';
+import '../event_view/recent_event_all_view.dart';
 import '../location_view/location_screen_view.dart';
 import '../profile_view/widgets/event_card.dart';
 import 'controller/my_profile_controller.dart';
@@ -295,6 +296,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     children: [
@@ -316,6 +318,21 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                       ),
                     ],
                   ),
+
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => RecentEventAllView());
+                    },
+                    child: CustomText(
+                      color: AppColors.mainColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 10.h,
+                      text: "View All",
+                    ),
+                  ),
+
+
+
                 ],
               ),
             ),

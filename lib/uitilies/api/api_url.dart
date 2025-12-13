@@ -10,7 +10,7 @@ class ApiUrl {
   static const String support = "$baseUrl/contacts/add";
   static const String changePassword = "$baseUrl/auth/change-password";
   static const String addFriend = "$baseUrl/friends";
-  static const String competition = "$baseUrl/users/competition";
+  static const String competition = "$baseUrl/competitions";
   static const String addGym = "$baseUrl/gyms";
   static const String claimGym = "$baseUrl/claim-reqs";
   static const String myGyms = "$baseUrl/gyms/my-gyms";
@@ -21,6 +21,7 @@ class ApiUrl {
   static const String allNotification = "$baseUrl/notifications";
 
   static const String profile = "$baseUrl/users/my-profile";
+  static const String getAllEventResult = "$baseUrl/competitions";
 
   static const String notificationUnread =
       "$baseUrl/notifications/unread-count";
