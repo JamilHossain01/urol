@@ -173,7 +173,7 @@ class LocationWidget extends StatelessWidget {
             validator: (value) =>
                 value!.isEmpty ? "Zip code is required" : null,
           ),
-        SizedBox(height: 20.h),
+        SizedBox(height: 10.h),
       ],
     );
   }

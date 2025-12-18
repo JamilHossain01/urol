@@ -11,6 +11,7 @@ import '../../../common widget/custom_app_bar_widget.dart';
 import '../../../common widget/custom_button_widget.dart';
 import '../../../common widget/dot_border_container.dart';
 import '../../../uitilies/custom_loader.dart';
+import 'package:calebshirthum/view/user/location_view/widgets/upload_card.dart';
 import 'controller/add_gym_controller.dart';
 import 'widgets/basic_info_widget.dart';
 import 'widgets/contact_info_widget.dart';
@@ -54,6 +55,10 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
   // --- Data ---
   List<File> _selectedImages = [];
   List<String> _selectedDisciplines = [];
+
+  File? utilityBillFile;
+  File? businessLicenseFile;
+  File? taxDocumentFile;
 
   List<Map<String, dynamic>> openMatSchedules = [
     {'day': null, 'from': null, 'to': null}
@@ -197,26 +202,25 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
 
     final openMatConverted = openMatSchedules
         .map((s) => {
-      'day': s['day'],
-      'from': _convertTimeToMinutes(s['from']),
-      'to': _convertTimeToMinutes(s['to']),
-    })
+              'day': s['day'],
+              'from': _convertTimeToMinutes(s['from']),
+              'to': _convertTimeToMinutes(s['to']),
+            })
         .toList();
 
     final classConverted = classSchedules
         .where((s) =>
-    s['name'] != null &&
-        s['day'] != null &&
-        s['from'] != null &&
-        s['to'] != null)
+            s['name'] != null &&
+            s['day'] != null &&
+            s['from'] != null &&
+            s['to'] != null)
         .map((s) => {
-      'name': s['name'] as String,
-      'day': s['day'] as String,
-      'from': _convertTimeToMinutes(s['from'] as String),
-      'to': _convertTimeToMinutes(s['to'] as String),
-    })
+              'name': s['name'] as String,
+              'day': s['day'] as String,
+              'from': _convertTimeToMinutes(s['from'] as String),
+              'to': _convertTimeToMinutes(s['to'] as String),
+            })
         .toList();
-
 
     await _addGymController.addGym(
       name: _gymNameController.text.trim(),
@@ -326,6 +330,42 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
                         gymNameController: _gymNameController,
                         descriptionController: _descriptionController,
                       ),
+
+                      CustomText(
+                        text: "Required Documents",
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textFieldNameColor,
+                      ),
+                      CustomText(
+                        text:
+                            "Upload one of these documents to verify ownership.",
+                        fontSize: 10.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xFF989898),
+                      ),
+                      SizedBox(height: 14.h),
+                      UploadCard(
+                        title: 'Utility Bill',
+                        onFileSelected: (file) {
+                          setState(() => utilityBillFile = file);
+                        },
+                      ),
+                      SizedBox(height: 6.h),
+                      UploadCard(
+                        title: 'Business License',
+                        onFileSelected: (file) {
+                          setState(() => businessLicenseFile = file);
+                        },
+                      ),
+                      SizedBox(height: 6.h),
+                      UploadCard(
+                        title: 'Tax Document',
+                        onFileSelected: (file) {
+                          setState(() => taxDocumentFile = file);
+                        },
+                      ),
+                      SizedBox(height: 20.h),
 
                       LocationWidget(
                         streetAddressController: _streetAddressController,

@@ -6,8 +6,6 @@ import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../common widget/custom_text_filed.dart';
 import '../../../../uitilies/app_colors.dart';
 
-
-
 class BasicInfoWidget extends StatelessWidget {
   final TextEditingController gymNameController;
   final TextEditingController descriptionController;
@@ -26,7 +24,6 @@ class BasicInfoWidget extends StatelessWidget {
         CustomText(
           text: "Basic Information",
           fontSize: 14.sp,
-     
           fontWeight: FontWeight.w600,
           color: AppColors.mainTextColors,
         ),
@@ -54,7 +51,6 @@ class BasicInfoWidget extends StatelessWidget {
           color: AppColors.mainTextColors,
         ),
         Gap(4.h),
-
         CustomTextField(
           controller: descriptionController,
           hintText: "Enter your gym description",
@@ -62,9 +58,10 @@ class BasicInfoWidget extends StatelessWidget {
           fillColor: AppColors.backRoudnColors,
           hintTextColor: AppColors.hintTextColors,
           maxLines: 3,
-          validator: (value) => value!.isEmpty ? "Description is required" : null,
+          validator: (value) =>
+              value!.isEmpty ? "Description is required" : null,
         ),
-        SizedBox(height: 20.h),
+        SizedBox(height: 10.h),
       ],
     );
   }
