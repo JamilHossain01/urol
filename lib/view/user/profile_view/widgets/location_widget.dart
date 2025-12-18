@@ -33,6 +33,60 @@ class LocationWidget extends StatelessWidget {
     this.zipCode,
   });
 
+  /// ✅ USA States List
+  static const List<String> usaStates = [
+    "Alabama",
+    "Alaska",
+    "Arizona",
+    "Arkansas",
+    "California",
+    "Colorado",
+    "Connecticut",
+    "Delaware",
+    "Florida",
+    "Georgia",
+    "Hawaii",
+    "Idaho",
+    "Illinois",
+    "Indiana",
+    "Iowa",
+    "Kansas",
+    "Kentucky",
+    "Louisiana",
+    "Maine",
+    "Maryland",
+    "Massachusetts",
+    "Michigan",
+    "Minnesota",
+    "Mississippi",
+    "Missouri",
+    "Montana",
+    "Nebraska",
+    "Nevada",
+    "New Hampshire",
+    "New Jersey",
+    "New Mexico",
+    "New York",
+    "North Carolina",
+    "North Dakota",
+    "Ohio",
+    "Oklahoma",
+    "Oregon",
+    "Pennsylvania",
+    "Rhode Island",
+    "South Carolina",
+    "South Dakota",
+    "Tennessee",
+    "Texas",
+    "Utah",
+    "Vermont",
+    "Virginia",
+    "Washington",
+    "West Virginia",
+    "Wisconsin",
+    "Wyoming",
+  ];
+
   Future<void> _pickLocation(BuildContext context) async {
     await Get.bottomSheet(
       LocationPickerModal(
@@ -44,7 +98,8 @@ class LocationWidget extends StatelessWidget {
           placemarkFromCoordinates(selLat, selLng).then((placemarks) {
             if (placemarks.isNotEmpty) {
               final p = placemarks.first;
-              cityController.text = p.street ?? '';
+
+              cityController.text = p.locality ?? '';
               stateController.text = p.administrativeArea ?? '';
               zipCodeController.text = p.postalCode ?? '';
             }
@@ -55,12 +110,11 @@ class LocationWidget extends StatelessWidget {
             );
           });
 
-          // Send lat/long back to parent screen
           if (onLocationChanged != null) {
             onLocationChanged!(selLat, selLng);
           }
 
-          Get.back(); // Close bottom sheet
+          Get.back();
         },
       ),
       isScrollControlled: true,
@@ -76,6 +130,7 @@ class LocationWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        /// Location Title
         CustomText(
           text: "Location",
           fontSize: 14.sp,
@@ -83,6 +138,8 @@ class LocationWidget extends StatelessWidget {
           color: AppColors.mainTextColors,
         ),
         SizedBox(height: 12.h),
+
+        /// Address
         CustomText(
           text: "Address",
           fontSize: 12.sp,
@@ -94,7 +151,7 @@ class LocationWidget extends StatelessWidget {
           onTap: () => _pickLocation(context),
           child: AbsorbPointer(
             child: CustomTextField(
-              controller: cityController,
+              controller: streetAddressController,
               hintText: "Tap to pick location from map",
               showObscure: false,
               fillColor: AppColors.backRoudnColors,
@@ -104,57 +161,114 @@ class LocationWidget extends StatelessWidget {
             ),
           ),
         ),
+
         SizedBox(height: 12.h),
-        Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomText(
-                    text: "State",
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textFieldNameColor,
-                  ),
-                  CustomTextField(
-                    controller: stateController,
-                    hintText: "Enter State",
-                    showObscure: false,
-                    fillColor: AppColors.backRoudnColors,
-                    hintTextColor: AppColors.hintTextColors,
-                    validator: (value) =>
-                        value!.isEmpty ? "State is required" : null,
-                  ),
-                ],
+
+        /// State & City Row
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              /// STATE DROPDOWN
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomText(
+                      text: "State",
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textFieldNameColor,
+                    ),
+                    SizedBox(height: 4.h),
+                    DropdownButtonFormField<String>(
+                      isExpanded: true,
+                      value: stateController.text.isEmpty
+                          ? null
+                          : stateController.text,
+                      items: usaStates
+                          .map(
+                            (state) => DropdownMenuItem<String>(
+                              value: state,
+                              child: Text(
+                                state,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        stateController.text = value ?? '';
+                      },
+                      decoration: InputDecoration(
+                        hintText: "State",
+                        filled: true,
+                        fillColor: AppColors.backRoudnColors,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 16,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                            color: Colors.grey.withOpacity(0.4),
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                            color: Colors.grey.withOpacity(0.4),
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                            color: Colors.grey.withOpacity(0.4),
+                            width: 1.5,
+                          ),
+                        ),
+                      ),
+                      validator: (value) => value == null || value.isEmpty
+                          ? "State is required"
+                          : null,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(width: 12.w),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomText(
-                    text: "City",
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textFieldNameColor,
-                  ),
-                  CustomTextField(
-                    controller: cityController,
-                    hintText: "Enter City",
-                    showObscure: false,
-                    fillColor: AppColors.backRoudnColors,
-                    hintTextColor: AppColors.hintTextColors,
-                    validator: (value) =>
-                        value!.isEmpty ? "City is required" : null,
-                  ),
-                ],
+
+              SizedBox(width: 12.w),
+
+              /// CITY FIELD
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomText(
+                      text: "City",
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textFieldNameColor,
+                    ),
+                    SizedBox(height: 4.h),
+                    CustomTextField(
+                      controller: cityController,
+                      hintText: "Enter City",
+                      showObscure: false,
+                      fillColor: AppColors.backRoudnColors,
+                      hintTextColor: AppColors.hintTextColors,
+                      validator: (value) =>
+                          value!.isEmpty ? "City is required" : null,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+
         SizedBox(height: 12.h),
+
+        /// ZIP CODE
         if (zipCode != false)
           CustomText(
             text: "Zip Code",
@@ -173,10 +287,9 @@ class LocationWidget extends StatelessWidget {
             validator: (value) =>
                 value!.isEmpty ? "Zip code is required" : null,
           ),
+
         SizedBox(height: 10.h),
       ],
     );
   }
 }
-
-// ===== LocationPickerModal =====
