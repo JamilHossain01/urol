@@ -4,8 +4,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import '../../../../common widget/success_screen_widget.dart';
 import '../../../../uitilies/api/api_url.dart';
 import '../../../../uitilies/api/local_storage.dart';
+import '../../../../uitilies/app_colors.dart';
 import '../../../../uitilies/custom_toast.dart';
 import '../../dashboard_view/bottom_navigation_view.dart';
 
@@ -30,6 +32,9 @@ class AddGymController extends GetxController {
     required List<Map<String, dynamic>> matSchedules,
     required List<Map<String, dynamic>> classSchedules,
     required List<File> images,
+    required File tax_document,
+    required File business_license,
+    required File utility_bill,
   }) async {
     try {
       isLoading(true);
@@ -78,6 +83,33 @@ class AddGymController extends GetxController {
         print("📸 Attached image: ${file.filename}");
       }
 
+      // ---------- Tax Document ----------
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'tax_document',
+          tax_document.path,
+          filename: tax_document.path.split('/').last,
+        ),
+      );
+
+// ---------- Business License ----------
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'business_license',
+          business_license.path,
+          filename: business_license.path.split('/').last,
+        ),
+      );
+
+// ---------- Utility Bill ----------
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'utility_bill',
+          utility_bill.path,
+          filename: utility_bill.path.split('/').last,
+        ),
+      );
+
       // ---- Send request --------------------------------------------------
       print("🚀 Sending POST to $uri");
       final streamedResponse = await request.send();
@@ -91,7 +123,19 @@ class AddGymController extends GetxController {
           streamedResponse.statusCode == 201) {
         final json = jsonDecode(responseBody);
         CustomToast.showToast("Gym added successfully!", isError: false);
-        Get.offAll(() => DashboardView());
+
+        Get.offAll(() => SuccessScreen(
+              title: "Success",
+              message: "Your gym has been added successfully.\n\n"
+                  "Our admin team will review your submission. "
+                  "Once it is approved, you will be able to see your gym "
+                  "in the 'My Gyms' section.",
+              buttonText: "Back to Home",
+              onPressed: () {
+                Get.offAll(() => DashboardView());
+              },
+              buttonColor: AppColors.mainColor,
+            ));
       } else {
         Map<String, dynamic> errorData = {};
         try {

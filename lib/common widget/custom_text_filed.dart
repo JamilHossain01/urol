@@ -17,7 +17,7 @@ class CustomTextField extends StatefulWidget {
   final Color? borderColor;
   final int? maxLines;
   final Color? hintTextColor; // Hint text color
-  final IconData? suffixIcon; // Suffix icon
+  final Widget? suffixIcon;
   final String? suffixIconAsset; // Suffix icon asset (image)
   final VoidCallback? onSuffixTap; // Optional tap for suffix
   final String? Function(String?)?
@@ -113,25 +113,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     });
                   },
                 )
-              : (widget.suffixIcon != null
-                  ? IconButton(
-                      icon: Icon(widget.suffixIcon, color: Color(0xFF666666)),
-                      onPressed: widget.onSuffixTap,
-                    )
-                  : (widget.suffixIconAsset != null
-                      ? GestureDetector(
-                          onTap: widget.onSuffixTap,
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Image.asset(
-                              widget.suffixIconAsset!,
-                              width: 24.w,
-                              height: 24.h,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        )
-                      : null)),
+              : widget.suffixIcon,
           hintText: widget.hintText,
           hintStyle: GoogleFonts.poppins(
             fontWeight: FontWeight.w400,

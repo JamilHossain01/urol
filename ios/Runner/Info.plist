@@ -52,6 +52,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 
+
+    <key>FirebaseAppDelegateProxyEnabled</key>
+    <true/>
+
+
 	<!-- Permissions -->
 	<key>NSCameraUsageDescription</key>
 	<string>We need access to your camera to take profile and gym photos.</string>

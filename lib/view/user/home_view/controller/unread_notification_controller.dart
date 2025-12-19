@@ -6,7 +6,7 @@ import '../../../../uitilies/api/base_client.dart';
 import '../model/unread_notification_model.dart';
 
 class UnreadNotificationController extends GetxController {
-  var isLoading = false.obs; // used internally, not for UI
+  var isLoading = false.obs;
   var unread = NotificationUnreadModel().obs;
 
   @override
@@ -15,7 +15,7 @@ class UnreadNotificationController extends GetxController {
     getUnReadController();
   }
 
-  void getUnReadController() async {
+  Future<void> getUnReadController() async {
     try {
       isLoading(true);
 
@@ -36,4 +36,3 @@ class UnreadNotificationController extends GetxController {
     }
   }
 }
-

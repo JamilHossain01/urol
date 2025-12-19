@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:calebshirthum/uitilies/app_colors.dart';
+import 'package:calebshirthum/uitilies/custom_toast.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/add_class_schedule_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -186,17 +187,39 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
     }
 
     if (_selectedImages.isEmpty) {
-      Get.snackbar("Error", "Please upload at least one image");
+      CustomToast.showToast("Please upload at least one image", isError: true);
+
+      return;
+    }
+
+    // Validate required documents
+    if (utilityBillFile == null) {
+      CustomToast.showToast("Please upload your Utility Bill", isError: true);
+
+      return;
+    }
+    if (businessLicenseFile == null) {
+      CustomToast.showToast("Please upload your Business License",
+          isError: true);
+
+      return;
+    }
+    if (taxDocumentFile == null) {
+      CustomToast.showToast("Please upload your Tax Document", isError: true);
+
       return;
     }
 
     if (_selectedDisciplines.isEmpty) {
-      Get.snackbar("Error", "Please select at least one discipline");
+      CustomToast.showToast("Please select at least one discipline",
+          isError: true);
+
       return;
     }
 
     if (!_validateSchedules(openMatSchedules)) {
-      Get.snackbar("Error", "Complete open mat schedules");
+      CustomToast.showToast("Complete open mat schedules", isError: true);
+
       return;
     }
 
@@ -240,6 +263,9 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
       matSchedules: openMatConverted,
       classSchedules: classConverted,
       images: _selectedImages,
+      tax_document: taxDocumentFile!,
+      business_license: businessLicenseFile!,
+      utility_bill: utilityBillFile!,
     );
 
     debugPrint("GYM SUBMITTED SUCCESS");
