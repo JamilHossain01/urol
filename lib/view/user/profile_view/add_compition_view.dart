@@ -31,6 +31,59 @@ class _AddCompetitionResultScreenState
   String _selectedDivision = "Gi";
   String _selectedResult = "Gold";
 
+  List<String> usaStates = [
+    "Alabama",
+    "Alaska",
+    "Arizona",
+    "Arkansas",
+    "California",
+    "Colorado",
+    "Connecticut",
+    "Delaware",
+    "Florida",
+    "Georgia",
+    "Hawaii",
+    "Idaho",
+    "Illinois",
+    "Indiana",
+    "Iowa",
+    "Kansas",
+    "Kentucky",
+    "Louisiana",
+    "Maine",
+    "Maryland",
+    "Massachusetts",
+    "Michigan",
+    "Minnesota",
+    "Mississippi",
+    "Missouri",
+    "Montana",
+    "Nebraska",
+    "Nevada",
+    "New Hampshire",
+    "New Jersey",
+    "New Mexico",
+    "New York",
+    "North Carolina",
+    "North Dakota",
+    "Ohio",
+    "Oklahoma",
+    "Oregon",
+    "Pennsylvania",
+    "Rhode Island",
+    "South Carolina",
+    "South Dakota",
+    "Tennessee",
+    "Texas",
+    "Utah",
+    "Vermont",
+    "Virginia",
+    "Washington",
+    "West Virginia",
+    "Wisconsin",
+    "Wyoming"
+  ];
+
   final AddCompetitionController _addCompetitionController =
       Get.put(AddCompetitionController());
 
@@ -229,8 +282,69 @@ class _AddCompetitionResultScreenState
     return Row(
       children: [
         Expanded(
-          child: _buildTextField("State", "Enter State",
-              controller: _stateController),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomText(
+                text: "State",
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textFieldNameColor,
+              ),
+              SizedBox(height: 4.h),
+              DropdownButtonFormField<String>(
+                hint: const Text("Select State"),
+                isExpanded: true,
+                value: usaStates.contains(_stateController.text)
+                    ? _stateController.text
+                    : null,
+                items: usaStates.map((state) {
+                  return DropdownMenuItem(
+                    value: state,
+                    child: Text(state),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  _stateController.text = value ?? '';
+                  setState(() {});
+                },
+                validator: (value) =>
+                    value == null || value.isEmpty ? "State is required" : null,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: AppColors.backRoudnColors,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Colors.grey.withOpacity(0.4),
+                      width: 1,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Colors.grey.withOpacity(0.4),
+                      width: 1.5,
+                    ),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Colors.red,
+                      width: 1,
+                    ),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                      color: Colors.red,
+                      width: 1.5,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
         SizedBox(width: 12.w),
         Expanded(
