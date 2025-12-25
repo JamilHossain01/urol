@@ -176,7 +176,7 @@ class _LocationWidgetState extends State<LocationWidget> {
           seperatedBuilder: Divider(
             color: Colors.white,
           ),
-          containerHorizontalPadding: 10,
+          containerHorizontalPadding: 0,
         ),
 
         SizedBox(height: 12.h),
