@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_app_bar_widget.dart';
 import '../../../common widget/custom_text_filed.dart';
+import '../../../common widget/phone_number_validator.dart';
 import '../home_view/controller/my_profile_controller.dart';
 import 'controller/update_profile_controller.dart';
 
@@ -66,6 +67,13 @@ class _EditProfileViewState extends State<EditProfileView> {
     "Muay Thai",
     "Kickboxing"
   ];
+
+  String? _phoneError;
+  void _onPhoneChanged(String value) {
+    setState(() {
+      _phoneError = PhoneValidator.validate(value);
+    });
+  }
 
   @override
   void initState() {
@@ -246,9 +254,13 @@ class _EditProfileViewState extends State<EditProfileView> {
 
                     _buildLabel("Phone Number"),
                     CustomTextField(
-                        controller: _phoneCtrl,
-                        hintText: "Enter phone",
-                        showObscure: false),
+                      controller: _phoneCtrl,
+                      hintText: "Enter your phone number",
+                      showObscure: false,
+                      keyboardType: TextInputType.phone,
+                      errorText: _phoneError,
+                      onChanged: _onPhoneChanged,
+                    ),
                     SizedBox(height: 16.h),
 
                     _buildLabel("Home Gym"),

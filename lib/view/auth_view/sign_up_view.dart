@@ -15,6 +15,7 @@ import '../../common widget/custom text/custom_text_widget.dart';
 import '../../common widget/custom_app_bar_widget.dart';
 import '../../common widget/custom_button_widget.dart';
 import '../../common widget/custom_text_filed.dart';
+import '../../common widget/phone_number_validator.dart';
 import 'login_auth_view.dart';
 
 class SignUpView extends StatefulWidget {
@@ -85,6 +86,14 @@ class _SignUpViewState extends State<SignUpView> {
       phoneNumber: _numberController.text.trim(),
       password: _passwordController.text.trim(),
     );
+  }
+
+  String? _errorText;
+
+  void _onChanged(String value) {
+    setState(() {
+      _errorText = PhoneValidator.validate(value);
+    });
   }
 
   @override
@@ -174,7 +183,10 @@ class _SignUpViewState extends State<SignUpView> {
                 hintText: "Enter your phone number",
                 showObscure: false,
                 keyboardType: TextInputType.phone,
+                errorText: _errorText,
+                onChanged: _onChanged, // realtime validation
               ),
+
               SizedBox(height: 10),
 
               // Password

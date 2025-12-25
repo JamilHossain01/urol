@@ -139,6 +139,36 @@ class _AddEventsViewState extends State<AddEventsView> {
     }
   }
 
+
+
+  String? _websiteError;
+  String? registrationError;
+
+
+  String? _validateURL(String? value, String fieldName) {
+    if (value == null || value.isEmpty) return null; // optional
+    final pattern = r'^(https?:\/\/)?' // optional http/https
+        r'([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}' // domain
+        r'(\/[^\s]*)?$'; // optional path
+    if (!RegExp(pattern).hasMatch(value)) {
+      return "Enter a valid $fieldName URL";
+    }
+    return null;
+  }
+
+
+
+
+  String? _validateDigits(String? value, String fieldName) {
+    if (value == null || value.isEmpty) return null; // optional
+    final pattern = r'^[0-9]+$'; // only digits
+    if (!RegExp(pattern).hasMatch(value)) {
+      return "Please enter a valid $fieldName (digits only)";
+    }
+    return null;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -300,12 +330,18 @@ class _AddEventsViewState extends State<AddEventsView> {
                   color: AppColors.textFieldNameColor),
               Gap(4.h),
               CustomTextField(
-                  controller: _websiteController,
-                  hintText: "Enter website link",
-                  showObscure: false,
-                  fillColor: AppColors.backRoudnColors,
-                  hintTextColor: AppColors.hintTextColors,
-                  maxLines: 1),
+                controller: _websiteController,
+                hintText: "Enter your website link",
+                showObscure: false,
+                fillColor: AppColors.backRoudnColors,
+                hintTextColor: AppColors.hintTextColors,
+                errorText: registrationError,
+                onChanged: (val) {
+                  setState(() {
+                    registrationError = _validateURL(val, "website");
+                  });
+                },
+              ),
 
               SizedBox(height: 10.h),
 
@@ -316,13 +352,21 @@ class _AddEventsViewState extends State<AddEventsView> {
                   fontWeight: FontWeight.w600,
                   color: AppColors.textFieldNameColor),
               Gap(4.h),
+
               CustomTextField(
-                  controller: _registrationController,
-                  hintText: "if registration fee if applicable..",
-                  showObscure: false,
-                  fillColor: AppColors.backRoudnColors,
-                  hintTextColor: AppColors.hintTextColors,
-                  maxLines: 1),
+                controller: _registrationController,
+                hintText: "if registration fee if applicable..",
+                showObscure: false,
+                fillColor: AppColors.backRoudnColors,
+                hintTextColor: AppColors.hintTextColors,
+                errorText: _websiteError,
+                onChanged: (val) {
+                  setState(() {
+                    _websiteError = _validateDigits(val, "fees");
+                  });
+                },
+              ),
+
 
               /// Location Picker
               LocationWidget(
@@ -340,7 +384,7 @@ class _AddEventsViewState extends State<AddEventsView> {
                   debugPrint("Selected Lat: $lat, Lng: $long");
                 },
               ),
-
+              Gap(10.h),
               /// Date & Time
               CustomText(
                   text: "Date & Time",

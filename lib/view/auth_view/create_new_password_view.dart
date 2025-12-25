@@ -29,9 +29,7 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
       TextEditingController();
 
   bool _isStrongPassword(String password) {
-    final regex =
-        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
-    return regex.hasMatch(password);
+    return password.length >= 8;
   }
 
   void _submitNewPassword() {
@@ -45,7 +43,7 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
 
     if (!_isStrongPassword(password)) {
       CustomToast.showToast(
-        "Password must include uppercase, lowercase, number, special char & be at least 8 chars",
+        "Password must include at least 8 chars",
         isError: true,
       );
       return;

@@ -16,12 +16,15 @@ class CustomTextField extends StatefulWidget {
   final Color? fillColor;
   final Color? borderColor;
   final int? maxLines;
-  final Color? hintTextColor; // Hint text color
+  final Color? hintTextColor;
   final Widget? suffixIcon;
-  final String? suffixIconAsset; // Suffix icon asset (image)
-  final VoidCallback? onSuffixTap; // Optional tap for suffix
-  final String? Function(String?)?
-      validator; // Added optional validator parameter
+  final String? suffixIconAsset;
+  final VoidCallback? onSuffixTap;
+  final String? Function(String?)? validator;
+
+  /// Real-time validation support
+  final void Function(String)? onChanged;
+  final String? errorText;
 
   const CustomTextField({
     Key? key,
@@ -39,7 +42,9 @@ class CustomTextField extends StatefulWidget {
     this.suffixIcon,
     this.suffixIconAsset,
     this.onSuffixTap,
-    this.validator, // Added
+    this.validator,
+    this.onChanged,
+    this.errorText,
   }) : super(key: key);
 
   @override
@@ -53,75 +58,82 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return Container(
       width: Get.width,
-      child: TextFormField(
-        keyboardType: widget.keyboardType,
-        controller: widget.controller,
-        readOnly: widget.readOnly ?? false,
-        obscureText: widget.showObscure ? _obscureText : false,
-        maxLines: widget.maxLines ?? 1,
-        style: GoogleFonts.poppins(
-          fontSize: 12.h,
-          color: Colors.black,
-        ),
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: widget.fillColor ?? Colors.white,
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.sp),
-            borderSide: BorderSide(
-              color: widget.borderColor ?? Color(0xFFB9B9B9),
-              width: 1,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextField(
+            keyboardType: widget.keyboardType,
+            controller: widget.controller,
+            readOnly: widget.readOnly ?? false,
+            obscureText: widget.showObscure ? _obscureText : false,
+            maxLines: widget.maxLines ?? 1,
+            onChanged: widget.onChanged,
+            style: GoogleFonts.poppins(
+              fontSize: 12.h,
+              color: Colors.black,
             ),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.sp),
-            borderSide: BorderSide(
-              color: widget.borderColor ?? Color(0xFFB9B9B9),
-              width: 1,
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.sp),
-            borderSide: BorderSide(
-              color: widget.borderColor ?? Color(0xFFB9B9B9),
-              width: 1,
-            ),
-          ),
-          prefixIcon: widget.imagePrefix != null
-              ? Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Image.asset(
-                    widget.imagePrefix!,
-                    width: 24.w,
-                    height: 24.h,
-                    fit: BoxFit.contain,
-                  ),
-                )
-              : (widget.prefixIcon != null
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: widget.fillColor ?? Colors.white,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.sp),
+                borderSide: BorderSide(
+                  color: widget.borderColor ?? Color(0xFFB9B9B9),
+                  width: 1,
+                ),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.sp),
+                borderSide: BorderSide(
+                  color: widget.borderColor ?? Color(0xFFB9B9B9),
+                  width: 1,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.sp),
+                borderSide: BorderSide(
+                  color: widget.borderColor ?? Color(0xFFB9B9B9),
+                  width: 1,
+                ),
+              ),
+              prefixIcon: widget.imagePrefix != null
+                  ? Padding(
+                padding: EdgeInsets.all(10),
+                child: Image.asset(
+                  widget.imagePrefix!,
+                  width: 24.w,
+                  height: 24.h,
+                  fit: BoxFit.contain,
+                ),
+              )
+                  : (widget.prefixIcon != null
                   ? Icon(widget.prefixIcon, color: Colors.white)
                   : null),
-          // Suffix icon logic: showObscure takes priority
-          suffixIcon: widget.showObscure
-              ? IconButton(
-                  icon: Icon(
-                    _obscureText ? Icons.visibility_off : Icons.visibility,
-                    color: Color(0xFF666666),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _obscureText = !_obscureText;
-                    });
-                  },
-                )
-              : widget.suffixIcon,
-          hintText: widget.hintText,
-          hintStyle: GoogleFonts.poppins(
-            fontWeight: FontWeight.w400,
-            fontSize: 12.h,
-            color: widget.hintTextColor ?? Color(0xff989898),
+              suffixIcon: widget.showObscure
+                  ? IconButton(
+                icon: Icon(
+                  _obscureText
+                      ? Icons.visibility_off
+                      : Icons.visibility,
+                  color: Color(0xFF666666),
+                ),
+                onPressed: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+              )
+                  : widget.suffixIcon,
+              hintText: widget.hintText,
+              hintStyle: GoogleFonts.poppins(
+                fontWeight: FontWeight.w400,
+                fontSize: 12.h,
+                color: widget.hintTextColor ?? Color(0xff989898),
+              ),
+              errorText: widget.errorText, // <-- show error below field
+            ),
           ),
-        ),
-        validator: widget.validator, // Added validator to TextFormField
+        ],
       ),
     );
   }

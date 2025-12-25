@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:google_places_flutter/google_places_flutter.dart';
+import 'package:google_places_flutter/model/prediction.dart';
 
 import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../common widget/custom_text_filed.dart';
@@ -40,6 +42,8 @@ class LocationWidget extends StatefulWidget {
 class _LocationWidgetState extends State<LocationWidget> {
   /// 🔐 MUST pick from map flag
   bool isLocationPicked = false;
+
+  final FocusNode streetFocusNode = FocusNode();
 
   /// 🇺🇸 USA States
   static const List<String> usaStates = [
@@ -95,52 +99,6 @@ class _LocationWidgetState extends State<LocationWidget> {
     "Wyoming",
   ];
 
-  Future<void> _pickLocation(BuildContext context) async {
-    await Get.bottomSheet(
-      LocationPickerModal(
-        initialLat: widget.lat,
-        initialLng: widget.long,
-        onLocationSelected:
-            (double selLat, double selLng, String address) async {
-          widget.streetAddressController.text = address;
-          isLocationPicked = true;
-          setState(() {});
-
-          try {
-            final placemarks = await placemarkFromCoordinates(selLat, selLng);
-            if (placemarks.isNotEmpty) {
-              final p = placemarks.first;
-
-              // City
-              widget.cityController.text = p.locality ?? '';
-
-              // State: Only set if exists in USA list
-              final String pickedState = p.administrativeArea ?? '';
-              if (usaStates.contains(pickedState)) {
-                widget.stateController.text = pickedState;
-              } else {
-                widget.stateController.clear();
-              }
-
-              // Zip code
-              widget.zipCodeController.text = p.postalCode ?? '';
-            }
-          } catch (e) {
-            debugPrint("Reverse geocoding failed: $e");
-          }
-
-          widget.onLocationChanged?.call(selLat, selLng);
-          Get.back();
-        },
-      ),
-      isScrollControlled: true,
-      backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -164,24 +122,61 @@ class _LocationWidgetState extends State<LocationWidget> {
         ),
         Gap(4.h),
 
-        CustomTextField(
-          controller: widget.streetAddressController,
-          hintText: "Pick location from map",
-          showObscure: false,
-          fillColor: AppColors.backRoudnColors,
-          hintTextColor: AppColors.hintTextColors,
-          validator: (value) {
-            if (!isLocationPicked) return "Please select location from map";
-            if (value == null || value.isEmpty) return "Address is required";
-            return null;
-          },
-          suffixIcon: IconButton(
-            icon: Icon(
-              Icons.location_on_outlined,
-              color: AppColors.mainTextColors,
+        SizedBox(height: 12.h),
+
+        GooglePlaceAutoCompleteTextField(
+          focusNode: streetFocusNode, // ✅ CORRECT
+          textEditingController: widget.streetAddressController,
+
+          textInputAction: TextInputAction.done, // or next if you want
+          googleAPIKey: "AIzaSyB_3nOokGz9jksH5jN_f05YNEJeZqWizYM",
+          inputDecoration: InputDecoration(
+            hintText: "Pick location from map",
+            hintStyle: TextStyle(color: AppColors.hintTextColors),
+            filled: true,
+            fillColor: AppColors.backRoudnColors,
+            border: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(8),
             ),
-            onPressed: () => _pickLocation(context),
           ),
+          debounceTime: 200,
+          countries: ["USA"],
+          isLatLngRequired: true,
+          getPlaceDetailWithLatLng: (Prediction prediction) async {
+            if (prediction.lat != null && prediction.lng != null) {
+              final lat = double.parse(prediction.lat!);
+              final lng = double.parse(prediction.lng!);
+
+              widget.onLocationChanged?.call(lat, lng);
+            }
+          },
+
+          itemClick: (Prediction prediction) {
+            widget.streetAddressController.text = prediction.description ?? "";
+
+            if (prediction.lat != null && prediction.lng != null) {
+              final double latitude = double.parse(prediction.lat!);
+              final double longitude = double.parse(prediction.lng!);
+
+              widget.onLocationChanged?.call(latitude, longitude);
+            }
+
+            streetFocusNode.unfocus();
+          },
+
+          itemBuilder: (context, index, Prediction prediction) {
+            return Container(
+              padding: EdgeInsets.all(10),
+              child: CustomText(
+                  textAlign: TextAlign.start,
+                  text: prediction.description ?? ""),
+            );
+          },
+          seperatedBuilder: Divider(
+            color: Colors.white,
+          ),
+          containerHorizontalPadding: 10,
         ),
 
         SizedBox(height: 12.h),

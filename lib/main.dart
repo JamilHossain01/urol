@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
 import 'common controller/notification controller/firebase_background_handler.dart';
 import 'common controller/notification controller/notification_controller.dart';
 import 'common widget/language widget/controller/language_controller.dart';

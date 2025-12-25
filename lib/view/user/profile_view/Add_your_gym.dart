@@ -408,6 +408,7 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
                           debugPrint("Selected Lat: $lat, Lng: $long");
                         },
                       ),
+                      SizedBox(height: 20.h),
 
                       ContactInfoWidget(
                         phoneController: _phoneController,

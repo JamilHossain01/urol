@@ -4,9 +4,10 @@ import 'package:gap/gap.dart';
 
 import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../common widget/custom_text_filed.dart';
+import '../../../../common widget/phone_number_validator.dart';
 import '../../../../uitilies/app_colors.dart';
 
-class ContactInfoWidget extends StatelessWidget {
+class ContactInfoWidget extends StatefulWidget {
   final TextEditingController phoneController;
   final TextEditingController emailController;
   final TextEditingController websiteController;
@@ -23,6 +24,41 @@ class ContactInfoWidget extends StatelessWidget {
   });
 
   @override
+  State<ContactInfoWidget> createState() => _ContactInfoWidgetState();
+}
+
+class _ContactInfoWidgetState extends State<ContactInfoWidget> {
+  String? _phoneError;
+  String? _websiteError;
+  String? _facebookError;
+  String? _instagramError;
+
+  void _onPhoneChanged(String value) {
+    setState(() {
+      _phoneError = PhoneValidator.validate(value);
+    });
+  }
+
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) return "Email is required";
+    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+      return "Enter a valid email";
+    }
+    return null;
+  }
+
+  String? _validateURL(String? value, String fieldName) {
+    if (value == null || value.isEmpty) return null; // optional
+    final pattern = r'^(https?:\/\/)?' // optional http/https
+        r'([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}' // domain
+        r'(\/[^\s]*)?$'; // optional path
+    if (!RegExp(pattern).hasMatch(value)) {
+      return "Enter a valid $fieldName URL";
+    }
+    return null;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,87 +70,99 @@ class ContactInfoWidget extends StatelessWidget {
           color: AppColors.mainTextColors,
         ),
         SizedBox(height: 12.h),
+        // Phone
         CustomText(
-          text: "Phone Number",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w600,
-          color: AppColors.textFieldNameColor,
-        ),
+            text: "Phone Number",
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w600,
+            color: AppColors.textFieldNameColor),
         Gap(4.h),
         CustomTextField(
-          controller: phoneController,
+          controller: widget.phoneController,
           hintText: "Enter your phone number",
           showObscure: false,
-          fillColor: AppColors.backRoudnColors,
-          hintTextColor: AppColors.hintTextColors,
-          validator: (value) {},
+          keyboardType: TextInputType.phone,
+          errorText: _phoneError,
+          onChanged: _onPhoneChanged,
         ),
         SizedBox(height: 12.h),
+        // Email
         CustomText(
-          text: "Email",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w600,
-          color: AppColors.textFieldNameColor,
-        ),
+            text: "Email",
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w600,
+            color: AppColors.textFieldNameColor),
         Gap(4.h),
         CustomTextField(
-          controller: emailController,
+          controller: widget.emailController,
           hintText: "Enter your email address",
           showObscure: false,
           fillColor: AppColors.backRoudnColors,
           hintTextColor: AppColors.hintTextColors,
-          validator: (value) {
-            if (value!.isEmpty) return "Email is required";
-            if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-              return "Enter a valid email";
-            }
-            return null;
-          },
+          validator: _validateEmail,
         ),
         SizedBox(height: 12.h),
+        // Website
         CustomText(
-          text: "Website",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w600,
-          color: AppColors.textFieldNameColor,
-        ),
+            text: "Website",
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w600,
+            color: AppColors.textFieldNameColor),
         Gap(4.h),
         CustomTextField(
-          controller: websiteController,
+          controller: widget.websiteController,
           hintText: "Enter your website link",
           showObscure: false,
           fillColor: AppColors.backRoudnColors,
           hintTextColor: AppColors.hintTextColors,
+          errorText: _websiteError,
+          onChanged: (val) {
+            setState(() {
+              _websiteError = _validateURL(val, "website");
+            });
+          },
         ),
         SizedBox(height: 12.h),
+        // Facebook
         CustomText(
-          text: "Facebook",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w600,
-          color: AppColors.textFieldNameColor,
-        ),
+            text: "Facebook",
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w600,
+            color: AppColors.textFieldNameColor),
         Gap(4.h),
         CustomTextField(
-          controller: facebookController,
+          controller: widget.facebookController,
           hintText: "Enter your Facebook link",
           showObscure: false,
           fillColor: AppColors.backRoudnColors,
           hintTextColor: AppColors.hintTextColors,
+          errorText: _facebookError,
+          onChanged: (val) {
+            setState(() {
+              _facebookError = _validateURL(val, "Facebook");
+            });
+          },
         ),
         SizedBox(height: 12.h),
+        // Instagram
         CustomText(
-          text: "Instagram",
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w600,
-          color: AppColors.textFieldNameColor,
-        ),
+            text: "Instagram",
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w600,
+            color: AppColors.textFieldNameColor),
         Gap(4.h),
         CustomTextField(
-          controller: instagramController,
+          controller: widget.instagramController,
           hintText: "Enter your Instagram link",
           showObscure: false,
           fillColor: AppColors.backRoudnColors,
           hintTextColor: AppColors.hintTextColors,
+          errorText: _instagramError,
+          onChanged: (val) {
+            setState(() {
+              _instagramError = _validateURL(val, "Instagram");
+            });
+          },
         ),
         SizedBox(height: 20.h),
       ],
