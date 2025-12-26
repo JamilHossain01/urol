@@ -375,7 +375,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                     child: EventCard(
                       medalColor: getMedalColor(competition.result),
                       medalIcon: getMedalIcon(competition.result),
-                      showCompetition: false,
+                      showCompetition: true,
                       title: competition.eventName ?? "",
                       date: CustomDateFormatter.formatDate(
                         competition.eventDate?.toIso8601String() ?? "",

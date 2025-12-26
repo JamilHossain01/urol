@@ -90,9 +90,18 @@ class _SignUpViewState extends State<SignUpView> {
 
   String? _errorText;
 
-  void _onChanged(String value) {
+  void _onPhoneChanged(String value) {
+    final formatted = PhoneFormatter.format(value);
+
+    if (formatted != value) {
+      _numberController.value = TextEditingValue(
+        text: formatted,
+        selection: TextSelection.collapsed(offset: formatted.length),
+      );
+    }
+
     setState(() {
-      _errorText = PhoneValidator.validate(value);
+      _errorText = PhoneValidator.validate(formatted);
     });
   }
 
@@ -184,7 +193,7 @@ class _SignUpViewState extends State<SignUpView> {
                 showObscure: false,
                 keyboardType: TextInputType.phone,
                 errorText: _errorText,
-                onChanged: _onChanged, // realtime validation
+                onChanged: _onPhoneChanged, // realtime validation
               ),
 
               SizedBox(height: 10),

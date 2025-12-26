@@ -24,7 +24,7 @@ class SplashView extends StatelessWidget {
           /// Logo at center
           Center(
             child: Image.asset(
-              "assets/icon/name_with_logo.png",
+              "assets/icon/logo_with_app.png",
               width: 250.w,
               height: 250.w,
               fit: BoxFit.contain,

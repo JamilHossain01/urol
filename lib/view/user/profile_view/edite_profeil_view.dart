@@ -70,8 +70,17 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   String? _phoneError;
   void _onPhoneChanged(String value) {
+    final formatted = PhoneFormatter.format(value);
+
+    if (formatted != value) {
+      _phoneCtrl.value = TextEditingValue(
+        text: formatted,
+        selection: TextSelection.collapsed(offset: formatted.length),
+      );
+    }
+
     setState(() {
-      _phoneError = PhoneValidator.validate(value);
+      _phoneError = PhoneValidator.validate(formatted);
     });
   }
 

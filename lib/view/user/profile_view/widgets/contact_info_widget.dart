@@ -34,8 +34,17 @@ class _ContactInfoWidgetState extends State<ContactInfoWidget> {
   String? _instagramError;
 
   void _onPhoneChanged(String value) {
+    final formatted = PhoneFormatter.format(value);
+
+    if (formatted != value) {
+      widget.phoneController.value = TextEditingValue(
+        text: formatted,
+        selection: TextSelection.collapsed(offset: formatted.length),
+      );
+    }
+
     setState(() {
-      _phoneError = PhoneValidator.validate(value);
+      _phoneError = PhoneValidator.validate(formatted);
     });
   }
 
