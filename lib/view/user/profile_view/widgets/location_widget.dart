@@ -18,6 +18,7 @@ class LocationWidget extends StatefulWidget {
   final TextEditingController cityController;
   final TextEditingController stateController;
   final TextEditingController zipCodeController;
+  final TextEditingController? apartmentController;
   final double? lat;
   final double? long;
   final bool? zipCode;
@@ -33,6 +34,7 @@ class LocationWidget extends StatefulWidget {
     this.long,
     this.onLocationChanged,
     this.zipCode,
+    this.apartmentController,
   });
 
   @override
@@ -120,7 +122,6 @@ class _LocationWidgetState extends State<LocationWidget> {
           fontWeight: FontWeight.w600,
           color: AppColors.textFieldNameColor,
         ),
-        Gap(4.h),
 
         SizedBox(height: 12.h),
 
@@ -282,21 +283,63 @@ class _LocationWidgetState extends State<LocationWidget> {
 
         /// Zip Code
         if (widget.zipCode != false) ...[
-          CustomText(
-            text: "Zip Code",
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textFieldNameColor,
-          ),
-          Gap(4.h),
-          CustomTextField(
-            controller: widget.zipCodeController,
-            hintText: "Enter zip code",
-            showObscure: false,
-            fillColor: AppColors.backRoudnColors,
-            hintTextColor: AppColors.hintTextColors,
-            validator: (value) =>
-                value!.isEmpty ? "Zip code is required" : null,
+          Row(
+            children: [
+              // Zip Code
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomText(
+                      text: "Zip Code",
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textFieldNameColor,
+                    ),
+                    Gap(4.h),
+                    CustomTextField(
+                      controller: widget.zipCodeController,
+                      hintText: "Enter zip code",
+                      showObscure: false,
+                      fillColor: AppColors.backRoudnColors,
+                      hintTextColor: AppColors.hintTextColors,
+                      keyboardType: TextInputType.number,
+                      validator: (value) =>
+                          value!.isEmpty ? "Zip code is required" : null,
+                    ),
+                  ],
+                ),
+              ),
+
+              Gap(12.w),
+
+              // Apartment Number
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomText(
+                      text: "Apartment No",
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textFieldNameColor,
+                    ),
+                    Gap(4.h),
+                    CustomTextField(
+                      controller: widget.apartmentController,
+                      hintText: "Apt / Unit",
+                      showObscure: false,
+                      fillColor: AppColors.backRoudnColors,
+                      hintTextColor: AppColors.hintTextColors,
+                      keyboardType: TextInputType.text,
+                      validator: (value) => value!.isEmpty
+                          ? "Apartment number is required"
+                          : null,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ],

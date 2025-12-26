@@ -480,35 +480,91 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
                                   final index = entry.key;
                                   final c = entry.value;
 
-                                  // Safety check to avoid null
+                                  // Safety check
                                   if (c['name'] == null ||
                                       c['day'] == null ||
                                       c['from'] == null ||
                                       c['to'] == null) {
-                                    return const SizedBox(); // Skip rendering null items
+                                    return const SizedBox();
                                   }
 
-                                  return Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 4.h),
+                                  return Container(
+                                    margin: EdgeInsets.symmetric(vertical: 6.h),
+                                    padding: EdgeInsets.all(12.w),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12.r),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.05),
+                                          blurRadius: 8,
+                                          offset: const Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Expanded(
-                                          child: Text(
-                                            "${c['name']} - ${c['day']} (${c['from']} to ${c['to']})",
-                                            style: TextStyle(fontSize: 14.sp),
+                                        // Leading icon
+                                        Container(
+                                          padding: EdgeInsets.all(8.w),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.mainColor,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Icon(
+                                            Icons.schedule,
+                                            size: 18.sp,
+                                            color: AppColors.mainColor,
                                           ),
                                         ),
-                                        IconButton(
-                                          icon: Icon(Icons.delete,
-                                              color: Colors.red, size: 20.sp),
-                                          onPressed: () {
+
+                                        Gap(12.w),
+
+                                        // Schedule info
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                c['name'],
+                                                style: TextStyle(
+                                                  fontSize: 15.sp,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.black87,
+                                                ),
+                                              ),
+                                              Gap(4.h),
+                                              Text(
+                                                "${c['day']} • ${c['from']} – ${c['to']}",
+                                                style: TextStyle(
+                                                  fontSize: 13.sp,
+                                                  color: Colors.grey[600],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                        // Delete action
+                                        InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          onTap: () {
                                             setState(() {
                                               classSchedules.removeAt(index);
                                             });
                                           },
+                                          child: Padding(
+                                            padding: EdgeInsets.all(6.w),
+                                            child: Icon(
+                                              Icons.delete_outline,
+                                              color: Colors.redAccent,
+                                              size: 20.sp,
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -517,6 +573,7 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
                               ),
                           ],
                         ),
+                      Gap(5.h),
 
                       DisciplinesWidget(
                         selectedDisciplines: _selectedDisciplines,

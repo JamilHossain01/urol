@@ -105,6 +105,17 @@ class _SignUpViewState extends State<SignUpView> {
     });
   }
 
+
+
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) return "Email is required";
+    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+      return "Enter a valid email";
+    }
+    return null;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -176,6 +187,9 @@ class _SignUpViewState extends State<SignUpView> {
                 controller: _emailController,
                 hintText: "Enter your email address",
                 showObscure: false,
+                fillColor: AppColors.backRoudnColors,
+                hintTextColor: AppColors.hintTextColors,
+                validator: _validateEmail,
               ),
               SizedBox(height: 10),
 

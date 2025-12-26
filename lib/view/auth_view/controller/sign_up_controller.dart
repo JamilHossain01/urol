@@ -44,7 +44,7 @@ class SignUpController extends GetxController {
 
           await _storageService.write('token', otpToken);
 
-          Get.offAll(() => OTPVerifyForRegister(email: email,));
+          Get.to(() => OTPVerifyForRegister(email: email,));
 
           CustomToast.showToast("Account Create Successfully Done!");
         } else {

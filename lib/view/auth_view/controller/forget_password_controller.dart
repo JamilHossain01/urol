@@ -39,7 +39,7 @@ class ForgotPasswordController extends GetxController {
 
         CustomToast.showToast('✅ Now please enter your OTP', isError: false);
 
-        Get.offAll(() => OTPVerifyView(
+        Get.to(() => OTPVerifyView(
               email: email,
             ));
       } else {

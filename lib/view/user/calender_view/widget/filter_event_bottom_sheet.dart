@@ -116,7 +116,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   .toList(),
             ),
 
-            Gap(15.h),
+            Gap(10.h),
 
             // Location Widget
             LocationWidget(
@@ -135,7 +135,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 debugPrint("Selected Lat: $lat, Lng: $long");
               },
             ),
-
+            Gap(10.h),
             // Apply Button
             CustomButtonWidget(
               btnColor: AppColors.mainColor,
@@ -150,7 +150,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               },
               iconWant: false,
             ),
-
 
             Gap(10.h),
           ],
