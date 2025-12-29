@@ -97,6 +97,7 @@ class _EditGymViewState extends State<EditGymView> {
   final _facebookController = TextEditingController();
   final _classNameController = TextEditingController();
   final _instagramController = TextEditingController();
+  final _apprtmentControlller = TextEditingController();
 
   List<Map<String, String?>> openMatSchedules = [];
   List<Map<String, String?>> classSchedules = [];
@@ -305,6 +306,7 @@ class _EditGymViewState extends State<EditGymView> {
       gymId: widget.gymId,
       newImages: _selectedImages,
       existingImages: _existingImageUrls,
+      apartment: _apprtmentControlller.text,
     );
   }
 
@@ -452,6 +454,7 @@ class _EditGymViewState extends State<EditGymView> {
                       SizedBox(height: 20.h),
 
                       LocationWidget(
+                        apartmentController: _apprtmentControlller,
                         streetAddressController: _streetAddressController,
                         cityController: _cityController,
                         stateController: _stateController,

@@ -319,7 +319,7 @@ class _LocationWidgetState extends State<LocationWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomText(
-                      text: "Apartment No",
+                      text: "Suite",
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w600,
                       color: AppColors.textFieldNameColor,
@@ -327,7 +327,7 @@ class _LocationWidgetState extends State<LocationWidget> {
                     Gap(4.h),
                     CustomTextField(
                       controller: widget.apartmentController,
-                      hintText: "Apt / Unit",
+                      hintText: "Suite",
                       showObscure: false,
                       fillColor: AppColors.backRoudnColors,
                       hintTextColor: AppColors.hintTextColors,
