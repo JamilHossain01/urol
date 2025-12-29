@@ -111,7 +111,7 @@ class EventCard extends StatelessWidget {
                       SizedBox(width: 6.w),
                       CustomText(
                         text: medalText ?? "GOLD",
-                        fontSize: 14.sp,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
                         color: medalColor ?? AppColors.orangeColor,
                       ),

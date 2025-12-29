@@ -58,27 +58,27 @@ class _ProfileViewState extends State<ProfileView> {
   Widget _buildMedalIcon(String? result) {
     if (result == "Gold") {
       return Image.asset(
-        "assets/images/gold.png",
-        height: 22,
-        width: 22,
+        "assets/images/goldOne.png",
+        height: 26,
+        width: 26,
       );
     } else if (result == "Silver") {
       return Image.asset(
-        "assets/images/silver.png",
-        height: 22,
-        width: 22,
+        "assets/images/silverTwo.png",
+        height: 26,
+        width: 26,
       );
     } else if (result == "Bronze") {
       return Image.asset(
-        "assets/images/bronze.png",
-        height: 22,
-        width: 22,
+        "assets/images/bronzeThree.png",
+        height: 26,
+        width: 26,
       );
     } else if (result == "DNP") {
       return Image.asset(
-        "assets/images/bronze.png",
-        height: 22,
-        width: 22,
+        "assets/images/dnp.png",
+        height: 26,
+        width: 26,
       );
     }
 

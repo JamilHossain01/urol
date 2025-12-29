@@ -98,35 +98,35 @@ class _HomeScreenViewState extends State<HomeScreenView> {
       switch (result) {
         case "Gold":
           return Image.asset(
-            "assets/images/gold.png",
-            width: 24,
-            height: 24,
+            "assets/images/goldOne.png",
+            width: 26,
+            height: 26,
           );
         case "Silver":
           return Image.asset(
-            "assets/images/silver.png",
-            width: 24,
-            height: 24,
+            "assets/images/silverTwo.png",
+            width: 26,
+            height: 26,
           );
         case "Bronze":
           return Image.asset(
-            "assets/images/bronze.png",
-            width: 24,
-            height: 24,
+            "assets/images/bronzeThree.png",
+            width: 26,
+            height: 26,
           );
 
         case "DNP":
           return Image.asset(
-            "assets/images/bronze.png",
-            width: 24,
-            height: 24,
+            "assets/images/dnp.png",
+            width: 26,
+            height: 26,
           );
 
         default:
           return Image.asset(
             "assets/images/dnp.png",
-            width: 24,
-            height: 24,
+            width: 26,
+            height: 26,
           );
       }
     }
