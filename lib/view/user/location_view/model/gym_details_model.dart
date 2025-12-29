@@ -27,6 +27,7 @@ class Data {
     required this.description,
     required this.street,
     required this.state,
+    required this.apartment,
     required this.city,
     required this.zipCode,
     required this.phone,
@@ -40,6 +41,7 @@ class Data {
     required this.isClaimed,
     required this.user,
     required this.location,
+    required this.status,
     required this.createdAt,
     required this.updatedAt,
     required this.v,
@@ -52,6 +54,7 @@ class Data {
   final String? description;
   final String? street;
   final String? state;
+  final String? apartment;
   final String? city;
   final String? zipCode;
   final String? phone;
@@ -65,6 +68,7 @@ class Data {
   final bool? isClaimed;
   final String? user;
   final Location? location;
+  final String? status;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final int? v;
@@ -78,6 +82,7 @@ class Data {
       description: json["description"],
       street: json["street"],
       state: json["state"],
+      apartment: json["apartment"],
       city: json["city"],
       zipCode: json["zip_code"],
       phone: json["phone"],
@@ -91,6 +96,7 @@ class Data {
       isClaimed: json["isClaimed"],
       user: json["user"],
       location: json["location"] == null ? null : Location.fromJson(json["location"]),
+      status: json["status"],
       createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
       updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
       v: json["__v"],

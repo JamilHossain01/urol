@@ -50,7 +50,7 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
   final _emailController = TextEditingController();
   final _websiteController = TextEditingController();
   final _facebookController = TextEditingController();
-  final _classNameController = TextEditingController();
+  final apprartmentController = TextEditingController();
   final _instagramController = TextEditingController();
 
   // --- Data ---
@@ -266,6 +266,7 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
       tax_document: taxDocumentFile!,
       business_license: businessLicenseFile!,
       utility_bill: utilityBillFile!,
+      apartment: apprartmentController.text.trim(),
     );
 
     debugPrint("GYM SUBMITTED SUCCESS");
@@ -394,6 +395,7 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
                       SizedBox(height: 20.h),
 
                       LocationWidget(
+                        apartmentController: apprartmentController,
                         streetAddressController: _streetAddressController,
                         cityController: _cityController,
                         stateController: _stateController,
@@ -516,7 +518,7 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
                                           child: Icon(
                                             Icons.schedule,
                                             size: 18.sp,
-                                            color: AppColors.mainColor,
+                                            color: Colors.white,
                                           ),
                                         ),
 

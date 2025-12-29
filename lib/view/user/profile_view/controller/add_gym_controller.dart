@@ -24,6 +24,7 @@ class AddGymController extends GetxController {
     required String phone,
     required String email,
     required String website,
+    required String apartment,
     required String facebook,
     required String instagram,
     required dynamic latitude,
@@ -58,6 +59,7 @@ class AddGymController extends GetxController {
         "zip_code": zipCode,
         "phone": phone,
         "email": email,
+        "apartment": apartment,
         "website": website,
         "facebook": facebook,
         "instagram": instagram,
@@ -121,7 +123,6 @@ class AddGymController extends GetxController {
       // ---- Handle response ----------------------------------------------
       if (streamedResponse.statusCode == 200 ||
           streamedResponse.statusCode == 201) {
-        final json = jsonDecode(responseBody);
         CustomToast.showToast("Gym added successfully!", isError: false);
 
         Get.offAll(() => SuccessScreen(
@@ -140,14 +141,16 @@ class AddGymController extends GetxController {
         Map<String, dynamic> errorData = {};
         try {
           errorData = jsonDecode(responseBody);
-        } catch (_) {
-          errorData = {'message': 'Unknown server error'};
-        }
+          final errorMessage = errorData['message'] ?? 'Unknown error occurred';
+          final errorDetails =
+              errorData['errors'] != null ? errorData['errors'].join(', ') : '';
 
-        final msg = errorData['message'] ??
-            errorData['error'] ??
-            'Server error: ${streamedResponse.statusCode}';
-        CustomToast.showToast(msg, isError: true);
+          CustomToast.showToast('$errorMessage $errorDetails', isError: true);
+        } catch (_) {
+          // In case the error response is not in the expected format
+          CustomToast.showToast('Server error: ${streamedResponse.statusCode}',
+              isError: true);
+        }
       }
     } catch (e) {
       print("❌ AddGymController error: $e");

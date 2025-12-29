@@ -199,6 +199,28 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                     ),
                     Gap(10.h),
 
+                    if ((data.apartment ?? '').isNotEmpty)
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.business,
+                            color: Color(0xFF4B4B4B),
+                            size: 16,
+                          ),
+                          Gap(5.w),
+                          CustomText(
+                            text: customEllipsisText(
+                              "Suite: ${data.apartment}",
+                              wordLimit: 9,
+                            ),
+                            fontSize: 10.sp,
+                            color: const Color(0xFF4B4B4B),
+                          ),
+                        ],
+                      ),
+
+                    Gap(10.h),
+
                     // Tags
                     if (data.disciplines.isNotEmpty)
                       Wrap(

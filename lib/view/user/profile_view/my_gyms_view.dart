@@ -120,7 +120,7 @@ class _MyGymsViewState extends State<MyGymsView> {
                   showDelete: true,
                   showEdit: true,
                   gymName: gym.name ?? "Unnamed Gym",
-                  location: "${gym.city ?? ''}, ${gym.state ?? ''}",
+                  location: "${gym.city ?? ''}, ${gym.state ?? ''}, ${gym.street ?? ''}",
                   image: imageUrl,
                   categories: gym.disciplines,
                 ),
