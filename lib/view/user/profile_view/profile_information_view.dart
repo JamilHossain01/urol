@@ -1,6 +1,7 @@
 import 'package:calebshirthum/common%20widget/custom_button_widget.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -25,9 +26,6 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
 
   final UpdateProfileController _updateProfileController =
       Get.put(UpdateProfileController());
-
-
-
 
   String? selectedBelt;
   String? selectedFeet = "5";
@@ -206,7 +204,7 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
                       ),
                       SizedBox(height: 6.h),
                       _buildDropdownField(
-                        selectedFeet ?? feetOptions[4], // default "5"
+                        selectedFeet ?? feetOptions[4],
                         feetOptions,
                         (String? value) => setState(() => selectedFeet = value),
                       ),
@@ -247,6 +245,10 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
             ),
             SizedBox(height: 6.h),
             CustomTextField(
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+              keyboardType: TextInputType.number,
               controller: weightController,
               hintText: "Enter your weight",
               showObscure: false,
@@ -300,7 +302,6 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
               hintTextColor: AppColors.hintTextColors,
             ),
             SizedBox(height: 24.h),
-
 
             Obx(() {
               return _updateProfileController.isLoading.value == true

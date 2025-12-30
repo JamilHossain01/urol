@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,6 +21,8 @@ class CustomTextField extends StatefulWidget {
   final Widget? suffixIcon;
   final String? suffixIconAsset;
   final VoidCallback? onSuffixTap;
+  final List<TextInputFormatter>? inputFormatters;
+
   final String? Function(String?)? validator;
 
   /// Real-time validation support
@@ -45,6 +48,7 @@ class CustomTextField extends StatefulWidget {
     this.validator,
     this.onChanged,
     this.errorText,
+    this.inputFormatters,
   }) : super(key: key);
 
   @override
@@ -68,6 +72,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
             obscureText: widget.showObscure ? _obscureText : false,
             maxLines: widget.maxLines ?? 1,
             onChanged: widget.onChanged,
+            inputFormatters: widget.inputFormatters,
+
             style: GoogleFonts.poppins(
               fontSize: 12.h,
               color: Colors.black,
@@ -98,31 +104,29 @@ class _CustomTextFieldState extends State<CustomTextField> {
               ),
               prefixIcon: widget.imagePrefix != null
                   ? Padding(
-                padding: EdgeInsets.all(10),
-                child: Image.asset(
-                  widget.imagePrefix!,
-                  width: 24.w,
-                  height: 24.h,
-                  fit: BoxFit.contain,
-                ),
-              )
+                      padding: EdgeInsets.all(10),
+                      child: Image.asset(
+                        widget.imagePrefix!,
+                        width: 24.w,
+                        height: 24.h,
+                        fit: BoxFit.contain,
+                      ),
+                    )
                   : (widget.prefixIcon != null
-                  ? Icon(widget.prefixIcon, color: Colors.white)
-                  : null),
+                      ? Icon(widget.prefixIcon, color: Colors.white)
+                      : null),
               suffixIcon: widget.showObscure
                   ? IconButton(
-                icon: Icon(
-                  _obscureText
-                      ? Icons.visibility_off
-                      : Icons.visibility,
-                  color: Color(0xFF666666),
-                ),
-                onPressed: () {
-                  setState(() {
-                    _obscureText = !_obscureText;
-                  });
-                },
-              )
+                      icon: Icon(
+                        _obscureText ? Icons.visibility_off : Icons.visibility,
+                        color: Color(0xFF666666),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscureText = !_obscureText;
+                        });
+                      },
+                    )
                   : widget.suffixIcon,
               hintText: widget.hintText,
               hintStyle: GoogleFonts.poppins(

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/custom_loader.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -239,6 +240,10 @@ class _EditProfileViewState extends State<EditProfileView> {
 
                     _buildLabel("First Name"),
                     CustomTextField(
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'[a-zA-Z]')),
+                        ],
                         controller: _fNameCtrl,
                         hintText: "Enter first name",
                         showObscure: false),
@@ -246,6 +251,10 @@ class _EditProfileViewState extends State<EditProfileView> {
                     SizedBox(height: 16.h),
                     _buildLabel("Last Name"),
                     CustomTextField(
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'[a-zA-Z]')),
+                        ],
                         controller: _lNameCtrl,
                         hintText: "Enter last name",
                         showObscure: false),

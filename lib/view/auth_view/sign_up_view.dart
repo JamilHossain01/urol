@@ -5,6 +5,7 @@ import 'package:calebshirthum/uitilies/custom_toast.dart';
 import 'package:calebshirthum/view/auth_view/controller/sign_up_controller.dart';
 import 'package:calebshirthum/view/auth_view/signUpOtp_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -105,8 +106,6 @@ class _SignUpViewState extends State<SignUpView> {
     });
   }
 
-
-
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) return "Email is required";
     if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
@@ -114,7 +113,6 @@ class _SignUpViewState extends State<SignUpView> {
     }
     return null;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -154,6 +152,9 @@ class _SignUpViewState extends State<SignUpView> {
                 fontSize: 12.sp,
               ),
               CustomTextField(
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                ],
                 controller: _firstNameController,
                 hintText: "Enter first name",
                 showObscure: false,
@@ -169,6 +170,9 @@ class _SignUpViewState extends State<SignUpView> {
                 fontSize: 12.sp,
               ),
               CustomTextField(
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                ],
                 controller: _lastNameController,
                 hintText: "Enter last name",
                 showObscure: false,
