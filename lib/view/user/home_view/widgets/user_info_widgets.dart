@@ -49,15 +49,23 @@ class UserInfoSection extends StatelessWidget {
       case 'Black':
         return "assets/icon/black_high.png";
       default:
-        return null; // show NOTHING
+        return null;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return CustomContainer(
-      height: 280.h,
-      color: Colors.white,
+    return Container(
+      padding: EdgeInsets.all(10.w),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(
+          color: Colors.transparent,
+          width: 1.0,
+        ),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
