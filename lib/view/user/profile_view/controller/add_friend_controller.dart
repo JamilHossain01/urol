@@ -44,8 +44,6 @@ class AddFriendController extends GetxController {
           "Friend added successfully!",
           isError: false,
         );
-
-        Get.back();
       } else {
         Map<String, dynamic> errorData = {};
         try {

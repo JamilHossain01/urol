@@ -87,7 +87,7 @@ class FindProfileView extends StatelessWidget {
               if (eventStatus != null) _buildEventSection(),
 
               Obx(() {
-                return addFriendController.isLoading.value == true
+                return addFriendController.isLoading.value == true || _unfriendController.isLoading.value
                     ? CustomLoader()
                     : Padding(
                         padding: EdgeInsets.symmetric(
