@@ -197,6 +197,36 @@ class FindProfileView extends StatelessWidget {
 
   /// 🏆 Event Section
   Widget _buildEventSection() {
+    Widget _buildMedalIcon(String? result) {
+      if (result == "Gold") {
+        return Image.asset(
+          "assets/images/goldOne.png",
+          height: 26,
+          width: 26,
+        );
+      } else if (result == "Silver") {
+        return Image.asset(
+          "assets/images/silverTwo.png",
+          height: 26,
+          width: 26,
+        );
+      } else if (result == "Bronze") {
+        return Image.asset(
+          "assets/images/bronzeThree.png",
+          height: 26,
+          width: 26,
+        );
+      } else if (result == "DNP") {
+        return Image.asset(
+          "assets/images/dnp.png",
+          height: 26,
+          width: 26,
+        );
+      }
+
+      return Container();
+    }
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: Column(
@@ -269,7 +299,9 @@ class FindProfileView extends StatelessWidget {
                 if (eventBadge != null && eventBadge!.isNotEmpty)
                   Center(
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 8.h),
+                      width: double.infinity,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
                       decoration: BoxDecoration(
                         color: const Color(0xFFE6E6E6),
                         borderRadius: BorderRadius.circular(6.r),
@@ -277,14 +309,13 @@ class FindProfileView extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset(AppImages.badge,
-                              height: 20.h, width: 20.w),
-                          SizedBox(width: 6.w),
+                          _buildMedalIcon(eventBadge),
+                          SizedBox(width: 8.w),
                           CustomText(
-                            color: AppColors.orangeColor,
-                            fontSize: 14.h,
-                            fontWeight: FontWeight.w600,
                             text: eventBadge!,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.orangeColor,
                           ),
                         ],
                       ),
