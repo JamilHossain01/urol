@@ -190,7 +190,7 @@ class _EventScreenViewState extends State<EventScreenView> {
                             "${event.date?.month ?? ''}/${event.date?.day ?? ''}\n${event.date?.year ?? ''}",
                         title: customEllipsisText(
                           event.name ?? "Unnamed Event",
-                          wordLimit: 5,
+                          wordLimit: 3,
                         ),
                         org: event.type ?? "",
                         location:

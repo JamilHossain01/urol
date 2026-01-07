@@ -1,3 +1,4 @@
+import 'package:calebshirthum/common%20widget/custom_elipse_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -83,7 +84,7 @@ class EventCardWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: CustomText(
-                  text: title,
+                  text: customEllipsisText(title,wordLimit: 2),
                   textAlign: TextAlign.start,
                   maxLines: 7,
                   overflow: TextOverflow.ellipsis,

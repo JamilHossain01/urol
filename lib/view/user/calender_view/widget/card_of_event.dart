@@ -165,6 +165,7 @@ class CardOfEvent extends StatelessWidget {
                     children: [
                       Expanded(
                         child: CustomText(
+                          textAlign: TextAlign.start,
                           text: location,
                           fontSize: 12.sp,
                           color: Color(0xFF686868),

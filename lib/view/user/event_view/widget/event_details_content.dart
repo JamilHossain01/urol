@@ -95,6 +95,7 @@ class EventDetailsContent extends StatelessWidget {
             SizedBox(width: 8.w),
             Expanded(
               child: CustomText(
+                textAlign: TextAlign.start,
                 text: location,
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
@@ -113,12 +114,14 @@ class EventDetailsContent extends StatelessWidget {
             _infoCard(
               icon: Icons.event,
               title: "Event Type",
-              value: eventType, color: Colors.black,
+              value: eventType,
+              color: Colors.black,
             ),
             _infoCard(
               icon: Icons.attach_money,
               title: "Reg. Fee",
-              value: registrationFee, color: Colors.black,
+              value: registrationFee,
+              color: Colors.black,
             ),
           ],
         ),
@@ -132,12 +135,14 @@ class EventDetailsContent extends StatelessWidget {
             _infoCard(
               icon: Icons.data_exploration_outlined,
               title: "Days Left",
-              value: day, color: Colors.black,
+              value: day,
+              color: Colors.black,
             ),
             _infoCard(
               icon: Icons.access_alarm,
               title: "Status",
-              value: staus, color: staus == "Open" ? Colors.green : Colors.red,
+              value: staus,
+              color: staus == "Open" ? Colors.green : Colors.red,
             ),
           ],
         ),
@@ -224,7 +229,7 @@ class EventDetailsContent extends StatelessWidget {
               text: value,
               fontSize: 15.sp,
               fontWeight: FontWeight.w700,
-              color:  color ?? Colors.black87,
+              color: color ?? Colors.black87,
             ),
           ],
         ),
