@@ -211,7 +211,7 @@ class _SignUpViewState extends State<SignUpView> {
                 showObscure: false,
                 keyboardType: TextInputType.phone,
                 errorText: _errorText,
-                onChanged: _onPhoneChanged, // realtime validation
+                onChanged: _onPhoneChanged,
               ),
 
               SizedBox(height: 10),
