@@ -218,17 +218,12 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
       return;
     }
 
-    if (!_validateSchedules(openMatSchedules)) {
-      CustomToast.showToast("Complete open mat schedules", isError: true);
-
-      return;
-    }
-
     final openMatConverted = openMatSchedules
+        .where((s) => s['day'] != null && s['from'] != null && s['to'] != null)
         .map((s) => {
-              'day': s['day'],
-              'from': _convertTimeToMinutes(s['from']),
-              'to': _convertTimeToMinutes(s['to']),
+              'day': s['day'] as String,
+              'from': _convertTimeToMinutes(s['from'] as String),
+              'to': _convertTimeToMinutes(s['to'] as String),
             })
         .toList();
 

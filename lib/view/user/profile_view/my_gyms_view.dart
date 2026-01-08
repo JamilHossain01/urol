@@ -1,5 +1,6 @@
 import 'package:calebshirthum/common%20widget/custom_app_bar_widget.dart';
 import 'package:calebshirthum/common%20widget/custom%20text/custom_text_widget.dart';
+import 'package:calebshirthum/common%20widget/custom_elipse_text.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/custom_loader.dart';
 import 'package:calebshirthum/view/user/location_view/widgets/gym_preview_card.dart';
@@ -120,7 +121,9 @@ class _MyGymsViewState extends State<MyGymsView> {
                   showDelete: true,
                   showEdit: true,
                   gymName: gym.name ?? "Unnamed Gym",
-                  location: "${gym.city ?? ''}, ${gym.state ?? ''}, ${gym.street ?? ''}",
+                  location: customEllipsisText(
+                      "${gym.city ?? ''}, ${gym.state ?? ''}, ${gym.street ?? ''}",
+                      wordLimit: 4),
                   image: imageUrl,
                   categories: gym.disciplines,
                 ),
