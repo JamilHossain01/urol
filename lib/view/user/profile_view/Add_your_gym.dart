@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/custom_toast.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/add_class_schedule_widget.dart';
+import 'package:calebshirthum/view/user/profile_view/widgets/mat_schdule_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -62,7 +63,7 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
   File? taxDocumentFile;
 
   List<Map<String, dynamic>> openMatSchedules = [
-    {'day': null, 'from': null, 'to': null}
+    {"name": null, 'from': null, 'to': null}
   ];
 
   List<Map<String, dynamic>> classSchedules = [
@@ -420,37 +421,122 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
                         instagramController: _instagramController,
                       ),
 
-                      /// Open Mat Schedule
-                      ...openMatSchedules.asMap().entries.map((entry) {
-                        int index = entry.key;
-                        var item = entry.value;
+                      // open Mat Schedule
+                      if (openMatSchedules.isNotEmpty)
+                        Column(
+                          children: [
+                            // Class Schedule Widget
+                            MatScheduleWidgetWidget(
+                              days: _days,
+                              times: _times,
+                              onScheduleAdded: (schedule) {
+                                setState(() {
+                                  openMatSchedules.add({
+                                    'day': schedule.day,
+                                    'from': schedule.startTime,
+                                    'to': schedule.endTime,
+                                  });
+                                });
+                              },
+                            ),
 
-                        return OpenMatScheduleWidget(
-                          addCC: index == openMatSchedules.length - 1
-                              ? 'Add More Days'
-                              : null,
-                          selectedDay: item['day'],
-                          startTime: item['from'],
-                          endTime: item['to'],
-                          days: _days,
-                          times: _times,
-                          onDayChanged: (value) =>
-                              setState(() => item['day'] = value),
-                          onStartTimeChanged: (value) =>
-                              setState(() => item['from'] = value),
-                          onEndTimeChanged: (value) =>
-                              setState(() => item['to'] = value),
-                          onAddMoreDays: () => setState(() {
-                            openMatSchedules
-                                .add({'day': null, 'from': null, 'to': null});
-                          }),
-                          onRemove: openMatSchedules.length > 1
-                              ? () => setState(() {
-                                    openMatSchedules.removeAt(index);
-                                  })
-                              : null,
-                        );
-                      }),
+                            // Display schedules only if list is not empty
+                            if (openMatSchedules.isNotEmpty)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: openMatSchedules
+                                    .asMap()
+                                    .entries
+                                    .map((entry) {
+                                  final index = entry.key;
+                                  final c = entry.value;
+
+                                  // Safety check
+                                  if (c['day'] == null ||
+                                      c['from'] == null ||
+                                      c['to'] == null) {
+                                    return const SizedBox();
+                                  }
+
+                                  return Container(
+                                    margin: EdgeInsets.symmetric(vertical: 6.h),
+                                    padding: EdgeInsets.all(12.w),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12.r),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.05),
+                                          blurRadius: 8,
+                                          offset: const Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // Leading icon
+                                        Container(
+                                          padding: EdgeInsets.all(8.w),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.mainColor,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Icon(
+                                            Icons.schedule,
+                                            size: 18.sp,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+
+                                        Gap(12.w),
+
+                                        // Schedule info
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Gap(4.h),
+                                              Text(
+                                                "${c['day']} • ${c['from']} – ${c['to']}",
+                                                style: TextStyle(
+                                                  fontSize: 13.sp,
+                                                  color: Colors.grey[600],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                        // Delete action
+                                        InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          onTap: () {
+                                            setState(() {
+                                              classSchedules.removeAt(index);
+                                            });
+                                          },
+                                          child: Padding(
+                                            padding: EdgeInsets.all(6.w),
+                                            child: Icon(
+                                              Icons.delete_outline,
+                                              color: Colors.redAccent,
+                                              size: 20.sp,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                          ],
+                        ),
+
+                      SizedBox(height: 20.h),
 
                       // Class Schedule Widget
 
