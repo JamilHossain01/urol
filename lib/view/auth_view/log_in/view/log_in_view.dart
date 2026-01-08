@@ -32,7 +32,7 @@ class LogInView extends StatelessWidget {
                 ),
                 SizedBox(height: 40.h),
                 Image.asset(
-                  "assets/images/new_logo.png",
+                  "assets/icon/logo_with_app.png",
                   width: 210.w,
                   height: 210.h,
                 ),
