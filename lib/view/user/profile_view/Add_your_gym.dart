@@ -516,7 +516,7 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
                                               BorderRadius.circular(30),
                                           onTap: () {
                                             setState(() {
-                                              classSchedules.removeAt(index);
+                                              openMatSchedules.removeAt(index);
                                             });
                                           },
                                           child: Padding(
