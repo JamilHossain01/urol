@@ -9,7 +9,9 @@ import '../../../../uitilies/app_colors.dart';
 import '../../profile_view/widgets/location_widget.dart';
 
 class FilterBottomSheet extends StatefulWidget {
-  const FilterBottomSheet({Key? key}) : super(key: key);
+  final double distance;
+
+  const FilterBottomSheet({Key? key, required this.distance}) : super(key: key);
 
   @override
   State<FilterBottomSheet> createState() => _FilterBottomSheetState();
@@ -32,6 +34,9 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   // -------------------------
   double? _lat;
   double? _long;
+
+  // Initialize _distance with a default value (e.g., 2.0)
+  double _distance = 2.0; // Default value for the distance
 
   @override
   void dispose() {
@@ -93,48 +98,70 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 "Tournament",
                 "Seminar"
               ]
-                  .map(
-                    (type) => ChoiceChip(
-                      backgroundColor: const Color(0xFFF5F5F5),
-                      label: CustomText(
-                        text: type,
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w500,
-                        color: selectedEventType == type
-                            ? Colors.white
-                            : Colors.black,
-                      ),
-                      selected: selectedEventType == type,
-                      selectedColor: AppColors.mainColor,
-                      onSelected: (_) {
-                        setState(() {
-                          selectedEventType = type;
-                        });
-                      },
-                    ),
-                  )
+                  .map((type) => Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              // Toggle selection
+                              selectedEventType =
+                                  selectedEventType == type ? null : type;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 16),
+                            decoration: BoxDecoration(
+                              color: selectedEventType == type
+                                  ? AppColors.mainColor
+                                  : const Color(0xFFF5F5F5),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: selectedEventType == type
+                                    ? AppColors.mainColor
+                                    : Colors.grey, // Border color change
+                              ),
+                            ),
+                            child: CustomText(
+                              text: type,
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w500,
+                              color: selectedEventType == type
+                                  ? Colors.white
+                                  : Colors.black, // Text color change
+                            ),
+                          ),
+                        ),
+                      ))
                   .toList(),
             ),
 
             Gap(10.h),
 
             // Location Widget
-            LocationWidget(
-              zipCode: false,
-              streetAddressController: _streetAddressController,
-              cityController: _cityController,
-              stateController: _stateController,
-              zipCodeController: _zipCodeController,
-              lat: _lat,
-              long: _long,
-              onLocationChanged: (lat, long) {
-                setState(() {
-                  _lat = lat;
-                  _long = long;
-                });
-                debugPrint("Selected Lat: $lat, Lng: $long");
-              },
+            /// Distance Slider
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomText(text: "Location Distance", fontSize: 16.sp),
+                CustomText(text: "Miles", fontSize: 14.sp),
+              ],
             ),
+            Row(
+              children: [
+                Expanded(
+                  child: Slider(
+                    value: _distance,
+                    min: 1,
+                    max: 100,
+                    activeColor: AppColors.mainColor,
+                    onChanged: (val) => setState(() => _distance = val),
+                  ),
+                ),
+                CustomText(text: "${_distance.toInt()}m", fontSize: 12.sp),
+              ],
+            ),
+
             Gap(10.h),
             // Apply Button
             CustomButtonWidget(

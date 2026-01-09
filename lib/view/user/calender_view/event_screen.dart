@@ -235,7 +235,7 @@ class _EventScreenViewState extends State<EventScreenView> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
       ),
       builder: (context) {
-        return const FilterBottomSheet();
+        return const FilterBottomSheet(distance: 2,);
       },
     );
 

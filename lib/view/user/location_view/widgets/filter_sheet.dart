@@ -81,27 +81,43 @@ class _FilterSheetState extends State<FilterSheet> {
           Wrap(
             spacing: 8.w,
             children: _allCategories
-                .map(
-                  (cat) => ChoiceChip(
-                backgroundColor: AppColors.mainColor,
-                selectedColor: AppColors.mainColor,
-                label: CustomText(
-                  text: cat,
-                  fontSize: 12.sp,
-                  color: Colors.white, // all labels white
-                ),
-                selected: _categories.contains(cat),
-                onSelected: (_) {
-                  setState(() {
-                    if (_categories.contains(cat)) {
-                      _categories.remove(cat);
-                    } else {
-                      _categories.add(cat);
-                    }
-                  });
-                },
-              ),
-            )
+                .map((cat) => Padding(
+                      padding: EdgeInsets.only(top: 5),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            if (_categories.contains(cat)) {
+                              _categories
+                                  .remove(cat); // Remove if already selected
+                            } else {
+                              _categories.add(cat); // Add if not selected
+                            }
+                          });
+                        },
+                        child: Container(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                          decoration: BoxDecoration(
+                            color: _categories.contains(cat)
+                                ? AppColors.mainColor
+                                : Colors.white, // Background color change
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: _categories.contains(cat)
+                                  ? AppColors.mainColor
+                                  : Colors.grey, // Border color change
+                            ),
+                          ),
+                          child: CustomText(
+                            text: cat,
+                            fontSize: 12.sp,
+                            color: _categories.contains(cat)
+                                ? Colors.white
+                                : Colors.black, // Text color change
+                          ),
+                        ),
+                      ),
+                    ))
                 .toList(),
           ),
           Gap(15.h),
