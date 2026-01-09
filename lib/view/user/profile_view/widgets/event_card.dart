@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../uitilies/app_colors.dart';
 import '../../../../uitilies/app_images.dart';
+import '../../event_view/recent_event_all_view.dart';
 import '../add_compition_view.dart';
 
 class EventCard extends StatelessWidget {
@@ -15,6 +16,7 @@ class EventCard extends StatelessWidget {
   final Color? medalColor;
   final Widget medalIcon;
   final bool showCompetition;
+  final bool? showAllResult;
 
   /// 🔴 NEW
   final bool showDeleteButton;
@@ -34,6 +36,7 @@ class EventCard extends StatelessWidget {
     /// 🔴 NEW
     this.showDeleteButton = false,
     this.onDelete,
+    this.showAllResult,
   }) : super(key: key);
 
   @override
@@ -130,6 +133,23 @@ class EventCard extends StatelessWidget {
                     child: Center(
                       child: CustomText(
                         text: "Add Competition Result",
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.mainColor,
+                      ),
+                    ),
+                  ),
+                ],
+                if (showAllResult!) ...[
+                  SizedBox(height: 10.h),
+                  Divider(color: Colors.black.withOpacity(0.1)),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => RecentEventAllView());
+                    },
+                    child: Center(
+                      child: CustomText(
+                        text: "See All Results",
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w600,
                         color: AppColors.mainColor,

@@ -373,6 +373,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: EventCard(
+                      showAllResult: false,
                       medalColor: getMedalColor(competition.result),
                       medalIcon: getMedalIcon(competition.result),
                       showCompetition: true,

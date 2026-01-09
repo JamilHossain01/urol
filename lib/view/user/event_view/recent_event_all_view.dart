@@ -94,8 +94,10 @@ class _RecentEventAllViewState extends State<RecentEventAllView> {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: EventCard(
+                showAllResult: false,
                 onDelete: () {
-                  _deleteEventController.deleteResultEvent(eventResultId: item.id);
+                  _deleteEventController.deleteResultEvent(
+                      eventResultId: item.id);
                 },
                 showDeleteButton: true,
                 medalColor: getMedalColor(item.result),

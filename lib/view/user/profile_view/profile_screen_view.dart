@@ -222,7 +222,8 @@ class _ProfileViewState extends State<ProfileView> {
                                     ? Colors.brown
                                     : Colors.black45,
 
-                        showCompetition: true,
+                        showCompetition: false,
+                        showAllResult: true,
 
                         title: _getProfileController
                                 .profile.value.data?.competition?.eventName ??
