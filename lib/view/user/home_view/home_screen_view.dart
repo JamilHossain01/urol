@@ -23,6 +23,7 @@ import '../../../uitilies/custom_loader.dart';
 import '../event_view/controller/get_all_event_result_controller.dart';
 import '../event_view/recent_event_all_view.dart';
 import '../location_view/location_screen_view.dart';
+import '../profile_view/add_compition_view.dart';
 import '../profile_view/widgets/event_card.dart';
 import 'controller/my_profile_controller.dart';
 import 'controller/unread_notification_controller.dart';
@@ -323,6 +324,27 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                       ),
                     ],
                   ),
+                ],
+              ),
+            ),
+            SizedBox(height: 10.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => AddCompetitionResultScreen());
+                    },
+                    child: CustomText(
+                      color: AppColors.mainColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 10.h,
+                      text: "Add Competition Result",
+                    ),
+                  ),
                   GestureDetector(
                     onTap: () {
                       Get.to(() => RecentEventAllView());
@@ -376,7 +398,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                       showAllResult: false,
                       medalColor: getMedalColor(competition.result),
                       medalIcon: getMedalIcon(competition.result),
-                      showCompetition: true,
+                      showCompetition: false,
                       title: competition.eventName ?? "",
                       date: CustomDateFormatter.formatDate(
                         competition.eventDate?.toIso8601String() ?? "",
