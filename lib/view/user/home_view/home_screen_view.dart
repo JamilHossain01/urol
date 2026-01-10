@@ -20,6 +20,7 @@ import '../../../common widget/custom_date_format.dart';
 import '../../../common widget/not_found_widget.dart';
 import '../../../uitilies/app_images.dart';
 import '../../../uitilies/custom_loader.dart';
+import '../dashboard_view/bottom_navigation_view.dart';
 import '../event_view/controller/get_all_event_result_controller.dart';
 import '../event_view/recent_event_all_view.dart';
 import '../location_view/location_screen_view.dart';
@@ -242,13 +243,14 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Get.to(() => MapScreenView());
+                          Get.offAll(() => DashboardView(initialIndex: 2));
+                          print("tap===");
                         },
                         child: CustomText(
                           color: AppColors.mainColor,
                           fontWeight: FontWeight.w600,
                           fontSize: 10.h,
-                          text: "View All on Map",
+                          text: "View All Events",
                         ),
                       ),
                     ],

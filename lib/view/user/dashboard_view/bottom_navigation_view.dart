@@ -12,12 +12,16 @@ import '../../../uitilies/app_colors.dart';
 import '../location_view/location_screen_view.dart';
 
 class DashboardView extends StatefulWidget {
+  final int? initialIndex;
+
+  const DashboardView({super.key, this.initialIndex});
+
   @override
   _BottomNavigationState createState() => _BottomNavigationState();
 }
 
 class _BottomNavigationState extends State<DashboardView> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
 
   List<Widget> _pages = [
     HomeScreenView(),
@@ -25,6 +29,12 @@ class _BottomNavigationState extends State<DashboardView> {
     EventScreenView(),
     ProfileView()
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex ?? 0;
+  }
 
   void _onItemTapped(int index) {
     setState(() {

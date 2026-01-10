@@ -195,18 +195,18 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
 
     // Validate required documents
     if (utilityBillFile == null) {
-      CustomToast.showToast("Please upload your Utility Bill", isError: true);
+      CustomToast.showToast("Please upload your utility bill document", isError: true);
 
       return;
     }
     if (businessLicenseFile == null) {
-      CustomToast.showToast("Please upload your Business License",
+      CustomToast.showToast("Please upload your valid business license document",
           isError: true);
 
       return;
     }
     if (taxDocumentFile == null) {
-      CustomToast.showToast("Please upload your Tax Document", isError: true);
+      CustomToast.showToast("Please upload your valid tax document", isError: true);
 
       return;
     }
