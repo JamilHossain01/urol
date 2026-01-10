@@ -250,7 +250,7 @@ class _ClassScheduleWidgetState extends State<ClassScheduleWidget> {
                   iconColor: const Color(0xFF989898),
                   text: "Save Classes",
                   fontSize: 14,
-                  textColor: const Color(0xFF989898),
+                  textColor: AppColors.mainColor,
                   direction: DottedBoxDirection.row,
                   spacing: 8,
                 ),

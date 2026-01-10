@@ -233,7 +233,7 @@ class _MatScheduleWidgetWidgetState extends State<MatScheduleWidgetWidget> {
                   iconColor: const Color(0xFF989898),
                   text: "Add More Schedule",
                   fontSize: 14,
-                  textColor: const Color(0xFF989898),
+                  textColor: AppColors.mainColor,
                   direction: DottedBoxDirection.row,
                   spacing: 8,
                 ),
