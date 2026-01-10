@@ -96,7 +96,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 "ADCC",
                 "Local",
                 "Tournament",
-                "Seminar"
+                "Seminar",
+                "Superfight"
               ]
                   .map((type) => Padding(
                         padding: EdgeInsets.only(top: 10),
