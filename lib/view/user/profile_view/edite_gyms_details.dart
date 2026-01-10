@@ -592,12 +592,11 @@ class _EditGymViewState extends State<EditGymView> {
                                   final index = entry.key;
                                   final c = entry.value;
 
-                                  // Safety check to avoid null
                                   if (c['name'] == null ||
                                       c['day'] == null ||
                                       c['from'] == null ||
                                       c['to'] == null) {
-                                    return const SizedBox(); // Skip rendering null items
+                                    return const SizedBox();
                                   }
 
                                   return Padding(
