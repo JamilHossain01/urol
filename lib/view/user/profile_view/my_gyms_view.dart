@@ -77,7 +77,12 @@ class _MyGymsViewState extends State<MyGymsView> {
                 },
                 child: GymPreviewCard(
                   editTap: () {
-                    Get.to(() => EditGymView(
+                    Get.off(() => EditGymView(
+                          imageId: gym.images
+                              .map((e) => e.id)
+                              .where((url) => url != null)
+                              .cast<String>()
+                              .toList(),
                           gymClassSchedules: gym.classSchedules
                               ?.map((s) => {
                                     'day': s.day,

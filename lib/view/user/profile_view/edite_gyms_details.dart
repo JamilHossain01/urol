@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:calebshirthum/uitilies/app_colors.dart';
+import 'package:calebshirthum/view/user/profile_view/controller/delete_gym_controller.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/add_class_schedule_widget.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/mat_schdule_widget.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +12,10 @@ import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_app_bar_widget.dart';
 import '../../../common widget/custom_button_widget.dart';
 import '../../../common widget/dot_border_container.dart';
+import '../../../common widget/format_min_to_hrs_min.dart';
 import '../../../uitilies/custom_loader.dart';
 import '../location_view/widgets/upload_card.dart';
+import 'controller/delete_gym_details_image_controller.dart';
 import 'controller/edit_gym_controller.dart';
 import 'widgets/basic_info_widget.dart';
 import 'widgets/contact_info_widget.dart';
@@ -40,6 +43,7 @@ class EditGymView extends StatefulWidget {
   final String gymInstagram;
   final String gymClassName;
   final List<String>? gymImages;
+  final List<String>? imageId;
   final List<String>? gymDisciplines;
   final List<Map<String, dynamic>>? gymOpenMatSchedules;
   final List<Map<String, dynamic>>? gymClassSchedules;
@@ -68,6 +72,7 @@ class EditGymView extends StatefulWidget {
     this.gymDisciplines,
     this.gymOpenMatSchedules,
     this.gymClassSchedules,
+    this.imageId,
   });
 
   @override
@@ -77,6 +82,9 @@ class EditGymView extends StatefulWidget {
 class _EditGymViewState extends State<EditGymView> {
   final _formKey = GlobalKey<FormState>();
   final _editGymController = Get.put(EditGymController());
+
+  final DeleteGymImageController _deleteGymImageController =
+      Get.put(DeleteGymImageController());
 
   List<String> _existingImageUrls = [];
   List<File> _selectedImages = [];
@@ -190,14 +198,13 @@ class _EditGymViewState extends State<EditGymView> {
     _selectedDisciplines = List<String>.from(widget.gymDisciplines ?? []);
     _existingImageUrls = widget.gymImages ?? [];
 
-    // Initialize schedules as Strings
     openMatSchedules = widget.gymOpenMatSchedules != null &&
             widget.gymOpenMatSchedules!.isNotEmpty
         ? widget.gymOpenMatSchedules!
             .map((s) => {
                   'day': s['day']?.toString(),
-                  'from': s['from']?.toString(),
-                  'to': s['to']?.toString(),
+                  'from': toSafeTime(s['from']),
+                  'to': toSafeTime(s['to']),
                 })
             .toList()
         : [
@@ -210,8 +217,8 @@ class _EditGymViewState extends State<EditGymView> {
                 .map((s) => <String, String?>{
                       'day': s['day']?.toString(),
                       'name': s['name']?.toString() ?? widget.gymClassName,
-                      'from': s['from']?.toString(),
-                      'to': s['to']?.toString(),
+                      'from': toSafeTime(s['from']),
+                      'to': toSafeTime(s['to']),
                     })
                 .toList()
             : [
@@ -224,39 +231,20 @@ class _EditGymViewState extends State<EditGymView> {
               ];
   }
 
-  int? convertTimeStringToMinutes(dynamic time) {
-    if (time == null) return null;
+  int? convertTimeStringToMinutes(String? time) {
+    if (time == null || time.isEmpty) return null;
 
-    // If it's already an int, just return it
-    if (time is int) return time;
-
-    // If it's numeric string like "870"
-    if (time is String && int.tryParse(time) != null) {
-      return int.parse(time);
+    // HH:mm format
+    if (RegExp(r'^\d{2}:\d{2}$').hasMatch(time)) {
+      final parts = time.split(':');
+      final h = int.parse(parts[0]);
+      final m = int.parse(parts[1]);
+      return h * 60 + m;
     }
 
-    if (time is String && time.contains(' ')) {
-      try {
-        final parts = time.split(' ');
-        if (parts.length != 2) return null;
-
-        final hm = parts[0].split(':');
-        if (hm.length != 2) return null;
-
-        int hour = int.parse(hm[0]);
-        int minute = int.parse(hm[1]);
-        String period = parts[1];
-
-        if (period == 'PM' && hour != 12) hour += 12;
-        if (period == 'AM' && hour == 12) hour = 0;
-
-        return hour * 60 + minute;
-      } catch (e) {
-        return null;
-      }
-    }
-
-    return null;
+    // already minute string
+    final minutes = int.tryParse(time);
+    return minutes;
   }
 
   Future<void> _pickImages() async {
@@ -271,20 +259,28 @@ class _EditGymViewState extends State<EditGymView> {
 
   Future<void> _submitGym() async {
     final List<Map<String, dynamic>> openMatConverted = openMatSchedules
+        .where((s) => s['day'] != null && s['from'] != null && s['to'] != null)
         .map((s) => {
               'day': s['day'],
               'from': convertTimeStringToMinutes(s['from']),
               'to': convertTimeStringToMinutes(s['to']),
             })
+        .where((s) => s['from'] != null && s['to'] != null)
         .toList();
 
     final List<Map<String, dynamic>> classConverted = classSchedules
+        .where((s) =>
+            s['day'] != null &&
+            s['name'] != null &&
+            s['from'] != null &&
+            s['to'] != null)
         .map((s) => {
               'name': s['name'],
               'day': s['day'],
               'from': convertTimeStringToMinutes(s['from']),
               'to': convertTimeStringToMinutes(s['to']),
             })
+        .where((s) => s['from'] != null && s['to'] != null)
         .toList();
 
     await _editGymController.editGym(
@@ -361,10 +357,24 @@ class _EditGymViewState extends State<EditGymView> {
                                     top: 0,
                                     right: 0,
                                     child: GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          _existingImageUrls.remove(url);
-                                        });
+                                      onTap: () async {
+                                        if (_existingImageUrls.contains(url)) {
+                                          final imageIdToDelete = widget
+                                                  .imageId?[
+                                              _existingImageUrls.indexOf(url)];
+
+                                          if (imageIdToDelete != null) {
+                                            await _deleteGymImageController
+                                                .deleteGymImage(
+                                              gymId: widget.gymId,
+                                              imageId: imageIdToDelete,
+                                            );
+
+                                            setState(() {
+                                              _existingImageUrls.remove(url);
+                                            });
+                                          }
+                                        }
                                       },
                                       child: Container(
                                         decoration: const BoxDecoration(
@@ -592,6 +602,7 @@ class _EditGymViewState extends State<EditGymView> {
                                   final index = entry.key;
                                   final c = entry.value;
 
+                                  // Safety check
                                   if (c['name'] == null ||
                                       c['day'] == null ||
                                       c['from'] == null ||
@@ -599,27 +610,83 @@ class _EditGymViewState extends State<EditGymView> {
                                     return const SizedBox();
                                   }
 
-                                  return Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 4.h),
+                                  return Container(
+                                    margin: EdgeInsets.symmetric(vertical: 6.h),
+                                    padding: EdgeInsets.all(12.w),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12.r),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.05),
+                                          blurRadius: 8,
+                                          offset: const Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Expanded(
-                                          child: Text(
-                                            "${c['name']} - ${c['day']} (${c['from']} to ${c['to']})",
-                                            style: TextStyle(fontSize: 14.sp),
+                                        // Leading icon
+                                        Container(
+                                          padding: EdgeInsets.all(8.w),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.mainColor,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Icon(
+                                            Icons.schedule,
+                                            size: 18.sp,
+                                            color: Colors.white,
                                           ),
                                         ),
-                                        IconButton(
-                                          icon: Icon(Icons.delete,
-                                              color: Colors.red, size: 20.sp),
-                                          onPressed: () {
+
+                                        Gap(12.w),
+
+                                        // Schedule info
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                c['name']!,
+                                                style: TextStyle(
+                                                  fontSize: 15.sp,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.black87,
+                                                ),
+                                              ),
+                                              Gap(4.h),
+                                              Text(
+                                                "${c['day']} • ${c['from']} – ${c['to']}",
+                                                style: TextStyle(
+                                                  fontSize: 13.sp,
+                                                  color: Colors.grey[600],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                        // Delete action
+                                        InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          onTap: () {
                                             setState(() {
                                               classSchedules.removeAt(index);
                                             });
                                           },
+                                          child: Padding(
+                                            padding: EdgeInsets.all(6.w),
+                                            child: Icon(
+                                              Icons.delete_outline,
+                                              color: Colors.redAccent,
+                                              size: 20.sp,
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -628,6 +695,7 @@ class _EditGymViewState extends State<EditGymView> {
                               ),
                           ],
                         ),
+                      Gap(5.h),
 
                       DisciplinesWidget(
                         selectedDisciplines: _selectedDisciplines,
