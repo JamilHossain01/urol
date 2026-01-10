@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/view/user/profile_view/controller/delete_gym_controller.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/add_class_schedule_widget.dart';
@@ -348,10 +349,16 @@ class _EditGymViewState extends State<EditGymView> {
                                 children: [
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
-                                    child: Image.network(url,
-                                        height: 80,
-                                        width: 80,
-                                        fit: BoxFit.cover),
+                                    child: CachedNetworkImage(
+                                      imageUrl: url,
+                                      height: 80,
+                                      width: 80,
+                                      fit: BoxFit.cover,
+                                      placeholder: (context, url) =>
+                                          CustomLoader(),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
+                                    ),
                                   ),
                                   Positioned(
                                     top: 0,
