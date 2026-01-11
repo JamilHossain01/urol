@@ -129,7 +129,7 @@ class _MyGymsViewState extends State<MyGymsView> {
                   },
                   showDelete: true,
                   showEdit: true,
-                  gymName: gym.name ?? "Unnamed Gym",
+                  gymName: customEllipsisText(gym.name ?? "Unnamed Gym",wordLimit: 3),
                   location: customEllipsisText(
                       "${gym.city ?? ''}, ${gym.state ?? ''}, ${gym.street ?? ''}",
                       wordLimit: 4),

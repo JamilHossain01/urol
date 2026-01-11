@@ -20,29 +20,7 @@ class _FriendsScreenState extends State<FriendsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  final List<Map<String, dynamic>> friends = [
-    {
-      'name': 'Caleb Shirthum',
-      'gym': 'The Arena Combat Academy',
-      'disciplines': ['Jiu Jitsu', 'Wrestling'],
-      'imageUrl':
-          'https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
-    },
-    {
-      'name': 'Sarah Martinez',
-      'gym': 'Elite Combat Training',
-      'disciplines': ['Jiu Jitsu', 'Wrestling', 'Judo'],
-      'imageUrl':
-          'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
-    },
-    {
-      'name': 'Marcus Johnson',
-      'gym': 'Iron Fist Gym',
-      'disciplines': ['Jiu Jitsu', 'MMA', 'Wrestling'],
-      'imageUrl':
-          'https://images.unsplash.com/photo-1530268729831-4f9721fa1d75?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max',
-    },
-  ];
+
 
   @override
   void initState() {

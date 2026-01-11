@@ -87,7 +87,8 @@ class FindProfileView extends StatelessWidget {
               if (eventStatus != null) _buildEventSection(),
 
               Obx(() {
-                return addFriendController.isLoading.value == true || _unfriendController.isLoading.value
+                return addFriendController.isLoading.value == true ||
+                        _unfriendController.isLoading.value
                     ? CustomLoader()
                     : Padding(
                         padding: EdgeInsets.symmetric(
@@ -116,6 +117,25 @@ class FindProfileView extends StatelessWidget {
 
   /// 🧩 Profile Info Section
   Widget _buildProfileInfo() {
+    String formatWeight(String? weight) {
+      if (weight == null) return '';
+
+      return weight.toLowerCase().replaceAll('kg', '').trim();
+    }
+
+    String formatHeight(String? heightCm) {
+      if (heightCm == null || heightCm.isEmpty) return '';
+
+      final cm = double.tryParse(heightCm);
+      if (cm == null) return '';
+
+      final totalInches = cm / 2.54;
+      final feet = totalInches ~/ 12;
+      final inches = (totalInches % 12).round();
+
+      return "$feet' $inches\"";
+    }
+
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16.w),
       padding: EdgeInsets.all(16.w),
@@ -158,8 +178,12 @@ class FindProfileView extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _infoTile(AppImages.scale, "Height", height),
-              _infoTile(AppImages.kg, "Weight", "$weight lb"),
+              _infoTile(
+                AppImages.scale,
+                "Height",
+                formatHeight(height),
+              ),
+              _infoTile(AppImages.kg, "Weight", "${formatWeight(weight)} lb"),
             ],
           ),
 

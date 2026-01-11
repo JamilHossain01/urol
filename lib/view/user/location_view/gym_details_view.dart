@@ -413,7 +413,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
       width: double.infinity,
       fit: BoxFit.cover,
       placeholder: (context, url) =>
-          const Center(child: CircularProgressIndicator()),
+          Center(child: CustomLoader()),
       errorWidget: (context, url, error) =>
           Image.asset(AppImages.gym2, fit: BoxFit.fill),
     );
