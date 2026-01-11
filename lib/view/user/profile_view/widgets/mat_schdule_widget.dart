@@ -1,4 +1,5 @@
 import 'package:calebshirthum/common%20widget/custom_button_widget.dart';
+import 'package:calebshirthum/uitilies/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -195,49 +196,38 @@ class _MatScheduleWidgetWidgetState extends State<MatScheduleWidgetWidget> {
               SizedBox(height: 12.h),
               Gap(12.h),
 
-              GestureDetector(
-                onTap: () {
-                  if (selectedDay == null ||
-                      startTime == null ||
-                      endTime == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Please fill all fields")),
+              CustomButtonWidget(
+                  btnColor: AppColors.mainColor,
+                  btnText: "Add More",
+                  onTap: () {
+                    if (selectedDay == null ||
+                        startTime == null ||
+                        endTime == null) {
+                      CustomToast.showToast("Please fill open mat all fields",
+                          isError: true);
+
+                      return;
+                    }
+
+                    final schedule = MatScheduleWidget(
+                      className: classNameController.text,
+                      day: selectedDay!,
+                      startTime: startTime!,
+                      endTime: endTime!,
                     );
-                    return;
-                  }
 
-                  final schedule = MatScheduleWidget(
-                    className: classNameController.text,
-                    day: selectedDay!,
-                    startTime: startTime!,
-                    endTime: endTime!,
-                  );
+                    // Clear inputs
+                    classNameController.clear();
+                    selectedDay = null;
+                    startTime = null;
+                    endTime = null;
 
-                  // Clear inputs
-                  classNameController.clear();
-                  selectedDay = null;
-                  startTime = null;
-                  endTime = null;
-
-                  // Notify parent
-                  if (widget.onScheduleAdded != null) {
-                    widget.onScheduleAdded!(schedule);
-                  }
-                },
-                child: DottedBorderBox(
-                  height: 30.h,
-                  width: double.infinity,
-                  borderColor: const Color(0xFF989898),
-                  borderWidth: 2,
-                  iconSize: 24,
-                  iconColor: const Color(0xFF989898),
-                  text: "Add More Schedule",
-                  fontSize: 14,
-                  textColor: AppColors.mainColor,
-                  direction: DottedBoxDirection.row,
-                  spacing: 8,
-                ),
-              ),
+                    // Notify parent
+                    if (widget.onScheduleAdded != null) {
+                      widget.onScheduleAdded!(schedule);
+                    }
+                  },
+                  iconWant: false)
             ],
           ),
         ),

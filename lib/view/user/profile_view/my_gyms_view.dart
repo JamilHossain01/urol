@@ -77,7 +77,7 @@ class _MyGymsViewState extends State<MyGymsView> {
                 },
                 child: GymPreviewCard(
                   editTap: () {
-                    Get.off(() => EditGymView(
+                    Get.to(() => EditGymView(
                           imageId: gym.images
                               .map((e) => e.id)
                               .where((url) => url != null)
@@ -118,7 +118,11 @@ class _MyGymsViewState extends State<MyGymsView> {
                           gymFacebook: gym.facebook ?? "",
                           gymInstagram: gym.instagram ?? "",
                           gymClassName: gym.classSchedules.first.name ?? "",
-                        ));
+                        ))?.then((_) {
+                      // 🔄 refresh when coming back
+                      _myGymController.getMyGyms();
+                    });
+                    ;
                   },
                   delete: () {
                     _deleteGymController.deleteGyms(gymId: gym.id.toString());
