@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:calebshirthum/common widget/custom_button_widget.dart';
+import 'package:calebshirthum/common%20widget/custom_elipse_text.dart';
 import 'package:calebshirthum/view/user/location_view/controller/all_map_gym_controller.dart';
 import 'package:calebshirthum/view/user/location_view/widgets/filter_sheet.dart';
 import 'package:calebshirthum/view/user/location_view/widgets/gym_preview_card.dart';
@@ -369,7 +370,8 @@ class _MapScreenViewState extends State<MapScreenView> {
                     });
                   },
                   gymName: selectedGym.name ?? "No Name",
-                  location: "${selectedGym.street ?? ''}",
+                  location: customEllipsisText(selectedGym.street ?? '',
+                      wordLimit: 7),
                   image: selectedGym.images.isNotEmpty
                       ? selectedGym.images.first.url ?? AppImages.gym1
                       : AppImages.gym1,
