@@ -155,18 +155,21 @@ class GymPreviewCard extends StatelessWidget {
   }
 
   Widget _buildChip(String text) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-      decoration: BoxDecoration(
-        color: AppColors.mainColor,
-        borderRadius: BorderRadius.circular(6.r),
-      ),
-      child: CustomText(
-        text: text,
-        fontSize: 12.sp,
-        fontWeight: FontWeight.w500,
-        color: Colors.white,
-      ),
-    );
+    return Padding(
+        padding: EdgeInsets.all(3),
+        child: Container(
+          margin: EdgeInsets.only(right: 4.w),
+          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+          decoration: BoxDecoration(
+            color: AppColors.mainColor,
+            borderRadius: BorderRadius.circular(6.r),
+          ),
+          child: CustomText(
+            text: text,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
+          ),
+        ));
   }
 }
