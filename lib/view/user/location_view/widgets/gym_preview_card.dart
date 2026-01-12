@@ -18,6 +18,7 @@ class GymPreviewCard extends StatelessWidget {
   final bool showDelete;
   final bool showEdit;
   final String? gymId;
+  final Icon? crossIcon;
   final VoidCallback? delete;
   final VoidCallback? editTap;
 
@@ -32,6 +33,7 @@ class GymPreviewCard extends StatelessWidget {
     required this.showEdit,
     this.gymId,
     this.editTap,
+    this.crossIcon,
   }) : super(key: key);
 
   @override
@@ -108,8 +110,9 @@ class GymPreviewCard extends StatelessWidget {
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.white, width: 1),
                           ),
-                          child: Icon(Icons.delete_outline_outlined,
-                              size: 28, color: Colors.white),
+                          child: crossIcon ??
+                              Icon(Icons.delete_outline_outlined,
+                                  size: 28, color: Colors.white),
                         ),
                       ),
                   ],

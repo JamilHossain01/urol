@@ -42,7 +42,7 @@ class _MapScreenViewState extends State<MapScreenView> {
   List<String> selectedCategories = [];
   String searchTerm = "";
   String? selectedGymId;
-  double _zoomLevel = 12.0;
+  double _zoomLevel = 5.0;
 
   LatLng? _currentLocation;
   Set<Annotation> markers = {};
@@ -52,6 +52,8 @@ class _MapScreenViewState extends State<MapScreenView> {
   BitmapDescriptor? customAppleIcon;
 
   final LatLng _fallbackCenter = const LatLng(38.5816, -121.4944);
+
+  bool _isGymPreviewCardVisible = false;
 
   @override
   void initState() {
@@ -147,15 +149,32 @@ class _MapScreenViewState extends State<MapScreenView> {
     final gyms = _allMapGymController.profile.value.data ?? [];
     Set<Annotation> temp = {};
 
+    // Track how many markers are at the same location
+    Map<LatLng, int> locationCounter = {};
+
     for (var gym in gyms) {
       if (gym.location?.coordinates.length == 2) {
         double lon = gym.location!.coordinates[0];
         double lat = gym.location!.coordinates[1];
+        LatLng location = LatLng(lat, lon);
+
+        locationCounter[location] = (locationCounter[location] ?? 0) + 1;
+
+        double offsetX = 0.0;
+        double offsetY = 0.0;
+        int count = locationCounter[location]!;
+
+        if (count > 1) {
+          offsetX = 0.0001 * count;
+          offsetY = 0.0001 * count;
+        }
+
+        LatLng adjustedLocation = LatLng(lat + offsetY, lon + offsetX);
 
         temp.add(
           Annotation(
             annotationId: AnnotationId(gym.id ?? ""),
-            position: LatLng(lat, lon),
+            position: adjustedLocation,
             icon: customAppleIcon!,
             infoWindow: InfoWindow(title: gym.name ?? "Gym"),
             onTap: () => _onMarkerTapped(gym.id ?? ""),
@@ -165,26 +184,30 @@ class _MapScreenViewState extends State<MapScreenView> {
     }
 
     if (!mounted) return;
-    setState(() => markers.addAll(temp));
+    setState(() {
+      markers.addAll(temp);
+    });
   }
 
   void _onMarkerTapped(String gymId) {
     if (!mounted) return;
     setState(() {
       selectedGymId = gymId;
+      _isGymPreviewCardVisible = true;
     });
   }
 
-  void _animateToPosition(LatLng pos, double zoom) {
+  void _animateToPosition(LatLng? pos, double zoom) {
     if (Platform.isIOS && appleMapController != null) {
       appleMapController!.animateCamera(
-        CameraUpdate.newCameraPosition(CameraPosition(target: pos, zoom: zoom)),
+        CameraUpdate.newCameraPosition(
+            CameraPosition(target: pos!, zoom: zoom)),
       );
     } else if (Platform.isAndroid && googleMapController != null) {
       googleMapController!.animateCamera(
         gmap.CameraUpdate.newCameraPosition(
           gmap.CameraPosition(
-            target: gmap.LatLng(pos.latitude, pos.longitude),
+            target: gmap.LatLng(pos!.latitude!, pos.longitude),
             zoom: zoom,
           ),
         ),
@@ -198,8 +221,11 @@ class _MapScreenViewState extends State<MapScreenView> {
 
     if (searchTerm != null && searchTerm.isNotEmpty) {
       final match = gyms.firstWhereOrNull((g) =>
-          g.name?.toLowerCase().contains(searchTerm.toLowerCase()) == true ||
-          g.city?.toLowerCase().contains(searchTerm.toLowerCase()) == true);
+          (g.name?.toLowerCase().contains(searchTerm.toLowerCase()) == true) ||
+          (g.city?.toLowerCase().contains(searchTerm.toLowerCase()) == true) ||
+          (g.state?.toLowerCase().contains(searchTerm.toLowerCase()) == true) ||
+          (g.zipCode?.toLowerCase().contains(searchTerm.toLowerCase()) ==
+              true));
 
       if (match != null && match.location?.coordinates.length == 2) {
         target = LatLng(
@@ -209,6 +235,7 @@ class _MapScreenViewState extends State<MapScreenView> {
       }
     }
 
+    // Fallback center if no match is found
     target ??= _fallbackCenter;
 
     _animateToPosition(target, 12);
@@ -259,14 +286,14 @@ class _MapScreenViewState extends State<MapScreenView> {
   void _zoomIn() {
     if (_zoomLevel < 20) {
       _zoomLevel++;
-      _animateToPosition(_currentLocation ?? _fallbackCenter, _zoomLevel);
+      _animateToPosition(_currentLocation, _zoomLevel);
     }
   }
 
   void _zoomOut() {
     if (_zoomLevel > 5) {
       _zoomLevel--;
-      _animateToPosition(_currentLocation ?? _fallbackCenter, _zoomLevel);
+      _animateToPosition(_currentLocation, _zoomLevel);
     }
   }
 
@@ -322,7 +349,7 @@ class _MapScreenViewState extends State<MapScreenView> {
               hintText: 'Search location here...',
             ),
           ),
-          if (selectedGym != null)
+          if (_isGymPreviewCardVisible && selectedGym != null)
             Positioned(
               bottom: 20.h,
               left: 16.w,
@@ -331,14 +358,22 @@ class _MapScreenViewState extends State<MapScreenView> {
                 onTap: () => Get.to(
                     () => GymDetailsScreen(gymId: selectedGym.id.toString())),
                 child: GymPreviewCard(
+                  crossIcon: Icon(
+                    Icons.remove,
+                    color: Colors.white,
+                  ),
+                  showDelete: true,
+                  delete: () {
+                    setState(() {
+                      _isGymPreviewCardVisible = false;
+                    });
+                  },
                   gymName: selectedGym.name ?? "No Name",
-                  location:
-                      "${selectedGym.city ?? ''}, ${selectedGym.state ?? ''}, ${selectedGym.zipCode ?? ''}",
+                  location: "${selectedGym.street ?? ''}",
                   image: selectedGym.images.isNotEmpty
                       ? selectedGym.images.first.url ?? AppImages.gym1
                       : AppImages.gym1,
                   categories: selectedGym.disciplines,
-                  showDelete: false,
                   showEdit: false,
                   gymId: selectedGym.id?.toString() ?? '',
                 ),
