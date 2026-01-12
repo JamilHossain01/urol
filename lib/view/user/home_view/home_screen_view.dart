@@ -82,8 +82,12 @@ class _HomeScreenViewState extends State<HomeScreenView> {
     String hour = now.hour.toString();
     String minute = now.minute.toString().padLeft(2, '0');
 
+    final int hour24 = now.hour;
+
+    final String amPm = hour24 >= 12 ? "PM" : "AM";
+
     print("Lat: ${pos.latitude}, Long: ${pos.longitude}");
-    print("Today: $day, Time (UTC): $hour:$minute");
+    print("Today: $day, Time (UTC): $hour:$minute $amPm");
 
     _openMatsController.getOpenMatsController(
       lat: pos.latitude.toString(),
