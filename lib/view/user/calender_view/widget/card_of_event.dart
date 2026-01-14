@@ -8,6 +8,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 
 import '../../../../common widget/custom text/custom_text_widget.dart';
+import '../../../../common widget/custom_date_format.dart';
 import '../../../../uitilies/app_colors.dart';
 import '../../profile_view/widgets/shimmer/full_image_view_shimmer.dart';
 
@@ -98,23 +99,6 @@ class CardOfEvent extends StatelessWidget {
                       ),
                     )),
               ),
-              Positioned(
-                top: 8.h,
-                left: 20.w,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 4.h),
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(6.r),
-                  ),
-                  child: CustomText(
-                    text: date,
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
             ],
           ),
 
@@ -132,13 +116,14 @@ class CardOfEvent extends StatelessWidget {
                     children: [
                       Expanded(
                         child: CustomText(
+
                           text: _shortenLink(title),
                           textAlign: TextAlign.start,
                           maxLines: 7,
                           overflow: TextOverflow.ellipsis,
                           // Prevents overflow errors
                           fontSize: 12.sp,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.bold,
                           color: AppColors.mainTextColors,
                         ),
                       ),
@@ -157,6 +142,12 @@ class CardOfEvent extends StatelessWidget {
                         ),
                       ),
                     ],
+                  ),
+
+                  CustomText(
+                    color: Colors.black.withOpacity(0.6),
+
+                    text: "Date: $date",
                   ),
 
                   Gap(5.h),

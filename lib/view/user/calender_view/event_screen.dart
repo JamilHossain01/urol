@@ -187,7 +187,7 @@ class _EventScreenViewState extends State<EventScreenView> {
                       },
                       child: CardOfEvent(
                         date:
-                            "${event.date?.month ?? ''}/${event.date?.day ?? ''}\n${event.date?.year ?? ''}",
+                            "${event.date?.month ?? ''}/${event.date?.day ?? ''}/${event.date?.year ?? ''}",
                         title: customEllipsisText(
                           event.name ?? "Unnamed Event",
                           wordLimit: 3,
@@ -235,7 +235,9 @@ class _EventScreenViewState extends State<EventScreenView> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
       ),
       builder: (context) {
-        return const FilterBottomSheet(distance: 2,);
+        return const FilterBottomSheet(
+          distance: 2,
+        );
       },
     );
 
