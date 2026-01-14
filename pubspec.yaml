@@ -63,6 +63,8 @@ dependencies:
   sign_in_with_apple:
   flutter_local_notifications: ^19.5.0
   google_maps_places_autocomplete_widgets:
+  connectivity_plus: ^6.0.3
+
 
 
 

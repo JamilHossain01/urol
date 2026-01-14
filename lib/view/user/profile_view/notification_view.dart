@@ -127,7 +127,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             isRead: (n.isRead ?? false).obs,
                             title: n.title ?? '',
                             subtitle: " ${n.message ?? ''}",
-                            time: _formatTime(n.createdAt),
+                            time: _formatTime(n.createdAt?.toLocal()),
                             onTapForSingleTap: () async {
                               _readController.getRead(
                                   notificationId: n.id.toString());

@@ -11,6 +11,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'common controller/notification controller/firebase_background_handler.dart';
 import 'common controller/notification controller/notification_controller.dart';
 import 'common widget/language widget/controller/language_controller.dart';
+import 'common widget/network_connectivity/controller/no_network_controller.dart';
+import 'common widget/network_connectivity/no_network_view.dart';
 import 'uitilies/api/local_storage.dart';
 import 'firebase_options.dart';
 
@@ -20,9 +22,6 @@ Future<void> main() async {
   /// Storage
   await GetStorage.init();
   await Get.put(LanguageController()).initStorage();
-
-
-
 
   /// Firebase
   await Firebase.initializeApp(
@@ -37,8 +36,6 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(
     firebaseMessagingBackgroundHandler,
   );
-
-
 
   /// FCM token
   try {
@@ -59,20 +56,49 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
+/// ================= APP =================
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Get.put(NetworkController(), permanent: true);
+
     return ScreenUtilInit(
       designSize: Size(360, 690),
       builder: (context, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           fallbackLocale: Locale('en', 'US'),
-          home: SplashView(),
+          home: RootWithNetworkOverlay(),
         );
       },
     );
   }
 }
+
+/// ================= NETWORK WRAPPER =================
+class RootWithNetworkOverlay extends StatelessWidget {
+  const RootWithNetworkOverlay({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final networkController = Get.find<NetworkController>();
+
+    return Obx(() {
+      return Stack(
+        children: [
+          /// 🔹 Main App
+          SplashView(),
+
+          /// 🔴 No Internet Overlay (GLOBAL)
+          if (!networkController.isConnected.value)
+            Positioned.fill(
+              child: NoInternetView(),
+            ),
+        ],
+      );
+    });
+  }
+}
+
