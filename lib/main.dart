@@ -91,7 +91,7 @@ class RootWithNetworkOverlay extends StatelessWidget {
           /// 🔹 Main App
           SplashView(),
 
-          /// 🔴 No Internet Overlay (GLOBAL)
+
           if (!networkController.isConnected.value)
             Positioned.fill(
               child: NoInternetView(),
