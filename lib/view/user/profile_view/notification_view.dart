@@ -42,7 +42,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Future<void> _fetchNotifications() async {
     await _controller.getNotification();
 
-
     _allNotificationReadController.getReadAll();
 
     final notifications = _controller.notification.value.data?.data ?? [];
@@ -98,7 +97,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         showLeadingIcon: true,
       ),
       body: Obx(() {
-        if (_controller.isLoading.value ) {
+        if (_controller.isLoading.value) {
           return Center(child: CustomLoader());
         }
 

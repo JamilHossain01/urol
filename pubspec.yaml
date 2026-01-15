@@ -64,6 +64,7 @@ dependencies:
   flutter_local_notifications: ^19.5.0
   google_maps_places_autocomplete_widgets:
   connectivity_plus: ^6.0.3
+  app_settings: ^5.1.1
 
 
 

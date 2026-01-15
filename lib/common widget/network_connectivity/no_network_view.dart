@@ -1,6 +1,8 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:calebshirthum/common%20widget/custom%20text/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:permission_handler/permission_handler.dart' as AppSettings;
 import '../../uitilies/app_colors.dart';
 
 class NoInternetView extends StatelessWidget {
@@ -57,7 +59,7 @@ class NoInternetView extends StatelessWidget {
                 /// Subtitle
                 CustomText(
                   text:
-                      "You're offline. Please check your Wi-Fi or mobile data and try again.",
+                      "You're offline. Please check your Wi-Fi \n or mobile data and try again.",
                   fontSize: 14.sp,
                   color: Colors.grey.shade600,
                   textAlign: TextAlign.center,
@@ -68,7 +70,7 @@ class NoInternetView extends StatelessWidget {
                 /// Retry Button (optional)
                 ElevatedButton(
                   onPressed: () {
-                    // You can re-check connectivity here if needed
+                    AppSettings.openAppSettings();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.mainColor,
