@@ -26,6 +26,7 @@ import '../event_view/recent_event_all_view.dart';
 import '../location_view/location_screen_view.dart';
 import '../profile_view/add_compition_view.dart';
 import '../profile_view/widgets/event_card.dart';
+import 'all_open_mats_view.dart';
 import 'controller/my_profile_controller.dart';
 import 'controller/unread_notification_controller.dart';
 
@@ -247,14 +248,13 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Get.offAll(() => DashboardView(initialIndex: 2));
-                          print("tap===");
+                         Get.to(() => AllOpenMatsView());
                         },
                         child: CustomText(
                           color: AppColors.mainColor,
                           fontWeight: FontWeight.w600,
                           fontSize: 10.h,
-                          text: "View All Events",
+                          text: "View All",
                         ),
                       ),
                     ],
