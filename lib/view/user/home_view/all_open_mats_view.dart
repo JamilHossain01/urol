@@ -3,6 +3,8 @@ import 'package:calebshirthum/view/user/home_view/widgets/nearby_mats_section.da
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'controller/all_open_mats_controller.dart';
+
 class AllOpenMatsView extends StatefulWidget {
   const AllOpenMatsView({super.key});
 
@@ -11,6 +13,9 @@ class AllOpenMatsView extends StatefulWidget {
 }
 
 class _AllOpenMatsViewState extends State<AllOpenMatsView> {
+  final GetAllOpenMatsController _getAllOpenMatsController =
+      Get.put(GetAllOpenMatsController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
