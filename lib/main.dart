@@ -91,7 +91,6 @@ class RootWithNetworkOverlay extends StatelessWidget {
           /// 🔹 Main App
           SplashView(),
 
-
           if (!networkController.isConnected.value)
             Positioned.fill(
               child: NoInternetView(),
@@ -101,4 +100,3 @@ class RootWithNetworkOverlay extends StatelessWidget {
     });
   }
 }
-
