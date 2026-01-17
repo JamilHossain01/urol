@@ -1,4 +1,5 @@
 import 'package:calebshirthum/common widget/custom_app_bar_widget.dart';
+import 'package:calebshirthum/common%20widget/custom_elipse_text.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/nearby_mats_section.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/shimmer/shimmer_card_of_map.dart';
 import 'package:calebshirthum/view/user/location_view/gym_details_view.dart';
@@ -62,7 +63,7 @@ class _AllOpenMatsViewState extends State<AllOpenMatsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBar(title: "All Open Mats"),
+      appBar: const CustomAppBar(title: "All Gym Open Mats"),
       body: Obx(() {
         /// 🔄 Loading
         if (controller.isLoading.value) {
@@ -110,7 +111,8 @@ class _AllOpenMatsViewState extends State<AllOpenMatsView> {
               child: NearbyMatsSection(
                 mats: [
                   MatCardData(
-                    name: mat.name ?? "Unknown Gym",
+                    name: customEllipsisText(mat.name ?? "Unknown Gym",
+                        wordLimit: 3),
                     distance: mat.distance != null
                         ? "${(mat.distance! / 1000).toStringAsFixed(1)} km"
                         : "0 km",
