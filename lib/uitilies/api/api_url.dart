@@ -48,7 +48,7 @@ class ApiUrl {
           {required String searchTerm,
           required dynamic distance,
           required String disciplines}) =>
-      "$baseUrl/gyms/mats?searchTerm=$searchTerm&disciplines=$disciplines&distance=$distance";
+      "$baseUrl/gyms/list?searchTerm=$searchTerm&disciplines=$disciplines&distance=$distance";
 
   static String readNotificationSingle({required String id}) =>
       "$baseUrl/notifications/make-read/$id";
