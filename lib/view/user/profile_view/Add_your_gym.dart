@@ -206,7 +206,7 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
       return;
     }
     if (taxDocumentFile == null) {
-      CustomToast.showToast("Please upload your valid tax document", isError: true);
+      CustomToast.showToast("Please upload a valid tax document.", isError: true);
 
       return;
     }

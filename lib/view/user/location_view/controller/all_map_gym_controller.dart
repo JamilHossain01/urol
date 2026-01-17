@@ -39,7 +39,8 @@ class AllMapGymController extends GetxController {
         print("✅ fetched: $gymCount gyms");
 
         if (gymCount == 0) {
-          CustomToast.showToast("No gyms found matching based on your filter",
+          CustomToast.showToast(
+              "Unfortunately, no gyms were found with your current filter settings.",
               isError: true);
         }
       } else {

@@ -86,7 +86,7 @@ class UpdateProfileController extends GetxController {
         final json = jsonDecode(responseBody);
 
         if (json['success'] == true) {
-          CustomToast.showToast("Profile updated successfully!");
+          CustomToast.showToast("Profile successfully updated!");
           Get.offAll(() => DashboardView());
           _getProfileController.getProfileController();
         } else {

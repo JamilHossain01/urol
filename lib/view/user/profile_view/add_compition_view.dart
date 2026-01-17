@@ -166,7 +166,7 @@ class _AddCompetitionResultScreenState
         eventDate.isEmpty ||
         city.isEmpty ||
         state.isEmpty) {
-      CustomToast.showToast("Please fill all required fields", isError: true);
+      CustomToast.showToast("Please fill in all required fields!", isError: true);
       return;
     }
 

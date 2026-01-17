@@ -38,10 +38,10 @@ class OTPController extends GetxController {
       if (response.statusCode == 200 && responseBody['success'] == true) {
         if (redirect) {
           Get.to(() => SignInView());
-          CustomToast.showToast('✅ Now please login', isError: false);
+          CustomToast.showToast('Please login now!', isError: false);
         } else {
           Get.to(() => CreateNewPasswordView());
-          CustomToast.showToast('✅ Now create your Password ', isError: false);
+          CustomToast.showToast('Please create your password!', isError: false);
         }
       } else {
         String errorMessage =

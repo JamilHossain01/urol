@@ -43,7 +43,7 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
 
     if (!_isStrongPassword(password)) {
       CustomToast.showToast(
-        "Password must include at least 8 chars",
+        "Password must include at least 8 characters!",
         isError: true,
       );
       return;

@@ -40,7 +40,7 @@ class UnfriendController extends GetxController {
         _getMyFriendsController.getFriends('');
         Get.back();
         CustomToast.showToast(
-          "Unfollow successfully done!",
+          "Unfollow successful!",
           isError: false,
         );
       } else {
