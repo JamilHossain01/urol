@@ -9,19 +9,20 @@ import '../model/unread_notification_model.dart';
 class GetAllOpenMatsController extends GetxController {
   var isLoading = false.obs;
   var unread = AllOpenMatsModel().obs;
+  //
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  //   getAllMats();
+  // }
 
-  @override
-  void onInit() {
-    super.onInit();
-    getAllMats();
-  }
-
-  Future<void> getAllMats() async {
+  Future<void> getAllMats({required dynamic lat, required dynamic long}) async {
     try {
       isLoading(true);
 
       dynamic responseBody = await BaseClient.handleResponse(
-        await BaseClient.getRequest(api: ApiUrl.allOpenMats),
+        await BaseClient.getRequest(
+            api: ApiUrl.allOpenMats(lat: lat, long: long)),
       );
 
       if (responseBody['success'] == true) {

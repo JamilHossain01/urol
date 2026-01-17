@@ -105,7 +105,7 @@ class ClaimYourGymController extends GetxController {
         Get.offAll(() => SuccessScreen(
               title: "Claim Submitted",
               message:
-                  "🎉 Your gym claim has been successfully submitted!\n\nSit back and relax while our admin team reviews your submission. You’ll receive a notification once it’s verified. Thank you for helping us keep our community safe and secure! 🏋️‍♂️✨",
+                  "Your gym claim submission has been successfully sent!\nOur administration team will review your submission soon and you will receive a notification if successfully verified.\nThank you!",
               buttonText: "Go to Dashboard",
               onPressed: () {
                 Get.offAll(() => DashboardView());

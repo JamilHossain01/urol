@@ -27,10 +27,8 @@ class ApiUrl {
   static const String notificationUnread =
       "$baseUrl/notifications/unread-count";
 
-
-  static const String allOpenMats =
-      "$baseUrl/gyms/mats";
-
+  static String allOpenMats({required dynamic lat, required dynamic long}) =>
+      "$baseUrl/gyms/list?lat=$lat&long=$long";
 
   static const String allNotificationRead =
       "$baseUrl/notifications/make-read-all";
@@ -68,10 +66,8 @@ class ApiUrl {
 
   static String deleteGym({required String gymId}) => "$baseUrl/gyms/$gymId";
 
-
-  static String eventResultDelete({required String eventResultId}) => "$baseUrl/competitions/$eventResultId";
-
-
+  static String eventResultDelete({required String eventResultId}) =>
+      "$baseUrl/competitions/$eventResultId";
 
   static String deleteBookMarkGym({required String gymId}) =>
       "$baseUrl/save/$gymId";

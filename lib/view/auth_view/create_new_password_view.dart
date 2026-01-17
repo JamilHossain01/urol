@@ -50,7 +50,7 @@ class _CreateNewPasswordViewState extends State<CreateNewPasswordView> {
     }
 
     if (password != confirmPassword) {
-      CustomToast.showToast("Passwords do not match", isError: true);
+      CustomToast.showToast("Passwords do not match!", isError: true);
       return;
     }
 

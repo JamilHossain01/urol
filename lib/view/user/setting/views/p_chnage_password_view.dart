@@ -104,13 +104,13 @@ class ChangedNewPasswordView extends StatelessWidget {
 
                               // 1. Check empty fields
                               if (oldPass.isEmpty || newPass.isEmpty || confirmPass.isEmpty) {
-                                CustomToast.showToast("All fields are required", isError: true);
+                                CustomToast.showToast("All fields are required.", isError: true);
                                 return;
                               }
 
                               // 2. Check password match
                               if (newPass != confirmPass) {
-                                CustomToast.showToast("Passwords do not match", isError: true);
+                                CustomToast.showToast("Passwords do not match!", isError: true);
                                 return;
                               }
 

@@ -28,7 +28,7 @@ class DeleteGymController extends GetxController {
 
       if (responseBody['success'] == true) {
 
-        CustomToast.showToast("Gym Delete Successfully Done", isError: false);
+        CustomToast.showToast("Gym successfully deleted!", isError: false);
         _myGymController.getMyGyms();
 
         print("fetched: ${gums.value}");

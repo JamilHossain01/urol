@@ -77,7 +77,7 @@ class AddEventController extends GetxController {
       // ---- Handle response ----------------------------------------------
       if (streamedResponse.statusCode == 200 ||
           streamedResponse.statusCode == 201) {
-        CustomToast.showToast("Event added successfully!", isError: false);
+        CustomToast.showToast(" Event successfully added!", isError: false);
         Get.offAll(() => SuccessScreen(
               title: "Success",
               message: "Your gym has been added successfully.\n\n"

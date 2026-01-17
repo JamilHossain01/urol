@@ -47,7 +47,7 @@ class AddCompetitionController extends GetxController {
 
       if (response.statusCode == 200) {
         CustomToast.showToast(
-          "Competition added successfully!",
+          "Competition results successfully added!",
           isError: false,
         );
 
@@ -55,7 +55,7 @@ class AddCompetitionController extends GetxController {
           () => SuccessScreen(
             title: "Success!",
             message:
-                "Your competition result has been added successfully. You can now view it in your profile section.",
+                "Your competition results have successfully been added!",
             buttonText: "Go to Dashboard",
             buttonColor: AppColors.mainColor,
             onPressed: () {

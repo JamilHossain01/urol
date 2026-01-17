@@ -51,7 +51,7 @@ class LoginController extends GetxController {
 
           _getProfileController.getProfileController();
 
-          CustomToast.showToast("Login Successfully Done!");
+          CustomToast.showToast("Login successful!");
         } else {
           String errorMessage =
               responseBody['message'] ?? 'Login failed. Please try again.';

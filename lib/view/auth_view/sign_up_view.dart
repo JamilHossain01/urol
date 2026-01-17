@@ -76,7 +76,7 @@ class _SignUpViewState extends State<SignUpView> {
     }
 
     if (password != confirmPassword) {
-      CustomToast.showToast("Passwords do not match", isError: true);
+      CustomToast.showToast("Passwords do not match!", isError: true);
       return;
     }
 

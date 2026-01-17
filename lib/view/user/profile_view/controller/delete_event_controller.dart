@@ -26,7 +26,7 @@ class DeleteEventController extends GetxController {
       );
 
       if (responseBody['success'] == true) {
-        CustomToast.showToast("Event Delete Successfully Done", isError: false);
+        CustomToast.showToast("Event successfully deleted!", isError: false);
         _myEventsController.getMyEvents();
       } else {
         throw 'Failed to load profile data: ${responseBody['message']}';

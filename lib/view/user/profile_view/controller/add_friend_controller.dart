@@ -41,7 +41,7 @@ class AddFriendController extends GetxController {
         _discoverFriendsController.getDiscover('');
 
         CustomToast.showToast(
-          "Friend added successfully!",
+          "Friend successfully added!",
           isError: false,
         );
       } else {

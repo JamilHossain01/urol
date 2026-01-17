@@ -45,7 +45,7 @@ class ContactUsController extends GetxController {
         Get.off(() => SuccessScreen(
           title: "Thank You, $name!",
           message:
-          "We have received your message and will get back to you at $email within 24 hours.",
+          "We’ve received your message and will get back to you at $email soon!\nThank you again",
           buttonText: "Back to Home",
           buttonColor: AppColors.mainColor,
           onPressed: () {

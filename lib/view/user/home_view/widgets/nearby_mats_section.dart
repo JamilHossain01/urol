@@ -57,32 +57,22 @@ class _NearbyMatsSectionState extends State<NearbyMatsSection> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Gap(10.h),
-        _isLoading
-            ? Column(
-                children: List.generate(
-                  1,
-                  (index) => Padding(
-                    padding: EdgeInsets.only(bottom: 10.h),
-                    child: ShimmerCardWidgetOfMap(),
+        Column(
+          children: widget.mats
+              .map(
+                (mat) => GestureDetector(
+                  onTap: mat.onTap,
+                  child: _buildNearbyMatCard(
+                    mat.name,
+                    mat.distance,
+                    mat.days,
+                    mat.time,
+                    mat.image,
                   ),
                 ),
               )
-            : Column(
-                children: widget.mats
-                    .map(
-                      (mat) => GestureDetector(
-                        onTap: mat.onTap,
-                        child: _buildNearbyMatCard(
-                          mat.name,
-                          mat.distance,
-                          mat.days,
-                          mat.time,
-                          mat.image,
-                        ),
-                      ),
-                    )
-                    .toList(),
-              ),
+              .toList(),
+        ),
       ],
     );
   }

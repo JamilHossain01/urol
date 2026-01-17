@@ -95,7 +95,7 @@ class EditGymController extends GetxController {
       // ---- Handle response ----
       if (streamedResponse.statusCode == 200 ||
           streamedResponse.statusCode == 201) {
-        CustomToast.showToast("Gym updated successfully!", isError: false);
+        CustomToast.showToast("Gym successfully updated!", isError: false);
         Get.back();
       } else {
         Map<String, dynamic> errorData = {};

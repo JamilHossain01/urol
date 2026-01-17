@@ -79,7 +79,7 @@ class ForgetPasswordView extends StatelessWidget {
                           btnColor: AppColors.mainColor,
                           onTap: () {
                             if (emailController.text.isEmpty) {
-                              CustomToast.showToast("Please enter your email",
+                              CustomToast.showToast("Please enter your email address",
                                   isError: true);
                             } else {
                               _forgotPasswordController.emailSubmit(

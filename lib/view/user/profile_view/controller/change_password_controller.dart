@@ -39,7 +39,7 @@ class ChnagePasswordController extends GetxController {
 
       if (response.statusCode == 200) {
         CustomToast.showToast(
-          "Your Password has been changed successfully!",
+          "Your password has been successfully changed!",
           isError: false,
         );
 

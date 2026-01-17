@@ -56,7 +56,6 @@ class EnableLocationView extends StatelessWidget {
               btnColor: AppColors.mainColor,
               btnText: "Enable Location",
               onTap: () async {
-                // 1️⃣ Request location permission
                 bool granted = await _locationService.requestPermission();
                 if (!granted) return;
 

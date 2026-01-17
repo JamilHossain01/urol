@@ -46,7 +46,7 @@ class SignUpController extends GetxController {
 
           Get.to(() => OTPVerifyForRegister(email: email,));
 
-          CustomToast.showToast("Account Create Successfully Done!");
+          CustomToast.showToast("Account successfully created!");
         } else {
           String errorMessage =
               responseBody['message'] ?? 'Login failed. Please try again.';
