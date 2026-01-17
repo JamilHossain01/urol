@@ -26,6 +26,12 @@ class ApiUrl {
 
   static const String notificationUnread =
       "$baseUrl/notifications/unread-count";
+
+
+  static const String allOpenMats =
+      "$baseUrl/gyms/mats";
+
+
   static const String allNotificationRead =
       "$baseUrl/notifications/make-read-all";
   static String discoverFriends(

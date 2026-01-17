@@ -3,11 +3,12 @@
 import 'package:get/get.dart';
 import '../../../../uitilies/api/api_url.dart';
 import '../../../../uitilies/api/base_client.dart';
+import '../model/all_open_mats_model.dart';
 import '../model/unread_notification_model.dart';
 
 class GetAllOpenMatsController extends GetxController {
   var isLoading = false.obs;
-  var unread = NotificationUnreadModel().obs;
+  var unread = AllOpenMatsModel().obs;
 
   @override
   void onInit() {
@@ -20,11 +21,11 @@ class GetAllOpenMatsController extends GetxController {
       isLoading(true);
 
       dynamic responseBody = await BaseClient.handleResponse(
-        await BaseClient.getRequest(api: ApiUrl.notificationUnread),
+        await BaseClient.getRequest(api: ApiUrl.allOpenMats),
       );
 
       if (responseBody['success'] == true) {
-        unread.value = NotificationUnreadModel.fromJson(responseBody);
+        unread.value = AllOpenMatsModel.fromJson(responseBody);
         print("fetched: ${unread.value}");
       } else {
         print('Failed to load: ${responseBody['message']}');
