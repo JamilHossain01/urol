@@ -25,38 +25,30 @@ class _AllOpenMatsViewState extends State<AllOpenMatsView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
     _loadMatsWithLocation();
   }
 
   Future<void> _loadMatsWithLocation() async {
-    /// 1️⃣ Permission
+    // 1️⃣ Request permission
     final granted = await locationService.requestPermission();
     if (!granted) {
       print("❌ Location permission denied");
       return;
     }
 
-    /// 2️⃣ Get current position
+    // 2️⃣ Get current position
     final position = await locationService.getCurrentLocation();
     if (position == null) {
       print("❌ Could not fetch location");
       return;
     }
 
-    /// 3️⃣ Save (optional)
-    await locationService.saveLatLong(
-      position.latitude,
-      position.longitude,
-    );
+    // 3️⃣ Save lat/long (optional)
+    await locationService.saveLatLong(position.latitude, position.longitude);
 
-    /// 4️⃣ Call API
-    controller.getAllMats(
-      lat: position.latitude,
-      long: position.longitude,
-    );
+    // 4️⃣ Call API
+    controller.getAllMats(lat: position.latitude, long: position.longitude);
   }
 
   @override
@@ -65,70 +57,71 @@ class _AllOpenMatsViewState extends State<AllOpenMatsView> {
       backgroundColor: Colors.white,
       appBar: const CustomAppBar(title: "All Gym Open Mats"),
       body: Obx(() {
-        /// 🔄 Loading
+        // 🔄 Loading state
         if (controller.isLoading.value) {
           return ListView.builder(
-              itemCount: 10,
-              itemBuilder: (BuildContext context, index) {
-                return Padding(
-                    padding: EdgeInsetsGeometry.all(10),
-                    child: ShimmerCardWidgetOfMap());
-              });
+            itemCount: 10,
+            itemBuilder: (BuildContext context, index) {
+              return Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: ShimmerCardWidgetOfMap());
+            },
+          );
         }
 
-        /// ❌ No data
         final mats = controller.unread.value.data;
         if (mats == null || mats.isEmpty) {
           return Center(
-              child: NotFoundWidget(
-            imagePath: "assets/images/not_found.png",
-            message: "No open mats found",
-          ));
+            child: NotFoundWidget(
+              imagePath: "assets/images/not_found.png",
+              message: "No open mats found",
+            ),
+          );
         }
 
-        /// ✅ Data
-        return ListView.builder(
-          itemCount: mats.length,
-          itemBuilder: (context, index) {
-            final mat = mats[index];
+        final filteredMats = mats.where((mat) {
+          return mat.matSchedules.isNotEmpty &&
+              (mat.matSchedules.first.day ?? "N/A") != "N/A";
+        }).toList();
 
-            /// 🖼️ Safe image
-            final imageUrl =
-                mat.images.isNotEmpty ? mat.images.first.url ?? "" : "";
+        if (filteredMats.isEmpty) {
+          return Center(
+            child: NotFoundWidget(
+              imagePath: "assets/images/not_found.png",
+              message: "No open mats found",
+            ),
+          );
+        }
 
-            /// 🕒 First mat schedule (if any)
-            String time = "N/A";
-            String day = "N/A";
+        final matCardDataList = filteredMats.map((mat) {
+          final imageUrl =
+              mat.images.isNotEmpty ? mat.images.first.url ?? "" : "";
 
-            if (mat.matSchedules.isNotEmpty) {
-              final schedule = mat.matSchedules.first;
-              day = schedule.day ?? "N/A";
-              time = "${schedule.fromView ?? ''} - ${schedule.toView ?? ''}";
-            }
+          final schedule = mat.matSchedules.first;
+          final day = schedule.day!;
+          final time = "${schedule.fromView ?? ''} - ${schedule.toView ?? ''}";
 
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: NearbyMatsSection(
-                mats: [
-                  MatCardData(
-                    name: customEllipsisText(mat.name ?? "Unknown Gym",
-                        wordLimit: 2),
-                    distance: mat.distance != null
-                        ? "${(mat.distance! / 1000).toStringAsFixed(1)} km"
-                        : "0 km",
-                    days: day,
-                    time: time,
-                    image: imageUrl.isNotEmpty
-                        ? imageUrl
-                        : "https://via.placeholder.com/150",
-                    onTap: () {
-                      Get.to(() => GymDetailsScreen(gymId: mat.id.toString()));
-                    },
-                  ),
-                ],
-              ),
-            );
-          },
+          return MatCardData(
+            name: customEllipsisText(mat.name ?? "Unknown Gym", wordLimit: 2),
+            distance: mat.distance != null
+                ? "${(mat.distance! / 1000).toStringAsFixed(1)} km"
+                : "0 km",
+            days: day,
+            time: time,
+            image: imageUrl.isNotEmpty
+                ? imageUrl
+                : "https://via.placeholder.com/150",
+            onTap: () {
+              Get.to(() => GymDetailsScreen(gymId: mat.id.toString()));
+            },
+          );
+        }).toList();
+
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: NearbyMatsSection(mats: matCardDataList),
+          ),
         );
       }),
     );
