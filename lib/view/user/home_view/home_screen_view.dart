@@ -51,10 +51,22 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   final GetAllEventResultController _getAllEventResultController =
       Get.put(GetAllEventResultController());
 
+  late String today;
+
   @override
   void initState() {
     super.initState();
-    // profileController.getProfileController();
+
+    today = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ][DateTime.now().weekday - 1];
+
     _getAllEventResultController.getAllEventResult();
     _getCurrentLocationAndUpdateMats();
     _unreadNotificationController.getUnReadController();
@@ -248,7 +260,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                       ),
                       GestureDetector(
                         onTap: () {
-                         Get.to(() => AllOpenMatsView());
+                          Get.to(() => AllOpenMatsView());
                         },
                         child: CustomText(
                           color: AppColors.mainColor,
@@ -277,14 +289,16 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                     } else {
                       return NearbyMatsSection(
                         mats: _openMatsController.openMats.value.data!.map((e) {
+                          final todaySchedules = e.matSchedules
+                              .where((s) => s.day == today)
+                              .toList();
+
                           return MatCardData(
                             name: e.name ?? "N/A",
                             distance: e.distance != null
                                 ? "${(e.distance! / 1000).toStringAsFixed(1)} km"
                                 : "0 km",
-                            days: e.matSchedules.isNotEmpty
-                                ? e.matSchedules.map((s) => s.day).join(", ")
-                                : "N/A",
+                            days: todaySchedules.isNotEmpty ? today : "N/A",
                             time: e.matSchedules.isNotEmpty
                                 ? "${e.matSchedules.first.fromView} - ${e.matSchedules.first.toView}"
                                 : "N/A",

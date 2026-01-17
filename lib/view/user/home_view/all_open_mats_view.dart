@@ -112,7 +112,7 @@ class _AllOpenMatsViewState extends State<AllOpenMatsView> {
                 mats: [
                   MatCardData(
                     name: customEllipsisText(mat.name ?? "Unknown Gym",
-                        wordLimit: 3),
+                        wordLimit: 2),
                     distance: mat.distance != null
                         ? "${(mat.distance! / 1000).toStringAsFixed(1)} km"
                         : "0 km",
