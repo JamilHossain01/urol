@@ -30,7 +30,6 @@ class _AllOpenMatsViewState extends State<AllOpenMatsView> {
   }
 
   Future<void> _loadMatsWithLocation() async {
-    // 1️⃣ Request permission
     final granted = await locationService.requestPermission();
     if (!granted) {
       print("❌ Location permission denied");
