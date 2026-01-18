@@ -32,7 +32,6 @@ class _SaveGymsViewState extends State<SaveGymsView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getSavedGymController.getSavedGym();
   }

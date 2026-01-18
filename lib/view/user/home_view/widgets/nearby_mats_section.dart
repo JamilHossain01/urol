@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/common widget/custom text/custom_text_widget.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/shimmer/shimmer_card_of_map.dart';
@@ -96,14 +97,13 @@ class _NearbyMatsSectionState extends State<NearbyMatsSection> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(12.r),
-              child: Image.network(
-                image,
-                height: 70.h,
-                width: 90.w,
-                fit: BoxFit.cover,
-              ),
-            ),
+                borderRadius: BorderRadius.circular(12.r),
+                child: CachedNetworkImage(
+                  imageUrl: image,
+                  height: 70.h,
+                  width: 90.w,
+                  fit: BoxFit.cover,
+                )),
           ),
           Expanded(
             child: Padding(

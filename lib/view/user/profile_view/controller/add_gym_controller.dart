@@ -128,7 +128,7 @@ class AddGymController extends GetxController {
         Get.offAll(() => SuccessScreen(
               title: "Success",
               message:
-                  "Your gym application has been received!\nOur administration team will review your submission.\nOnce approved, it will be visible in the “My Gym” section",
+                  "Your gym application has been received!\nOur administration team will review your submission.\nOnce approved, it will be visible in the “My Gym” section.",
               buttonText: "Back to Home",
               onPressed: () {
                 Get.offAll(() => DashboardView());

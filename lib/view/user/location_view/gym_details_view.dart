@@ -85,6 +85,11 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
           return const Center(child: Text("No data available"));
         }
 
+        final bool hasAnySocial =
+            (data.website != null && data.website!.isNotEmpty) ||
+                (data.facebook != null && data.facebook!.isNotEmpty) ||
+                (data.instagram != null && data.instagram!.isNotEmpty);
+
         return SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -266,20 +271,31 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                           ),
                           const Divider(),
                           BuildInfoWidget(
-                              tap: () => _launchUrl(data.website ?? ''),
-                              iconPath: AppImages.earth2,
-                              text: "Website",
-                              text1: _shortenLink(
-                                data.website ?? 'N/A',
-                              )),
+                            tap: () {
+                              if (data.website != null &&
+                                  data.website!.isNotEmpty) {
+                                _launchUrl(data.website!);
+                              }
+                            },
+                            iconPath: AppImages.earth2,
+                            text: "Website",
+                            text1:
+                                (data.website == null || data.website!.isEmpty)
+                                    ? 'N/A'
+                                    : _shortenLink(data.website!),
+                          ),
                           const Divider(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              /// Left side title
                               Row(
                                 children: [
-                                  Image.asset(AppImages.earth2,
-                                      height: 18.h, width: 18.w),
+                                  Image.asset(
+                                    AppImages.earth2,
+                                    height: 18.h,
+                                    width: 18.w,
+                                  ),
                                   SizedBox(width: 10.w),
                                   CustomText(
                                     text: "Social",
@@ -289,33 +305,49 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                                   ),
                                 ],
                               ),
-                              Row(
-                                children: [
-                                  if (data.website != null)
-                                    GestureDetector(
-                                      onTap: () =>
-                                          _launchUrl(data.website ?? ''),
-                                      child: Image.asset(AppImages.https,
-                                          height: 18.h, width: 18.w),
-                                    ),
-                                  Gap(5.w),
-                                  if (data.facebook != null)
-                                    GestureDetector(
-                                      onTap: () =>
-                                          _launchUrl(data.facebook ?? ''),
-                                      child: Image.asset(AppImages.fb,
-                                          height: 18.h, width: 18.w),
-                                    ),
-                                  Gap(5.w),
-                                  if (data.instagram != null)
-                                    GestureDetector(
-                                      onTap: () =>
-                                          _launchUrl(data.instagram ?? ''),
-                                      child: Image.asset(AppImages.insta,
-                                          height: 18.h, width: 18.w),
-                                    ),
-                                ],
-                              ),
+
+                              if (hasAnySocial)
+                                Row(
+                                  children: [
+                                    if (data.website != null &&
+                                        data.website!.isNotEmpty)
+                                      GestureDetector(
+                                        onTap: () => _launchUrl(data.website!),
+                                        child: Image.asset(
+                                          AppImages.https,
+                                          height: 18.h,
+                                          width: 18.w,
+                                        ),
+                                      ),
+                                    if (data.website != null &&
+                                        data.website!.isNotEmpty)
+                                      Gap(5.w),
+                                    if (data.facebook != null &&
+                                        data.facebook!.isNotEmpty)
+                                      GestureDetector(
+                                        onTap: () => _launchUrl(data.facebook!),
+                                        child: Image.asset(
+                                          AppImages.fb,
+                                          height: 18.h,
+                                          width: 18.w,
+                                        ),
+                                      ),
+                                    if (data.facebook != null &&
+                                        data.facebook!.isNotEmpty)
+                                      Gap(5.w),
+                                    if (data.instagram != null &&
+                                        data.instagram!.isNotEmpty)
+                                      GestureDetector(
+                                        onTap: () =>
+                                            _launchUrl(data.instagram!),
+                                        child: Image.asset(
+                                          AppImages.insta,
+                                          height: 18.h,
+                                          width: 18.w,
+                                        ),
+                                      ),
+                                  ],
+                                ),
                             ],
                           ),
                         ],
@@ -412,8 +444,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
       height: 250.h,
       width: double.infinity,
       fit: BoxFit.cover,
-      placeholder: (context, url) =>
-          Center(child: CustomLoader()),
+      placeholder: (context, url) => Center(child: CustomLoader()),
       errorWidget: (context, url, error) =>
           Image.asset(AppImages.gym2, fit: BoxFit.fill),
     );
