@@ -56,7 +56,6 @@ class _NearbyMatsSectionState extends State<NearbyMatsSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Gap(10.h),
         Column(
           children: widget.mats
               .map(

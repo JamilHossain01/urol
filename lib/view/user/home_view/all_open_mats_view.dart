@@ -55,7 +55,7 @@ class _AllOpenMatsViewState extends State<AllOpenMatsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBar(title: "All Gym Open Mats"),
+      appBar: const CustomAppBar(title: "All Open Mats"),
       body: Obx(() {
         // 🔄 Loading state
         if (controller.isLoading.value) {
