@@ -198,7 +198,10 @@ class _EventScreenViewState extends State<EventScreenView> {
                         status: statusText,
                         daysLeft: daysLeftText,
                         price: "\$${event.registrationFee?.toString() ?? '0'}",
-                        link: event.eventWebsite ?? "No website",
+                        link: (event.eventWebsite == null ||
+                                event.eventWebsite!.isEmpty)
+                            ? "No website"
+                            : event.eventWebsite!,
                         image: event.image?.url ??
                             "https://via.placeholder.com/300x200.png?text=No+Image",
                         websiteRedirect: () async {

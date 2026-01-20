@@ -371,7 +371,7 @@ class _MapScreenViewState extends State<MapScreenView> {
                   },
                   gymName: selectedGym.name ?? "No Name",
                   location: customEllipsisText(selectedGym.street ?? '',
-                      wordLimit: 7),
+                      wordLimit: 3),
                   image: selectedGym.images.isNotEmpty
                       ? selectedGym.images.first.url ?? AppImages.gym1
                       : AppImages.gym1,
