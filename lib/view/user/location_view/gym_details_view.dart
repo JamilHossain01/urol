@@ -98,7 +98,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
               Stack(
                 children: [
                   SizedBox(
-                    height: 220.h,
+                    height: 225.h,
                     width: double.infinity,
                     child: PageView.builder(
                       controller: _pageController,
@@ -224,7 +224,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                         ],
                       ),
 
-                    Gap(10.h),
+                    Gap(5.h),
 
                     // Tags
                     if (data.disciplines.isNotEmpty)
@@ -234,7 +234,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                             data.disciplines.map((e) => _buildChip(e)).toList(),
                       ),
 
-                    Gap(15.h),
+                    Gap(10.h),
 
                     // Description
                     CustomText(
@@ -257,7 +257,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomText(
-                            text: "Information Details",
+                            text: "Contact Information",
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w600,
                             color: AppColors.mainTextColors,
@@ -423,18 +423,20 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
 
   // ---------- CHIPS ----------
   Widget _buildChip(String text) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-      decoration: BoxDecoration(
-        color: AppColors.mainColor,
-        borderRadius: BorderRadius.circular(50.r),
-      ),
-      child: CustomText(
-        text: text,
-        fontSize: 12.sp,
-        color: Colors.white,
-      ),
-    );
+    return Padding(
+        padding: REdgeInsets.fromLTRB(0, 4, 0, 0),
+        child: Container(
+          padding: EdgeInsets.all(6.h),
+          decoration: BoxDecoration(
+            color: AppColors.mainColor,
+            borderRadius: BorderRadius.circular(50.r),
+          ),
+          child: CustomText(
+            text: text,
+            fontSize: 12.sp,
+            color: Colors.white,
+          ),
+        ));
   }
 
   // ---------- IMAGE ----------
