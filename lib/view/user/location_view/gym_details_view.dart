@@ -39,6 +39,20 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
   final AddGymBookMarksController _addGymBookMarksController =
       Get.put(AddGymBookMarksController());
 
+  String formatUSPhone(String? phone) {
+    if (phone == null || phone.isEmpty) return 'N/A';
+
+    String digits = phone.replaceAll(RegExp(r'\D'), '');
+
+    if (digits.length != 10) {
+      return phone;
+    }
+
+    return '(${digits.substring(0, 3)}) '
+        '${digits.substring(3, 6)}-'
+        '${digits.substring(6)}';
+  }
+
   @override
   void initState() {
     super.initState();
@@ -195,8 +209,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                             color: Color(0xFF4B4B4B), size: 16),
                         Gap(5.w),
                         CustomText(
-                          text: customEllipsisText(
-                              "${data.street ?? ''}",
+                          text: customEllipsisText("${data.street ?? ''}",
                               wordLimit: 11),
                           fontSize: 10.sp,
                           color: const Color(0xFF4B4B4B),
@@ -268,7 +281,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                             tap: () => _phoneCall(data.phone ?? ''),
                             iconPath: AppImages.call,
                             text: "Phone",
-                            text1: data.phone ?? 'N/A',
+                            text1: formatUSPhone(data.phone),
                           ),
                           const Divider(),
                           BuildInfoWidget(
@@ -408,7 +421,9 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                         btnText: 'Claim This Gym',
                         onTap: () => Get.to(() => ClaimYourGymScreen(
                               gymId: _getGymDetailsController
-                                  .allEvent.value.data?.id.toString() ?? "",
+                                      .allEvent.value.data?.id
+                                      .toString() ??
+                                  "",
                             )),
                         iconWant: false,
                         btnColor: AppColors.mainColor,

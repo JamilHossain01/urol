@@ -62,7 +62,7 @@ class GymPreviewCard extends StatelessWidget {
                   imageUrl: image,
                   height: 120.h,
                   width: double.infinity,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.fitHeight,
                   placeholder: (context, url) => Center(
                     child: SizedBox(
                       height: 30.h,
