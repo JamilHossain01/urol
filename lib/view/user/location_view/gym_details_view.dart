@@ -197,7 +197,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                         CustomText(
                           text: customEllipsisText(
                               "${data.street ?? ''}",
-                              wordLimit: 9),
+                              wordLimit: 11),
                           fontSize: 10.sp,
                           color: const Color(0xFF4B4B4B),
                         ),
