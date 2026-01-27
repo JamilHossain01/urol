@@ -86,7 +86,7 @@ class _FinalLocationWidgetState extends State<FinalLocationWidget> {
           textInputAction: TextInputAction.done,
           googleAPIKey: "AIzaSyB_3nOokGz9jksH5jN_f05YNEJeZqWizYM",
           inputDecoration: InputDecoration(
-            hintText: "Pick location from map",
+            hintText: "Enter address",
             hintStyle: TextStyle(color: AppColors.hintTextColors),
             filled: true,
             fillColor: AppColors.backRoudnColors,

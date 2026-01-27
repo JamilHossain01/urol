@@ -60,7 +60,7 @@ class GymPreviewCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.r),
                 child: CachedNetworkImage(
                   imageUrl: image,
-                  height: 120.h,
+                  height: 125.h,
                   width: double.infinity,
                   fit: BoxFit.fitHeight,
                   placeholder: (context, url) => Center(
@@ -121,12 +121,14 @@ class GymPreviewCard extends StatelessWidget {
             ],
           ),
           Gap(8.h),
-          CustomText(
+          Center(
+              child: CustomText(
             text: gymName,
             fontSize: 18.sp,
             fontWeight: FontWeight.w700,
             color: AppColors.mainTextColors,
-          ),
+          )),
+          Gap(2.h),
           Row(
             children: [
               Image.asset(

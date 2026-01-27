@@ -453,6 +453,7 @@ class _EditGymViewState extends State<EditGymView> {
                           });
                         },
                       ),
+                      SizedBox(height: 15),
                       ContactInfoWidget(
                         phoneController: _phoneController,
                         emailController: _emailController,
