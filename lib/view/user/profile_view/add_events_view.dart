@@ -5,6 +5,7 @@ import 'package:calebshirthum/uitilies/custom_loader.dart';
 import 'package:calebshirthum/uitilies/custom_toast.dart';
 import 'package:calebshirthum/view/user/profile_view/controller/add_event_controller.dart';
 import 'package:calebshirthum/view/user/profile_view/controller/my_gym_controller.dart';
+import 'package:calebshirthum/view/user/profile_view/widgets/final_location_widget.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/image_upload_widget.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/location_widget.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +74,7 @@ class _AddEventsViewState extends State<AddEventsView> {
 
   XFile? selectedImage;
 
-  final _eventTypes = ['Seminar', 'Tournament','Super Fight','Open Mat'];
+  final _eventTypes = ['Seminar', 'Tournament', 'Super Fight', 'Open Mat'];
 
   final AddEventController _addEventController = Get.put(AddEventController());
   final MyGymController _myGymController = Get.put(MyGymController());
@@ -139,11 +140,8 @@ class _AddEventsViewState extends State<AddEventsView> {
     }
   }
 
-
-
   String? _websiteError;
   String? registrationError;
-
 
   String? _validateURL(String? value, String fieldName) {
     if (value == null || value.isEmpty) return null; // optional
@@ -156,9 +154,6 @@ class _AddEventsViewState extends State<AddEventsView> {
     return null;
   }
 
-
-
-
   String? _validateDigits(String? value, String fieldName) {
     if (value == null || value.isEmpty) return null; // optional
     final pattern = r'^[0-9]+$'; // only digits
@@ -167,7 +162,6 @@ class _AddEventsViewState extends State<AddEventsView> {
     }
     return null;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -367,9 +361,8 @@ class _AddEventsViewState extends State<AddEventsView> {
                 },
               ),
 
-
               /// Location Picker
-              LocationWidget(
+              FinalLocationWidget(
                 streetAddressController: _streetAddressController,
                 cityController: _cityController,
                 stateController: _stateController,
@@ -385,6 +378,7 @@ class _AddEventsViewState extends State<AddEventsView> {
                 },
               ),
               Gap(10.h),
+
               /// Date & Time
               CustomText(
                   text: "Date & Time",
@@ -456,88 +450,87 @@ class _AddEventsViewState extends State<AddEventsView> {
 
               SizedBox(height: 20.h),
 
-            Obx(() {
-              final isLoading = _addEventController.isLoading.value ||
-                  _editEventController.isLoading.value;
+              Obx(() {
+                final isLoading = _addEventController.isLoading.value ||
+                    _editEventController.isLoading.value;
 
-              return isLoading
-                  ? CustomLoader()
-                  : CustomButtonWidget(
-                btnColor: AppColors.mainColor,
-                btnText: widget.isEdit ? "Update Event" : "Submit",
-                onTap: () {
-                  if (_nameController.text.isEmpty || selectedDate == null) {
-                    CustomToast.showToast(
-                      "Event name and date are required",
-                      isError: true,
-                    );
-                    return;
-                  }
+                return isLoading
+                    ? CustomLoader()
+                    : CustomButtonWidget(
+                        btnColor: AppColors.mainColor,
+                        btnText: widget.isEdit ? "Update Event" : "Submit",
+                        onTap: () {
+                          if (_nameController.text.isEmpty ||
+                              selectedDate == null) {
+                            CustomToast.showToast(
+                              "Event name and date are required",
+                              isError: true,
+                            );
+                            return;
+                          }
 
-                  if (selectedGym == null) {
-                    CustomToast.showToast("Please select a gym", isError: true);
-                    return;
-                  }
+                          if (selectedGym == null) {
+                            CustomToast.showToast("Please select a gym",
+                                isError: true);
+                            return;
+                          }
 
-                  final formattedDate =
-                      "${selectedDate!.year.toString().padLeft(4, '0')}-"
-                      "${selectedDate!.month.toString().padLeft(2, '0')}-"
-                      "${selectedDate!.day.toString().padLeft(2, '0')}";
+                          final formattedDate =
+                              "${selectedDate!.year.toString().padLeft(4, '0')}-"
+                              "${selectedDate!.month.toString().padLeft(2, '0')}-"
+                              "${selectedDate!.day.toString().padLeft(2, '0')}";
 
-                  // ✅ Allow edit without new image (use existing one if not changed)
-                  final imageFile = selectedImage != null
-                      ? File(selectedImage!.path)
-                      : null;
+                          // ✅ Allow edit without new image (use existing one if not changed)
+                          final imageFile = selectedImage != null
+                              ? File(selectedImage!.path)
+                              : null;
 
-                  if (!widget.isEdit) {
-                    if (imageFile == null) {
-                      CustomToast.showToast("Please select an image", isError: true);
-                      return;
-                    }
+                          if (!widget.isEdit) {
+                            if (imageFile == null) {
+                              CustomToast.showToast("Please select an image",
+                                  isError: true);
+                              return;
+                            }
 
-                    _addEventController.addEvent(
-                      name: _nameController.text,
-                      street: _streetAddressController.text,
-                      state: _stateController.text,
-                      city: _cityController.text,
-                      zipCode: _zipCodeController.text,
-                      phone: _phoneController.text,
-                      email: _emailController.text,
-                      website: _websiteController.text,
-                      type: selectedEventType ?? "Seminar",
-                      date: formattedDate,
-                      registrationFee: _registrationController.text,
-                      image: imageFile,
-                      gymId: selectedGym.toString(),
-                    );
-                  } else {
-                    
-                    
-                    print("Selected image $selectedImage");
-                    
-                    
-                    _editEventController.updateEvent(
-                      name: _nameController.text,
-                      street: _streetAddressController.text,
-                      state: _stateController.text,
-                      city: _cityController.text,
-                      zipCode: _zipCodeController.text,
-                      phone: _phoneController.text,
-                      email: _emailController.text,
-                      website: _websiteController.text,
-                      type: selectedEventType ?? "Seminar",
-                      date: formattedDate,
-                      registrationFee: _registrationController.text,
-                      image: imageFile,
-                      gymId: selectedGym.toString(),
-                      eventId: widget.eventId.toString(),
-                    );
-                  }
-                },
-                iconWant: false,
-              );
-            }),
+                            _addEventController.addEvent(
+                              name: _nameController.text,
+                              street: _streetAddressController.text,
+                              state: _stateController.text,
+                              city: _cityController.text,
+                              zipCode: _zipCodeController.text,
+                              phone: _phoneController.text,
+                              email: _emailController.text,
+                              website: _websiteController.text,
+                              type: selectedEventType ?? "Seminar",
+                              date: formattedDate,
+                              registrationFee: _registrationController.text,
+                              image: imageFile,
+                              gymId: selectedGym.toString(),
+                            );
+                          } else {
+                            print("Selected image $selectedImage");
 
+                            _editEventController.updateEvent(
+                              name: _nameController.text,
+                              street: _streetAddressController.text,
+                              state: _stateController.text,
+                              city: _cityController.text,
+                              zipCode: _zipCodeController.text,
+                              phone: _phoneController.text,
+                              email: _emailController.text,
+                              website: _websiteController.text,
+                              type: selectedEventType ?? "Seminar",
+                              date: formattedDate,
+                              registrationFee: _registrationController.text,
+                              image: imageFile,
+                              gymId: selectedGym.toString(),
+                              eventId: widget.eventId.toString(),
+                            );
+                          }
+                        },
+                        iconWant: false,
+                      );
+              }),
 
               SizedBox(height: 30.h),
             ],

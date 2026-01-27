@@ -10,6 +10,7 @@ import '../../../common widget/custom text/custom_text_widget.dart';
 import '../../../common widget/custom_app_bar_widget.dart';
 import '../../../common widget/custom_button_widget.dart';
 import '../../../common widget/custom_text_filed.dart';
+import '../../../common widget/phone_number_validator.dart';
 import '../../../uitilies/app_colors.dart';
 import '../../../uitilies/custom_toast.dart';
 import '../profile_view/widgets/location_widget.dart';
@@ -42,6 +43,23 @@ class _ClaimYourGymScreenState extends State<ClaimYourGymScreen> {
   File? utilityBillFile;
   File? businessLicenseFile;
   File? taxDocumentFile;
+
+  String? _errorText;
+
+  void _onPhoneChanged(String value) {
+    final formatted = PhoneFormatter.format(value);
+
+    if (formatted != value) {
+      _phoneController.value = TextEditingValue(
+        text: formatted,
+        selection: TextSelection.collapsed(offset: formatted.length),
+      );
+    }
+
+    setState(() {
+      _errorText = PhoneValidator.validate(formatted);
+    });
+  }
 
   @override
   void dispose() {
@@ -95,7 +113,7 @@ class _ClaimYourGymScreenState extends State<ClaimYourGymScreen> {
             ),
             SizedBox(height: 6.h),
             CustomTextField(
-              hintText: "The Arena Combat Academy",
+              hintText: "Enter gym name",
               showObscure: false,
               fillColor: AppColors.backRoudnColors,
               hintTextColor: AppColors.hintTextColors,
@@ -110,7 +128,7 @@ class _ClaimYourGymScreenState extends State<ClaimYourGymScreen> {
             SizedBox(height: 6.h),
             CustomTextField(
               controller: _emailController,
-              hintText: "Enter the email",
+              hintText: "Enter email address",
               showObscure: false,
               fillColor: AppColors.backRoudnColors,
               hintTextColor: AppColors.hintTextColors,
@@ -125,33 +143,11 @@ class _ClaimYourGymScreenState extends State<ClaimYourGymScreen> {
             SizedBox(height: 6.h),
             CustomTextField(
               controller: _phoneController,
-              hintText: "+13462127336",
+              hintText: "Enter your phone number",
               showObscure: false,
-              fillColor: AppColors.backRoudnColors,
-              hintTextColor: AppColors.hintTextColors,
-            ),
-            SizedBox(height: 14.h),
-            CustomText(
-              text: "Location",
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textFieldNameColor,
-            ),
-            SizedBox(height: 6.h),
-            LocationWidget(
-              streetAddressController: _streetAddressController,
-              cityController: _cityController,
-              stateController: _stateController,
-              zipCodeController: _zipCodeController,
-              lat: _lat,
-              long: _long,
-              onLocationChanged: (lat, long) {
-                setState(() {
-                  _lat = lat;
-                  _long = long;
-                });
-                debugPrint("Selected Lat: $lat, Lng: $long");
-              },
+              keyboardType: TextInputType.phone,
+              errorText: _errorText,
+              onChanged: _onPhoneChanged,
             ),
             SizedBox(height: 14.h),
             CustomText(

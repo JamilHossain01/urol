@@ -53,7 +53,7 @@ class ClaimYourGymController extends GetxController {
       final Map<String, dynamic> payload = {
         "email": email,
         "phone": phone,
-        "gym": "690ef46bf68c74f27ce553b4",
+        "gym": gymId,
       };
 
       request.fields['data'] = jsonEncode(payload);

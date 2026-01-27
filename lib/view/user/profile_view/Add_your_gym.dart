@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/custom_toast.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/add_class_schedule_widget.dart';
+import 'package:calebshirthum/view/user/profile_view/widgets/final_location_widget.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/mat_schdule_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -390,7 +391,7 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
                       ),
                       SizedBox(height: 20.h),
 
-                      LocationWidget(
+                      FinalLocationWidget(
                         apartmentController: apprartmentController,
                         streetAddressController: _streetAddressController,
                         cityController: _cityController,

@@ -130,7 +130,7 @@ class _NearbyMatsSectionState extends State<NearbyMatsSection> {
                           child: CustomText(
                             color: const Color(0xFF686868),
                             fontSize: 10.h,
-                            text: distance,
+                            text: "$distance mi",
                           ),
                         ),
                       ),

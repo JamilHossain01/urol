@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:io';
+import 'dart:math' as math;
 import 'dart:typed_data';
 import 'package:calebshirthum/common widget/custom_button_widget.dart';
 import 'package:calebshirthum/common%20widget/custom_elipse_text.dart';
@@ -150,27 +151,38 @@ class _MapScreenViewState extends State<MapScreenView> {
     final gyms = _allMapGymController.profile.value.data ?? [];
     Set<Annotation> temp = {};
 
-    // Track how many markers are at the same location
-    Map<LatLng, int> locationCounter = {};
+    /// Same location counter (LatLng direct use না করে string key)
+    Map<String, int> locationCounter = {};
 
     for (var gym in gyms) {
-      if (gym.location?.coordinates.length == 2) {
+      if (gym.location?.coordinates != null &&
+          gym.location!.coordinates.length == 2) {
         double lon = gym.location!.coordinates[0];
         double lat = gym.location!.coordinates[1];
-        LatLng location = LatLng(lat, lon);
 
-        locationCounter[location] = (locationCounter[location] ?? 0) + 1;
+        LatLng baseLocation = LatLng(lat, lon);
 
-        double offsetX = 0.0;
-        double offsetY = 0.0;
-        int count = locationCounter[location]!;
+        /// Key to avoid floating precision issue
+        final String key =
+            "${lat.toStringAsFixed(6)},${lon.toStringAsFixed(6)}";
 
+        locationCounter[key] = (locationCounter[key] ?? 0) + 1;
+        int count = locationCounter[key]!;
+
+        double offsetLat = 0.0;
+        double offsetLon = 0.0;
+
+        /// 🔹 Only if same location repeats
         if (count > 1) {
-          offsetX = 0.0001 * count;
-          offsetY = 0.0001 * count;
+          /// Apple map এর জন্য খুব ছোট offset (~1 meter)
+          final double angle = (count * 60) * (math.pi / 180);
+          const double radius = 0.00001; // ✅ VERY SMALL OFFSET
+
+          offsetLat = radius * math.sin(angle);
+          offsetLon = radius * math.cos(angle);
         }
 
-        LatLng adjustedLocation = LatLng(lat + offsetY, lon + offsetX);
+        LatLng adjustedLocation = LatLng(lat + offsetLat, lon + offsetLon);
 
         temp.add(
           Annotation(
@@ -185,7 +197,9 @@ class _MapScreenViewState extends State<MapScreenView> {
     }
 
     if (!mounted) return;
+
     setState(() {
+      markers.clear();
       markers.addAll(temp);
     });
   }

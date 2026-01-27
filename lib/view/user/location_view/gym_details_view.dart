@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:gap/gap.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../common widget/comon_conatainer/custom_conatiner.dart';
@@ -195,7 +196,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                         Gap(5.w),
                         CustomText(
                           text: customEllipsisText(
-                              "${data.city ?? ''}, ${data.state ?? ''}, ${data.zipCode ?? ''}",
+                              "${data.street ?? ''}",
                               wordLimit: 9),
                           fontSize: 10.sp,
                           color: const Color(0xFF4B4B4B),
@@ -406,7 +407,8 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                       CustomButtonWidget(
                         btnText: 'Claim This Gym',
                         onTap: () => Get.to(() => ClaimYourGymScreen(
-                              gymId: data.id.toString(),
+                              gymId: _getGymDetailsController
+                                  .allEvent.value.data?.id.toString() ?? "",
                             )),
                         iconWant: false,
                         btnColor: AppColors.mainColor,

@@ -296,8 +296,8 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                           return MatCardData(
                             name: e.name ?? "N/A",
                             distance: e.distance != null
-                                ? "${(e.distance! / 1000).toStringAsFixed(1)} km"
-                                : "0 km",
+                                ? e.distance!.toStringAsFixed(1)
+                                : "0.0",
                             days: todaySchedules.isNotEmpty ? today : "N/A",
                             time: e.matSchedules.isNotEmpty
                                 ? "${e.matSchedules.first.fromView} - ${e.matSchedules.first.toView}"

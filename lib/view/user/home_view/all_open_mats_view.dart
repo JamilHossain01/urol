@@ -95,8 +95,8 @@ class _AllOpenMatsViewState extends State<AllOpenMatsView> {
                 name:
                 customEllipsisText(gym.name ?? "Unknown Gym", wordLimit: 2),
                 distance: gym.distance != null
-                    ? "${(gym.distance! / 1000).toStringAsFixed(1)} km"
-                    : "0 km",
+                    ? gym.distance!.toStringAsFixed(1)
+                    : "0.0",
                 days: schedule.day ?? "N/A",
                 time:
                 "${schedule.fromView ?? ''} - ${schedule.toView ?? ''}",
