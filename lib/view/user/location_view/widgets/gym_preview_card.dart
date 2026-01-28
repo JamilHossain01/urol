@@ -22,6 +22,10 @@ class GymPreviewCard extends StatelessWidget {
   final VoidCallback? delete;
   final VoidCallback? editTap;
 
+  // 🔥 NEW FLAGS
+  final bool? centerGymName;
+  final BoxFit? imageFit;
+
   const GymPreviewCard({
     Key? key,
     required this.image,
@@ -34,6 +38,8 @@ class GymPreviewCard extends StatelessWidget {
     this.gymId,
     this.editTap,
     this.crossIcon,
+    this.centerGymName,
+    this.imageFit,
   }) : super(key: key);
 
   @override
@@ -62,7 +68,7 @@ class GymPreviewCard extends StatelessWidget {
                   imageUrl: image,
                   height: 125.h,
                   width: double.infinity,
-                  fit: BoxFit.fitHeight,
+                  fit: imageFit ?? BoxFit.cover,
                   placeholder: (context, url) => Center(
                     child: SizedBox(
                       height: 30.h,
@@ -121,13 +127,22 @@ class GymPreviewCard extends StatelessWidget {
             ],
           ),
           Gap(8.h),
-          Center(
-              child: CustomText(
-            text: gymName,
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w700,
-            color: AppColors.mainTextColors,
-          )),
+          centerGymName!
+              ? Center(
+                  child: CustomText(
+                    textAlign: TextAlign.center,
+                    text: gymName,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.mainTextColors,
+                  ),
+                )
+              : CustomText(
+                  text: gymName,
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.mainTextColors,
+                ),
           Gap(2.h),
           Row(
             children: [

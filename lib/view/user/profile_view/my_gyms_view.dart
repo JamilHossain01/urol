@@ -91,7 +91,7 @@ class _MyGymsViewState extends State<MyGymsView> {
                                   })
                               .toList(),
                           gymOpenMatSchedules: gym.matSchedules
-                              ?.map((s) => {
+                              .map((s) => {
                                     'day': s.day,
                                     'from': s.from,
                                     'to': s.to,
@@ -119,7 +119,6 @@ class _MyGymsViewState extends State<MyGymsView> {
                           gymInstagram: gym.instagram ?? "",
                           gymClassName: gym.classSchedules.first.name ?? "",
                         ))?.then((_) {
-                      // 🔄 refresh when coming back
                       _myGymController.getMyGyms();
                     });
                     ;
@@ -129,12 +128,16 @@ class _MyGymsViewState extends State<MyGymsView> {
                   },
                   showDelete: true,
                   showEdit: true,
-                  gymName: customEllipsisText(gym.name ?? "Unnamed Gym",wordLimit: 3),
+                  gymName: customEllipsisText(gym.name ?? "Unnamed Gym",
+                      wordLimit: 3),
                   location: customEllipsisText(
                       "${gym.city ?? ''}, ${gym.state ?? ''}, ${gym.street ?? ''}",
                       wordLimit: 4),
                   image: imageUrl,
                   categories: gym.disciplines,
+                  imageFit: BoxFit.cover,
+                  centerGymName: false,
+
                 ),
               ),
             );

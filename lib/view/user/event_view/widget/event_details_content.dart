@@ -1,4 +1,5 @@
 import 'package:calebshirthum/uitilies/app_colors.dart';
+import 'package:calebshirthum/uitilies/custom_loader.dart';
 import 'package:calebshirthum/view/user/profile_view/widgets/shimmer/full_image_view_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -55,7 +56,7 @@ class EventDetailsContent extends StatelessWidget {
                 imageUrl,
                 height: 140.h,
                 width: double.infinity,
-                fit: BoxFit.fill,
+                fit: BoxFit.fitHeight,
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;
 
@@ -64,10 +65,7 @@ class EventDetailsContent extends StatelessWidget {
                     width: double.infinity,
                     color: Colors.grey.shade200,
                     child: Center(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.5,
-                        valueColor: AlwaysStoppedAnimation(AppColors.mainColor),
-                      ),
+                      child: CustomLoader(),
                     ),
                   );
                 },
@@ -97,7 +95,7 @@ class EventDetailsContent extends StatelessWidget {
               child: CustomText(
                 textAlign: TextAlign.start,
                 text: location,
-                fontSize: 16.sp,
+                fontSize: 13.sp,
                 fontWeight: FontWeight.w600,
                 color: Colors.black87,
               ),

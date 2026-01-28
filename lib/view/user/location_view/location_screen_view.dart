@@ -378,6 +378,8 @@ class _MapScreenViewState extends State<MapScreenView> {
                     color: Colors.white,
                   ),
                   showDelete: true,
+                  centerGymName: true,
+                  imageFit: BoxFit.fitHeight,
                   delete: () {
                     setState(() {
                       _isGymPreviewCardVisible = false;

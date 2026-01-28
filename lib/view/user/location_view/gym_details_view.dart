@@ -262,7 +262,7 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
 
                     Gap(10.h),
 
-                    // ---------- INFO CONTAINER ------------
+                    // ------- INFO CONTAINER -------
                     CustomContainer(
                       color: const Color(0xFFF8F9FA),
                       borderColor: const Color(0xFF989898),

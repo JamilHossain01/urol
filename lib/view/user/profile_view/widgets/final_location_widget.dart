@@ -45,14 +45,11 @@ class _FinalLocationWidgetState extends State<FinalLocationWidget> {
   Future<void> getAddressFromCoordinates(
       double latitude, double longitude) async {
     try {
-      // Use the geocoding package to get address details
       List<Placemark> placemarks =
           await placemarkFromCoordinates(latitude, longitude);
 
-      // Extract the components of the address
       Placemark placemark = placemarks.first;
 
-      // Update the controllers with the fetched data
       widget.cityController.text = placemark.locality ?? "";
       widget.stateController.text = placemark.administrativeArea ?? "";
       widget.zipCodeController.text = placemark.postalCode ?? "";
@@ -60,6 +57,59 @@ class _FinalLocationWidgetState extends State<FinalLocationWidget> {
       print("Error getting address from coordinates: $e");
     }
   }
+
+  static const List<String> usaStatesAbbreviations = [
+    "AL",
+    "AK",
+    "AZ",
+    "AR",
+    "CA",
+    "CO",
+    "CT",
+    "DE",
+    "FL",
+    "GA",
+    "HI",
+    "ID",
+    "IL",
+    "IN",
+    "IA",
+    "KS",
+    "KY",
+    "LA",
+    "ME",
+    "MD",
+    "MA",
+    "MI",
+    "MN",
+    "MS",
+    "MO",
+    "MT",
+    "NE",
+    "NV",
+    "NH",
+    "NJ",
+    "NM",
+    "NY",
+    "NC",
+    "ND",
+    "OH",
+    "OK",
+    "OR",
+    "PA",
+    "RI",
+    "SC",
+    "SD",
+    "TN",
+    "TX",
+    "UT",
+    "VT",
+    "VA",
+    "WA",
+    "WV",
+    "WI",
+    "WY",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +136,7 @@ class _FinalLocationWidgetState extends State<FinalLocationWidget> {
           textInputAction: TextInputAction.done,
           googleAPIKey: "AIzaSyB_3nOokGz9jksH5jN_f05YNEJeZqWizYM",
           inputDecoration: InputDecoration(
-            hintText: "Enter address",
+            hintText: "Enter gym address",
             hintStyle: TextStyle(color: AppColors.hintTextColors),
             filled: true,
             fillColor: AppColors.backRoudnColors,
@@ -105,7 +155,6 @@ class _FinalLocationWidgetState extends State<FinalLocationWidget> {
 
               widget.onLocationChanged?.call(lat, lng);
 
-              // Fetch the state, city, and zip code after selecting the address
               await getAddressFromCoordinates(lat, lng);
             }
           },
@@ -118,7 +167,6 @@ class _FinalLocationWidgetState extends State<FinalLocationWidget> {
 
               widget.onLocationChanged?.call(latitude, longitude);
 
-              // Fetch the state, city, and zip code after selecting the address
               getAddressFromCoordinates(latitude, longitude);
             }
 
@@ -152,15 +200,60 @@ class _FinalLocationWidgetState extends State<FinalLocationWidget> {
                     color: AppColors.textFieldNameColor,
                   ),
                   SizedBox(height: 4.h),
-                  CustomTextField(
-                    controller: widget.stateController,
-                    hintText: "Enter state",
-                    showObscure: false,
-                    fillColor: AppColors.backRoudnColors,
-                    hintTextColor: AppColors.hintTextColors,
-                    validator: (value) =>
-                        value!.isEmpty ? "State is required" : null,
-                  ),
+                  DropdownButtonFormField<String>(
+                      hint: CustomText(
+                        text: "Select State",
+                      ),
+                      isExpanded: true,
+                      value: usaStatesAbbreviations
+                              .contains(widget.stateController.text)
+                          ? widget.stateController.text
+                          : null,
+                      items: usaStatesAbbreviations
+                          .map(
+                            (state) => DropdownMenuItem(
+                              value: state,
+                              child: Text(state),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        widget.stateController.text = value ?? '';
+                        setState(() {});
+                      },
+                      validator: (value) =>
+                          value == null ? "State is required" : null,
+                      decoration: InputDecoration(
+                          filled: true,
+                          fillColor: AppColors.backRoudnColors,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                              color: Colors.grey.withOpacity(0.4),
+                              width: 1,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                              color: Colors.grey.withOpacity(0.4),
+                              width: 1.5,
+                            ),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                              color: Colors.grey.withOpacity(0.4),
+                              width: 1,
+                            ),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                              color: Colors.grey.withOpacity(0.4),
+                              width: 1.5,
+                            ),
+                          ))),
                 ],
               ),
             ),
