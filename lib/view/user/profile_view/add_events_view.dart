@@ -361,6 +361,8 @@ class _AddEventsViewState extends State<AddEventsView> {
                 },
               ),
 
+              SizedBox(height: 15),
+
               /// Location Picker
               FinalLocationWidget(
                 streetAddressController: _streetAddressController,
