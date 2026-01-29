@@ -405,7 +405,7 @@ class _AddYourGymDetailsScreenState extends State<AddYourGymDetailsScreen> {
                             _long = long;
                           });
                           debugPrint("Selected Lat: $lat, Lng: $long");
-                        },
+                        }, stringOfHintText: 'Enter gym address',
                       ),
                       SizedBox(height: 20.h),
 

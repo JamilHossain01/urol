@@ -451,7 +451,7 @@ class _EditGymViewState extends State<EditGymView> {
                             _lat = lat;
                             _long = long;
                           });
-                        },
+                        }, stringOfHintText: 'Enter gym address',
                       ),
                       SizedBox(height: 15),
                       ContactInfoWidget(

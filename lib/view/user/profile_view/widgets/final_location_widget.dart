@@ -16,6 +16,7 @@ class FinalLocationWidget extends StatefulWidget {
   final TextEditingController stateController;
   final TextEditingController zipCodeController;
   final TextEditingController? apartmentController;
+  final String stringOfHintText;
   final double? lat;
   final double? long;
   final bool? zipCode;
@@ -32,6 +33,7 @@ class FinalLocationWidget extends StatefulWidget {
     this.onLocationChanged,
     this.zipCode,
     this.apartmentController,
+    required this.stringOfHintText,
   });
 
   @override
@@ -39,22 +41,18 @@ class FinalLocationWidget extends StatefulWidget {
 }
 
 class _FinalLocationWidgetState extends State<FinalLocationWidget> {
-  bool isLocationPicked = false;
   final FocusNode streetFocusNode = FocusNode();
 
-  Future<void> getAddressFromCoordinates(
-      double latitude, double longitude) async {
-    try {
-      List<Placemark> placemarks =
-          await placemarkFromCoordinates(latitude, longitude);
+  String? _selectedState; // ✅ VERY IMPORTANT
 
-      Placemark placemark = placemarks.first;
+  @override
+  void initState() {
+    super.initState();
 
-      widget.cityController.text = placemark.locality ?? "";
-      widget.stateController.text = placemark.administrativeArea ?? "";
-      widget.zipCodeController.text = placemark.postalCode ?? "";
-    } catch (e) {
-      print("Error getting address from coordinates: $e");
+    /// 🔥 VERY IMPORTANT: controller → dropdown sync
+    final controllerState = widget.stateController.text.trim();
+    if (usaStatesAbbreviations.contains(controllerState)) {
+      _selectedState = controllerState;
     }
   }
 
@@ -111,6 +109,100 @@ class _FinalLocationWidgetState extends State<FinalLocationWidget> {
     "WY",
   ];
 
+  static const Map<String, String> usaStateNameToAbbr = {
+    "Alabama": "AL",
+    "Alaska": "AK",
+    "Arizona": "AZ",
+    "Arkansas": "AR",
+    "California": "CA",
+    "Colorado": "CO",
+    "Connecticut": "CT",
+    "Delaware": "DE",
+    "Florida": "FL",
+    "Georgia": "GA",
+    "Hawaii": "HI",
+    "Idaho": "ID",
+    "Illinois": "IL",
+    "Indiana": "IN",
+    "Iowa": "IA",
+    "Kansas": "KS",
+    "Kentucky": "KY",
+    "Louisiana": "LA",
+    "Maine": "ME",
+    "Maryland": "MD",
+    "Massachusetts": "MA",
+    "Michigan": "MI",
+    "Minnesota": "MN",
+    "Mississippi": "MS",
+    "Missouri": "MO",
+    "Montana": "MT",
+    "Nebraska": "NE",
+    "Nevada": "NV",
+    "New Hampshire": "NH",
+    "New Jersey": "NJ",
+    "New Mexico": "NM",
+    "New York": "NY",
+    "North Carolina": "NC",
+    "North Dakota": "ND",
+    "Ohio": "OH",
+    "Oklahoma": "OK",
+    "Oregon": "OR",
+    "Pennsylvania": "PA",
+    "Rhode Island": "RI",
+    "South Carolina": "SC",
+    "South Dakota": "SD",
+    "Tennessee": "TN",
+    "Texas": "TX",
+    "Utah": "UT",
+    "Vermont": "VT",
+    "Virginia": "VA",
+    "Washington": "WA",
+    "West Virginia": "WV",
+    "Wisconsin": "WI",
+    "Wyoming": "WY",
+  };
+
+  /// 🔥 Reverse geocoding
+  Future<void> getAddressFromCoordinates(double lat, double lng) async {
+    try {
+      final placemarks = await placemarkFromCoordinates(lat, lng);
+      final place = placemarks.first;
+
+      // City & Zip
+      widget.cityController.text = place.locality ?? "";
+      widget.zipCodeController.text = place.postalCode ?? "";
+
+      // 🔥 STATE HANDLING
+      final rawState = place.administrativeArea?.trim();
+      String? finalState;
+
+      debugPrint("RAW STATE: $rawState");
+
+      if (rawState != null) {
+        // Case 1: already abbreviation (e.g., NY, CA)
+        if (usaStatesAbbreviations.contains(rawState)) {
+          finalState = rawState;
+        }
+        // Case 2: full name (e.g., New York)
+        else if (usaStateNameToAbbr.containsKey(rawState)) {
+          finalState = usaStateNameToAbbr[rawState];
+        }
+      }
+
+      if (finalState != null) {
+        setState(() {
+          _selectedState = finalState;
+          widget.stateController.text = finalState!;
+        });
+        debugPrint("✅ AUTO SELECTED STATE: $finalState");
+      } else {
+        debugPrint("❌ STATE NOT FOUND OR NOT MATCHED: $rawState");
+      }
+    } catch (e) {
+      debugPrint("Geocoding error: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -120,226 +212,137 @@ class _FinalLocationWidgetState extends State<FinalLocationWidget> {
           text: "Location",
           fontSize: 14.sp,
           fontWeight: FontWeight.w600,
-          color: AppColors.mainTextColors,
         ),
         SizedBox(height: 12.h),
+
         CustomText(
           text: "Address",
           fontSize: 12.sp,
           fontWeight: FontWeight.w600,
-          color: AppColors.textFieldNameColor,
         ),
         SizedBox(height: 12.h),
+
+        /// GOOGLE ADDRESS FIELD
         GooglePlaceAutoCompleteTextField(
           focusNode: streetFocusNode,
           textEditingController: widget.streetAddressController,
-          textInputAction: TextInputAction.done,
           googleAPIKey: "AIzaSyB_3nOokGz9jksH5jN_f05YNEJeZqWizYM",
+          countries: const ["USA"],
+          isLatLngRequired: true,
+          debounceTime: 200,
           inputDecoration: InputDecoration(
-            hintText: "Enter gym address",
-            hintStyle: TextStyle(color: AppColors.hintTextColors),
+            hintText: widget.stringOfHintText,
             filled: true,
             fillColor: AppColors.backRoudnColors,
             border: OutlineInputBorder(
-              borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide.none,
             ),
           ),
-          debounceTime: 200,
-          countries: ["USA"],
-          isLatLngRequired: true,
           getPlaceDetailWithLatLng: (gpf.Prediction prediction) async {
             if (prediction.lat != null && prediction.lng != null) {
               final lat = double.parse(prediction.lat!);
               final lng = double.parse(prediction.lng!);
 
               widget.onLocationChanged?.call(lat, lng);
-
               await getAddressFromCoordinates(lat, lng);
             }
           },
           itemClick: (Prediction prediction) {
             widget.streetAddressController.text = prediction.description ?? "";
-
-            if (prediction.lat != null && prediction.lng != null) {
-              final double latitude = double.parse(prediction.lat!);
-              final double longitude = double.parse(prediction.lng!);
-
-              widget.onLocationChanged?.call(latitude, longitude);
-
-              getAddressFromCoordinates(latitude, longitude);
-            }
-
             streetFocusNode.unfocus();
           },
           itemBuilder: (context, index, gpf.Prediction prediction) {
-            return Container(
-              padding: EdgeInsets.all(10),
-              child: CustomText(
-                textAlign: TextAlign.start,
-                text: prediction.description ?? "",
-              ),
+            return Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text(prediction.description ?? ""),
             );
           },
-          seperatedBuilder: Divider(
-            color: Colors.white,
-          ),
-          containerHorizontalPadding: 0,
+          seperatedBuilder: const Divider(),
         ),
+
         SizedBox(height: 12.h),
+
+        /// STATE + CITY
         Row(
           children: [
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomText(
-                    text: "State",
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textFieldNameColor,
-                  ),
-                  SizedBox(height: 4.h),
-                  DropdownButtonFormField<String>(
-                      hint: CustomText(
-                        text: "Select State",
+              child: DropdownButtonFormField<String>(
+                hint: CustomText(text: "Select State"),
+                value: _selectedState,
+                isExpanded: true,
+                items: usaStatesAbbreviations
+                    .map(
+                      (state) => DropdownMenuItem(
+                        value: state,
+                        child: Text(state),
                       ),
-                      isExpanded: true,
-                      value: usaStatesAbbreviations
-                              .contains(widget.stateController.text)
-                          ? widget.stateController.text
-                          : null,
-                      items: usaStatesAbbreviations
-                          .map(
-                            (state) => DropdownMenuItem(
-                              value: state,
-                              child: Text(state),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) {
-                        widget.stateController.text = value ?? '';
-                        setState(() {});
-                      },
-                      validator: (value) =>
-                          value == null ? "State is required" : null,
-                      decoration: InputDecoration(
-                          filled: true,
-                          fillColor: AppColors.backRoudnColors,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(
-                              color: Colors.grey.withOpacity(0.4),
-                              width: 1,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(
-                              color: Colors.grey.withOpacity(0.4),
-                              width: 1.5,
-                            ),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(
-                              color: Colors.grey.withOpacity(0.4),
-                              width: 1,
-                            ),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(
-                              color: Colors.grey.withOpacity(0.4),
-                              width: 1.5,
-                            ),
-                          ))),
-                ],
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedState = value;
+                    widget.stateController.text = value ?? "";
+                  });
+
+                  debugPrint("🟢 MANUAL SELECT STATE: $value");
+                },
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Colors.grey.shade400, width: 1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Colors.grey.shade600, width: 1.5),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                style: const TextStyle(color: Colors.black),
+                dropdownColor: Colors.white,
               ),
             ),
-            SizedBox(width: 12.w),
+            Gap(12.w),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomText(
-                    text: "City",
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textFieldNameColor,
-                  ),
-                  SizedBox(height: 4.h),
-                  CustomTextField(
-                    controller: widget.cityController,
-                    hintText: "Enter City",
-                    showObscure: false,
-                    fillColor: AppColors.backRoudnColors,
-                    hintTextColor: AppColors.hintTextColors,
-                    validator: (value) =>
-                        value!.isEmpty ? "City is required" : null,
-                  ),
-                ],
+              child: CustomTextField(
+                controller: widget.cityController,
+                hintText: "City",
+                showObscure: false,
+                fillColor: AppColors.backRoudnColors,
               ),
             ),
           ],
         ),
+
         SizedBox(height: 12.h),
-        if (widget.zipCode != false) ...[
+
+        /// ZIP + SUITE
+        if (widget.zipCode != false)
           Row(
             children: [
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomText(
-                      text: "Zip Code",
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textFieldNameColor,
-                    ),
-                    Gap(4.h),
-                    CustomTextField(
-                      controller: widget.zipCodeController,
-                      hintText: "Enter zip code",
-                      showObscure: false,
-                      fillColor: AppColors.backRoudnColors,
-                      hintTextColor: AppColors.hintTextColors,
-                      keyboardType: TextInputType.number,
-                      validator: (value) =>
-                          value!.isEmpty ? "Zip code is required" : null,
-                    ),
-                  ],
+                child: CustomTextField(
+                  controller: widget.zipCodeController,
+                  hintText: "Zip Code",
+                  keyboardType: TextInputType.number,
+                  showObscure: false,
+                  fillColor: AppColors.backRoudnColors,
                 ),
               ),
               Gap(12.w),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomText(
-                      text: "Suite",
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textFieldNameColor,
-                    ),
-                    Gap(4.h),
-                    CustomTextField(
-                      controller: widget.apartmentController,
-                      hintText: "Suite",
-                      showObscure: false,
-                      fillColor: AppColors.backRoudnColors,
-                      hintTextColor: AppColors.hintTextColors,
-                      keyboardType: TextInputType.text,
-                      validator: (value) => value!.isEmpty
-                          ? "Apartment number is required"
-                          : null,
-                    ),
-                  ],
+                child: CustomTextField(
+                  controller: widget.apartmentController,
+                  hintText: "Suite",
+                  showObscure: false,
+                  fillColor: AppColors.backRoudnColors,
                 ),
               ),
             ],
           ),
-        ],
       ],
     );
   }

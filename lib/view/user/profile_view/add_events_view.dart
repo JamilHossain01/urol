@@ -376,6 +376,7 @@ class _AddEventsViewState extends State<AddEventsView> {
                   });
                   debugPrint("Selected Lat: $lat, Lng: $long");
                 },
+                stringOfHintText: 'Enter event address',
               ),
               Gap(10.h),
 

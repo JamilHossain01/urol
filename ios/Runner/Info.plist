@@ -58,16 +58,21 @@
 
 
 	<!-- Permissions -->
-	<key>NSCameraUsageDescription</key>
-	<string>We need access to your camera to take profile and gym photos.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>We need access to your location even when the app is in the background for providing nearby services or shops.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We need access to your location to provide nearby open mats.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>We need permission to save photos to your library if you take a new photo.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We need access to your photo library to upload existing images for your profile or gym.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>We need access to your camera to take profile and gym photos.</string>
+
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Your location is used to show nearby gyms and open mats, and to help auto-fill your address accurately.</string>
+
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Your location helps us provide nearby gym and open mat suggestions and accurately fill address details when needed.</string>
+
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need access to your photo library so you can upload existing photos for your profile or gym.</string>
+
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>We need permission to save photos to your library when you take new photos in the app.</string>
+
 
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
