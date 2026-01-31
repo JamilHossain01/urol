@@ -279,36 +279,39 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                             null ||
                         _openMatsController.openMats.value.data!.isEmpty) {
                       return Padding(
-                          padding: EdgeInsets.symmetric(vertical: 20.h),
-                          child: Center(
-                              child: NotFoundWidget(
+                        padding: EdgeInsets.symmetric(vertical: 20.h),
+                        child: Center(
+                          child: NotFoundWidget(
                             imagePath: "assets/images/not_found.png",
                             message:
                                 "Sorry, no open mats currently happening \nnear you!",
-                          )));
+                          ),
+                        ),
+                      );
                     } else {
                       return NearbyMatsSection(
                         mats: _openMatsController.openMats.value.data!.map((e) {
-                          final todaySchedules = e.matSchedules
-                              .where((s) => s.day == today)
-                              .toList();
+                          final bool isToday = e.day == today;
 
                           return MatCardData(
-                            name: customEllipsisText(e.name ?? "N/A",
-                                wordLimit: 2),
+                            name: e.name.toString(),
                             distance: e.distance != null
                                 ? e.distance!.toStringAsFixed(1)
                                 : "0.0",
-                            days: todaySchedules.isNotEmpty ? today : "N/A",
-                            time: e.matSchedules.isNotEmpty
-                                ? "${e.matSchedules.first.fromView} - ${e.matSchedules.first.toView}"
+                            days: isToday ? today : "N/A",
+                            time: isToday &&
+                                    e.fromView != null &&
+                                    e.toView != null
+                                ? "${e.fromView} - ${e.toView}"
                                 : "N/A",
                             image: e.images.isNotEmpty
-                                ? e.images.first.url ?? ""
+                                ? e.images.first.url ??
+                                    "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"
                                 : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
                             onTap: () {
-                              Get.to(() =>
-                                  GymDetailsScreen(gymId: e.id.toString()));
+                              Get.to(() => GymDetailsScreen(
+                                    gymId: e.id.toString(),
+                                  ));
                             },
                           );
                         }).toList(),

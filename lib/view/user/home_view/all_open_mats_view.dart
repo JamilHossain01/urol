@@ -19,10 +19,10 @@ class AllOpenMatsView extends StatefulWidget {
 
 class _AllOpenMatsViewState extends State<AllOpenMatsView> {
   final GetAllOpenMatsController controller =
-  Get.put(GetAllOpenMatsController());
+      Get.put(GetAllOpenMatsController());
 
   final CurrentLocationService locationService =
-  Get.put(CurrentLocationService());
+      Get.put(CurrentLocationService());
 
   @override
   void initState() {
@@ -86,26 +86,22 @@ class _AllOpenMatsViewState extends State<AllOpenMatsView> {
           for (final schedule in gym.matSchedules) {
             if (schedule.day == null || schedule.day!.isEmpty) continue;
 
-            final imageUrl = gym.images.isNotEmpty
-                ? gym.images.first.url ?? ""
-                : "";
+            final imageUrl =
+                gym.images.isNotEmpty ? gym.images.first.url ?? "" : "";
 
             matCards.add(
               MatCardData(
-                name:
-                customEllipsisText(gym.name ?? "Unknown Gym", wordLimit: 2),
+                name: gym.name ?? "Unknown Gym",
                 distance: gym.distance != null
                     ? gym.distance!.toStringAsFixed(1)
                     : "0.0",
                 days: schedule.day ?? "N/A",
-                time:
-                "${schedule.fromView ?? ''} - ${schedule.toView ?? ''}",
+                time: "${schedule.fromView ?? ''} - ${schedule.toView ?? ''}",
                 image: imageUrl.isNotEmpty
                     ? imageUrl
                     : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png",
                 onTap: () {
-                  Get.to(() =>
-                      GymDetailsScreen(gymId: gym.id.toString()));
+                  Get.to(() => GymDetailsScreen(gymId: gym.id.toString()));
                 },
               ),
             );

@@ -112,30 +112,37 @@ class _NearbyMatsSectionState extends State<NearbyMatsSection> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomText(
-                        color: AppColors.mainTextColors,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12.h,
-                        text: name,
+                      Expanded(
+                        // ✅ this is the key fix
+                        child: CustomText(
+                          textAlign: TextAlign.start,
+                          color: AppColors.mainTextColors,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 11.h,
+                          text: name,
+                          maxLines: 3,
+                          overflow: TextOverflow.visible,
+                        ),
                       ),
+                      Gap(6.w),
                       Container(
                         decoration: BoxDecoration(
-                            color: Color(0xFFF5F5F5),
-                            borderRadius: BorderRadius.circular(10.r)),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 4),
-                          child: CustomText(
-                            color: const Color(0xFF686868),
-                            fontSize: 10.h,
-                            text: "$distance mi",
-                          ),
+                          color: const Color(0xFFF5F5F5),
+                          borderRadius: BorderRadius.circular(10.r),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        child: CustomText(
+                          color: const Color(0xFF686868),
+                          fontSize: 10.h,
+                          text: "$distance mi",
                         ),
                       ),
                     ],
                   ),
+
                   Gap(5.h),
                   // Days
                   Container(
