@@ -294,7 +294,8 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                               .toList();
 
                           return MatCardData(
-                            name: e.name ?? "N/A",
+                            name: customEllipsisText(e.name ?? "N/A",
+                                wordLimit: 2),
                             distance: e.distance != null
                                 ? e.distance!.toStringAsFixed(1)
                                 : "0.0",

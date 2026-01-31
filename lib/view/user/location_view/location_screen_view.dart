@@ -8,6 +8,7 @@ import 'package:calebshirthum/common%20widget/custom_elipse_text.dart';
 import 'package:calebshirthum/view/user/location_view/controller/all_map_gym_controller.dart';
 import 'package:calebshirthum/view/user/location_view/widgets/filter_sheet.dart';
 import 'package:calebshirthum/view/user/location_view/widgets/gym_preview_card.dart';
+import 'package:calebshirthum/view/user/location_view/widgets/map_gym_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -369,45 +370,41 @@ class _MapScreenViewState extends State<MapScreenView> {
               bottom: 20.h,
               left: 16.w,
               right: 16.w,
-              child: GestureDetector(
-                onTap: () => Get.to(
-                    () => GymDetailsScreen(gymId: selectedGym.id.toString())),
-                child: GymPreviewCard(
-                  crossIcon: Icon(
-                    Icons.remove,
-                    color: Colors.white,
-                  ),
-                  showDelete: true,
-                  centerGymName: true,
-                  imageFit: BoxFit.fitHeight,
-                  delete: () {
-                    setState(() {
-                      _isGymPreviewCardVisible = false;
-                    });
-                  },
-                  gymName: selectedGym.name ?? "No Name",
-                  location: customEllipsisText(selectedGym.street ?? '',
-                      wordLimit: 11),
-                  image: selectedGym.images.isNotEmpty
-                      ? selectedGym.images.first.url ?? AppImages.gym1
-                      : AppImages.gym1,
-                  categories: selectedGym.disciplines,
-                  showEdit: false,
-                  gymId: selectedGym.id?.toString() ?? '',
-                ),
+              child: MapGymView(
+                viewDetails: () {
+                  print("here is the docs: ${selectedGym.id}");
+                  Get.to(()=> GymDetailsScreen(gymId: selectedGym.id.toString()));
+                },
+                showDelete: true,
+                centerGymName: true,
+                imageFit: BoxFit.fitHeight,
+                delete: () {
+                  setState(() {
+                    _isGymPreviewCardVisible = false;
+                  });
+                },
+                gymName: selectedGym.name ?? "No Name",
+                location:
+                    customEllipsisText(selectedGym.street ?? '', wordLimit: 11),
+                image: selectedGym.images.isNotEmpty
+                    ? selectedGym.images.first.url ?? AppImages.gym1
+                    : AppImages.gym1,
+                categories: selectedGym.disciplines,
+                showEdit: false,
+                gymId: selectedGym.id?.toString() ?? '',
               ),
             ),
-          Positioned(
-            bottom: 10.h,
-            right: 16.w,
-            child: Column(
-              children: [
-                _zoomBtn(Icons.add, _zoomIn),
-                Gap(10.h),
-                _zoomBtn(Icons.remove, _zoomOut),
-              ],
-            ),
-          ),
+          // Positioned(
+          //   bottom: 10.h,
+          //   right: 16.w,
+          //   child: Column(
+          //     children: [
+          //       _zoomBtn(Icons.add, _zoomIn),
+          //       Gap(10.h),
+          //       _zoomBtn(Icons.remove, _zoomOut),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );

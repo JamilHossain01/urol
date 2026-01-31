@@ -22,7 +22,7 @@ class GetAllOpenMatsController extends GetxController {
 
       dynamic responseBody = await BaseClient.handleResponse(
         await BaseClient.getRequest(
-            api: ApiUrl.allOpenMats(lat: lat, long: long)),
+            api: ApiUrl.allOpenMats(lat: lat, long: long, distance: 300)),
       );
 
       if (responseBody['success'] == true) {
