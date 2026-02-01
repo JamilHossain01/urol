@@ -313,6 +313,20 @@ class _MapScreenViewState extends State<MapScreenView> {
     }
   }
 
+  String formatUSPhone(String? phone) {
+    if (phone == null || phone.isEmpty) return 'N/A';
+
+    String digits = phone.replaceAll(RegExp(r'\D'), '');
+
+    if (digits.length != 10) {
+      return phone;
+    }
+
+    return '(${digits.substring(0, 3)}) '
+        '${digits.substring(3, 6)}-'
+        '${digits.substring(6)}';
+  }
+
   @override
   Widget build(BuildContext context) {
     final selectedGym = _allMapGymController.profile.value.data
@@ -371,32 +385,32 @@ class _MapScreenViewState extends State<MapScreenView> {
               left: 16.w,
               right: 16.w,
               child: MapGymView(
-                viewDetails: () {
-                  print("here is the docs: ${selectedGym.id}");
-                  Get.to(
-                      () => GymDetailsScreen(gymId: selectedGym.id.toString()));
-                },
-                showDelete: true,
-                centerGymName: true,
-                imageFit: BoxFit.fitHeight,
-                delete: () {
-                  setState(() {
-                    _isGymPreviewCardVisible = false;
-                  });
-                },
-                gymName: selectedGym.name ?? "No Name",
-                location:
-                    customEllipsisText(selectedGym.street ?? '', wordLimit: 11),
-                image: selectedGym.images.isNotEmpty
-                    ? selectedGym.images.first.url ?? AppImages.gym1
-                    : AppImages.gym1,
-                categories: selectedGym.disciplines,
-                showEdit: false,
-                gymId: selectedGym.id?.toString() ?? '',
-                phoneNumber: selectedGym.phone.toString() ?? "n/a",
-              ),
+                  viewDetails: () {
+                    print("here is the docs: ${selectedGym.id}");
+                    Get.to(() =>
+                        GymDetailsScreen(gymId: selectedGym.id.toString()));
+                  },
+                  showDelete: true,
+                  centerGymName: true,
+                  imageFit: BoxFit.fitHeight,
+                  delete: () {
+                    setState(() {
+                      _isGymPreviewCardVisible = false;
+                    });
+                  },
+                  gymName: selectedGym.name ?? "No Name",
+                  location: customEllipsisText(selectedGym.street ?? '',
+                      wordLimit: 11),
+                  image: selectedGym.images.isNotEmpty
+                      ? selectedGym.images.first.url ?? AppImages.gym1
+                      : AppImages.gym1,
+                  categories: selectedGym.disciplines,
+                  showEdit: false,
+                  gymId: selectedGym.id?.toString() ?? '',
+                  phoneNumber: formatUSPhone(
+                    selectedGym.phone.toString() ?? "n/a",
+                  )),
             ),
-
         ],
       ),
     );
