@@ -373,7 +373,8 @@ class _MapScreenViewState extends State<MapScreenView> {
               child: MapGymView(
                 viewDetails: () {
                   print("here is the docs: ${selectedGym.id}");
-                  Get.to(()=> GymDetailsScreen(gymId: selectedGym.id.toString()));
+                  Get.to(
+                      () => GymDetailsScreen(gymId: selectedGym.id.toString()));
                 },
                 showDelete: true,
                 centerGymName: true,
@@ -392,19 +393,10 @@ class _MapScreenViewState extends State<MapScreenView> {
                 categories: selectedGym.disciplines,
                 showEdit: false,
                 gymId: selectedGym.id?.toString() ?? '',
+                phoneNumber: selectedGym.phone.toString() ?? "n/a",
               ),
             ),
-          // Positioned(
-          //   bottom: 10.h,
-          //   right: 16.w,
-          //   child: Column(
-          //     children: [
-          //       _zoomBtn(Icons.add, _zoomIn),
-          //       Gap(10.h),
-          //       _zoomBtn(Icons.remove, _zoomOut),
-          //     ],
-          //   ),
-          // ),
+
         ],
       ),
     );

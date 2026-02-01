@@ -13,6 +13,7 @@ class MapGymView extends StatelessWidget {
   final List<String> categories;
   final bool showDelete;
   final bool showEdit;
+  final String phoneNumber;
   final String? gymId;
   final VoidCallback? delete;
   final VoidCallback? editTap;
@@ -35,6 +36,7 @@ class MapGymView extends StatelessWidget {
     this.centerGymName,
     this.imageFit,
     this.viewDetails,
+    required this.phoneNumber,
   }) : super(key: key);
 
   @override
@@ -59,7 +61,6 @@ class MapGymView extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Image
               ClipRRect(
                 borderRadius: BorderRadius.circular(8.r),
                 child: CachedNetworkImage(
@@ -121,6 +122,31 @@ class MapGymView extends StatelessWidget {
                         Expanded(
                           child: Text(
                             location,
+                            style: TextStyle(
+                              letterSpacing: 0,
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w500,
+                              color: const Color(0xFF4B4B4B),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height:5),
+
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.call,
+                          color: Colors.grey,
+                          size: 15.sp,
+                        ),
+                        SizedBox(width: 4.w),
+                        Expanded(
+                          child: Text(
+                            phoneNumber,
                             style: TextStyle(
                               letterSpacing: 0,
                               fontSize: 12.sp,
