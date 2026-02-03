@@ -30,6 +30,8 @@ class _EventScreenViewState extends State<EventScreenView> {
   final GetEventController _getEventController = Get.put(GetEventController());
 
   /// ✅ MULTI EVENT TYPES
+  double selectedDistance = 2.0;
+
   List<String> selectedEventTypes = [];
 
   @override
@@ -187,17 +189,17 @@ class _EventScreenViewState extends State<EventScreenView> {
     );
   }
 
-  /// ✅ FILTER BOTTOM SHEET
   void _openFilterSheet(BuildContext context) async {
-    final result = await showModalBottomSheet(
+    final result = await showModalBottomSheet<Map<String, dynamic>>(
       context: context,
+      isScrollControlled: true,
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
       ),
       builder: (context) {
         return FilterBottomSheet(
-          distance: 2,
+          distance: selectedDistance,
           initialEventTypes: selectedEventTypes,
         );
       },
@@ -206,12 +208,14 @@ class _EventScreenViewState extends State<EventScreenView> {
     if (result != null) {
       final List<String> eventTypes =
           List<String>.from(result["eventTypes"] ?? []);
-
       final city = result["city"] ?? "";
       final state = result["state"] ?? "";
 
+      final distance = (result["distance"] ?? selectedDistance).toDouble();
+
       setState(() {
         selectedEventTypes = eventTypes;
+        selectedDistance = distance;
       });
 
       _getEventController.getAllEvent(

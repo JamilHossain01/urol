@@ -28,7 +28,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   final TextEditingController _stateController = TextEditingController();
 
   // Distance
-  double _distance = 2.0;
+  late double _distance;
 
   final List<String> eventTypes = [
     "AGF",
@@ -48,7 +48,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     selectedEventTypes = List<String>.from(widget.initialEventTypes);
     _distance = widget.distance;
   }
-
 
   void _toggleEventType(String type) {
     setState(() {
@@ -148,12 +147,18 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               children: [
                 Expanded(
                   child: Slider(
-                    value: _distance,
-                    min: 1,
-                    max: 500,
-                    activeColor: AppColors.mainColor,
-                    onChanged: (val) => setState(() => _distance = val),
-                  ),
+            value: _distance,
+              min: 1,
+              max: 500,
+              divisions: 500,
+              activeColor: AppColors.mainColor,
+              onChanged: (val) {
+                setState(() {
+                  _distance = val; // ✅ এই মান bottom sheet খোলা থাকাকালীন ধরে থাকবে
+                });
+              },
+            ),
+
                 ),
                 CustomText(
                   text: "${_distance.toInt()}m",
