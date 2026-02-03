@@ -95,8 +95,8 @@ class _FilterSheetState extends State<FilterSheet> {
                           });
                         },
                         child: Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 16),
                           decoration: BoxDecoration(
                             color: _categories.contains(cat)
                                 ? AppColors.mainColor
@@ -136,7 +136,7 @@ class _FilterSheetState extends State<FilterSheet> {
                 child: Slider(
                   value: _distance,
                   min: 1,
-                  max: 100,
+                  max: 500,
                   activeColor: AppColors.mainColor,
                   onChanged: (val) => setState(() => _distance = val),
                 ),
