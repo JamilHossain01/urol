@@ -43,7 +43,7 @@ class EditGymView extends StatefulWidget {
   final String gymWebsite;
   final String gymFacebook;
   final String gymInstagram;
-  final String gymClassName;
+  final List<String> gymClassName;
   final List<String>? gymImages;
   final List<String>? imageId;
   final List<String>? gymDisciplines;
@@ -192,7 +192,8 @@ class _EditGymViewState extends State<EditGymView> {
     _websiteController.text = widget.gymWebsite;
     _facebookController.text = widget.gymFacebook;
     _instagramController.text = widget.gymInstagram;
-    _classNameController.text = widget.gymClassName;
+
+    _classNameController.text = '';
 
     _lat = widget.lat;
     _long = widget.long;
@@ -215,38 +216,77 @@ class _EditGymViewState extends State<EditGymView> {
 
     classSchedules =
         widget.gymClassSchedules != null && widget.gymClassSchedules!.isNotEmpty
-            ? widget.gymClassSchedules!
-                .map((s) => <String, String?>{
-                      'day': s['day']?.toString(),
-                      'name': s['name']?.toString() ?? widget.gymClassName,
-                      'from': toSafeTime(s['from']),
-                      'to': toSafeTime(s['to']),
-                    })
-                .toList()
-            : [
-                {
-                  'day': null,
-                  'name': widget.gymClassName,
-                  'from': null,
-                  'to': null
+            ? widget.gymClassSchedules!.asMap().entries.map((entry) {
+                final i = entry.key;
+                final s = entry.value;
+
+                String? name;
+                if (s['name'] != null && s['name'].toString().isNotEmpty) {
+                  name = s['name'].toString();
+                } else if (i < widget.gymClassName.length) {
+                  name = widget.gymClassName[i];
+                } else if (widget.gymClassName.isNotEmpty) {
+                  name = widget.gymClassName.first;
+                } else {
+                  name = null;
                 }
-              ];
+
+                return {
+                  'day': s['day']?.toString(),
+                  'name': name,
+                  'from': toSafeTime(s['from']),
+                  'to': toSafeTime(s['to']),
+                };
+              }).toList()
+            : widget.gymClassName.isNotEmpty
+                ? widget.gymClassName
+                    .map((name) => {
+                          'day': null,
+                          'name': name,
+                          'from': null,
+                          'to': null,
+                        })
+                    .toList()
+                : [
+                    {
+                      'day': null,
+                      'name': null,
+                      'from': null,
+                      'to': null,
+                    }
+                  ];
   }
 
-  int? convertTimeStringToMinutes(String? time) {
-    if (time == null || time.isEmpty) return null;
+  int _convertTimeToMinutes(String time) {
+    time = time.trim();
+    if (time.isEmpty) return 0;
 
-    // HH:mm format
-    if (RegExp(r'^\d{2}:\d{2}$').hasMatch(time)) {
-      final parts = time.split(':');
-      final h = int.parse(parts[0]);
-      final m = int.parse(parts[1]);
-      return h * 60 + m;
+    // Check if AM/PM exists
+    if (time.toUpperCase().contains('AM') ||
+        time.toUpperCase().contains('PM')) {
+      final parts = time.split(' ');
+      if (parts.length != 2) return 0;
+
+      final hourMinute = parts[0].split(':');
+      if (hourMinute.length != 2) return 0;
+
+      int hour = int.tryParse(hourMinute[0]) ?? 0;
+      int minute = int.tryParse(hourMinute[1]) ?? 0;
+      final period = parts[1].toUpperCase();
+
+      if (period == 'PM' && hour != 12) hour += 12;
+      if (period == 'AM' && hour == 12) hour = 0;
+
+      return hour * 60 + minute;
+    } else {
+      final hourMinute = time.split(':');
+      if (hourMinute.length != 2) return 0;
+
+      int hour = int.tryParse(hourMinute[0]) ?? 0;
+      int minute = int.tryParse(hourMinute[1]) ?? 0;
+
+      return hour * 60 + minute;
     }
-
-    // already minute string
-    final minutes = int.tryParse(time);
-    return minutes;
   }
 
   Future<void> _pickImages() async {
@@ -260,39 +300,28 @@ class _EditGymViewState extends State<EditGymView> {
   }
 
   Future<void> _submitGym() async {
-    final List<Map<String, dynamic>> openMatConverted = [];
+    final openMatConverted = openMatSchedules
+        .where((s) => s['day'] != null && s['from'] != null && s['to'] != null)
+        .map((s) => {
+              'day': s['day'] as String,
+              'from': _convertTimeToMinutes(s['from'] as String),
+              'to': _convertTimeToMinutes(s['to'] as String),
+            })
+        .toList();
 
-    for (final s in openMatSchedules) {
-      final day = s['day'];
-      final from = convertTimeStringToMinutes(s['from']);
-      final to = convertTimeStringToMinutes(s['to']);
-
-      if (day != null && from != null && to != null) {
-        openMatConverted.add({
-          'day': day,
-          'from': from,
-          'to': to,
-        });
-      }
-    }
-
-    final List<Map<String, dynamic>> classConverted = [];
-
-    for (final s in classSchedules) {
-      final name = s['name'];
-      final day = s['day'];
-      final from = convertTimeStringToMinutes(s['from']);
-      final to = convertTimeStringToMinutes(s['to']);
-
-      if (name != null && day != null && from != null && to != null) {
-        classConverted.add({
-          'name': name,
-          'day': day,
-          'from': from,
-          'to': to,
-        });
-      }
-    }
+    final classConverted = classSchedules
+        .where((s) =>
+            s['name'] != null &&
+            s['day'] != null &&
+            s['from'] != null &&
+            s['to'] != null)
+        .map((s) => {
+              'name': s['name'] as String,
+              'day': s['day'] as String,
+              'from': _convertTimeToMinutes(s['from'] as String),
+              'to': _convertTimeToMinutes(s['to'] as String),
+            })
+        .toList();
 
     await _editGymController.editGym(
       name: _gymNameController.text.trim(),
@@ -474,246 +503,240 @@ class _EditGymViewState extends State<EditGymView> {
 
                       /// Open Mat Schedule
 
-                      if (openMatSchedules.isNotEmpty)
-                        Column(
-                          children: [
-                            MatScheduleWidgetWidget(
-                              days: _days,
-                              times: _times,
-                              onScheduleAdded: (schedule) {
-                                print(
-                                    "New Schedule: ${schedule.day} ${schedule.startTime} – ${schedule.endTime}");
+                      Column(
+                        children: [
+                          MatScheduleWidgetWidget(
+                            days: _days,
+                            times: _times,
+                            onScheduleAdded: (schedule) {
+                              print(
+                                  "New Schedule: ${schedule.day} ${schedule.startTime} – ${schedule.endTime}");
 
-                                setState(() {
-                                  openMatSchedules.add({
-                                    'day': schedule.day?.trim(),
-                                    'from': schedule.startTime?.trim(),
-                                    'to': schedule.endTime?.trim(),
-                                  });
+                              setState(() {
+                                openMatSchedules.add({
+                                  'day': schedule.day?.trim(),
+                                  'from': schedule.startTime?.trim(),
+                                  'to': schedule.endTime?.trim(),
                                 });
-                              },
-                            ),
-                            if (openMatSchedules.isNotEmpty)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: openMatSchedules
-                                    .asMap()
-                                    .entries
-                                    .map((entry) {
-                                  final index = entry.key;
-                                  final c = entry.value;
+                              });
+                            },
+                          ),
+                          if (openMatSchedules.isNotEmpty)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children:
+                                  openMatSchedules.asMap().entries.map((entry) {
+                                final index = entry.key;
+                                final c = entry.value;
 
-                                  // Safety check
-                                  if (c['day'] == null ||
-                                      c['from'] == null ||
-                                      c['to'] == null) {
-                                    return const SizedBox();
-                                  }
+                                if (c['day'] == null ||
+                                    c['from'] == null ||
+                                    c['to'] == null) {
+                                  return const SizedBox();
+                                }
 
-                                  return Container(
-                                    margin: EdgeInsets.symmetric(vertical: 6.h),
-                                    padding: EdgeInsets.all(12.w),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(12.r),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.05),
-                                          blurRadius: 8,
-                                          offset: const Offset(0, 4),
+                                return Container(
+                                  margin: EdgeInsets.symmetric(vertical: 6.h),
+                                  padding: EdgeInsets.all(12.w),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12.r),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.05),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // Leading icon
+                                      Container(
+                                        padding: EdgeInsets.all(8.w),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.mainColor,
+                                          shape: BoxShape.circle,
                                         ),
-                                      ],
-                                    ),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        // Leading icon
-                                        Container(
-                                          padding: EdgeInsets.all(8.w),
-                                          decoration: BoxDecoration(
-                                            color: AppColors.mainColor,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: Icon(
-                                            Icons.schedule,
-                                            size: 18.sp,
-                                            color: Colors.white,
-                                          ),
+                                        child: Icon(
+                                          Icons.schedule,
+                                          size: 18.sp,
+                                          color: Colors.white,
                                         ),
+                                      ),
 
-                                        Gap(12.w),
+                                      Gap(12.w),
 
-                                        // Schedule info
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Gap(4.h),
-                                              Text(
-                                                "${c['day']} • ${c['from']} – ${c['to']}",
-                                                style: TextStyle(
-                                                  fontSize: 13.sp,
-                                                  color: Colors.grey[600],
-                                                ),
+                                      // Schedule info
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Gap(4.h),
+                                            Text(
+                                              "${c['day']} • ${c['from']} – ${c['to']}",
+                                              style: TextStyle(
+                                                fontSize: 13.sp,
+                                                color: Colors.grey[600],
                                               ),
-                                            ],
-                                          ),
-                                        ),
-
-                                        // Delete action
-                                        InkWell(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                          onTap: () {
-                                            setState(() {
-                                              openMatSchedules.removeAt(index);
-                                            });
-                                          },
-                                          child: Padding(
-                                            padding: EdgeInsets.all(6.w),
-                                            child: Icon(
-                                              Icons.delete_outline,
-                                              color: Colors.redAccent,
-                                              size: 20.sp,
                                             ),
+                                          ],
+                                        ),
+                                      ),
+
+                                      // Delete action
+                                      InkWell(
+                                        borderRadius: BorderRadius.circular(30),
+                                        onTap: () {
+                                          setState(() {
+                                            openMatSchedules.removeAt(index);
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: EdgeInsets.all(6.w),
+                                          child: Icon(
+                                            Icons.delete_outline,
+                                            color: Colors.redAccent,
+                                            size: 20.sp,
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
-                          ],
-                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                        ],
+                      ),
 
                       SizedBox(
                         height: 10,
                       ),
 
                       /// Class Schedule
-                      if (classSchedules.isNotEmpty)
-                        Column(
-                          children: [
-                            // Class Schedule Widget
-                            ClassScheduleWidget(
-                              days: _days,
-                              times: _times,
-                              onScheduleAdded: (schedule) {
-                                setState(() {
-                                  classSchedules.add({
-                                    'name': schedule.className?.trim(),
-                                    'day': schedule.day?.trim(),
-                                    'from': schedule.startTime?.trim(),
-                                    'to': schedule.endTime?.trim(),
-                                  });
+                      Column(
+                        children: [
+                          // Class Schedule Widget
+                          ClassScheduleWidget(
+                            days: _days,
+                            times: _times,
+                            onScheduleAdded: (schedule) {
+                              print(
+                                  "New Schedule: ${schedule.className} ${schedule.day} – ${schedule.endTime}");
+
+                              setState(() {
+                                classSchedules.add({
+                                  'name': schedule.className?.trim(),
+                                  'day': schedule.day?.trim(),
+                                  'from': schedule.startTime?.trim(),
+                                  'to': schedule.endTime?.trim(),
                                 });
-                              },
-                            ),
+                              });
+                            },
+                          ),
 
-                            // Display schedules only if list is not empty
-                            if (classSchedules.isNotEmpty)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children:
-                                    classSchedules.asMap().entries.map((entry) {
-                                  final index = entry.key;
-                                  final c = entry.value;
+                          if (classSchedules.isNotEmpty)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children:
+                                  classSchedules.asMap().entries.map((entry) {
+                                final index = entry.key;
+                                final c = entry.value;
 
-                                  // Safety check
-                                  if (c['name'] == null ||
-                                      c['day'] == null ||
-                                      c['from'] == null ||
-                                      c['to'] == null) {
-                                    return const SizedBox();
-                                  }
+                                if (c['name'] == null ||
+                                    c['day'] == null ||
+                                    c['from'] == null ||
+                                    c['to'] == null) {
+                                  return const SizedBox();
+                                }
 
-                                  return Container(
-                                    margin: EdgeInsets.symmetric(vertical: 6.h),
-                                    padding: EdgeInsets.all(12.w),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(12.r),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.05),
-                                          blurRadius: 8,
-                                          offset: const Offset(0, 4),
+                                return Container(
+                                  margin: EdgeInsets.symmetric(vertical: 6.h),
+                                  padding: EdgeInsets.all(12.w),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12.r),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.05),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // Leading icon
+                                      Container(
+                                        padding: EdgeInsets.all(8.w),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.mainColor,
+                                          shape: BoxShape.circle,
                                         ),
-                                      ],
-                                    ),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        // Leading icon
-                                        Container(
-                                          padding: EdgeInsets.all(8.w),
-                                          decoration: BoxDecoration(
-                                            color: AppColors.mainColor,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: Icon(
-                                            Icons.schedule,
-                                            size: 18.sp,
-                                            color: Colors.white,
-                                          ),
+                                        child: Icon(
+                                          Icons.schedule,
+                                          size: 18.sp,
+                                          color: Colors.white,
                                         ),
+                                      ),
 
-                                        Gap(12.w),
+                                      Gap(12.w),
 
-                                        // Schedule info
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                c['name']!,
-                                                style: TextStyle(
-                                                  fontSize: 15.sp,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.black87,
-                                                ),
+                                      // Schedule info
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "${c['name']}",
+                                              style: TextStyle(
+                                                fontSize: 15.sp,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.black87,
                                               ),
-                                              Gap(4.h),
-                                              Text(
-                                                "${c['day']} • ${c['from']} – ${c['to']}",
-                                                style: TextStyle(
-                                                  fontSize: 13.sp,
-                                                  color: Colors.grey[600],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-
-                                        // Delete action
-                                        InkWell(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                          onTap: () {
-                                            setState(() {
-                                              classSchedules.removeAt(index);
-                                            });
-                                          },
-                                          child: Padding(
-                                            padding: EdgeInsets.all(6.w),
-                                            child: Icon(
-                                              Icons.delete_outline,
-                                              color: Colors.redAccent,
-                                              size: 20.sp,
                                             ),
+                                            Gap(4.h),
+                                            Text(
+                                              "${c['day']} • ${c['from']} – ${c['to']}",
+                                              style: TextStyle(
+                                                fontSize: 13.sp,
+                                                color: Colors.grey[600],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+
+                                      // Delete action
+                                      InkWell(
+                                        borderRadius: BorderRadius.circular(30),
+                                        onTap: () {
+                                          setState(() {
+                                            classSchedules.removeAt(index);
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: EdgeInsets.all(6.w),
+                                          child: Icon(
+                                            Icons.delete_outline,
+                                            color: Colors.redAccent,
+                                            size: 20.sp,
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
-                          ],
-                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                        ],
+                      ),
                       Gap(5.h),
 
                       DisciplinesWidget(

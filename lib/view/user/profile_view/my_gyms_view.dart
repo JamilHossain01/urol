@@ -78,47 +78,59 @@ class _MyGymsViewState extends State<MyGymsView> {
                 child: GymPreviewCard(
                   editTap: () {
                     Get.to(() => EditGymView(
-                          imageId: gym.images
-                              .map((e) => e.id)
-                              .where((url) => url != null)
-                              .cast<String>()
-                              .toList(),
-                          gymClassSchedules: gym.classSchedules
-                              ?.map((s) => {
-                                    'day': s.day,
-                                    'from': s.from,
-                                    'to': s.to,
-                                  })
-                              .toList(),
-                          gymOpenMatSchedules: gym.matSchedules
-                              .map((s) => {
-                                    'day': s.day,
-                                    'from': s.from,
-                                    'to': s.to,
-                                  })
-                              .toList(),
-                          long: gym.location!.coordinates.first,
-                          lat: gym.location!.coordinates.last,
-                          gymDisciplines: gym.disciplines,
-                          gymImages: gym.images
-                              .map((e) => e.url)
-                              .where((url) => url != null)
-                              .cast<String>()
-                              .toList(),
-                          gymId: gym.id.toString(),
-                          gymName: gym.name ?? "",
-                          gymDescription: gym.description ?? "",
-                          gymStreetAddress: gym.street ?? "",
-                          gymCity: gym.city ?? "",
-                          gymState: gym.state ?? "",
-                          gymZipCode: gym.zipCode ?? "",
-                          gymPhone: gym.phone ?? "",
-                          gymEmail: gym.email ?? "",
-                          gymWebsite: gym.website ?? "",
-                          gymFacebook: gym.facebook ?? "",
-                          gymInstagram: gym.instagram ?? "",
-                          gymClassName: "",
-                        ))?.then((_) {
+                        imageId: gym.images
+                            .map((e) => e.id)
+                            .where((url) => url != null)
+                            .cast<String>()
+                            .toList(),
+                        gymClassSchedules: gym.classSchedules
+                            ?.map((s) => {
+                                  'day': s.day,
+                                  'from': s.from,
+                                  'to': s.to,
+                                })
+                            .toList(),
+                        gymOpenMatSchedules: gym.matSchedules
+                            .map((s) => {
+                                  'day': s.day,
+                                  'from': s.from,
+                                  'to': s.to,
+                                })
+                            .toList(),
+                        long: gym.location!.coordinates.first,
+                        lat: gym.location!.coordinates.last,
+                        gymDisciplines: gym.disciplines,
+                        gymImages: gym.images
+                            .map((e) => e.url)
+                            .where((url) => url != null)
+                            .cast<String>()
+                            .toList(),
+                        gymId: gym.id.toString(),
+
+
+
+
+                        gymName: gym.name ?? "",
+                        gymDescription: gym.description ?? "",
+                        gymStreetAddress: gym.street ?? "",
+                        gymCity: gym.city ?? "",
+                        gymState: gym.state ?? "",
+                        gymZipCode: gym.zipCode ?? "",
+                        gymPhone: gym.phone ?? "",
+                        gymEmail: gym.email ?? "",
+                        gymWebsite: gym.website ?? "",
+                        gymFacebook: gym.facebook ?? "",
+                        gymInstagram: gym.instagram ?? "",
+                      gymClassName: gym.classSchedules
+                          .map((s) => s.name ?? '')
+                          .where((name) => name.isNotEmpty)
+                          .toList(),
+
+
+
+
+
+                    ))?.then((_) {
                       _myGymController.getMyGyms();
                     });
                     ;
@@ -137,7 +149,6 @@ class _MyGymsViewState extends State<MyGymsView> {
                   categories: gym.disciplines,
                   imageFit: BoxFit.cover,
                   centerGymName: false,
-
                 ),
               ),
             );

@@ -1,18 +1,26 @@
-String? toSafeTime(dynamic value) {
-  if (value == null) return null;
+String toSafeTime(dynamic time) {
+  if (time == null) return '';
 
-  final v = value.toString().trim();
+  int totalMinutes;
 
-  // already HH:mm → return as is
-  if (RegExp(r'^\d{2}:\d{2}$').hasMatch(v)) {
-    return v;
+  if (time is int) {
+    totalMinutes = time; // if API already gives minutes
+  } else if (time is String) {
+    // if API gives "13:30"
+    final parts = time.split(':');
+    if (parts.length != 2) return '';
+    final hour = int.tryParse(parts[0]) ?? 0;
+    final minute = int.tryParse(parts[1]) ?? 0;
+    totalMinutes = hour * 60 + minute;
+  } else {
+    return '';
   }
 
-  // minute string → convert
-  final minutes = int.tryParse(v);
-  if (minutes == null) return null;
+  int hour = totalMinutes ~/ 60;
+  int minute = totalMinutes % 60;
+  final period = hour >= 12 ? 'PM' : 'AM';
+  hour = hour % 12;
+  if (hour == 0) hour = 12;
 
-  final h = (minutes ~/ 60).toString().padLeft(2, '0');
-  final m = (minutes % 60).toString().padLeft(2, '0');
-  return '$h:$m';
+  return '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} $period';
 }

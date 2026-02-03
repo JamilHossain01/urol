@@ -129,7 +129,7 @@ class _ClassScheduleWidgetState extends State<ClassScheduleWidget> {
                 fontWeight: FontWeight.w500,
                 color: Colors.black87,
               ),
-              Gap(4.h),
+              Gap(10.h),
               CustomTextField(
                 controller: classNameController,
                 hintText: "Enter class name",
