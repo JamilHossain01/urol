@@ -260,30 +260,39 @@ class _EditGymViewState extends State<EditGymView> {
   }
 
   Future<void> _submitGym() async {
-    final List<Map<String, dynamic>> openMatConverted = openMatSchedules
-        .where((s) => s['day'] != null && s['from'] != null && s['to'] != null)
-        .map((s) => {
-              'day': s['day'],
-              'from': convertTimeStringToMinutes(s['from']),
-              'to': convertTimeStringToMinutes(s['to']),
-            })
-        .where((s) => s['from'] != null && s['to'] != null)
-        .toList();
+    final List<Map<String, dynamic>> openMatConverted = [];
 
-    final List<Map<String, dynamic>> classConverted = classSchedules
-        .where((s) =>
-            s['day'] != null &&
-            s['name'] != null &&
-            s['from'] != null &&
-            s['to'] != null)
-        .map((s) => {
-              'name': s['name'],
-              'day': s['day'],
-              'from': convertTimeStringToMinutes(s['from']),
-              'to': convertTimeStringToMinutes(s['to']),
-            })
-        .where((s) => s['from'] != null && s['to'] != null)
-        .toList();
+    for (final s in openMatSchedules) {
+      final day = s['day'];
+      final from = convertTimeStringToMinutes(s['from']);
+      final to = convertTimeStringToMinutes(s['to']);
+
+      if (day != null && from != null && to != null) {
+        openMatConverted.add({
+          'day': day,
+          'from': from,
+          'to': to,
+        });
+      }
+    }
+
+    final List<Map<String, dynamic>> classConverted = [];
+
+    for (final s in classSchedules) {
+      final name = s['name'];
+      final day = s['day'];
+      final from = convertTimeStringToMinutes(s['from']);
+      final to = convertTimeStringToMinutes(s['to']);
+
+      if (name != null && day != null && from != null && to != null) {
+        classConverted.add({
+          'name': name,
+          'day': day,
+          'from': from,
+          'to': to,
+        });
+      }
+    }
 
     await _editGymController.editGym(
       name: _gymNameController.text.trim(),
@@ -465,25 +474,25 @@ class _EditGymViewState extends State<EditGymView> {
 
                       /// Open Mat Schedule
 
-                      // open Mat Schedule
                       if (openMatSchedules.isNotEmpty)
                         Column(
                           children: [
-                            // Class Schedule Widget
                             MatScheduleWidgetWidget(
                               days: _days,
                               times: _times,
                               onScheduleAdded: (schedule) {
+                                print(
+                                    "New Schedule: ${schedule.day} ${schedule.startTime} – ${schedule.endTime}");
+
                                 setState(() {
                                   openMatSchedules.add({
-                                    'day': schedule.day,
-                                    'from': schedule.startTime,
-                                    'to': schedule.endTime,
+                                    'day': schedule.day?.trim(),
+                                    'from': schedule.startTime?.trim(),
+                                    'to': schedule.endTime?.trim(),
                                   });
                                 });
                               },
                             ),
-
                             if (openMatSchedules.isNotEmpty)
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -594,10 +603,10 @@ class _EditGymViewState extends State<EditGymView> {
                               onScheduleAdded: (schedule) {
                                 setState(() {
                                   classSchedules.add({
-                                    'name': schedule.className,
-                                    'day': schedule.day,
-                                    'from': schedule.startTime,
-                                    'to': schedule.endTime,
+                                    'name': schedule.className?.trim(),
+                                    'day': schedule.day?.trim(),
+                                    'from': schedule.startTime?.trim(),
+                                    'to': schedule.endTime?.trim(),
                                   });
                                 });
                               },
