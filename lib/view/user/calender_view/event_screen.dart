@@ -29,7 +29,8 @@ class EventScreenView extends StatefulWidget {
 class _EventScreenViewState extends State<EventScreenView> {
   final GetEventController _getEventController = Get.put(GetEventController());
 
-  String selectedEventType = "All Events";
+  /// ✅ MULTI EVENT TYPES
+  List<String> selectedEventTypes = [];
 
   @override
   void initState() {
@@ -69,13 +70,11 @@ class _EventScreenViewState extends State<EventScreenView> {
             /// SEARCH BAR
             SearchBarWithFilter(
               backgroundColor: Colors.grey[200],
-              onFilterTap: () {
-                _openFilterSheet(context);
-              },
+              onFilterTap: () => _openFilterSheet(context),
               onSearchChanged: (text) {
                 _getEventController.getAllEvent(
                   searchTerms: text,
-                  type: '',
+                  type: selectedEventTypes.join(","),
                   state: '',
                   city: '',
                 );
@@ -85,14 +84,14 @@ class _EventScreenViewState extends State<EventScreenView> {
 
             Gap(8.h),
 
-            /// SELECTED EVENT TYPE TEXT
-            Text(
-              selectedEventType,
-              style: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
-                color: Colors.black87,
-              ),
+            /// ✅ SELECTED EVENT TYPES TEXT
+            CustomText(
+              text: selectedEventTypes.isEmpty
+                  ? "All Events"
+                  : selectedEventTypes.join(", "),
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w500,
+              color: Colors.black87,
             ),
 
             Gap(10.h),
@@ -101,7 +100,7 @@ class _EventScreenViewState extends State<EventScreenView> {
             Expanded(
               child: Obx(() {
                 if (_getEventController.isLoading.value) {
-                  return Center(child: EventShimmerListScreen());
+                  return const Center(child: EventShimmerListScreen());
                 }
 
                 final events =
@@ -125,19 +124,15 @@ class _EventScreenViewState extends State<EventScreenView> {
                     String statusText = 'Open';
 
                     if (event.date != null) {
-                      final eventDate = event.date!;
-                      final now = DateTime.now();
-                      final difference = eventDate.difference(now).inDays;
+                      final diff =
+                          event.date!.difference(DateTime.now()).inDays;
 
-                      if (difference > 1) {
-                        daysLeftText = "$difference Days Left";
-                        statusText = "Open";
-                      } else if (difference == 1) {
+                      if (diff > 1) {
+                        daysLeftText = "$diff Days Left";
+                      } else if (diff == 1) {
                         daysLeftText = "Tomorrow";
-                        statusText = "Open";
-                      } else if (difference == 0) {
+                      } else if (diff == 0) {
                         daysLeftText = "Today";
-                        statusText = "Open";
                       } else {
                         daysLeftText = "Event Passed";
                         statusText = "Closed";
@@ -147,77 +142,40 @@ class _EventScreenViewState extends State<EventScreenView> {
                       statusText = "Closed";
                     }
 
-                    Future<void> _launchUrl(String link) async {
-                      final Uri _url = Uri.parse(link);
-
-                      if (!await launchUrl(_url,
-                          mode: LaunchMode.externalApplication)) {
-                        CustomToast.showToast(
-                          "Could not launch the link",
-                          isError: true,
-                        );
-                      }
-                    }
-
-                    Color statusColor =
-                        statusText == "Open" ? Colors.green : Colors.red;
-
-                    Color leftDaysColor =
-                        daysLeftText == "Today" || statusText == "Open"
-                            ? Colors.green
-                            : Colors.red;
-
-                    return GestureDetector(
-                      onTap: () {
-                        CustomBottomSheet.show(
-                            context: context,
-                            title: "Event Details",
-                            child: EventDetailsContent(
-                              imageUrl: event.image?.url ??
-                                  "https://via.placeholder.com/300x200.png?text=No+Image",
-                              location:
-                                  "${event.city ?? ''}, ${event.state ?? ''}, ${event.venue ?? ''}",
-                              eventType: event.type ?? "",
-                              registrationFee:
-                                  "\$${event.registrationFee?.toString() ?? '0'}",
-                              link: event.eventWebsite.toString(),
-                              day: daysLeftText,
-                              staus: statusText,
-                            ));
-                      },
-                      child: CardOfEvent(
-                        date:
-                            "${event.date?.month ?? ''}/${event.date?.day ?? ''}/${event.date?.year ?? ''}",
-                        title: customEllipsisText(
-                          event.name ?? "Unnamed Event",
-                          wordLimit: 3,
-                        ),
-                        org: event.type ?? "",
-                        location:
-                            "${event.city ?? ''}, ${event.state ?? ''}, ${event.venue ?? ''}",
-                        status: statusText,
-                        daysLeft: daysLeftText,
-                        price: "\$${event.registrationFee?.toString() ?? '0'}",
-                        link: (event.eventWebsite == null ||
-                                event.eventWebsite!.isEmpty)
-                            ? "No website"
-                            : event.eventWebsite!,
-                        image: event.image?.url ??
-                            "https://via.placeholder.com/300x200.png?text=No+Image",
-                        websiteRedirect: () async {
-                          final link = event.eventWebsite;
-                          if (link != null && link.isNotEmpty) {
-                            await _launchUrl(link);
-                          } else {
-                            CustomToast.showToast(
-                              "Invalid event link",
-                              isError: true,
-                            );
-                          }
-                        },
-                        statusColor: statusColor,
-                        leftDaysColor: leftDaysColor,
+                    return CardOfEvent(
+                      date:
+                          "${event.date?.month ?? ''}/${event.date?.day ?? ''}/${event.date?.year ?? ''}",
+                      title: customEllipsisText(
+                        event.name ?? "Unnamed Event",
+                        wordLimit: 3,
                       ),
+                      org: event.type ?? "",
+                      location:
+                          "${event.city ?? ''}, ${event.state ?? ''}, ${event.venue ?? ''}",
+                      status: statusText,
+                      daysLeft: daysLeftText,
+                      price: "\$${event.registrationFee?.toString() ?? '0'}",
+                      link: event.eventWebsite ?? "",
+                      image: event.image?.url ??
+                          "https://via.placeholder.com/300x200.png",
+                      statusColor:
+                          statusText == "Open" ? Colors.green : Colors.red,
+                      leftDaysColor:
+                          statusText == "Open" ? Colors.green : Colors.red,
+                      websiteRedirect: () async {
+                        final link = event.eventWebsite;
+                        if (link != null && link.isNotEmpty) {
+                          await launchUrl(
+                            Uri.parse(link),
+                            mode: LaunchMode.externalApplication,
+                          );
+                        } else {
+                          CustomToast.showToast(
+                            "Invalid event link",
+                            isError: true,
+                          );
+                        }
+                      },
                     );
                   },
                 );
@@ -229,7 +187,7 @@ class _EventScreenViewState extends State<EventScreenView> {
     );
   }
 
-  /// FILTER BOTTOM SHEET
+  /// ✅ FILTER BOTTOM SHEET
   void _openFilterSheet(BuildContext context) async {
     final result = await showModalBottomSheet(
       context: context,
@@ -238,27 +196,27 @@ class _EventScreenViewState extends State<EventScreenView> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
       ),
       builder: (context) {
-        return const FilterBottomSheet(
+        return FilterBottomSheet(
           distance: 2,
+          initialEventTypes: selectedEventTypes,
         );
       },
     );
 
     if (result != null) {
-      final eventType = result["eventType"] ?? "";
+      final List<String> eventTypes =
+          List<String>.from(result["eventTypes"] ?? []);
+
       final city = result["city"] ?? "";
       final state = result["state"] ?? "";
 
-      /// SET VALUE IMMEDIATELY
       setState(() {
-        selectedEventType =
-            eventType.isEmpty ? "All Events" : eventType.toString();
+        selectedEventTypes = eventTypes;
       });
 
-      /// CALL API
       _getEventController.getAllEvent(
         searchTerms: '',
-        type: eventType,
+        type: eventTypes.join(","),
         state: state,
         city: city,
       );

@@ -6,45 +6,58 @@ import 'package:gap/gap.dart';
 import '../../../../common widget/custom text/custom_text_widget.dart';
 import '../../../../common widget/custom_button_widget.dart';
 import '../../../../uitilies/app_colors.dart';
-import '../../profile_view/widgets/location_widget.dart';
 
 class FilterBottomSheet extends StatefulWidget {
   final double distance;
+  final List<String> initialEventTypes;
 
-  const FilterBottomSheet({Key? key, required this.distance}) : super(key: key);
+  const FilterBottomSheet(
+      {Key? key, required this.distance, required this.initialEventTypes})
+      : super(key: key);
 
   @override
   State<FilterBottomSheet> createState() => _FilterBottomSheetState();
 }
 
 class _FilterBottomSheetState extends State<FilterBottomSheet> {
-  String? selectedEventType = "AGF";
+  /// ✅ MULTI SELECT EVENT TYPES
+  List<String> selectedEventTypes = [];
 
-  // -------------------------
-  // Added Controllers
-  // -------------------------
-  final TextEditingController _streetAddressController =
-      TextEditingController();
+  // Controllers
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _stateController = TextEditingController();
-  final TextEditingController _zipCodeController = TextEditingController();
 
-  // -------------------------
-  // Added Lat/Long Variables
-  // -------------------------
-  double? _lat;
-  double? _long;
+  // Distance
+  double _distance = 2.0;
 
-  // Initialize _distance with a default value (e.g., 2.0)
-  double _distance = 2.0; // Default value for the distance
+  final List<String> eventTypes = [
+    "AGF",
+    "IBJJF",
+    "NAGA",
+    "ADCC",
+    "Local",
+    "Tournament",
+    "Seminar",
+    "Superfight"
+  ];
 
   @override
-  void dispose() {
-    _streetAddressController.dispose();
-    _cityController.dispose();
-    _stateController.dispose();
-    _zipCodeController.dispose();
-    super.dispose();
+  @override
+  void initState() {
+    super.initState();
+    selectedEventTypes = List<String>.from(widget.initialEventTypes);
+    _distance = widget.distance;
+  }
+
+
+  void _toggleEventType(String type) {
+    setState(() {
+      if (selectedEventTypes.contains(type)) {
+        selectedEventTypes.remove(type);
+      } else {
+        selectedEventTypes.add(type);
+      }
+    });
   }
 
   @override
@@ -56,15 +69,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
+            /// Header
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  icon: Icon(
-                    Icons.close,
-                    size: 18,
-                  ),
+                  icon: const Icon(Icons.close, size: 18),
                   onPressed: () => Navigator.pop(context),
                 ),
                 CustomText(
@@ -73,74 +83,59 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   fontWeight: FontWeight.w600,
                   color: AppColors.mainTextColors,
                 ),
-                Container(width: 45),
+                const SizedBox(width: 45),
               ],
             ),
+
             Gap(15.h),
 
-            // Event Types
+            /// Event Type
             CustomText(
               text: "Event type",
               fontSize: 16.sp,
               fontWeight: FontWeight.w500,
               color: AppColors.mainTextColors,
             ),
+
             Gap(8.h),
 
+            /// ✅ MULTI SELECT UI
             Wrap(
               spacing: 8.w,
-              children: [
-                "AGF",
-                "IBJJF",
-                "NAGA",
-                "ADCC",
-                "Local",
-                "Tournament",
-                "Seminar",
-                "Superfight"
-              ]
-                  .map((type) => Padding(
-                        padding: EdgeInsets.only(top: 10),
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              // Toggle selection
-                              selectedEventType =
-                                  selectedEventType == type ? null : type;
-                            });
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 16),
-                            decoration: BoxDecoration(
-                              color: selectedEventType == type
-                                  ? AppColors.mainColor
-                                  : const Color(0xFFF5F5F5),
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: selectedEventType == type
-                                    ? AppColors.mainColor
-                                    : Colors.grey, // Border color change
-                              ),
-                            ),
-                            child: CustomText(
-                              text: type,
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w500,
-                              color: selectedEventType == type
-                                  ? Colors.white
-                                  : Colors.black, // Text color change
-                            ),
-                          ),
-                        ),
-                      ))
-                  .toList(),
+              runSpacing: 8.h,
+              children: eventTypes.map((type) {
+                final isSelected = selectedEventTypes.contains(type);
+
+                return GestureDetector(
+                  onTap: () => _toggleEventType(type),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 8.h,
+                      horizontal: 16.w,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? AppColors.mainColor
+                          : const Color(0xFFF5F5F5),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: isSelected ? AppColors.mainColor : Colors.grey,
+                      ),
+                    ),
+                    child: CustomText(
+                      text: type,
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w500,
+                      color: isSelected ? Colors.white : Colors.black,
+                    ),
+                  ),
+                );
+              }).toList(),
             ),
 
-            Gap(10.h),
+            Gap(16.h),
 
-            // Location Widget
-            /// Distance Slider
+            /// Distance
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -148,35 +143,43 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 CustomText(text: "Miles", fontSize: 14.sp),
               ],
             ),
+
             Row(
               children: [
                 Expanded(
                   child: Slider(
                     value: _distance,
                     min: 1,
-                    max: 100,
+                    max: 500,
                     activeColor: AppColors.mainColor,
                     onChanged: (val) => setState(() => _distance = val),
                   ),
                 ),
-                CustomText(text: "${_distance.toInt()}m", fontSize: 12.sp),
+                CustomText(
+                  text: "${_distance.toInt()}m",
+                  fontSize: 12.sp,
+                ),
               ],
             ),
 
-            Gap(10.h),
-            // Apply Button
+            Gap(20.h),
+
+            /// Apply Button
             CustomButtonWidget(
               btnColor: AppColors.mainColor,
               btnTextColor: Colors.white,
               btnText: 'Apply Filter',
+              iconWant: false,
               onTap: () {
+                print(selectedEventTypes);
+
                 Navigator.pop(context, {
-                  "eventType": selectedEventType,
+                  "eventTypes": selectedEventTypes,
+                  "distance": _distance.toInt(),
                   "city": _cityController.text.trim(),
                   "state": _stateController.text.trim(),
                 });
               },
-              iconWant: false,
             ),
 
             Gap(10.h),

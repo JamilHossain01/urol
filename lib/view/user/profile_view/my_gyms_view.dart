@@ -117,7 +117,7 @@ class _MyGymsViewState extends State<MyGymsView> {
                           gymWebsite: gym.website ?? "",
                           gymFacebook: gym.facebook ?? "",
                           gymInstagram: gym.instagram ?? "",
-                          gymClassName: gym.classSchedules.first.name ?? "",
+                          gymClassName: "",
                         ))?.then((_) {
                       _myGymController.getMyGyms();
                     });

@@ -27,7 +27,10 @@ class ApiUrl {
   static const String notificationUnread =
       "$baseUrl/notifications/unread-count";
 
-  static String allOpenMats({required dynamic lat, required dynamic long,required dynamic distance}) =>
+  static String allOpenMats(
+          {required dynamic lat,
+          required dynamic long,
+          required dynamic distance}) =>
       "$baseUrl/gyms/list?lat=$lat&long=$long&distance=$distance";
 
   static const String allNotificationRead =
