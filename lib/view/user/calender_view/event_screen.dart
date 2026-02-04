@@ -5,6 +5,7 @@ import 'package:calebshirthum/uitilies/custom_toast.dart';
 import 'package:calebshirthum/view/user/calender_view/controller/get_event_controller.dart';
 import 'package:calebshirthum/view/user/calender_view/widget/card_of_event.dart';
 import 'package:calebshirthum/view/user/calender_view/widget/card_of_shimmer_event.dart';
+import 'package:calebshirthum/view/user/calender_view/widget/event_bottom_sheet.dart';
 import 'package:calebshirthum/view/user/calender_view/widget/filter_event_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -144,41 +145,69 @@ class _EventScreenViewState extends State<EventScreenView> {
                       statusText = "Closed";
                     }
 
-                    return CardOfEvent(
-                      date:
-                          "${event.date?.month ?? ''}/${event.date?.day ?? ''}/${event.date?.year ?? ''}",
-                      title: customEllipsisText(
-                        event.name ?? "Unnamed Event",
-                        wordLimit: 3,
-                      ),
-                      org: event.type ?? "",
-                      location:
-                          "${event.city ?? ''}, ${event.state ?? ''}, ${event.venue ?? ''}",
-                      status: statusText,
-                      daysLeft: daysLeftText,
-                      price: "\$${event.registrationFee?.toString() ?? '0'}",
-                      link: event.eventWebsite ?? "",
-                      image: event.image?.url ??
-                          "https://via.placeholder.com/300x200.png",
-                      statusColor:
-                          statusText == "Open" ? Colors.green : Colors.red,
-                      leftDaysColor:
-                          statusText == "Open" ? Colors.green : Colors.red,
-                      websiteRedirect: () async {
-                        final link = event.eventWebsite;
-                        if (link != null && link.isNotEmpty) {
-                          await launchUrl(
-                            Uri.parse(link),
-                            mode: LaunchMode.externalApplication,
+                    return GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(16.r)),
+                            ),
+                            builder: (context) {
+                              return EventDetailsBottomSheet(
+                                imageUrl: event.image?.url ??
+                                    "https://via.placeholder.com/300x200.png",
+                                location:
+                                    "${event.city ?? ''}, ${event.state ?? ''}, ${event.venue ?? ''}",
+                                eventType: event.type ?? "N/A",
+                                registrationFee:
+                                    "\$${event.registrationFee?.toString() ?? '0'}",
+                                link: event.eventWebsite ?? "",
+                                day: event.date != null
+                                    ? "${event.date!.month}/${event.date!.day}/${event.date!.year}"
+                                    : "No Date",
+                                staus: statusText,
+                              );
+                            },
                           );
-                        } else {
-                          CustomToast.showToast(
-                            "Invalid event link",
-                            isError: true,
-                          );
-                        }
-                      },
-                    );
+                        },
+                        child: CardOfEvent(
+                          date:
+                              "${event.date?.month ?? ''}/${event.date?.day ?? ''}/${event.date?.year ?? ''}",
+                          title: customEllipsisText(
+                            event.name ?? "Unnamed Event",
+                            wordLimit: 3,
+                          ),
+                          org: event.type ?? "",
+                          location:
+                              "${event.city ?? ''}, ${event.state ?? ''}, ${event.venue ?? ''}",
+                          status: statusText,
+                          daysLeft: daysLeftText,
+                          price:
+                              "\$${event.registrationFee?.toString() ?? '0'}",
+                          link: event.eventWebsite ?? "",
+                          image: event.image?.url ??
+                              "https://via.placeholder.com/300x200.png",
+                          statusColor:
+                              statusText == "Open" ? Colors.green : Colors.red,
+                          leftDaysColor:
+                              statusText == "Open" ? Colors.green : Colors.red,
+                          websiteRedirect: () async {
+                            final link = event.eventWebsite;
+                            if (link != null && link.isNotEmpty) {
+                              await launchUrl(
+                                Uri.parse(link),
+                                mode: LaunchMode.externalApplication,
+                              );
+                            } else {
+                              CustomToast.showToast(
+                                "Invalid event link",
+                                isError: true,
+                              );
+                            }
+                          },
+                        ));
                   },
                 );
               }),
