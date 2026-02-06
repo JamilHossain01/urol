@@ -2,6 +2,7 @@ import 'package:calebshirthum/common%20widget/current_location_service.dart';
 import 'package:calebshirthum/common%20widget/custom_elipse_text.dart';
 import 'package:calebshirthum/uitilies/app_colors.dart';
 import 'package:calebshirthum/uitilies/constant.dart';
+import 'package:calebshirthum/uitilies/custom_toast.dart';
 import 'package:calebshirthum/view/user/home_view/controller/open_mats_controller.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/greeting_section_widgets.dart';
 import 'package:calebshirthum/view/user/home_view/widgets/nearby_mats_section.dart';
@@ -101,6 +102,11 @@ class _HomeScreenViewState extends State<HomeScreenView> {
 
     print("Lat: ${pos.latitude}, Long: ${pos.longitude}");
     print("Today: $day, Time (UTC): $hour:$minute $amPm");
+
+
+    CustomToast.showToast("Today: $day, Time (UTC): $hour:$minute $amPm",);
+
+
 
     _openMatsController.getOpenMatsController(
       lat: pos.latitude.toString(),
