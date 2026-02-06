@@ -82,7 +82,8 @@ class _HomeScreenViewState extends State<HomeScreenView> {
 
     await _locationService.saveLatLong(pos.latitude, pos.longitude);
 
-    DateTime now = DateTime.now().toUtc();
+    DateTime now = DateTime.now();
+
     String day = [
       "Monday",
       "Tuesday",
@@ -93,20 +94,19 @@ class _HomeScreenViewState extends State<HomeScreenView> {
       "Sunday"
     ][now.weekday - 1];
 
-    String hour = now.hour.toString();
+    int hour24 = now.hour;
+    int hour12 = hour24 % 12;
+    if (hour12 == 0) hour12 = 12;
+
+    String hour = hour12.toString();
     String minute = now.minute.toString().padLeft(2, '0');
+    String amPm = hour24 >= 12 ? "PM" : "AM";
 
-    final int hour24 = now.hour;
+    print("Today: $day, Time (Local): $hour:$minute $amPm");
 
-    final String amPm = hour24 >= 12 ? "PM" : "AM";
-
-    print("Lat: ${pos.latitude}, Long: ${pos.longitude}");
-    print("Today: $day, Time (UTC): $hour:$minute $amPm");
-
-
-    CustomToast.showToast("Today: $day, Time (UTC): $hour:$minute $amPm",);
-
-
+    CustomToast.showToast(
+      "Today: $day, Time (Local): $hour:$minute $amPm",
+    );
 
     _openMatsController.getOpenMatsController(
       lat: pos.latitude.toString(),
