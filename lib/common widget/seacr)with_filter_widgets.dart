@@ -44,26 +44,25 @@ class SearchBarWithFilter extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(width: 10.w),
 
         // ⚙️ Filter Button
-        InkWell(
-          onTap: onFilterTap,
-          borderRadius: BorderRadius.circular(12.r),
-          child: Container(
-            height: 44.h,
-            width: 50.h,
-            decoration: BoxDecoration(
-              color: const Color(0xFFA32020),
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-            child: const Icon(
-              Icons.tune_rounded,
-              color: Colors.white,
-              size: 24,
-            ),
-          ),
-        ),
+        // InkWell(
+        //   onTap: onFilterTap,
+        //   borderRadius: BorderRadius.circular(12.r),
+        //   child: Container(
+        //     height: 44.h,
+        //     width: 50.h,
+        //     decoration: BoxDecoration(
+        //       color: const Color(0xFFA32020),
+        //       borderRadius: BorderRadius.circular(12.r),
+        //     ),
+        //     child: const Icon(
+        //       Icons.tune_rounded,
+        //       color: Colors.white,
+        //       size: 24,
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

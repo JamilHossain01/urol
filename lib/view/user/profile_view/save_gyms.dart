@@ -73,6 +73,8 @@ class _SaveGymsViewState extends State<SaveGymsView> {
                       ));
                 },
                 child: GymPreviewCard(
+                  centerGymName: false,
+                  imageFit: BoxFit.cover,
                   gymName: gym.gym?.name.toString() ?? "n/a",
                   location: customEllipsisText(
                       gym.gym?.street.toString() ?? "n/a",

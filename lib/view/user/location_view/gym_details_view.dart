@@ -149,23 +149,6 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                       ),
                     ),
                   ),
-                  Positioned(
-                    top: 40.h,
-                    right: 16.w,
-                    child: GestureDetector(
-                      onTap: () {
-                        _addGymBookMarksController.addGym(gymId: data.id);
-                      },
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: Colors.black54,
-                        child: data.isSaved == true
-                            ? Icon(Icons.bookmark, color: Colors.white)
-                            : Icon(Icons.bookmark_add_outlined,
-                                color: Colors.white),
-                      ),
-                    ),
-                  ),
                 ],
               ),
 
@@ -200,22 +183,39 @@ class _GymDetailsScreenState extends State<GymDetailsScreen> {
                       fontWeight: FontWeight.w600,
                       color: AppColors.mainTextColors,
                     ),
-                    Gap(5.h),
 
-                    // Location
                     Row(
                       children: [
-                        const Icon(Icons.location_on,
-                            color: Color(0xFF4B4B4B), size: 16),
-                        Gap(5.w),
-                        CustomText(
-                          text: customEllipsisText("${data.street ?? ''}",
-                              wordLimit: 11),
-                          fontSize: 10.sp,
-                          color: const Color(0xFF4B4B4B),
+                        Expanded(
+                            child: Row(
+                          children: [
+                            const Icon(Icons.location_on,
+                                color: Color(0xFF4B4B4B), size: 16),
+                            Gap(1.w),
+                            CustomText(
+                              text: customEllipsisText("${data.street ?? ''}",
+                                  wordLimit: 11),
+                              fontSize: 10.sp,
+                              color: const Color(0xFF4B4B4B),
+                            ),
+                          ],
+                        )),
+                        GestureDetector(
+                          onTap: () {
+                            _addGymBookMarksController.addGym(gymId: data.id);
+                          },
+                          child: CircleAvatar(
+                            radius: 19,
+                            backgroundColor: Colors.grey.withOpacity(0.4),
+                            child: data.isSaved == true
+                                ? Icon(Icons.bookmark, color: AppColors.mainColor)
+                                : Icon(Icons.bookmark_add_outlined,
+                                    color: AppColors.mainColor),
+                          ),
                         ),
                       ],
                     ),
+
                     Gap(10.h),
 
                     if ((data.apartment ?? '').isNotEmpty)
