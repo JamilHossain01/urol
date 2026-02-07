@@ -18,6 +18,7 @@ import '../../../common widget/seacr)with_filter_widgets.dart';
 import '../../../uitilies/custom_loader.dart';
 import '../event_view/widget/event_details_content.dart';
 import '../event_view/widget/event_details_modal.dart';
+import '../event_view/widget/event_serach_filter_sheet.dart';
 import '../home_view/widgets/shimmer/event_shimmer_portion.dart';
 
 class EventScreenView extends StatefulWidget {
@@ -71,7 +72,7 @@ class _EventScreenViewState extends State<EventScreenView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             /// SEARCH BAR
-            SearchBarWithFilter(
+            EventSearchBarWithFilter(
               backgroundColor: Colors.grey[200],
               onFilterTap: () => _openFilterSheet(context),
               onSearchChanged: (text) {

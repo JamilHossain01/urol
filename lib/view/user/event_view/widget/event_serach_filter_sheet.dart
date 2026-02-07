@@ -1,13 +1,14 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SearchBarWithFilter extends StatelessWidget {
+class EventSearchBarWithFilter extends StatelessWidget {
   final VoidCallback onFilterTap;
   final Color? backgroundColor;
   final String hintText;
   final ValueChanged<String>? onSearchChanged;
 
-  const SearchBarWithFilter({
+  const EventSearchBarWithFilter({
     Key? key,
     required this.onFilterTap,
     this.backgroundColor,
@@ -39,31 +40,31 @@ class SearchBarWithFilter extends StatelessWidget {
                 ),
                 border: InputBorder.none,
                 contentPadding:
-                    EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
+                EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
               ),
             ),
           ),
         ),
-        // SizedBox(width: 10.w),
-        //
-        // // ⚙️ Filter Button
-        // InkWell(
-        //   onTap: onFilterTap,
-        //   borderRadius: BorderRadius.circular(12.r),
-        //   child: Container(
-        //     height: 44.h,
-        //     width: 50.h,
-        //     decoration: BoxDecoration(
-        //       color: const Color(0xFFA32020),
-        //       borderRadius: BorderRadius.circular(12.r),
-        //     ),
-        //     child: const Icon(
-        //       Icons.tune_rounded,
-        //       color: Colors.white,
-        //       size: 24,
-        //     ),
-        //   ),
-        // ),
+        SizedBox(width: 10.w),
+
+        // ⚙️ Filter Button
+        InkWell(
+          onTap: onFilterTap,
+          borderRadius: BorderRadius.circular(12.r),
+          child: Container(
+            height: 44.h,
+            width: 50.h,
+            decoration: BoxDecoration(
+              color: const Color(0xFFA32020),
+              borderRadius: BorderRadius.circular(12.r),
+            ),
+            child: const Icon(
+              Icons.tune_rounded,
+              color: Colors.white,
+              size: 24,
+            ),
+          ),
+        ),
       ],
     );
   }
