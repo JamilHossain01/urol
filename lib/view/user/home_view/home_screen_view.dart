@@ -104,9 +104,9 @@ class _HomeScreenViewState extends State<HomeScreenView> {
 
     print("Today: $day, Time (Local): $hour:$minute $amPm");
 
-    // CustomToast.showToast(
-    //   "Today: $day, Time (Local): $hour:$minute $amPm",
-    // );
+    CustomToast.showToast(
+      "Today: $day, Time (Local): $hour:$minute $amPm",
+    );
 
     _openMatsController.getOpenMatsController(
       lat: pos.latitude.toString(),
