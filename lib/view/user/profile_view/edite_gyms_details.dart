@@ -773,7 +773,7 @@ class _EditGymViewState extends State<EditGymView> {
                       ),
                       Gap(10.h),
                       CustomButtonWidget(
-                          btnText: 'Edit Gym',
+                          btnText: 'Save Changes',
                           onTap: _submitGym,
                           iconWant: false,
                           btnColor: AppColors.mainColor),
